@@ -1,0 +1,121 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="BerLib.BerType" Collapsed="true">
+    <Position X="8.75" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAABBAAxWQEgBBAAAAAAgCACCCYAAiQAAEIKAAEACIA=</HashCode>
+      <FileName>BerDefinitions.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="BerLib.BerDefinitions" Collapsed="true">
+    <Position X="5.25" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AQEAAAAAAAAAAAAAAAAAAACIAAAAABCAAAAAAAABAAA=</HashCode>
+      <FileName>BerDefinitions.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="BerLib.BerEncoding" Collapsed="true">
+    <Position X="7" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>ChCGJBABEQEAMYAYQKgBEAAYGDAAAYAAAAgQAAgAJBA=</HashCode>
+      <FileName>BerEncoding.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="BerLib.BerException" Collapsed="true">
+    <Position X="8.75" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAEAAAAAAAAgAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>BerException.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="BerLib.BerFormatter" Collapsed="true">
+    <Position X="5.25" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAABAAEAABAAAQAAAAAAAAAAAAAAAAAAAAAQAAAAAA=</HashCode>
+      <FileName>BerFormatter.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="BerLib.BerBufferedInput" Collapsed="true">
+    <Position X="2.75" Y="5.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>QAAAAAAgAAAAAQAAAAAgAAAAAAAAAEAAAAAAAAAAAAA=</HashCode>
+      <FileName>BerInput.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="BerLib.BerStreamInput" Collapsed="true">
+    <Position X="2.75" Y="7.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAABA=</HashCode>
+      <FileName>BerInput.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="BerLib.BerMemoryInput" Collapsed="true">
+    <Position X="0.5" Y="5.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAgAAIAAIAAAAAAAAAAAAAUAAAAAAAAAAAAA=</HashCode>
+      <FileName>BerInput.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="BerLib.BerBufferedOutput" Collapsed="true">
+    <Position X="2.75" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>QAAAAAAgACAAAAAAAAAAAAAAQAAAQAAgAAAAAAAIAAA=</HashCode>
+      <FileName>BerOutput.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="BerLib.BerStreamOutput" Collapsed="true">
+    <Position X="2.75" Y="3.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAACAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAABA=</HashCode>
+      <FileName>BerOutput.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="BerLib.BerMemoryOutput" Collapsed="true">
+    <Position X="0.5" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAgAAAAAAAAAAAAAAQAAAAAAgAgAAAABIAAA=</HashCode>
+      <FileName>BerOutput.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="BerLib.BerReaderBase" Collapsed="true">
+    <Position X="7" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AABAAAABIAAgMJAAAAAEFEBAAAAAAAAAARAoEAAAAAA=</HashCode>
+      <FileName>BerReaderBase.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Struct Name="BerLib.BerTag" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="5.25" Y="2.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>EIBAAAQAAAAAAAQEgkIAAAAAAwAAAIAAACAgAAAAAiA=</HashCode>
+      <FileName>BerTag.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Struct>
+  <Interface Name="BerLib.IBerInput" Collapsed="true">
+    <Position X="5.25" Y="4" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAA=</HashCode>
+      <FileName>BerInput.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="BerLib.IBerOutput" Collapsed="true">
+    <Position X="7" Y="4" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAQAAAAAAgAAAAAAAIAAA=</HashCode>
+      <FileName>BerOutput.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Enum Name="BerLib.BerClass" Collapsed="true">
+    <Position X="5.25" Y="5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AQAAAAAAABAAAAAAAAAAAAAAGAAAAAAAAACAAAAAAAA=</HashCode>
+      <FileName>BerDefinitions.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

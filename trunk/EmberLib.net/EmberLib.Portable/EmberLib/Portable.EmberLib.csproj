@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <MinimumVisualStudioVersion>10.0</MinimumVisualStudioVersion>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{5858F550-8EE0-4C64-B445-C12DD705D669}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>EmberLib</RootNamespace>
+    <AssemblyName>EmberLib</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkProfile>Profile1</TargetFrameworkProfile>
+    <FileAlignment>512</FileAlignment>
+    <ProjectTypeGuids>{786C830F-07A1-408B-BD7F-6EE04809D6DB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <DocumentationFile>bin\Release\EmberLib.XML</DocumentationFile>
+    <NoWarn>1591;1573</NoWarn>
+  </PropertyGroup>
+  <ItemGroup>
+    <!-- A reference to the entire .NET Framework is automatically included -->
+    <ProjectReference Include="..\BerLib\Portable.BerLib.csproj">
+      <Project>{9521a12e-517d-4f8e-9bc3-74dc4666d69c}</Project>
+      <Name>Portable.BerLib</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\..\BerLib\Properties\EmberLib.AssemblyInfo.cs">
+      <Link>Properties\EmberLib.AssemblyInfo.cs</Link>
+    </Compile>
+    <Compile Include="..\..\EmberLib\AsyncDomReader.cs">
+      <Link>AsyncDomReader.cs</Link>
+    </Compile>
+    <Compile Include="..\..\EmberLib\AsyncEmberReader.cs">
+      <Link>AsyncEmberReader.cs</Link>
+    </Compile>
+    <Compile Include="..\..\EmberLib\Crc.cs">
+      <Link>Crc.cs</Link>
+    </Compile>
+    <Compile Include="..\..\EmberLib\DecoderValidation.cs">
+      <Link>DecoderValidation.cs</Link>
+    </Compile>
+    <Compile Include="..\..\EmberLib\EmberApplicationInterface.cs">
+      <Link>EmberApplicationInterface.cs</Link>
+    </Compile>
+    <Compile Include="..\..\EmberLib\EmberContainer.cs">
+      <Link>EmberContainer.cs</Link>
+    </Compile>
+    <Compile Include="..\..\EmberLib\EmberEncoding.cs">
+      <Link>EmberEncoding.cs</Link>
+    </Compile>
+    <Compile Include="..\..\EmberLib\EmberLeaf.cs">
+      <Link>EmberLeaf.cs</Link>
+    </Compile>
+    <Compile Include="..\..\EmberLib\EmberNode.cs">
+      <Link>EmberNode.cs</Link>
+    </Compile>
+    <Compile Include="..\..\EmberLib\EmberReader.cs">
+      <Link>EmberReader.cs</Link>
+    </Compile>
+    <Compile Include="..\..\EmberLib\EmberSequence.cs">
+      <Link>EmberSequence.cs</Link>
+    </Compile>
+    <Compile Include="..\..\EmberLib\EmberSet.cs">
+      <Link>EmberSet.cs</Link>
+    </Compile>
+    <Compile Include="..\..\EmberLib\EmberWriter.cs">
+      <Link>EmberWriter.cs</Link>
+    </Compile>
+    <Compile Include="..\..\EmberLib\IEmberVisitor.cs">
+      <Link>IEmberVisitor.cs</Link>
+    </Compile>
+    <Compile Include="..\..\EmberLib\Legacy\AsyncFrameReader.cs">
+      <Link>Legacy\AsyncFrameReader.cs</Link>
+    </Compile>
+    <Compile Include="..\..\EmberLib\Legacy\EmberDynamicContainer.cs">
+      <Link>Legacy\EmberDynamicContainer.cs</Link>
+    </Compile>
+    <Compile Include="..\..\EmberLib\Legacy\EmberFrame.cs">
+      <Link>Legacy\EmberFrame.cs</Link>
+    </Compile>
+    <Compile Include="..\..\EmberLib\Xml\XmlExport.cs">
+      <Link>Xml\XmlExport.cs</Link>
+    </Compile>
+    <Compile Include="..\..\EmberLib\Xml\XmlImport.cs">
+      <Link>Xml\XmlImport.cs</Link>
+    </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

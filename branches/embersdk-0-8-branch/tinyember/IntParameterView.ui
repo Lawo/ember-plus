@@ -1,0 +1,350 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>IntParameterView</class>
+ <widget class="QFrame" name="IntParameterView">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>292</width>
+    <height>330</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Frame</string>
+  </property>
+  <property name="frameShape">
+   <enum>QFrame::StyledPanel</enum>
+  </property>
+  <property name="frameShadow">
+   <enum>QFrame::Raised</enum>
+  </property>
+  <widget class="QGroupBox" name="groupBox">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>0</y>
+     <width>265</width>
+     <height>290</height>
+    </rect>
+   </property>
+   <property name="title">
+    <string>Integer Parameter</string>
+   </property>
+   <property name="flat">
+    <bool>false</bool>
+   </property>
+   <widget class="QLineEdit" name="numberText">
+    <property name="geometry">
+     <rect>
+      <x>210</x>
+      <y>20</y>
+      <width>50</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="readOnly">
+     <bool>true</bool>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="descriptionText">
+    <property name="geometry">
+     <rect>
+      <x>70</x>
+      <y>45</y>
+      <width>133</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="readOnly">
+     <bool>false</bool>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_2">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>45</y>
+      <width>61</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Description</string>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="identifierText">
+    <property name="geometry">
+     <rect>
+      <x>70</x>
+      <y>20</y>
+      <width>133</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="readOnly">
+     <bool>true</bool>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>20</y>
+      <width>44</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Identifier</string>
+    </property>
+   </widget>
+   <widget class="QCheckBox" name="isWriteableBox">
+    <property name="geometry">
+     <rect>
+      <x>70</x>
+      <y>100</y>
+      <width>131</width>
+      <height>17</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Is Writeable</string>
+    </property>
+   </widget>
+   <widget class="QCheckBox" name="isCommandCheckBox">
+    <property name="geometry">
+     <rect>
+      <x>70</x>
+      <y>120</y>
+      <width>131</width>
+      <height>17</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Is Command</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_4">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>160</y>
+      <width>40</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Min</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_5">
+    <property name="geometry">
+     <rect>
+      <x>150</x>
+      <y>160</y>
+      <width>31</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Max</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_6">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>70</y>
+      <width>51</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Value</string>
+    </property>
+   </widget>
+   <widget class="QSpinBox" name="valueBox">
+    <property name="geometry">
+     <rect>
+      <x>70</x>
+      <y>70</y>
+      <width>133</width>
+      <height>20</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QSpinBox" name="minBox">
+    <property name="geometry">
+     <rect>
+      <x>70</x>
+      <y>160</y>
+      <width>70</width>
+      <height>20</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QSpinBox" name="maxBox">
+    <property name="geometry">
+     <rect>
+      <x>190</x>
+      <y>160</y>
+      <width>70</width>
+      <height>20</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_7">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>190</y>
+      <width>51</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Format</string>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="formatText">
+    <property name="geometry">
+     <rect>
+      <x>70</x>
+      <y>190</y>
+      <width>70</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="readOnly">
+     <bool>true</bool>
+    </property>
+   </widget>
+  </widget>
+ </widget>
+ <resources/>
+ <connections>
+  <connection>
+   <sender>minBox</sender>
+   <signal>editingFinished()</signal>
+   <receiver>IntParameterView</receiver>
+   <slot>updateEntityMin()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>115</x>
+     <y>190</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>184</x>
+     <y>149</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>maxBox</sender>
+   <signal>editingFinished()</signal>
+   <receiver>IntParameterView</receiver>
+   <slot>updateEntityMax()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>275</x>
+     <y>190</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>184</x>
+     <y>149</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>valueBox</sender>
+   <signal>editingFinished()</signal>
+   <receiver>IntParameterView</receiver>
+   <slot>updateEntityValue()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>115</x>
+     <y>160</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>184</x>
+     <y>149</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>formatText</sender>
+   <signal>editingFinished()</signal>
+   <receiver>IntParameterView</receiver>
+   <slot>updateEntityFormat()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>275</x>
+     <y>159</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>184</x>
+     <y>149</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>isCommandCheckBox</sender>
+   <signal>clicked()</signal>
+   <receiver>IntParameterView</receiver>
+   <slot>updateEntityIsCommand()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>145</x>
+     <y>108</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>184</x>
+     <y>149</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>isWriteableBox</sender>
+   <signal>clicked()</signal>
+   <receiver>IntParameterView</receiver>
+   <slot>updateEntityIsWriteable()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>145</x>
+     <y>88</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>184</x>
+     <y>149</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>descriptionText</sender>
+   <signal>editingFinished()</signal>
+   <receiver>IntParameterView</receiver>
+   <slot>updateEntityDescription()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>143</x>
+     <y>55</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>184</x>
+     <y>149</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+ <slots>
+  <slot>updateUi()</slot>
+  <slot>updateEntityDescription()</slot>
+  <slot>updateEntityValue()</slot>
+  <slot>updateEntityMin()</slot>
+  <slot>updateEntityMax()</slot>
+  <slot>updateEntityIsWriteable()</slot>
+  <slot>updateEntityIsCommand()</slot>
+  <slot>updateEntityFormat()</slot>
+ </slots>
+</ui>

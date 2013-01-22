@@ -1,0 +1,26 @@
+TinyEmber+ Changelog
+---------------------------------------
+
+Version 2.10.1
+- Compiled with new libember (Dtd 2.10), which fixed a bug in the real encoding.
+
+Version 2.10.0
+- Compiled with new libember (Dtd 2.10)
+
+Version 2.2.8
+- Fixed a bug which prevented a user from creating a node at root level.
+- Removed the unused toolbar.
+
+Version 2.2.7
+- Added a boolean parameter type
+- The parameter type is no longer transmitted to connected consumers.
+- The main window now displays the tcp/ip port the application listens to.
+
+Version 2.2.6
+- The dialogs to create a node or parameter now assure that it is not possible
+  to create an object with an identifier that already exists.
+- When a new node or parameter has been created, all properties are now marked
+  dirty. That way the complete object will be transmitted to currently connected
+  consumers.
+- It is now no longer possible to create several root nodes.
+

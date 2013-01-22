@@ -1,0 +1,758 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>IntegerView</class>
+ <widget class="QFrame" name="IntegerView">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>275</width>
+    <height>390</height>
+   </rect>
+  </property>
+  <property name="sizePolicy">
+   <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+    <horstretch>0</horstretch>
+    <verstretch>0</verstretch>
+   </sizepolicy>
+  </property>
+  <property name="windowTitle">
+   <string>Frame</string>
+  </property>
+  <property name="frameShape">
+   <enum>QFrame::StyledPanel</enum>
+  </property>
+  <property name="frameShadow">
+   <enum>QFrame::Raised</enum>
+  </property>
+  <widget class="QLabel" name="label_6">
+   <property name="geometry">
+    <rect>
+     <x>35</x>
+     <y>60</y>
+     <width>60</width>
+     <height>20</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Value</string>
+   </property>
+  </widget>
+  <widget class="QLineEdit" name="descriptionText">
+   <property name="geometry">
+    <rect>
+     <x>100</x>
+     <y>35</y>
+     <width>130</width>
+     <height>20</height>
+    </rect>
+   </property>
+   <property name="readOnly">
+    <bool>false</bool>
+   </property>
+  </widget>
+  <widget class="QLineEdit" name="numberText">
+   <property name="geometry">
+    <rect>
+     <x>235</x>
+     <y>10</y>
+     <width>30</width>
+     <height>20</height>
+    </rect>
+   </property>
+   <property name="readOnly">
+    <bool>true</bool>
+   </property>
+  </widget>
+  <widget class="QSpinBox" name="valueBox">
+   <property name="geometry">
+    <rect>
+     <x>100</x>
+     <y>60</y>
+     <width>130</width>
+     <height>20</height>
+    </rect>
+   </property>
+   <property name="minimum">
+    <number>-10000</number>
+   </property>
+   <property name="maximum">
+    <number>10000</number>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label">
+   <property name="geometry">
+    <rect>
+     <x>35</x>
+     <y>10</y>
+     <width>60</width>
+     <height>20</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Identifier</string>
+   </property>
+  </widget>
+  <widget class="QLineEdit" name="identifierText">
+   <property name="geometry">
+    <rect>
+     <x>100</x>
+     <y>10</y>
+     <width>130</width>
+     <height>20</height>
+    </rect>
+   </property>
+   <property name="readOnly">
+    <bool>true</bool>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_2">
+   <property name="geometry">
+    <rect>
+     <x>35</x>
+     <y>35</y>
+     <width>60</width>
+     <height>20</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Description</string>
+   </property>
+  </widget>
+  <widget class="QSpinBox" name="minBox">
+   <property name="geometry">
+    <rect>
+     <x>100</x>
+     <y>85</y>
+     <width>70</width>
+     <height>20</height>
+    </rect>
+   </property>
+   <property name="minimum">
+    <number>-10000</number>
+   </property>
+   <property name="maximum">
+    <number>10000</number>
+   </property>
+  </widget>
+  <widget class="QSpinBox" name="maxBox">
+   <property name="geometry">
+    <rect>
+     <x>205</x>
+     <y>85</y>
+     <width>70</width>
+     <height>20</height>
+    </rect>
+   </property>
+   <property name="minimum">
+    <number>-10000</number>
+   </property>
+   <property name="maximum">
+    <number>10000</number>
+   </property>
+  </widget>
+  <widget class="QLineEdit" name="formatText">
+   <property name="geometry">
+    <rect>
+     <x>100</x>
+     <y>110</y>
+     <width>70</width>
+     <height>20</height>
+    </rect>
+   </property>
+   <property name="readOnly">
+    <bool>false</bool>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_5">
+   <property name="geometry">
+    <rect>
+     <x>180</x>
+     <y>85</y>
+     <width>20</width>
+     <height>20</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Max</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_7">
+   <property name="geometry">
+    <rect>
+     <x>35</x>
+     <y>110</y>
+     <width>60</width>
+     <height>20</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Format</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_4">
+   <property name="geometry">
+    <rect>
+     <x>35</x>
+     <y>85</y>
+     <width>60</width>
+     <height>20</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Min</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_3">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>10</y>
+     <width>16</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+   <property name="pixmap">
+    <pixmap resource="TinyEmberPlus.qrc">:/image/resources/ui-tooltip--exclamation.png</pixmap>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_8">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>35</y>
+     <width>16</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+   <property name="pixmap">
+    <pixmap resource="TinyEmberPlus.qrc">:/image/resources/ui-tooltip-balloon-bottom.png</pixmap>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_9">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>60</y>
+     <width>16</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+   <property name="pixmap">
+    <pixmap resource="TinyEmberPlus.qrc">:/image/resources/ui-text-field-format.png</pixmap>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_10">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>85</y>
+     <width>16</width>
+     <height>20</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+   <property name="pixmap">
+    <pixmap resource="TinyEmberPlus.qrc">:/image/resources/ui-ruler.png</pixmap>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_11">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>110</y>
+     <width>16</width>
+     <height>20</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+   <property name="pixmap">
+    <pixmap resource="TinyEmberPlus.qrc">:/image/resources/ui-tooltip--pencil.png</pixmap>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_12">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>135</y>
+     <width>16</width>
+     <height>20</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+   <property name="pixmap">
+    <pixmap resource="TinyEmberPlus.qrc">:/image/resources/lock--pencil.png</pixmap>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_13">
+   <property name="geometry">
+    <rect>
+     <x>35</x>
+     <y>135</y>
+     <width>60</width>
+     <height>22</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Access</string>
+   </property>
+  </widget>
+  <widget class="QComboBox" name="accessBox">
+   <property name="geometry">
+    <rect>
+     <x>100</x>
+     <y>135</y>
+     <width>130</width>
+     <height>22</height>
+    </rect>
+   </property>
+   <item>
+    <property name="text">
+     <string>None</string>
+    </property>
+    <property name="icon">
+     <iconset resource="TinyEmberPlus.qrc">
+      <normaloff>:/image/resources/lock.png</normaloff>:/image/resources/lock.png</iconset>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>Read</string>
+    </property>
+    <property name="icon">
+     <iconset resource="TinyEmberPlus.qrc">
+      <normaloff>:/image/resources/lock--arrow.png</normaloff>:/image/resources/lock--arrow.png</iconset>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>Write</string>
+    </property>
+    <property name="icon">
+     <iconset resource="TinyEmberPlus.qrc">
+      <normaloff>:/image/resources/lock--pencil.png</normaloff>:/image/resources/lock--pencil.png</iconset>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>Read | Write</string>
+    </property>
+    <property name="icon">
+     <iconset resource="TinyEmberPlus.qrc">
+      <normaloff>:/image/resources/lock-unlock.png</normaloff>:/image/resources/lock-unlock.png</iconset>
+    </property>
+   </item>
+  </widget>
+  <widget class="QGroupBox" name="streamingGroupBox">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>260</y>
+     <width>251</width>
+     <height>121</height>
+    </rect>
+   </property>
+   <property name="title">
+    <string>Streaming</string>
+   </property>
+   <widget class="QCheckBox" name="checkUseStreamIdentifier">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>20</y>
+      <width>80</width>
+      <height>22</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Identifier</string>
+    </property>
+   </widget>
+   <widget class="QSpinBox" name="streamIdentifierBox">
+    <property name="geometry">
+     <rect>
+      <x>90</x>
+      <y>20</y>
+      <width>60</width>
+      <height>22</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QComboBox" name="streamFormatBox">
+    <property name="geometry">
+     <rect>
+      <x>90</x>
+      <y>50</y>
+      <width>131</width>
+      <height>22</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QSpinBox" name="streamOffsetBox">
+    <property name="geometry">
+     <rect>
+      <x>90</x>
+      <y>80</y>
+      <width>60</width>
+      <height>22</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QCheckBox" name="checkUseStreamDescriptor">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>50</y>
+      <width>80</width>
+      <height>22</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Descriptor</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_14">
+    <property name="geometry">
+     <rect>
+      <x>35</x>
+      <y>80</y>
+      <width>46</width>
+      <height>22</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Offset</string>
+    </property>
+   </widget>
+  </widget>
+  <widget class="QLineEdit" name="displayValueText">
+   <property name="geometry">
+    <rect>
+     <x>100</x>
+     <y>170</y>
+     <width>130</width>
+     <height>20</height>
+    </rect>
+   </property>
+   <property name="readOnly">
+    <bool>true</bool>
+   </property>
+  </widget>
+  <widget class="QGroupBox" name="groupBox">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>200</y>
+     <width>251</width>
+     <height>60</height>
+    </rect>
+   </property>
+   <property name="title">
+    <string>Formula</string>
+   </property>
+   <widget class="QLabel" name="label_16">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>35</y>
+      <width>65</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="toolTip">
+     <string>Transform a device value into a display value</string>
+    </property>
+    <property name="text">
+     <string>To Consumer</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_15">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>15</y>
+      <width>60</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="toolTip">
+     <string>Transforms a display value into a device value</string>
+    </property>
+    <property name="text">
+     <string>To Provider</string>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="toConsumerTermText">
+    <property name="geometry">
+     <rect>
+      <x>90</x>
+      <y>35</y>
+      <width>130</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="readOnly">
+     <bool>false</bool>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="toProviderTermText">
+    <property name="geometry">
+     <rect>
+      <x>90</x>
+      <y>15</y>
+      <width>130</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="readOnly">
+     <bool>false</bool>
+    </property>
+   </widget>
+  </widget>
+ </widget>
+ <resources>
+  <include location="MainWindow.qrc"/>
+  <include location="TinyEmberPlus.qrc"/>
+ </resources>
+ <connections>
+  <connection>
+   <sender>descriptionText</sender>
+   <signal>editingFinished()</signal>
+   <receiver>IntegerView</receiver>
+   <slot>updateDescription()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>136</x>
+     <y>49</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>124</x>
+     <y>74</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>formatText</sender>
+   <signal>editingFinished()</signal>
+   <receiver>IntegerView</receiver>
+   <slot>updateFormat()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>104</x>
+     <y>134</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>124</x>
+     <y>74</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>maxBox</sender>
+   <signal>editingFinished()</signal>
+   <receiver>IntegerView</receiver>
+   <slot>updateMax()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>204</x>
+     <y>109</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>124</x>
+     <y>74</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>minBox</sender>
+   <signal>editingFinished()</signal>
+   <receiver>IntegerView</receiver>
+   <slot>updateMin()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>104</x>
+     <y>109</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>124</x>
+     <y>74</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>valueBox</sender>
+   <signal>editingFinished()</signal>
+   <receiver>IntegerView</receiver>
+   <slot>updateValue()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>136</x>
+     <y>74</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>124</x>
+     <y>74</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>accessBox</sender>
+   <signal>currentIndexChanged(int)</signal>
+   <receiver>IntegerView</receiver>
+   <slot>updateAccess(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>149</x>
+     <y>160</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>137</x>
+     <y>87</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>checkUseStreamIdentifier</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>IntegerView</receiver>
+   <slot>updateStreamIdentifierState(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>59</x>
+     <y>200</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>137</x>
+     <y>149</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>checkUseStreamDescriptor</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>IntegerView</receiver>
+   <slot>updateStreamDescriptorState(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>59</x>
+     <y>230</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>137</x>
+     <y>149</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>streamIdentifierBox</sender>
+   <signal>editingFinished()</signal>
+   <receiver>IntegerView</receiver>
+   <slot>updateStreamIdentifier()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>129</x>
+     <y>200</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>137</x>
+     <y>149</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>streamFormatBox</sender>
+   <signal>currentIndexChanged(int)</signal>
+   <receiver>IntegerView</receiver>
+   <slot>updateStreamFormat(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>165</x>
+     <y>230</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>137</x>
+     <y>149</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>streamOffsetBox</sender>
+   <signal>editingFinished()</signal>
+   <receiver>IntegerView</receiver>
+   <slot>updateStreamOffset()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>129</x>
+     <y>260</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>137</x>
+     <y>149</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>toConsumerTermText</sender>
+   <signal>editingFinished()</signal>
+   <receiver>IntegerView</receiver>
+   <slot>updateRxTerm()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>164</x>
+     <y>169</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>137</x>
+     <y>194</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>toProviderTermText</sender>
+   <signal>editingFinished()</signal>
+   <receiver>IntegerView</receiver>
+   <slot>updateTxTerm()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>164</x>
+     <y>144</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>137</x>
+     <y>194</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+ <slots>
+  <slot>updateUi()</slot>
+  <slot>updateDescription()</slot>
+  <slot>updateValue()</slot>
+  <slot>updateMin()</slot>
+  <slot>updateMax()</slot>
+  <slot>updateFormat()</slot>
+  <slot>updateAccess(int)</slot>
+  <slot>updateStreamIdentifierState(bool)</slot>
+  <slot>updateStreamDescriptorState(bool)</slot>
+  <slot>updateStreamIdentifier()</slot>
+  <slot>updateStreamFormat(int)</slot>
+  <slot>updateStreamOffset()</slot>
+  <slot>updateTxTerm()</slot>
+  <slot>updateRxTerm()</slot>
+ </slots>
+</ui>

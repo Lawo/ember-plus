@@ -146,11 +146,11 @@ namespace libember { namespace ber
 
             static long long denormalizeMantissa(long long mantissa)
             {
-                while ((mantissa & 0x7FFFF00000000000LL) == 0)
+                while ((mantissa & 0x000FF00000000000LL) == 0)
                 {
                     mantissa <<= 8;
                 }
-                while ((mantissa & 0x7FF0000000000000LL) == 0)
+                while ((mantissa & 0x0010000000000000LL) == 0)
                 {
                     mantissa <<= 1;
                 }
@@ -168,20 +168,16 @@ namespace libember { namespace ber
                 util::OctetStream::value_type const preamble = input.front();
                 input.consume();
 
-                // Check for positive or negative infinity
+                // + Infinity
                 if (encodedLength == 1)
                 {
                     if (preamble == 0x40)
                     {
                         return +std::numeric_limits<value_type>::infinity();
                     }
-                    else if (preamble == 0x41)
+                    if (preamble == 0x41)
                     {
                         return -std::numeric_limits<value_type>::infinity();
-                    }
-                    else
-                    {
-                        return value_type(0);
                     }
                 }
 

@@ -20,9 +20,7 @@
 #ifndef __LIBEMBER_GLOW_GLOWPARAMETERBASE_IPP
 #define __LIBEMBER_GLOW_GLOWPARAMETERBASE_IPP
 
-#include <sstream>
 #include "../../util/Inline.hpp"
-#include "../util/Validation.hpp"
 #include "../util/ValueConverter.hpp"
 #include "../GlowStreamDescriptor.hpp"
 #include "../GlowStringIntegerPair.hpp"
@@ -46,17 +44,13 @@ namespace libember { namespace glow
     LIBEMBER_INLINE
     void GlowParameterBase::setDescription(std::string const& description)
     {
-        contents().set(GlowTags::ParameterContents::Description(), description);
+        contents().push_back(new dom::VariantLeaf(GlowTags::ParameterContents::Description(), description));
     }
 
     LIBEMBER_INLINE
     void GlowParameterBase::setIdentifier(std::string const& identifier)
     {
-#ifndef LIBEMBER_DISABLE_IDENTIFIER_VALIDATION
-        libember::glow::util::Validation::assertIdentifierValid(identifier);
-#endif//LIBEMBER_DISABLE_IDENTIFIER_VALIDATION
-
-        contents().set(GlowTags::ParameterContents::Identifier(), identifier);
+        contents().push_back(new dom::VariantLeaf(GlowTags::ParameterContents::Identifier(), identifier));
     }
 
     LIBEMBER_INLINE
@@ -65,146 +59,118 @@ namespace libember { namespace glow
         std::ostringstream stream;
         stream << providerToConsumer << "\n" << consumerToProvider;
 
-        contents().set(GlowTags::ParameterContents::Formula(), stream.str());
+        contents().push_back(new dom::VariantLeaf(GlowTags::ParameterContents::Formula(), stream.str()));
     }
 
     LIBEMBER_INLINE
     void GlowParameterBase::setFormat(std::string const& format)
     {
-        contents().set(GlowTags::ParameterContents::Format(), format);
+        contents().push_back(new dom::VariantLeaf(GlowTags::ParameterContents::Format(), format));
     }
 
     LIBEMBER_INLINE
     void GlowParameterBase::setEnumeration(std::string const& enumeration)
     {
-        contents().set(GlowTags::ParameterContents::Enumeration(), enumeration);
+        contents().push_back(new dom::VariantLeaf(GlowTags::ParameterContents::Enumeration(), enumeration));
     }
 
     LIBEMBER_INLINE
     void GlowParameterBase::setMinimum(double minimum)
     {
-        contents().set(GlowTags::ParameterContents::Minimum(), minimum);
+        contents().push_back(new dom::VariantLeaf(GlowTags::ParameterContents::Minimum(), minimum));
     }
 
     LIBEMBER_INLINE
-    void GlowParameterBase::setMinimum(long minimum)
+    void GlowParameterBase::setMinimum(int minimum)
     {
-        contents().set(GlowTags::ParameterContents::Minimum(), minimum);
+        contents().push_back(new dom::VariantLeaf(GlowTags::ParameterContents::Minimum(), minimum));
     }
 
     LIBEMBER_INLINE
     void GlowParameterBase::setMaximum(double maximum)
     {
-        contents().set(GlowTags::ParameterContents::Maximum(), maximum);
+        contents().push_back(new dom::VariantLeaf(GlowTags::ParameterContents::Maximum(), maximum));
     }
 
     LIBEMBER_INLINE
-    void GlowParameterBase::setMaximum(long maximum)
+    void GlowParameterBase::setMaximum(int maximum)
     {
-        contents().set(GlowTags::ParameterContents::Maximum(), maximum);
+        contents().push_back(new dom::VariantLeaf(GlowTags::ParameterContents::Maximum(), maximum));
     }
 
     LIBEMBER_INLINE
     void GlowParameterBase::setFactor(int factor)
     {
-        contents().set(GlowTags::ParameterContents::Factor(), factor);
+        contents().push_back(new dom::VariantLeaf(GlowTags::ParameterContents::Factor(), factor));
     }
 
     LIBEMBER_INLINE
     void GlowParameterBase::setDefault(double value)
     {
-        contents().set(GlowTags::ParameterContents::Default(), value);
+        contents().push_back(new dom::VariantLeaf(GlowTags::ParameterContents::Default(), value));
     }
 
     LIBEMBER_INLINE
-    void GlowParameterBase::setDefault(long value)
+    void GlowParameterBase::setDefault(int value)
     {
-        contents().set(GlowTags::ParameterContents::Default(), value);
+        contents().push_back(new dom::VariantLeaf(GlowTags::ParameterContents::Default(), value));
     }
 
     LIBEMBER_INLINE
     void GlowParameterBase::setDefault(std::string const& value)
     {
-        contents().set(GlowTags::ParameterContents::Default(), value);
-    }
-
-    LIBEMBER_INLINE
-    void GlowParameterBase::setDefault(bool value)
-    {
-        contents().set(GlowTags::ParameterContents::Default(), value);
-    }
-
-    LIBEMBER_INLINE
-    void GlowParameterBase::setDefault(ber::Octets const& value)
-    {
-        contents().set(GlowTags::ParameterContents::Default(), value);
+        contents().push_back(new dom::VariantLeaf(GlowTags::ParameterContents::Default(), value));
     }
 
     LIBEMBER_INLINE
     void GlowParameterBase::setValue(double value)
     {
-        contents().set(GlowTags::ParameterContents::Value(), value);
+        contents().push_back(new dom::VariantLeaf(GlowTags::ParameterContents::Value(), value));
     }
 
     LIBEMBER_INLINE
-    void GlowParameterBase::setValue(long value)
+    void GlowParameterBase::setValue(int value)
     {
-        contents().set(GlowTags::ParameterContents::Value(), value);
+        contents().push_back(new dom::VariantLeaf(GlowTags::ParameterContents::Value(), value));
     }
 
     LIBEMBER_INLINE
     void GlowParameterBase::setValue(std::string const& value)
     {
-        contents().set(GlowTags::ParameterContents::Value(), value);
+        contents().push_back(new dom::VariantLeaf(GlowTags::ParameterContents::Value(), value));
     }
 
     LIBEMBER_INLINE
-    void GlowParameterBase::setValue(bool value)
+    void GlowParameterBase::setStep(double value)
     {
-        contents().set(GlowTags::ParameterContents::Value(), value);
-    }
-
-    LIBEMBER_INLINE
-    void GlowParameterBase::setValue(ber::Octets const& value)
-    {
-        contents().set(GlowTags::ParameterContents::Value(), value);
-    }
-
-    LIBEMBER_INLINE
-    void GlowParameterBase::setStep(int value)
-    {
-        contents().set(GlowTags::ParameterContents::Step(), value);
+        contents().push_back(new dom::VariantLeaf(GlowTags::ParameterContents::Step(), value));
     }
 
     LIBEMBER_INLINE
     void GlowParameterBase::setAccess(Access const& access)
     {
-        contents().set(GlowTags::ParameterContents::Access(), access.value());
+        contents().push_back(new dom::VariantLeaf(GlowTags::ParameterContents::Access(), access.value()));
     }
 
     LIBEMBER_INLINE
     void GlowParameterBase::setType(ParameterType const& type)
     {
-        contents().set(GlowTags::ParameterContents::Type(), type.value());
+        contents().push_back(new dom::VariantLeaf(GlowTags::ParameterContents::Type(), type.value()));
     }
 
     LIBEMBER_INLINE
     void GlowParameterBase::setStreamIdentifier(int identifier)
     {
-        contents().set(GlowTags::ParameterContents::StreamIdentifier(), identifier);
+        contents().push_back(new dom::VariantLeaf(GlowTags::ParameterContents::StreamIdentifier(), identifier));
     }
 
     LIBEMBER_INLINE
     void GlowParameterBase::setStreamDescriptor(StreamFormat const& format, int offset)
     {
         ber::Tag const tag = GlowTags::ParameterContents::StreamDescriptor();
-        contents().set(new GlowStreamDescriptor(tag, format, offset));
-    }
+        GlowStreamDescriptor* descriptor = new GlowStreamDescriptor(tag, format, offset);
 
-    LIBEMBER_INLINE
-    void GlowParameterBase::setIsOnline(bool isOnline)
-    {
-        contents().set(GlowTags::ParameterContents::IsOnline(), isOnline);
+        contents().push_back(descriptor);
     }
 
     LIBEMBER_INLINE
@@ -212,44 +178,54 @@ namespace libember { namespace glow
     {
         iterator const first = begin();
         iterator const last = end();
-        iterator const result = util::find_tag(first, last, m_childrenTag);
-        if (result != last)
+        dom::Node* collection = find_node<dom::Node>(first, last, m_childrenTag);
+
+        if (collection == 0)
         {
-            return dynamic_cast<GlowElementCollection*>(&*result);
-        }
-        else
-        {
-            GlowElementCollection* collection = new GlowElementCollection(m_childrenTag);
+            collection = new GlowElementCollection(m_childrenTag);
             insert(last, collection);
-            return collection;
         }
+
+        return dynamic_cast<GlowElementCollection*>(collection);
     }
 
     LIBEMBER_INLINE
     std::string GlowParameterBase::description() const
     {
-        ber::Value const value = contents().get(GlowTags::ParameterContents::Description());
-        return util::ValueConverter::valueOf(value, std::string());
+        Contents const& content = contents();
+        Contents::const_iterator const first = content.begin();
+        Contents::const_iterator const last = content.end();
+        dom::VariantLeaf const* leaf = find_node<dom::VariantLeaf>(first, last, GlowTags::ParameterContents::Description());
+
+        return util::ValueConverter::toValue(leaf, std::string());
     }
 
     LIBEMBER_INLINE
     std::string GlowParameterBase::identifier() const
     {
-        ber::Value const value = contents().get(GlowTags::ParameterContents::Identifier());
-        return util::ValueConverter::valueOf(value, std::string());
+        Contents const& content = contents();
+        Contents::const_iterator const first = content.begin();
+        Contents::const_iterator const last = content.end();
+        dom::VariantLeaf const* leaf = find_node<dom::VariantLeaf>(first, last, GlowTags::ParameterContents::Identifier());
+
+        return util::ValueConverter::toValue(leaf, std::string());
     }
 
     LIBEMBER_INLINE
     Formula GlowParameterBase::formula() const
     {
-        ber::Value const value = contents().get(GlowTags::ParameterContents::Formula());
-        std::string const term = util::ValueConverter::valueOf(value, std::string());
-        std::size_t const index = term.find('\n');
+        Contents const& content = contents();
+        Contents::const_iterator const first = content.begin();
+        Contents::const_iterator const last = content.end();
+        dom::VariantLeaf const* leaf = find_node<dom::VariantLeaf>(first, last, GlowTags::ParameterContents::Formula());
 
-        if (index != std::string::npos)
+        std::string const term = util::ValueConverter::toValue(leaf, std::string());
+        std::size_t splitIndex = term.find('\n');
+
+        if (splitIndex != std::string::npos)
         {
-            std::string const providerToConsumer = term.substr(0, index);
-            std::string const consumerToProvider = term.substr(index + 1);
+            std::string const providerToConsumer = term.substr(0, splitIndex);
+            std::string const consumerToProvider = term.substr(splitIndex + 1);
             return Formula(providerToConsumer, consumerToProvider);
         }
         else
@@ -261,15 +237,21 @@ namespace libember { namespace glow
     LIBEMBER_INLINE
     std::string GlowParameterBase::format() const
     {
-        ber::Value const value = contents().get(GlowTags::ParameterContents::Format());
-        return util::ValueConverter::valueOf(value, std::string());
+        Contents const& content = contents();
+        Contents::const_iterator const first = content.begin();
+        Contents::const_iterator const last = content.end();
+        dom::VariantLeaf const* leaf = find_node<dom::VariantLeaf>(first, last, GlowTags::ParameterContents::Format());
+
+        return util::ValueConverter::toValue(leaf, std::string());
     }
 
     LIBEMBER_INLINE
     Enumeration GlowParameterBase::enumeration() const
     {
-        ber::Value const value = contents().get(GlowTags::ParameterContents::Enumeration());
-        std::string const enumeration = util::ValueConverter::valueOf(value, std::string());
+        Contents const& content = contents();
+        dom::VariantLeaf const* leaf = find_node<dom::VariantLeaf>(content.begin(), content.end(), GlowTags::ParameterContents::Enumeration());
+
+        std::string enumeration = util::ValueConverter::toValue(leaf, std::string());
         std::size_t first = 0;
         std::size_t last = enumeration.find('\n');
         std::list<std::string> list;
@@ -293,27 +275,23 @@ namespace libember { namespace glow
     LIBEMBER_INLINE
     Enumeration GlowParameterBase::enumerationMap() const
     {
-        Contents::const_iterator const result = util::find_tag(contents().begin(), contents().end(), GlowTags::ParameterContents::EnumMap());
+        Contents const& content = contents();
+        GlowStringIntegerCollection const* enumeration = find_node<GlowStringIntegerCollection>(content.begin(), content.end(), GlowTags::ParameterContents::EnumMap());
         std::list<std::pair<std::string, int> > list;
 
-        if (result != contents().end())
+        if (enumeration != 0)
         {
-            GlowStringIntegerCollection const* enumeration = dynamic_cast<GlowStringIntegerCollection const*>(&*result);
-
-            if (enumeration != 0)
-            {
-                GlowStringIntegerCollection::const_iterator first = enumeration->begin();
-                GlowStringIntegerCollection::const_iterator const last = enumeration->end();
+            GlowStringIntegerCollection::const_iterator first = enumeration->begin();
+            GlowStringIntegerCollection::const_iterator const last = enumeration->end();
             
-                for (/** Nothing */; first != last; ++first)
-                {
-                    dom::Node const& node = *first;
-                    GlowStringIntegerPair const* entry = dynamic_cast<GlowStringIntegerPair const*>(&node);
+            for (/** Nothing */; first != last; ++first)
+            {
+                dom::Node const& node = *first;
+                GlowStringIntegerPair const* entry = dynamic_cast<GlowStringIntegerPair const*>(&node);
 
-                    if (entry != 0)
-                    {
-                        list.push_back(std::make_pair(entry->name(), entry->value()));
-                    }
+                if (entry != 0)
+                {
+                    list.push_back(std::make_pair(entry->name(), entry->value()));
                 }
             }
         }
@@ -324,73 +302,108 @@ namespace libember { namespace glow
     LIBEMBER_INLINE
     MinMax GlowParameterBase::minimum() const
     {
-        ber::Value const value = contents().get(GlowTags::ParameterContents::Minimum());
-        return MinMax(value);
+        Contents const& content = contents();
+        Contents::const_iterator const first = content.begin();
+        Contents::const_iterator const last = content.end();
+        dom::VariantLeaf const* leaf = find_node<dom::VariantLeaf>(first, last, GlowTags::ParameterContents::Minimum());
+
+        return MinMax::fromLeaf(leaf);
     }
 
     LIBEMBER_INLINE
     MinMax GlowParameterBase::maximum() const
     {
-        ber::Value const value = contents().get(GlowTags::ParameterContents::Maximum());
-        return MinMax(value);
+        Contents const& content = contents();
+        Contents::const_iterator const first = content.begin();
+        Contents::const_iterator const last = content.end();
+        dom::VariantLeaf const* leaf = find_node<dom::VariantLeaf>(first, last, GlowTags::ParameterContents::Maximum());
+
+        return MinMax::fromLeaf(leaf);
     }
 
     LIBEMBER_INLINE
     int GlowParameterBase::factor() const
     {
-        ber::Value const value = contents().get(GlowTags::ParameterContents::Factor());
-        return util::ValueConverter::valueOf(value, int(1));
+        Contents const& content = contents();
+        Contents::const_iterator const first = content.begin();
+        Contents::const_iterator const last = content.end();
+        dom::VariantLeaf const* leaf = find_node<dom::VariantLeaf>(first, last, GlowTags::ParameterContents::Factor());
+
+        return util::ValueConverter::toValue(leaf, 1);
     }
 
     LIBEMBER_INLINE
     Value GlowParameterBase::defaultValue() const
     {
-        ber::Value const value = contents().get(GlowTags::ParameterContents::Default());
-        return Value(value);
+        Contents const& content = contents();
+        Contents::const_iterator const first = content.begin();
+        Contents::const_iterator const last = content.end();
+        dom::VariantLeaf const* leaf = find_node<dom::VariantLeaf>(first, last, GlowTags::ParameterContents::Default());
+
+        return Value::fromLeaf(leaf);
     }
 
     LIBEMBER_INLINE
     Value GlowParameterBase::value() const
     {
-        ber::Value const value = contents().get(GlowTags::ParameterContents::Value());
-        return Value(value);
+        Contents const& content = contents();
+        Contents::const_iterator const first = content.begin();
+        Contents::const_iterator const last = content.end();
+        dom::VariantLeaf const* leaf = find_node<dom::VariantLeaf>(first, last, GlowTags::ParameterContents::Value());
+
+        return Value::fromLeaf(leaf);
     }
 
     LIBEMBER_INLINE
-    int GlowParameterBase::step() const
+    double GlowParameterBase::step() const
     {
-        ber::Value const value = contents().get(GlowTags::ParameterContents::Step());
-        return util::ValueConverter::valueOf(value, int(1));
+        Contents const& content = contents();
+        Contents::const_iterator const first = content.begin();
+        Contents::const_iterator const last = content.end();
+        dom::VariantLeaf const* leaf = find_node<dom::VariantLeaf>(first, last, GlowTags::ParameterContents::Step());
+
+        return util::ValueConverter::toValue(leaf, 1.0);
     }
 
     LIBEMBER_INLINE
     Access GlowParameterBase::access() const
     {
-        ber::Value const value = contents().get(GlowTags::ParameterContents::Access());
-        int const access = util::ValueConverter::valueOf(value, int(Access::ReadOnly));
-        return static_cast<Access::_Domain>(access);
+        Contents const& content = contents();
+        Contents::const_iterator const first = content.begin();
+        Contents::const_iterator const last = content.end();
+        dom::VariantLeaf const* leaf = find_node<dom::VariantLeaf>(first, last, GlowTags::ParameterContents::Access());
+
+        return static_cast<Access::_Domain>(util::ValueConverter::toValue(leaf, static_cast<int>(Access::ReadOnly)));
     }
 
     LIBEMBER_INLINE
     bool GlowParameterBase::isWriteable() const
     {
         Access const access = this->access();
+
         return access.value() == Access::WriteOnly || access.value() == Access::ReadWrite;
     }
 
     LIBEMBER_INLINE
     ParameterType GlowParameterBase::type() const
     {
-        ber::Value const value = contents().get(GlowTags::ParameterContents::Type());
-        int const type = util::ValueConverter::valueOf(value, int(1));
-        return static_cast<ParameterType::_Domain>(type);
+        Contents const& content = contents();
+        Contents::const_iterator const first = content.begin();
+        Contents::const_iterator const last = content.end();
+        dom::VariantLeaf const* leaf = find_node<dom::VariantLeaf>(first, last, GlowTags::ParameterContents::Type());
+
+        return static_cast<ParameterType::_Domain>(util::ValueConverter::toValue(leaf, 1));
     }
 
     LIBEMBER_INLINE
     int GlowParameterBase::streamIdentifier() const
     {
-        ber::Value const value = contents().get(GlowTags::ParameterContents::StreamIdentifier());
-        return util::ValueConverter::valueOf(value, int(-1));
+        Contents const& content = contents();
+        Contents::const_iterator const first = content.begin();
+        Contents::const_iterator const last = content.end();
+        dom::VariantLeaf const* leaf = find_node<dom::VariantLeaf>(first, last, GlowTags::ParameterContents::StreamIdentifier());
+
+        return util::ValueConverter::toValue(leaf, -1);
     }
 
     LIBEMBER_INLINE
@@ -398,38 +411,20 @@ namespace libember { namespace glow
     {
         const_iterator const first = begin();
         const_iterator const last = end();
-        const_iterator const result = util::find_tag(first, last, m_childrenTag);
-        if (result != last)
-        {
-            return dynamic_cast<GlowElementCollection const*>(&*result);
-        }
-        else
-        {
-            return 0;
-        }
+        dom::Node const* collection = find_node<dom::Node>(first, last, m_childrenTag);
+
+        return dynamic_cast<GlowElementCollection const*>(collection);
     }
 
     LIBEMBER_INLINE
     GlowStreamDescriptor const* GlowParameterBase::streamDescriptor() const
     {
-        Contents::const_iterator const first = contents().begin();
-        Contents::const_iterator const last = contents().end();
-        Contents::const_iterator const result = util::find_tag(first, last, GlowTags::ParameterContents::StreamDescriptor());
-        if (result != last)
-        {
-            return dynamic_cast<GlowStreamDescriptor const*>(&*result);
-        }
-        else
-        {
-            return 0;
-        }
-    }
+        Contents const& content = contents();
+        Contents::const_iterator const first = content.begin();
+        Contents::const_iterator const last = content.end();
+        GlowStreamDescriptor const* value = find_node<GlowStreamDescriptor>(first, last, GlowTags::ParameterContents::StreamDescriptor());
 
-    LIBEMBER_INLINE
-    bool GlowParameterBase::isOnline() const
-    {
-        ber::Value const value = contents().get(GlowTags::ParameterContents::IsOnline());
-        return util::ValueConverter::valueOf(value, true);
+        return value;
     }
 }
 }

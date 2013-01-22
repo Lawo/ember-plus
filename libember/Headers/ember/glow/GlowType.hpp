@@ -45,12 +45,6 @@ namespace libember { namespace glow
                 QualifiedNode = 10,
                 RootElementCollection = 11,
                 StreamDescriptor = 12,
-                Matrix = 13,
-                Target = 14,
-                Source = 15,
-                Connection = 16,
-                QualifiedMatrix = 17,
-                Label = 18
             };
 
             typedef unsigned int value_type;

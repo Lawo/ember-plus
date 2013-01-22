@@ -44,36 +44,16 @@ namespace libember { namespace glow
     std::string GlowStringIntegerPair::name() const
     {
         ber::Tag const tag = GlowTags::StringIntegerPair::Name(); 
-        const_iterator first = begin();
-        const_iterator const last = end();
-        const_iterator const result = util::find_tag(first, last, tag);
-        if (result != last)
-        {
-            std::string const value = util::ValueConverter::valueOf(&*result, std::string());
-            return value;
-        }
-        else
-        {
-            return std::string();
-        }
+
+        return util::ValueConverter::toValue(find_node<dom::VariantLeaf>(begin(), end(), tag), std::string());
     }
 
     LIBEMBER_INLINE
     int GlowStringIntegerPair::value() const
     {
         ber::Tag const tag = GlowTags::StringIntegerPair::Value();
-        const_iterator first = begin();
-        const_iterator const last = end();
-        const_iterator const result = util::find_tag(first, last, tag);
-        if (result != last)
-        {
-            int const value = util::ValueConverter::valueOf(&*result, -1);
-            return value;
-        }
-        else
-        {
-            return -1;
-        }
+        
+        return util::ValueConverter::toValue(find_node<dom::VariantLeaf>(begin(), end(), tag), -1);
     }
 }
 }

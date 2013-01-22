@@ -22,7 +22,7 @@
 
 #include "berreader.h"
 
-#ifndef EMBER_MAX_TREE_DEPTH
+#ifndef MAX_EMBER_TREE_DEPTH
 /**
   * The maximum depth of an ember tree to decode.
   * Can be set using a compiler option. Default
@@ -30,7 +30,7 @@
   * If this value is exceeded during the decoding
   * process, the throwError callback is called.
   */
-#define EMBER_MAX_TREE_DEPTH (65)
+#define MAX_EMBER_TREE_DEPTH (65)
 #endif
 
 /**
@@ -62,7 +62,7 @@ typedef struct
   */
 typedef struct
 {
-   __EmberAsyncContainer items[EMBER_MAX_TREE_DEPTH];
+   __EmberAsyncContainer items[MAX_EMBER_TREE_DEPTH];
    int length;
 } __EmberAsyncContainerStack;
 
@@ -141,8 +141,13 @@ typedef struct SEmberAsyncReader
   * Must be called before any other operations on the
   * EmberAsyncReader instance are invoked.
   * @param pThis pointer to the object to process.
+  * @param pBuffer pointer to the memory location to store
+  *     encoded values to.
+  * @param bufferSize maximum length of a encoded value.
+  *      If this value is exceeded, the throwError callback
+  *      is invoked.
   */
-void emberAsyncReader_init(EmberAsyncReader *pThis);
+void emberAsyncReader_init(EmberAsyncReader *pThis, byte *pBuffer, int bufferSize);
 
 /**
   * Frees all dynamically allocated memory used by the

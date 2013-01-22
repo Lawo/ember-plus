@@ -1,6 +1,5 @@
 #include <algorithm>
 #include <cmath>
-#include "BooleanParameter.h"
 #include "EnumParameter.h"
 #include "IntegerParameter.h"
 #include "RealParameter.h"
@@ -10,13 +9,6 @@
 
 namespace gadget
 {
-    void StreamManager::RandomValueGenerator::visit(BooleanParameter* parameter)
-    {
-        auto const result = std::rand() % 100;
-        auto const value = result < 50;
-        parameter->setValue(value);
-    }
-
     void StreamManager::RandomValueGenerator::visit(EnumParameter* parameter)
     {
         if (parameter->size() > 0)
@@ -44,8 +36,8 @@ namespace gadget
 
     void StreamManager::RandomValueGenerator::visit(IntegerParameter* parameter)
     {
-        auto const min = parameter->minimum();
-        auto const max = parameter->maximum();
+        auto const min = parameter->min();
+        auto const max = parameter->max();
         auto const range = max - min;
         auto const sample = 1.0 * rand() / RAND_MAX;
         
@@ -55,8 +47,8 @@ namespace gadget
 
     void StreamManager::RandomValueGenerator::visit(RealParameter* parameter)
     {
-        auto const min = parameter->minimum();
-        auto const max = parameter->maximum();
+        auto const min = parameter->min();
+        auto const max = parameter->max();
         auto const range = max - min;
         auto const sample = 1.0 * rand() / RAND_MAX;
         

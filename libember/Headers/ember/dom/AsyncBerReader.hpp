@@ -55,8 +55,6 @@ namespace libember { namespace dom
             /**
              * Reads a single byte.
              * @param value The byte to decode.
-             * @throw std::runtime_error if the end of a stream is reached while still decoding
-             *      a container or when there is a mismatch with the decoded tag or length.
              */
             void read(value_type value);
 
@@ -66,8 +64,6 @@ namespace libember { namespace dom
              *        of elements to decode.
              * @param last an iterator referring to the element one past the last
              *        element of the sequence of elements to decode.
-             * @throw std::runtime_error if the end of a stream is reached while still decoding
-             *      a container or when there is a mismatch with the decoded tag or length.
              */
             template<typename InputIterator>
             void read(InputIterator first, InputIterator last);
@@ -191,7 +187,7 @@ namespace libember { namespace dom
                         Tag,
                         Length,
                         Value,
-                        Terminator
+                        Terminator,
                     };
 
                     typedef std::size_t value_type;

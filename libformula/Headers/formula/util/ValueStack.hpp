@@ -29,7 +29,7 @@ namespace libformula { namespace util
             enum _Domain
             {
                 Long = 1,
-                Real
+                Real,
             };
 
             typedef unsigned int value_type;
@@ -447,52 +447,6 @@ namespace libformula { namespace util
                 else
                 {
                     return - x.toValueType<long_type>();
-                }
-            }
-
-            /**
-             * Returns the absolute value of the provided item.
-             * @param x Operand.
-             * @return Returns the absolute value of the provided item.
-             */
-            static ValueStackItem abs(ValueStackItem const& x)
-            {
-                if (x.type().value() == ValueStackItemType::Real)
-                {
-                    auto const value = x.toValueType<real_type>();
-                    return std::abs(value);
-                }
-                else
-                {
-                    auto const value = x.toValueType<long_type>();
-                    return std::abs(value);
-                }
-            }
-
-            /**
-             * Returns the sign of the provided item.
-             * @param x Operand.
-             * @return Returns 1 if the value is 0 or above, otherwise -1.
-             */
-            static ValueStackItem sgn(ValueStackItem const& x)
-            {
-                if (x.type().value() == ValueStackItemType::Real)
-                {
-                    auto const value = x.toValueType<real_type>();
-                    return value < 0.0 
-                        ? ValueStackItem(long_type(-1)) 
-                        : (value > 0.0
-                            ? ValueStackItem(long_type(1))
-                            : ValueStackItem(long_type(0)));
-                }
-                else
-                {
-                    auto const value = x.toValueType<long_type>();
-                    return value < 0
-                        ? ValueStackItem(long_type(-1)) 
-                        : (value > 0
-                            ? ValueStackItem(long_type(1))
-                            : ValueStackItem(long_type(0)));
                 }
             }
 

@@ -32,30 +32,23 @@ namespace libs101
             /**
              * Ember Message
              */
-            EmBER = 0x0E
+            EmBER = 0x0E,
         };
 
         typedef unsigned char value_type;
-        public:
-            /**
-             * Non-explicit constructor to allow implicit conversion.
-             * @param value A value from _Domain to initialize this instance with.
-             */
-            MessageType(_Domain value)
-                : m_value(static_cast<value_type>(value))
-            {}
 
-            /**
-             * Return the raw value currently represented by this instance.
-             * @return The raw value currently represented by this instance.
-             */
-            value_type value() const
-            {
-                return m_value;
-            }
+        /**
+         * Non-explicit constructor to allow implicit conversion.
+         * @param value A value from _Domain to initialize this instance with.
+         */
+        MessageType(_Domain value)
+            : value(value)
+        {}
 
-        private:
-            value_type m_value;
+        /**
+         * Command value.
+         */
+        value_type const value;
     };
 }
 

@@ -3,7 +3,6 @@
 #include <vector>
 #include <ember\Ember.hpp>
 #include "StreamConverter.h"
-#include "../../gadget/BooleanParameter.h"
 #include "../../gadget/EnumParameter.h"
 #include "../../gadget/IntegerParameter.h"
 #include "../../gadget/RealParameter.h"
@@ -19,11 +18,6 @@ namespace glow { namespace util
     {
         auto converter = SingleStreamEntryFactory(parameter);
         return converter.m_entry;
-    }
-
-    void StreamConverter::SingleStreamEntryFactory::visit(gadget::BooleanParameter* parameter)
-    {
-        m_entry = new GlowStreamEntry(parameter->streamIdentifier(), !!parameter->value());
     }
 
     void StreamConverter::SingleStreamEntryFactory::visit(gadget::EnumParameter* parameter)
@@ -87,7 +81,7 @@ namespace glow { namespace util
                 if (size == 1 && streams.front()->hasStreamDescriptor() == false)
                 {
                     auto parameter = streams.front();
-                    if (parameter->isSubscribed() && parameter->isDirty())
+                    if (parameter->isSubscribed())
                     {
                         auto entry = SingleStreamEntryFactory::create(parameter);
                         root->insert(entry);
@@ -117,7 +111,7 @@ namespace glow { namespace util
 
                     auto const isSubscribed = std::any_of(first, last, [](decltype(*first) stream) -> bool
                     {
-                        return stream->isSubscribed() && stream->isDirty();
+                        return stream->isSubscribed();
                     });
 
                     if (result != last && isSubscribed)
@@ -131,7 +125,6 @@ namespace glow { namespace util
                         for each(auto parameter in streams)
                         {
                             encode(parameter, std::begin(buffer), std::end(buffer));
-                            parameter->clearDirtyState();
                         }
 
                         root->insert(identifier, std::begin(buffer), std::end(buffer));

@@ -3,10 +3,6 @@
 
 namespace gadget
 {
-    /**
-     * Scoped enumeration which contains the symbolic names of all supported
-     * parameter types.
-     */
     struct ParameterType
     {
         public:
@@ -23,18 +19,10 @@ namespace gadget
 
             typedef std::size_t value_type;
 
-            /**
-             * Initializes a new Parameter type.
-             * @param value The value to initialize this instance with.
-             */
             ParameterType(_Domain value)
                 : m_value(value)
             {}
 
-            /**
-             * Returns the current numeric value of this ParameterType instance.
-             * @return The current numeric value.
-             */
             value_type value() const
             {
                 return m_value;

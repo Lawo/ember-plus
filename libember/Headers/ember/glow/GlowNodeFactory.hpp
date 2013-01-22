@@ -53,7 +53,7 @@ namespace libember { namespace glow
 }
 
 #ifdef LIBEMBER_HEADER_ONLY
-#  include "impl/GlowNodeFactory.ipp"
+#   include "impl/GlowNodeFactory.ipp"
 #endif
 
 #endif  // __LIBEMBER_GLOW_GLOWNODEFACTORY_HPP

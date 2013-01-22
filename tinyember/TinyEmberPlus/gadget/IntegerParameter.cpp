@@ -13,10 +13,6 @@ namespace gadget
         , m_value(value)
     {
     }
-
-    void IntegerParameter::setValueImpl(value_type value, bool forceNotification)
-    {
-    }
     
     void IntegerParameter::accept(ParameterTypeVisitorConst const& visitor) const
     {
@@ -40,8 +36,8 @@ namespace gadget
 
         if (m_format.size() > 0)
         {
-            char buffer[256];
-            sprintf_s(buffer, 256, m_format.c_str(), value);
+            char buffer[128];
+            sprintf_s(buffer, 128, m_format.c_str(), value);
             return std::string(buffer);
         }
         else
@@ -52,12 +48,12 @@ namespace gadget
         }
     }
 
-    IntegerParameter::value_type IntegerParameter::minimum() const
+    IntegerParameter::value_type IntegerParameter::min() const
     {
         return m_min;
     }
 
-    IntegerParameter::value_type IntegerParameter::maximum() const
+    IntegerParameter::value_type IntegerParameter::max() const
     {
         return m_max;
     }
@@ -90,13 +86,12 @@ namespace gadget
         }
     }
 
-    void IntegerParameter::setValue(value_type value, bool forceNotification)
+    void IntegerParameter::setValue(value_type value)
     {
-        if (m_value != value || forceNotification)
+        if (m_value != value)
         {
             m_value = value;
-            setValueImpl(value, forceNotification);
-            markDirty(ParameterField::Value | (forceNotification ? ParameterField::ForceUpdate : 0), true);
+            markDirty(ParameterField::Value, true);
         }
     }
 

@@ -310,19 +310,6 @@
      </property>
     </widget>
    </widget>
-   <widget class="QLabel" name="label_5">
-    <property name="geometry">
-     <rect>
-      <x>370</x>
-      <y>10</y>
-      <width>145</width>
-      <height>21</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Listening on TCP/IP port 9000</string>
-    </property>
-   </widget>
   </widget>
   <widget class="QMenuBar" name="menuBar">
    <property name="geometry">
@@ -344,6 +331,14 @@
     <addaction name="actionExit"/>
    </widget>
    <addaction name="menuFile"/>
+  </widget>
+  <widget class="QToolBar" name="mainToolBar">
+   <attribute name="toolBarArea">
+    <enum>TopToolBarArea</enum>
+   </attribute>
+   <attribute name="toolBarBreak">
+    <bool>false</bool>
+   </attribute>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
   <action name="actionSave_as">

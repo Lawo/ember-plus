@@ -8,10 +8,6 @@ namespace gadget
         , m_index(0)
     {
     }
-
-    void EnumParameter::setIndexImpl(size_type value, bool forceNotification)
-    {
-    }
     
     void EnumParameter::accept(ParameterTypeVisitorConst const& visitor) const
     {
@@ -33,17 +29,16 @@ namespace gadget
         }
         else
         {
-            return std::string("");
+            return "";
         }
     }
 
-    void EnumParameter::setIndex(size_type value, bool forceNotification)
+    void EnumParameter::setIndex(size_type value)
     {
-        if ((m_index != value || forceNotification) && value < size())
+        if (m_index != value && value < size())
         {
             m_index = value;
-            setIndexImpl(value, forceNotification);
-            markDirty(ParameterField::Value | (forceNotification ? ParameterField::ForceUpdate : 0), true);
+            markDirty(ParameterField::Value, true);
         }
     }
 

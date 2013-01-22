@@ -41,11 +41,6 @@ typedef struct SByteBuffer
      * Current position of the write cursor.
      */
    unsigned int position;
-
-   /**
-     * private field
-     */
-   bool isDynamic;
 } ByteBuffer;
 
 /**
@@ -58,16 +53,6 @@ typedef struct SByteBuffer
   * @param size the size of the memory chunk at @p pMemory in bytes.
   */
 void byteBuffer_init(ByteBuffer *pThis, byte *pMemory, unsigned int size);
-
-/**
-  * Initializes a dynamic ByteBuffer instance, which allocates
-  * memory if needed.
-  * Must be called before any operations on the ByteBuffer at
-  * @p pThis are invoked.
-  * @param pThis pointer to the object to process.
-  * @param size the initial size of the buffer.
-  */
-void byteBuffer_initDynamic(ByteBuffer *pThis, unsigned int size);
 
 /**
   * Add a byte to the buffer, advancing the write position.
@@ -85,14 +70,6 @@ void byteBuffer_add(ByteBuffer *pThis, byte b);
 void byteBuffer_reset(ByteBuffer *pThis);
 
 /**
-  * Ensures that the size of the dynamic buffer is at least @p size bytes.
-  * Does nothing if @p pThis is not dynamic.
-  * @param pThis pointer to the object to process.
-  * @param size new size of the buffer.
-  */
-void byteBuffer_resize(ByteBuffer *pThis, unsigned int size);
-
-/**
   * Gets a value indicating whether the passed byte buffer
   * is full or not.
   * @param pThis pointer to the object to process.
@@ -100,11 +77,5 @@ void byteBuffer_resize(ByteBuffer *pThis, unsigned int size);
   *      end of the buffer, otherwise false.
   */
 bool byteBuffer_isEmpty(const ByteBuffer *pThis);
-
-/**
-  * Frees all memory allocated by the dynamic buffer.
-  * @param pThis pointer to the object to process.
-  */
-void byteBuffer_free(ByteBuffer *pThis);
 
 #endif

@@ -46,13 +46,11 @@ namespace libformula
                 Float,
                 Exp,
                 Powf,
-                Abs,
-                Sgn,
             
                 IntegerValue    = 0x8001,
                 RealValue,
 
-                EndOfFile = 0xFFFF
+                EndOfFile = 0xFFFF,
             };
 
             typedef unsigned int value_type;

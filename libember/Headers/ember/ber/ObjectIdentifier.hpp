@@ -61,12 +61,6 @@ namespace libember { namespace ber
             explicit ObjectIdentifier(value_type value);
 
             /**
-             * Returns true if the ObjectIdentifier does not contain any elements.
-             * @retunr True if the ObjectIdentifier does not contain any elements.
-             */
-            bool empty() const;
-
-            /**
              * Returns the number of elements this oid contains.
              * @return The number of elements this oid contains.
              */
@@ -116,12 +110,6 @@ namespace libember { namespace ber
              */
             void swap(ObjectIdentifier& other);
 
-            /**
-             * Gets the sub-id at position @p index.
-             * @param index the position of the sub-id to return.
-             */
-            std::size_t operator[](int index) const;
-
         private:
 #ifdef _MSC_VER
 #  pragma warning(push)
@@ -156,11 +144,6 @@ namespace libember { namespace ber
     ObjectIdentifier::ObjectIdentifier(InputIterator first, InputIterator last)
     {
         m_items.assign(first, last);
-    }
-
-    inline bool ObjectIdentifier::empty() const
-    {
-        return m_items.empty();
     }
 
     inline ObjectIdentifier::const_iterator ObjectIdentifier::begin() const

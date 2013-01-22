@@ -214,16 +214,6 @@ int ber_getHeaderLength(const BerTag *pTag, int length)
    return result + 1 + ber_getIntegerLength(length);
 }
 
-int ber_getRelativeOidLength(const berint *pValue, int count)
-{
-   int size = 0;
-
-   for( ; count > 0; count--, pValue++)
-      size += ber_getMultiByteIntegerLength((dword)*pValue);
-
-   return size;
-}
-
 
 // ====================================================================
 //
@@ -656,10 +646,10 @@ double ber_decodeReal(BerInput *pIn, int length)
             mantissa = ber_decodeLong(pIn, length - exponentLength - 1) << ff;
 
             // de-normalize mantissa (required by CER and DER)
-            while((mantissa & 0x7FFFF00000000000LL) == 0x0)
+            while((mantissa & 0x000FF00000000000LL) == 0x0)
                mantissa <<= 8;
 
-            while((mantissa & 0x7FF0000000000000LL) == 0x0)
+            while((mantissa & 0x0010000000000000LL) == 0x0)
                mantissa <<= 1;
 
             mantissa &= 0x0FFFFFFFFFFFFFLL;

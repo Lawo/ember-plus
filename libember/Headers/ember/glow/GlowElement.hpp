@@ -49,7 +49,7 @@ namespace libember { namespace glow
 }
 
 #ifdef LIBEMBER_HEADER_ONLY
-#  include "impl/GlowElement.ipp"
+#   include "impl/GlowElement.ipp"
 #endif
 
 #endif  // __LIBEMBER_GLOW_GLOWELEMENT_HPP

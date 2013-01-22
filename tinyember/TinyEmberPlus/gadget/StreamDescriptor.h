@@ -5,31 +5,15 @@
 
 namespace gadget
 {
-    /**
-     * Class describing the format and offset of a stream.
-     */
     class StreamDescriptor
     {
         public:
             typedef std::size_t offset_type;
 
-            /**
-             * Initializes a new StreamDescriptor.
-             * @param format The format of the stream value.
-             * @param offset The offset of the value within the stream.
-             */
             StreamDescriptor(StreamFormat const& format, offset_type offset);
 
-            /**
-             * Returns the offset of the value within the stream.
-             * @return The offset of the value within the stream.
-             */
             offset_type offset() const;
 
-            /**
-             * Returns the format of the stream value.
-             * @return The format of the stream value.
-             */
             StreamFormat const& format() const;
 
         private:

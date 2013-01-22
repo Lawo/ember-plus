@@ -5,35 +5,16 @@
 #include "gadget\Parameter.h"
 #include <qtreewidget.h>
 
-/**
- * Manages a context menu which can be used to create or remove nodes or parameters.
- */
 class GadgetViewContextMenu
 {
     public:
-        /**
-         * Initializes a new GadgetViewContext menu.
-         * @param view A pointer to the gadget tree view.
-         * @param cursor The top-left position of the context menu.
-         */
         GadgetViewContextMenu(QTreeWidget* view, QPoint const& cursor);
 
-        /**
-         * Runs the context menu.
-         */
         void exec();
 
     private:
-        /**
-         * Runs the context menu for a selected node.
-         * @param parent The selected node.
-         */
         void exec(gadget::Node* parent);
 
-        /**
-         * Runs the context menu for a selected parameter.
-         * @param parameter The selected parameter.
-         */
         void exec(gadget::Parameter* parameter);
 
     private:

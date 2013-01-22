@@ -22,7 +22,7 @@
 
 #include "ParameterType.hpp"
 #include "Variant.hpp"
-#include "util/ValueConverter.hpp"
+#include "../dom/VariantLeaf.hpp"
 
 namespace libember { namespace glow 
 {
@@ -34,10 +34,20 @@ namespace libember { namespace glow
     {
         public:
             /**
+             * Creates a new MinMax instance from the provided VariantLeaf. The leaf
+             * must contain an integer or a real value, otherwise a new instance 
+             * with the value set to 0 will be returned.
+             * @param leaf The leaf to get the value from.
+             * @return Returns the MinMax instance created from the provided leaf.
+             */
+            static MinMax fromLeaf(dom::VariantLeaf const* leaf);
+
+        public:
+            /**
              * Initialzes an integer value.
              * @param value Value to store.
              */
-            MinMax(long value);
+            MinMax(int value);
 
             /**
              * Initialzes a real value.
@@ -50,12 +60,6 @@ namespace libember { namespace glow
              * @param other Instance to copy the value from.
              */
             MinMax(MinMax const& other);
-
-            /**
-             * Initializes a new MinMax instance from the passed type erased ber value.
-             * @param value The ber value to initialize this instance with.
-             */
-            MinMax(ber::Value const& value);
 
             /**
              * Destructor
@@ -72,7 +76,7 @@ namespace libember { namespace glow
              * Returns the current value as integer.
              * @return The current value as integer.
              */
-            long toInteger() const;
+            int toInteger() const;
 
             /**
              * Returns the current value as real.
@@ -100,32 +104,30 @@ namespace libember { namespace glow
      * Inline Implementation                              *
      ******************************************************/
 
-    inline MinMax::MinMax(ber::Value const& value)
-        : m_value(0)
+    inline MinMax MinMax::fromLeaf(dom::VariantLeaf const* leaf)
     {
-        ber::Tag const type = value.universalTag();
-        if (type.getClass() == ber::Class::Universal)
+        if (leaf != 0)
         {
-            switch(type.number())
+            ber::Value const value = leaf->value();
+            ber::Tag const tag = leaf->typeTag();
+            switch(tag.number())
             {
                 case ber::Type::Integer:
-                    m_value = Variant::create(util::ValueConverter::valueOf(value, long(0)));
-                    return;
+                    return MinMax(value.as<int>());
+
                 case ber::Type::Real:
-                    m_value = Variant::create(util::ValueConverter::valueOf(value, double(0.0)));
-                    return;
+                    return MinMax(value.as<double>());
             }
         }
 
-        if (m_value == 0)
-            m_value = Variant::create(0L);
+        return MinMax(0);
     }
 
     inline MinMax::MinMax(double value)
         : m_value(Variant::create(value))
     {}
 
-    inline MinMax::MinMax(long value)
+    inline MinMax::MinMax(int value)
         : m_value(Variant::create(value))
     {}
 
@@ -138,7 +140,7 @@ namespace libember { namespace glow
         m_value->releaseRef();
     }
 
-    inline long MinMax::toInteger() const
+    inline int MinMax::toInteger() const
     {
         return m_value->toInteger();
     }
@@ -151,11 +153,6 @@ namespace libember { namespace glow
     inline void MinMax::swap(MinMax &other)
     {
         std::swap(m_value, other.m_value);
-    }
-
-    inline ParameterType MinMax::type() const
-    {
-        return m_value->type();
     }
 
     inline MinMax& MinMax::operator=(MinMax other)

@@ -25,11 +25,9 @@
  */
 
 #include "Byte.hpp"
-#include "CommandType.hpp"
-#include "Dtd.hpp"
+#include "Command.hpp"
 #include "MessageType.hpp"
 #include "StreamDecoder.hpp"
 #include "StreamEncoder.hpp"
-#include "PackageFlag.hpp"
 
 #endif  // __LIBS101_S101_HPP

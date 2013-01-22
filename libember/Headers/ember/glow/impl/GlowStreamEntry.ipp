@@ -60,35 +60,16 @@ namespace libember { namespace glow
     int GlowStreamEntry::streamIdentifier() const
     {
         ber::Tag const tag = GlowTags::StreamEntry::StreamIdentifier(); 
-        const_iterator const first = begin();
-        const_iterator const last = end();
-        const_iterator const result = util::find_tag(first, last, tag);
-        if (result != last)
-        {
-            return util::ValueConverter::valueOf(&*result, -1);
-        }
-        else
-        {
-            return -1;
-        }
+
+        return util::ValueConverter::toValue(find_node<dom::VariantLeaf>(begin(), end(), tag), -1);
     }
 
     LIBEMBER_INLINE
     Value GlowStreamEntry::value() const
     {
-        ber::Tag const tag = GlowTags::StreamEntry::StreamValue(); 
-        const_iterator const first = begin();
-        const_iterator const last = end();
-        const_iterator const result = util::find_tag(first, last, tag);
-        if (result != last)
-        {
-            ber::Value const value = util::ValueConverter::valueOf(&*result);
-            return Value(value);
-        }
-        else
-        {
-            return Value(-1L);
-        }
+        ber::Tag const tag = GlowTags::StreamEntry::StreamValue();
+        
+        return Value::fromLeaf(find_node<dom::VariantLeaf>(begin(), end(), tag));
     }
 }
 }

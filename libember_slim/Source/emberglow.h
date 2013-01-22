@@ -35,7 +35,7 @@
   * The upper byte is the major version number, the
   * lower byte is the minor version number.
   */
-#define GLOW_SCHEMA_VERSION (0x020A)
+#define GLOW_SCHEMA_VERSION (0x0205)
 
 
 /**
@@ -97,7 +97,6 @@ typedef struct
       BerTag identifier;
       BerTag description;
       BerTag isRoot;
-      BerTag isOnline;
    } nodeContents;
 
    struct
@@ -139,64 +138,6 @@ typedef struct
       BerTag offset;
    } streamDescription;
 
-   struct
-   {
-      BerTag number;
-      BerTag contents;
-      BerTag children;
-      BerTag targets;
-      BerTag sources;
-      BerTag connections;
-   } matrix;
-   
-   struct
-   {
-      BerTag path;
-      BerTag contents;
-      BerTag children;
-      BerTag targets;
-      BerTag sources;
-      BerTag connections;
-   } qualifiedMatrix;
-   
-   struct
-   {
-      BerTag identifier;
-      BerTag description;
-      BerTag type;
-      BerTag addressingMode;
-      BerTag targetCount;
-      BerTag sourceCount;
-      BerTag maximumTotalConnects;
-      BerTag maximumConnectsPerTarget;
-      BerTag parametersLocation;
-      BerTag labels;
-   } matrixContents;
-
-   struct
-   {
-      BerTag basePath;
-      BerTag description;
-   } label;
-   
-   struct 
-   {
-      BerTag number;
-   } signal;
-
-   struct 
-   {
-      BerTag target;
-      BerTag sources;
-      BerTag operation;
-      BerTag disposition;
-   } connection;
-
-   struct 
-   {
-      BerTag item;
-   } collection;
-
    BerTag root;
 
 } __GlowTags;
@@ -226,12 +167,6 @@ typedef enum EGlowType
    GlowType_QualifiedNode         = BerType_ApplicationFlag | 10,
    GlowType_RootElementCollection = BerType_ApplicationFlag | 11,
    GlowType_StreamDescription     = BerType_ApplicationFlag | 12,
-   GlowType_Matrix                = BerType_ApplicationFlag | 13,
-   GlowType_Target                = BerType_ApplicationFlag | 14,
-   GlowType_Source                = BerType_ApplicationFlag | 15,
-   GlowType_Connection            = BerType_ApplicationFlag | 16,
-   GlowType_QualifiedMatrix       = BerType_ApplicationFlag | 17,
-   GlowType_Label                 = BerType_ApplicationFlag | 18,
 } GlowType;
 
 
@@ -297,8 +232,6 @@ typedef enum EGlowFieldFlags
    GlowFieldFlag_Enumeration        = 0x00004000,
  //GlowFieldFlag_EnumMap            = 0x00008000,
    GlowFieldFlag_StreamDescriptor   = 0x00010000,
-   GlowFieldFlag_IsRoot             = 0x00020000,
-   GlowFieldFlag_Connections        = 0x00000005,
 
    GlowFieldFlag_All                = 0xFFFFFFFF,
 } GlowFieldFlags;
@@ -309,69 +242,25 @@ typedef enum EGlowFieldFlags
   */
 typedef enum EGlowStreamFormat
 {
-   GlowStreamFormat_UnsignedInt8               =  0,
-   GlowStreamFormat_UnsignedInt16BigEndian     =  2,
-   GlowStreamFormat_UnsignedInt16LittleEndian  =  3,
-   GlowStreamFormat_UnsignedInt32BigEndian     =  4,
-   GlowStreamFormat_UnsignedInt32LittleEndian  =  5,
-   GlowStreamFormat_UnsignedInt64BigEndian     =  6,
-   GlowStreamFormat_UnsignedInt64LittleEndian  =  7,
-   GlowStreamFormat_SignedInt8                 =  8,
-   GlowStreamFormat_SignedInt16BigEndian       = 10,
-   GlowStreamFormat_SignedInt16LittleEndian    = 11,
-   GlowStreamFormat_SignedInt32BigEndian       = 12,
-   GlowStreamFormat_SignedInt32LittleEndian    = 13,
-   GlowStreamFormat_SignedInt64BigEndian       = 14,
-   GlowStreamFormat_SignedInt64LittleEndian    = 15,
-   GlowStreamFormat_IeeeFloat32BigEndian       = 20,
-   GlowStreamFormat_IeeeFloat32LittleEndian    = 21,
-   GlowStreamFormat_IeeeFloat64BigEndian       = 22,
-   GlowStreamFormat_IeeeFloat64LittleEndian    = 23,
+   GlowStreamFormat_UnsignedInt8                  =  0,
+   GlowStreamFormat_UnsignedInt16BigEndian        =  2,
+   GlowStreamFormat_UnsignedInt16LittleEndian     =  3,
+   GlowStreamFormat_UnsignedInt32BigEndian        =  4,
+   GlowStreamFormat_UnsignedInt32LittleEndian     =  5,
+   GlowStreamFormat_UnsignedInt64BigEndian        =  6,
+   GlowStreamFormat_UnsignedInt64LittleEndian     =  7,
+   GlowStreamFormat_SignedInt8                    =  8,
+   GlowStreamFormat_SignedInt16BigEndian          = 10,
+   GlowStreamFormat_SignedInt16LittleEndian       = 11,
+   GlowStreamFormat_SignedInt32BigEndian          = 12,
+   GlowStreamFormat_SignedInt32LittleEndian       = 13,
+   GlowStreamFormat_SignedInt64BigEndian          = 14,
+   GlowStreamFormat_SignedInt64LittleEndian       = 15,
+   GlowStreamFormat_IeeeFloat32BigEndian          = 20,
+   GlowStreamFormat_IeeeFloat32LittleEndian       = 21,
+   GlowStreamFormat_IeeeFloat64BigEndian          = 22,
+   GlowStreamFormat_IeeeFloat64LittleEndian       = 23,
 } GlowStreamFormat;
-
-
-/**
-  * possible values of the "addressingMode" field of a GlowMatrix
-  */
-typedef enum EGlowMatrixAddressingMode
-{
-   GlowMatrixAddressingMode_Linear     = 0,
-   GlowMatrixAddressingMode_NonLinear  = 1,
-} GlowMatrixAddressingMode;
-
-
-/**
-  * possible values of the "type" field of a GlowMatrix
-  */
-typedef enum EGlowMatrixType
-{
-   GlowMatrixType_OneToN    = 0,
-   GlowMatrixType_OneToOne  = 1,
-   GlowMatrixType_NToN      = 2,
-} GlowMatrixType;
-
-
-/**
-  * possible values of the "operation" field of a GlowConnection
-  */
-typedef enum EGlowConnectionOperation
-{
-   GlowConnectionOperation_Absolute    = 0,
-   GlowConnectionOperation_Connect     = 1,
-   GlowConnectionOperation_Disconnect  = 2,
-} GlowConnectionOperation;
-
-
-/**
-  * possible values of the "disposition" field of a GlowConnection
-  */
-typedef enum EGlowConnectionDisposition
-{
-   GlowConnectionDisposition_Tally      = 0,
-   GlowConnectionDisposition_Modified   = 1,
-   GlowConnectionDisposition_Pending    = 2,
-   GlowConnectionDisposition_Locked     = 3,
-} GlowConnectionDisposition;
 
 
 // ====================================================================
@@ -380,25 +269,26 @@ typedef enum EGlowConnectionDisposition
 //
 // ====================================================================
 
+#ifndef GLOW_MAX_IDENTIFIER_LENGTH
 /**
-  * Maximum depth of the glow tree (nodes and parameters).
-  * Dependent on the maximum depth of the ember tree. Since
-  * each glow node consists of 2 nested containers (node, children),
-  * half of the maximum ember tree depth is a good approximation.
+  * Maximum length of Parameter.identifier and Node.identifier.
   */
-#define GLOW_MAX_TREE_DEPTH (EMBER_MAX_TREE_DEPTH / 2)
+#define GLOW_MAX_IDENTIFIER_LENGTH (64)
+#endif
 
-
+#ifndef GLOW_MAX_DESCRIPTION_LENGTH
 /**
-  * Type that can be used to identify a type of
-  * parent element (see ASN.1 definition of EmberPlus-Glow.Element).
+  * Maximum length of Parameter.description and Node.description.
   */
-typedef enum EGlowElementType
-{
-   GlowElementType_Node      = 0,
-   GlowElementType_Parameter = 1,
-   GlowElementType_Matrix    = 2,
-} GlowElementType;
+#define GLOW_MAX_DESCRIPTION_LENGTH (64)
+#endif
+
+#ifndef GLOW_MAX_VALUE_LENGTH
+/**
+  * Maximum length of Parameter.value.string and Parameter.value.octets
+  */
+#define GLOW_MAX_VALUE_LENGTH (64)
+#endif
 
 /**
   * Holds information about a Glow Node or Glow QualifiedNode.
@@ -409,30 +299,18 @@ typedef struct SGlowNode
    /**
      * The "identifier" field.
      */
-   pstr pIdentifier;
+   char identifier[GLOW_MAX_IDENTIFIER_LENGTH];
 
    /**
      * The "description" field.
      */
-   pstr pDescription;
+   char description[GLOW_MAX_DESCRIPTION_LENGTH];
 
    /**
      * The "isRoot" field.
      */
    bool isRoot;
-
-   /**
-     * The "isOnline" field.
-     */
-   bool isOnline;
 } GlowNode;
-
-
-/**
-  * Frees all memory allocated by a GlowNode instance.
-  * @param pThis pointer to the object to process.
-  */
-void glowNode_free(GlowNode *pThis);
 
 
 /**
@@ -461,7 +339,7 @@ typedef struct SGlowMinMax
   */
 typedef struct SGlowOctetsValue
 {
-   byte *pOctets;
+   byte octets[GLOW_MAX_VALUE_LENGTH];
    int length;
 } GlowOctetsValue;
 
@@ -476,7 +354,7 @@ typedef struct SGlowValue
      * The type of the stored value.
      * If flag is GlowParameterType_Integer, GlowValue.integer is valid.
      * If flag is GlowParameterType_Real, GlowValue.real is valid.
-     * If flag is GlowParameterType_String, GlowValue.pString is valid.
+     * If flag is GlowParameterType_String, GlowValue.string is valid.
      * If flag is GlowParameterType_Boolean, GlowValue.boolean is valid.
      * If flag is GlowParameterType_Octets, GlowValue.octets is valid.
      */
@@ -486,25 +364,10 @@ typedef struct SGlowValue
       berlong integer;
       double real;
       bool boolean;
-      pstr pString;
+      char string[GLOW_MAX_VALUE_LENGTH];
       GlowOctetsValue octets;
    };
 } GlowValue;
-
-
-/**
-  * Deep-Copies the passed glow value to another instance,
-  * @param pThis pointer to the object to process.
-  * @param pDest pointer to the destination value.
-  */
-void glowValue_copyTo(const GlowValue *pThis, GlowValue *pDest);
-
-
-/**
-  * Frees all memory allocated by a GlowValue instance.
-  * @param pThis pointer to the object to process.
-  */
-void glowValue_free(GlowValue *pThis);
 
 
 /**
@@ -534,12 +397,12 @@ typedef struct SGlowParameter
    /**
      * the "identifier" field.
      */
-   pstr pIdentifier;
+   char identifier[GLOW_MAX_IDENTIFIER_LENGTH];
 
    /**
      * the "description" field.
      */
-   pstr pDescription;
+   char description[GLOW_MAX_DESCRIPTION_LENGTH];
 
    /**
      * the "value" field.
@@ -612,13 +475,6 @@ typedef struct SGlowParameter
 
 
 /**
-  * Frees all memory allocated by a GlowValue instance.
-  * @param pThis pointer to the object to process.
-  */
-void glowParameter_free(GlowParameter *pThis);
-
-
-/**
   * Holds information about a Glow Command.
   * @note see GlowDTD definition of type Parameter.
   */
@@ -655,190 +511,6 @@ typedef struct SGlowStreamEntry
 } GlowStreamEntry;
 
 
-/**
-  * Holds information about a Glow Label.
-  * @note see GlowDTD definition of type Label.
-  */
-typedef struct SGlowLabel
-{
-   /**
-     * the "basePath" field.
-     */
-   berint basePath[GLOW_MAX_TREE_DEPTH];
-
-   /**
-     * length of the "basePath" field.
-     */
-   int basePathLength;
-
-   /**
-     * the "identifier" field.
-     */
-   //char description[GLOW_MAX_DESCRIPTION_LENGTH];
-} GlowLabel;
-
-
-typedef enum EGlowParametersLocationKind
-{
-   GlowParametersLocationKind_BasePath = 0,
-   GlowParametersLocationKind_Inline = 1,
-} GlowParametersLocationKind;
-
-
-/**
-  * Holds the value of the GlowingEmber.MatrixContents.parametersLocation field
-  */
-typedef struct SGlowParametersLocation
-{
-   /**
-     * The kind of the stored value.
-     * BasePath: basePath is valid
-     * Inline: inlineId is valid
-     */
-   GlowParametersLocationKind kind;
-
-   union
-   {
-      struct
-      {
-         berint ids[GLOW_MAX_TREE_DEPTH];
-         int length;
-      } basePath;
-
-      berint inlineId;
-   };
-} GlowParametersLocation;
-
-
-/**
-  * Returns true if pThis points to a valid (initialized) GlowParametersLocation struct.
-  */
-bool glowParametersLocation_isValid(const GlowParametersLocation *pThis);
-
-
-/**
-  * Holds information about a Glow Matrix or Glow QualifiedMatrix.
-  * @note see GlowDTD definition of type Matrix and QualifiedMatrix.
-  */
-typedef struct SGlowMatrix
-{
-   /**
-     * the "identifier" field.
-     */
-   pstr pIdentifier;
-
-   /**
-     * the "description" field.
-     */
-   pstr pDescription;
-
-   /**
-     * the "type" field.
-     */
-   GlowMatrixType type;
-
-   /**
-     * the "addressingMode" field.
-     */
-   GlowMatrixAddressingMode addressingMode;
-
-   /**
-     * the "targetCount" field.
-     * linear: matrix X size; nonLinear: number of targets
-     */
-   berint targetCount;
-
-   /**
-     * the "sourceCount" field.
-     * linear: matrix Y size; nonLinear: number of sources
-     */
-   berint sourceCount;
-
-   /**
-     * the "maximumTotalConnects" field.
-     * nToN: max number of set connections
-     */
-   berint maximumTotalConnects;
-
-   /**
-     * the "maximumConnectsPerTarget" field.
-     * nToN: max number of sources connected to one target
-     */
-   berint maximumConnectsPerTarget;
-
-   /**
-     * the "parametersLocation" field.
-     * nToN: path to node containing parameters for targets, sources and connections
-     */
-   GlowParametersLocation parametersLocation;
-
-   /**
-     * TODO: the "labels" field.
-     */
-   //GlowLabel labels;
-} GlowMatrix;
-
-
-/**
-  * Frees all memory allocated by a GlowMatrix instance.
-  * @param pThis pointer to the object to process.
-  */
-void glowMatrix_free(GlowMatrix *pThis);
-
-
-/**
-  * Holds information about a Glow Connection.
-  * @note see GlowDTD definition of type Connection.
-  */
-typedef struct SGlowConnection
-{
-   /**
-     * the "target" field.
-     */
-   berint target;
-
-   /**
-     * the "sources" field.
-     */
-   berint *pSources;
-
-   /**
-     * length of the "sources" field.
-     */
-   int sourcesLength;
-
-   /**
-     * the "operation" field.
-     */
-   GlowConnectionOperation operation;
-
-   /**
-     * the "disposition" field.
-     */
-   GlowConnectionDisposition disposition;
-} GlowConnection;
-
-
-/**
-  * Frees all memory allocated by a GlowMatrix instance.
-  * @param pThis pointer to the object to process.
-  */
-void glowConnection_free(GlowConnection *pThis);
-
-
-/**
-  * Holds information about a Glow Signal.
-  * @note see GlowDTD definition of type Signal.
-  */
-typedef struct SGlowSignal
-{
-   /**
-     * the "number" field. 
-     */
-   berint number;
-} GlowSignal;
-
-
 // ====================================================================
 //
 // GlowOutput
@@ -865,20 +537,7 @@ typedef struct SGlowOutput
      * private field
      */
    int packageCount;
-
-#ifdef _DEBUG
-   /**
-     * private field
-     */
-   int positionHint;
-#endif
 } GlowOutput;
-
-#ifdef _DEBUG
-#define __GLOWOUTPUT_POSITION_TARGETS (1)
-#define __GLOWOUTPUT_POSITION_SOURCES (2)
-#define __GLOWOUTPUT_POSITION_CONNECTIONS (3)
-#endif
 
 /**
   * Initializes a GlowOutput instance.
@@ -987,20 +646,21 @@ void glow_writeQualifiedParameter(GlowOutput *pOut,
   *     the number of the tree's root node. May be NULL only if
   *     pathLength is 0.
   * @param pathLength number of node numbers at @p pPath.
-  * @param parent indicates the type of parent element to nest
-  *     the command in.
-  *     - parentType = GlowElementType_Node:
-  *       command is nested in a QualifiedNode
-  *     - parentType = GlowElementType_Parameter:
-  *       command is nested in a QualifiedParameter
-  *     - parentType = GlowElementType_Matrix:
-  *       command is nested in a QualifiedMatrix
+  * @param isNestedInParameter indicates that the command is a direct
+  *     child of a parameter instead of a node.
+  *     If this is true, the glow tree from the above example will look
+  *     like this:
+  *     pPath points to {1, 5}, isNestedInParameter is true -> writes
+  *     <qualifiedParameter path="1,5"><pCommand... /></qualifiedParameter>
+  *     This is needed for commands that directly affect a single parameter,
+  *     like the "subscribe" command.
   */
 void glow_writeQualifiedCommand(GlowOutput *pOut,
                                 const GlowCommand *pCommand,
                                 const berint *pPath,
                                 int pathLength,
-                                GlowElementType parentType);
+                                bool isNestedInParameter);
+
 
 /**
   * Writes a StreamEntry to the passed GlowOutput.
@@ -1009,121 +669,20 @@ void glow_writeQualifiedCommand(GlowOutput *pOut,
   */
 void glow_writeStreamEntry(GlowOutput *pOut, const GlowStreamEntry *pEntry);
 
-/**
-  * Writes a Matrix to the passed GlowOutput, encoding @p pMatrix
-  * with type QualifiedMatrix.
-  * Only writes the "contents" set of the matrix. The sequences "targets",
-  * "sources" and "connections" are written with dedicated functions.
-  * The last integer at @p pPath is the number of the matrix.
-  * @param pOut pointer to the output to be used for in-memory framing.
-  * @param pMatrix pointer to the matrix to write.
-  * @param fields flags indicating which fields of @p pMatrix should
-  *     be written.
-  * @param pPath pointer to the first number in the node path, which is
-  *     the number of the tree's root node. The last number is the parameter's
-  *     number. May be NULL only if pathLength is 0.
-  *     This is encoded in the "path" field of the QualifiedMatrix.
-  * @param pathLength number of node numbers at @p pPath.
-  */
-void glow_writeQualifiedMatrix(GlowOutput *pOut,
-                               const GlowMatrix *pMatrix,
-                               GlowFieldFlags fields,
-                               const berint *pPath,
-                               int pathLength);
-
-/**
-  * Writes the prefix for the "targets" sequence of a QualifiedMatrix.
-  * (in XML, this would be: <QualifiedMatrix path="pMatrixPath"><Targets>).
-  * @param pOut pointer to the output to be used for in-memory framing.
-  * @param pMatrixPath pointer to the first number in the node path to the
-  *     enclosing matrix. May be NULL only if pathLength is 0.
-  *     This is encoded in the "path" field of the QualifiedMatrix.
-  * @param matrixPathLength number of node numbers at @p pPath.
-  */
-void glow_writeTargetsPrefix(GlowOutput *pOut,
-                             const berint *pMatrixPath,
-                             int matrixPathLength);
-
-/**
-  * Writes a Target to the passed GlowOutput. Only valid if preceeded by a
-  * call to glow_writeTargetsPrefix.
-  * @param pOut pointer to the output to be used for in-memory framing.
-  * @param pConnection pointer to the target to write.
-  */
-void glow_writeTarget(GlowOutput *pOut, const GlowSignal *pTarget);
-
-/**
-  * Writes the suffix for the "targets" sequence of a QualifiedMatrix.
-  * (in XML, this would be: </Targets></QualifiedMatrix>).
-  * Only valid if preceeded by a call to glow_writeTargetsPrefix.
-  * @param pOut pointer to the output to be used for in-memory framing.
-  */
-void glow_writeTargetsSuffix(GlowOutput *pOut);
-
-/**
-  * Writes the prefix for the "sources" sequence of a QualifiedMatrix.
-  * (in XML, this would be: <QualifiedMatrix path="pMatrixPath"><Sources>).
-  * @param pOut pointer to the output to be used for in-memory framing.
-  * @param pMatrixPath pointer to the first number in the node path to the
-  *     enclosing matrix. May be NULL only if pathLength is 0.
-  *     This is encoded in the "path" field of the QualifiedMatrix.
-  * @param matrixPathLength number of node numbers at @p pPath.
-  */
-void glow_writeSourcesPrefix(GlowOutput *pOut,
-                             const berint *pMatrixPath,
-                             int matrixPathLength);
-
-/**
-  * Writes a Source to the passed GlowOutput. Only valid if preceeded by a
-  * call to glow_writeSourcesPrefix.
-  * @param pOut pointer to the output to be used for in-memory framing.
-  * @param pConnection pointer to the source to write.
-  */
-void glow_writeSource(GlowOutput *pOut, const GlowSignal *pSource);
-
-/**
-  * Writes the suffix for the "sources" sequence of a QualifiedMatrix.
-  * (in XML, this would be: </Sources></QualifiedMatrix>).
-  * Only valid if preceeded by a call to glow_writeSourcesPrefix.
-  * @param pOut pointer to the output to be used for in-memory framing.
-  */
-void glow_writeSourcesSuffix(GlowOutput *pOut);
-
-/**
-  * Writes the prefix for the "connections" sequence of a QualifiedMatrix.
-  * (in XML, this would be: <QualifiedMatrix path="pMatrixPath"><Connections>).
-  * @param pOut pointer to the output to be used for in-memory framing.
-  * @param pMatrixPath pointer to the first number in the node path to the
-  *     enclosing matrix. May be NULL only if pathLength is 0.
-  *     This is encoded in the "path" field of the QualifiedMatrix.
-  * @param matrixPathLength number of node numbers at @p pPath.
-  */
-void glow_writeConnectionsPrefix(GlowOutput *pOut,
-                                 const berint *pMatrixPath,
-                                 int matrixPathLength);
-
-/**
-  * Writes a Connection to the passed GlowOutput. Only valid if preceeded by a
-  * call to glow_writeConnectionsPrefix.
-  * @param pOut pointer to the output to be used for in-memory framing.
-  * @param pConnection pointer to the connection to write.
-  */
-void glow_writeConnection(GlowOutput *pOut, const GlowConnection *pConnection);
-
-/**
-  * Writes the suffix for the "connections" sequence of a QualifiedMatrix.
-  * (in XML, this would be: </Connections></QualifiedMatrix>).
-  * Only valid if preceeded by a call to glow_writeConnectionsPrefix.
-  * @param pOut pointer to the output to be used for in-memory framing.
-  */
-void glow_writeConnectionsSuffix(GlowOutput *pOut);
-
 
 // ====================================================================
 //
 // NonFramingGlowReader
 //
 // ====================================================================
+
+/**
+  * Maximum depth of the glow tree (nodes and parameters).
+  * Dependent on the maximum depth of the ember tree. Since
+  * each glow node consists of 2 nested containers (node, children),
+  * half of the maximum ember tree depth is a good approximation.
+  */
+#define MAX_GLOW_TREE_DEPTH (MAX_EMBER_TREE_DEPTH / 2)
 
 /**
   * Function type used by NonFramingGlowReader to notify the application
@@ -1144,8 +703,6 @@ typedef void (*onParameter_t)(const GlowParameter *pParameter, GlowFieldFlags fi
   * Function type used by NonFramingGlowReader to notify the application
   * of an incoming glow node.
   * @param pNode pointer to the read node.
-  * @param fields flags indicating which fields of @p pNode have been
-  *     read.
   * @param pPath pointer to the first number in the node path, which is
   *     the number of the tree's root node. May be NULL only if
   *     pathLength is 0.
@@ -1153,7 +710,7 @@ typedef void (*onParameter_t)(const GlowParameter *pParameter, GlowFieldFlags fi
   * @param pathLength number of node numbers at @p pPath.
   * @param state application-defined state as stored in NonFramingGlowReader.
   */
-typedef void (*onNode_t)(const GlowNode *pNode, GlowFieldFlags fields, const berint *pPath, int pathLength, voidptr state);
+typedef void (*onNode_t)(const GlowNode *pNode, const berint *pPath, int pathLength, voidptr state);
 
 /**
   * Function type used by NonFramingGlowReader to notify the application
@@ -1172,14 +729,6 @@ typedef void (*onCommand_t)(const GlowCommand *pCommand, const berint *pPath, in
   * Function type used by NonFramingGlowReader to notify the application
   * of an incoming glow stream entry.
   * @param pStreamEntry pointer to the read stream entry.
-  * @param state application-defined state as stored in NonFramingGlowReader.
-  */
-typedef void (*onStreamEntry_t)(const GlowStreamEntry *pStreamEntry, voidptr state);
-
-/**
-  * Function type used by NonFramingGlowReader to notify the application
-  * of an incoming matrix.
-  * @param pMatrix pointer to the read matrix.
   * @param pPath pointer to the first number in the node path, which is
   *     the number of the tree's root node. May be NULL only if
   *     pathLength is 0.
@@ -1187,33 +736,7 @@ typedef void (*onStreamEntry_t)(const GlowStreamEntry *pStreamEntry, voidptr sta
   * @param pathLength number of node numbers at @p pPath.
   * @param state application-defined state as stored in NonFramingGlowReader.
   */
-typedef void (*onMatrix_t)(const GlowMatrix *pMatrix, const berint *pPath, int pathLength, voidptr state);
-
-/**
-  * Function type used by NonFramingGlowReader to notify the application
-  * of an incoming signal.
-  * @param pSignal pointer to the read signal.
-  * @param pPath pointer to the first number in the node path, which is
-  *     the number of the tree's root node. May be NULL only if
-  *     pathLength is 0.
-  *     This path identifies the element containing the signal (usually a matrix).
-  * @param pathLength number of node numbers at @p pPath.
-  * @param state application-defined state as stored in NonFramingGlowReader.
-  */
-typedef void (*onSignal_t)(const GlowSignal *pSignal, const berint *pPath, int pathLength, voidptr state);
-
-/**
-  * Function type used by NonFramingGlowReader to notify the application
-  * of an incoming connection.
-  * @param pConnection pointer to the read connection.
-  * @param pPath pointer to the first number in the node path, which is
-  *     the number of the tree's root node. May be NULL only if
-  *     pathLength is 0.
-  *     This path identifies the element containing the connection (usually a matrix).
-  * @param pathLength number of node numbers at @p pPath.
-  * @param state application-defined state as stored in NonFramingGlowReader.
-  */
-typedef void (*onConnection_t)(const GlowConnection *pConnection, const berint *pPath, int pathLength, voidptr state);
+typedef void (*onStreamEntry_t)(const GlowStreamEntry *pStreamEntry, const berint *pPath, int pathLength, voidptr state);
 
 /**
   * Lists the possible states of a GlowReader when calling the
@@ -1225,10 +748,6 @@ typedef enum EGlowReaderPosition
    GlowReaderPosition_ParameterContents,
    GlowReaderPosition_Command,
    GlowReaderPosition_StreamEntry,
-   GlowReaderPosition_MatrixContents,
-   GlowReaderPosition_Target,
-   GlowReaderPosition_Source,
-   GlowReaderPosition_Connection,
 } GlowReaderPosition;
 
 /**
@@ -1265,55 +784,37 @@ typedef struct SNonFramingGlowReader
    /**
      * Private field.
      */
-   berint path[GLOW_MAX_TREE_DEPTH];
+   berint path[MAX_GLOW_TREE_DEPTH];
 
    /**
      * Private field.
      */
    int pathLength;
 
-   union
-   {
-      /**
-        * Private field.
-        */
-      GlowNode node;
-
-      /**
-        * Private field.
-        */
-      GlowParameter parameter;
-
-      /**
-        * Private field.
-        */
-      GlowCommand command;
-
-      /**
-        * Private field.
-        */
-      GlowStreamEntry streamEntry;
-
-      /**
-        * Private field.
-        */
-      GlowMatrix matrix;
-
-      /**
-        * Private field.
-        */
-      GlowSignal signal;
-
-      /**
-        * Private field.
-        */
-      GlowConnection connection;
-   };
+   /**
+     * Private field.
+     */
+   GlowNode node;
 
    /**
      * Private field.
      */
-   GlowFieldFlags fields;
+   GlowParameter parameter;
+
+   /**
+     * Private field.
+     */
+   GlowFieldFlags paramFields;
+
+   /**
+     * Private field.
+     */
+   GlowCommand command;
+
+   /**
+     * Private field.
+     */
+   GlowStreamEntry streamEntry;
 
    /**
      * Private field.
@@ -1345,30 +846,6 @@ typedef struct SNonFramingGlowReader
    onStreamEntry_t onStreamEntry;
 
    /**
-     * May be set to a callback function called when
-     * a glow matrix has been read.
-     */
-   onMatrix_t onMatrix;
-
-   /**
-     * May be set to a callback function called when
-     * a glow target has been read.
-     */
-   onSignal_t onTarget;
-
-   /**
-     * May be set to a callback function called when
-     * a glow source has been read.
-     */
-   onSignal_t onSource;
-
-   /**
-     * May be set to a callback function called when
-     * a glow target has been read.
-     */
-   onConnection_t onConnection;
-
-   /**
      * May be set to a callback function called when an unsupported TTLV
      * has been read.
      * The application code can evaluate the TTLV using the passed Arguments.
@@ -1387,6 +864,11 @@ typedef struct SNonFramingGlowReader
   * Must be called before any other operations on the
   * NonFramingGlowReader instance are invoked.
   * @param pThis pointer to the object to process.
+  * @param pBuffer pointer to the memory location to store
+  *     encoded values to.
+  * @param bufferSize maximum length of a encoded value.
+  *      If this value is exceeded, the throwError callback
+  *      is invoked.
   * @param onNode callback function to called by the reader
   *     when a glow node has been read.
   * @param onParameter callback function to called by the reader
@@ -1399,6 +881,8 @@ typedef struct SNonFramingGlowReader
   *     all memory allocated by nonFramingGlowReader_init.
   */
 void nonFramingGlowReader_init(NonFramingGlowReader *pThis,
+                               byte *pBuffer,
+                               int bufferSize,
                                onNode_t onNode,
                                onParameter_t onParameter,
                                onCommand_t onCommand,
@@ -1457,6 +941,11 @@ typedef struct SGlowReader
   * Must be called before any other operations on the
   * GlowReader instance are invoked.
   * @param pThis pointer to the object to process.
+  * @param pValueBuffer pointer to the memory location to store
+  *     encoded primitive values to.
+  * @param valueBufferSize maximum length of a primitive encoded
+  *      value. If this value is exceeded, the throwError callback
+  *      is invoked.
   * @param onNode callback function to called by the reader
   *     when a glow node has been read.
   * @param onParameter callback function to called by the reader
@@ -1479,6 +968,8 @@ typedef struct SGlowReader
   *     all memory allocated by glowReader_init.
   */
 void glowReader_init(GlowReader *pThis,
+                     byte *pValueBuffer,
+                     int valueBufferSize,
                      onNode_t onNode,
                      onParameter_t onParameter,
                      onCommand_t onCommand,

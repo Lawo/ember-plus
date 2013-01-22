@@ -30,7 +30,7 @@ namespace libember { namespace glow
      * Helper class that may contain different data types (string, int, double) and 
      * is able to convert them to any other type supported.
      * This class is used by MinMax and Value.
-     * @note This class should not be used directly. Use MinMax or Value instead.
+     * @note This should not be used directly. Use MinMax or Value instead.
      */
     struct Variant
     {
@@ -50,7 +50,7 @@ namespace libember { namespace glow
          * integer, the implementation will try to convert it.
          * @return Returns the internal value as integer.
          */
-        virtual long toInteger() const = 0;
+        virtual int toInteger() const = 0;
 
         /** 
          * Returns the internal value as double. If the internal type is not a
@@ -169,7 +169,7 @@ namespace libember { namespace glow
             friend struct Variant;
             typedef std::string value_type;
             public:
-                virtual long toInteger() const
+                virtual int toInteger() const
                 {
                     std::stringstream stream(m_value);
                     int integer = 0;
@@ -224,12 +224,12 @@ namespace libember { namespace glow
          * Variant specialization for the integer type.
          */
         template<>
-        struct VariantImpl<long> : Variant
+        struct VariantImpl<int> : Variant
         {
             friend struct Variant;
             typedef int value_type;
             public:
-                virtual long toInteger() const
+                virtual int toInteger() const
                 {
                     return m_value;
                 }
@@ -284,9 +284,9 @@ namespace libember { namespace glow
             friend struct Variant;
             typedef double value_type;
             public:
-                virtual long toInteger() const
+                virtual int toInteger() const
                 {
-                    return static_cast<long>(m_value);
+                    return static_cast<int>(m_value);
                 }
 
                 virtual double toReal() const
@@ -339,7 +339,7 @@ namespace libember { namespace glow
             friend struct Variant;
             typedef bool value_type;
             public:
-                virtual long toInteger() const
+                virtual int toInteger() const
                 {
                     return m_value ? 1 : 0;
                 }
@@ -391,7 +391,7 @@ namespace libember { namespace glow
             friend struct Variant;
             typedef ber::Octets value_type;
             public:
-                virtual long toInteger() const
+                virtual int toInteger() const
                 {
                     return 0;
                 }

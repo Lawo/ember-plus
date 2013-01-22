@@ -28,7 +28,7 @@ namespace libember { namespace glow
     class GlowNodeFactory;
     class GlowElementCollection;
     class GlowRootElementCollection;
-    class GlowNodeBase;
+    class GlowQualifiedNode;
 
     /**
      * Class representing a single node.
@@ -57,10 +57,26 @@ namespace libember { namespace glow
             /**
              * Initializes a new GlowNode with the specified number and adds it as child node
              * to the provided parent.
+             * @param parent The collection owning this node.
+             * @param number The internal node number.
+             */
+            GlowNode(GlowElementCollection* parent, int number);
+
+            /**
+             * Initializes a new GlowNode with the specified number and adds it as child node
+             * to the provided parent.
              * @param parent The node owning this node.
              * @param number The internal node number.
              */
-            GlowNode(GlowNodeBase* parent, int number);
+            GlowNode(GlowNode* parent, int number);
+
+            /**
+             * Initializes a new GlowNode with the specified number and adds it as child node
+             * to the provided parent.
+             * @param parent The node owning this node.
+             * @param number The internal node number.
+             */
+            GlowNode(GlowQualifiedNode* parent, int number);
 
             /**
              * Constructor, initializes a Glow node with an application tag.

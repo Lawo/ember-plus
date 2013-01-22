@@ -12,8 +12,7 @@
 //$$ MSVCRT specific
 #include <WinSock2.h>
 
-#include "emberplus.h"
-#include "emberinternal.h"
+#include "emberglow.h"
 
 //$$ MSVCRT specific
 // Need to link with Ws2_32.lib
@@ -31,9 +30,6 @@
 #define stringCopy(dest, size, source) \
    do { strncpy_s(dest, size, source, (size) - 1); dest[(size) - 1] = 0; } while(0)
 #endif
-
-#define stringDup(pStr) \
-   (pStr != NULL ? _strdup(pStr) : NULL)
 
 
 // ====================================================================
@@ -60,7 +56,6 @@ static void onFailAssertion(pcstr pFileName, int lineNumber)
 // ====================================================================
 
 #define STREAMS_COUNT (3)
-#define STREAMS_MAX_STRING_LENGTH (16)
 
 static GlowStreamEntry _streams[STREAMS_COUNT];
 
@@ -73,18 +68,10 @@ static void initializePpmStreams()
 
    _streams[1].streamIdentifier = 1;
    _streams[1].streamValue.flag = GlowParameterType_Octets;
-   _streams[1].streamValue.octets.pOctets = newarr(byte, 8);
    _streams[1].streamValue.octets.length = 8;
 
    _streams[2].streamIdentifier = 2;
    _streams[2].streamValue.flag = GlowParameterType_String;
-   _streams[2].streamValue.pString = newarr(char, STREAMS_MAX_STRING_LENGTH);
-}
-
-static void freePpmStreams()
-{
-   freeMemory(_streams[1].streamValue.octets.pOctets);
-   freeMemory(_streams[2].streamValue.pString);
 }
 
 static void collectPpmData()
@@ -93,13 +80,13 @@ static void collectPpmData()
    _streams[0].streamValue.integer = ((rand() % 80) - 64) * 32; // from -64 to +15 in db/32
 
    // octets containing big endian int16
-   *(short *)&_streams[1].streamValue.octets.pOctets[0] = htons(((rand() % 256) - 128) * 32); // from -128 to +127 in db/32
+   *(short *)&_streams[1].streamValue.octets.octets[0] = htons(((rand() % 256) - 128) * 32); // from -128 to +127 in db/32
 
    // octets containing little endian int32
-   *(berint *)&_streams[1].streamValue.octets.pOctets[4] = ((rand() % 256) - 255) * 32; // from -255 to 0 in db/32
+   *(berint *)&_streams[1].streamValue.octets.octets[4] = ((rand() % 256) - 255) * 32; // from -255 to 0 in db/32
 
-   stringCopy(_streams[2].streamValue.pString, STREAMS_MAX_STRING_LENGTH, "abc");
-   _itoa_s(rand() % 100, &_streams[2].streamValue.pString[3], STREAMS_MAX_STRING_LENGTH - 3, 10);
+   stringCopy(_streams[2].streamValue.string, GLOW_MAX_VALUE_LENGTH, "abc");
+   _itoa_s(rand() % 100, &_streams[2].streamValue.string[3], GLOW_MAX_VALUE_LENGTH - 3, 10);
 }
 
 
@@ -152,28 +139,23 @@ static void sampleNode_free(SampleNode *pThis)
       if(pChild != NULL)
       {
          sampleNode_free(pChild);
-         freeMemory(pChild);
+         free(pChild);
       }
    }
-
-   if(pThis->isParameter)
-      glowParameter_free(&pThis->param);
-   else
-      glowNode_free(&pThis->node);
 
    bzero(*pThis);
 }
 
 static SampleNode *createNode(SampleNode *pParent, pcstr pIdentifier, pcstr pDescription)
 {
-   SampleNode *pNode = newobj(SampleNode);
+   SampleNode *pNode = (SampleNode *)malloc(sizeof(SampleNode));
    dword fields = GlowFieldFlag_Identifier;
    sampleNode_init(pNode, pParent);
-   pNode->node.pIdentifier = stringDup(pIdentifier);
+   stringCopy(pNode->node.identifier, GLOW_MAX_IDENTIFIER_LENGTH, pIdentifier);
 
    if(pDescription != NULL)
    {
-      pNode->node.pDescription = stringDup(pDescription);
+      stringCopy(pNode->node.description, GLOW_MAX_DESCRIPTION_LENGTH, pDescription);
       fields |= GlowFieldFlag_Description;
    }
 
@@ -183,16 +165,16 @@ static SampleNode *createNode(SampleNode *pParent, pcstr pIdentifier, pcstr pDes
 
 static SampleNode *createParameter(SampleNode *pParent, pcstr pIdentifier, pcstr pDescription)
 {
-   SampleNode *pNode = newobj(SampleNode);
+   SampleNode *pNode = (SampleNode *)malloc(sizeof(SampleNode));
    dword fields = GlowFieldFlag_Identifier;
    sampleNode_init(pNode, pParent);
    pNode->isParameter = true;
 
-   pNode->param.pIdentifier = stringDup(pIdentifier);
+   stringCopy(pNode->param.identifier, GLOW_MAX_IDENTIFIER_LENGTH, pIdentifier);
 
    if(pDescription != NULL)
    {
-      pNode->param.pDescription = stringDup(pDescription);
+      stringCopy(pNode->param.description, GLOW_MAX_DESCRIPTION_LENGTH, pDescription);
       fields |= GlowFieldFlag_Description;
    }
 
@@ -368,7 +350,7 @@ static void createStream4(SampleNode *pParent)
    pParam->param.type = GlowParameterType_String;
    fields |= GlowFieldFlag_Type;
 
-   pParam->param.maximum.integer = STREAMS_MAX_STRING_LENGTH - 1;
+   pParam->param.maximum.integer = GLOW_MAX_VALUE_LENGTH - 1;
    pParam->param.maximum.flag = GlowParameterType_Integer;
    fields |= GlowFieldFlag_Maximum;
 
@@ -461,9 +443,9 @@ static void onCommand(const GlowCommand *pCommand, const berint *pPath, int path
 
    if(pCommand->number == GlowCommandType_GetDirectory)
    {
-      pOutPath = newarr(berint, GLOW_MAX_TREE_DEPTH);
+      pOutPath = (berint *)malloc(MAX_GLOW_TREE_DEPTH);
       memcpy(pOutPath, pPath, pathLength * sizeof(berint));
-      pBuffer = newarr(byte, bufferSize);
+      pBuffer = (byte *)malloc(bufferSize);
       glowOutput_init(&output, pBuffer, bufferSize, 0);
 
       if(pCursor->isParameter)
@@ -476,7 +458,7 @@ static void onCommand(const GlowCommand *pCommand, const berint *pPath, int path
       }
       else if(pCursor->childrenCount == 0)
       {
-         // leaf node - send single empty node
+         // leaf node - send single complete node
          fields = 0;
          glowOutput_beginPackage(&output, true);
          glow_writeQualifiedNode(&output, &pCursor->node, (GlowFieldFlags)fields, pOutPath, pathLength);
@@ -505,8 +487,8 @@ static void onCommand(const GlowCommand *pCommand, const berint *pPath, int path
          }
       }
 
-      freeMemory(pBuffer);
-      freeMemory(pOutPath);
+      free(pBuffer);
+      free(pOutPath);
    }
    else if(pCommand->number == GlowCommandType_Subscribe)
    {
@@ -534,15 +516,14 @@ static void onParameter(const GlowParameter *pParameter, GlowFieldFlags fields, 
    if(pCursor->isParameter
    && (fields & GlowFieldFlag_Value) == GlowFieldFlag_Value)
    {
-      glowValue_free(&pCursor->param.value);
-      glowValue_copyTo(&pParameter->value, &pCursor->param.value);
+      memcpy(&pCursor->param.value, &pParameter->value, sizeof(GlowValue));
 
-      pBuffer = newarr(byte, bufferSize);
+      pBuffer = (byte *)malloc(bufferSize);
       glowOutput_init(&output, pBuffer, bufferSize, 0);
       glowOutput_beginPackage(&output, true);
       glow_writeQualifiedParameter(&output, &pCursor->param, GlowFieldFlag_Value, pPath, pathLength);
       send(sock, (char *)pBuffer, glowOutput_finishPackage(&output), 0);
-      freeMemory(pBuffer);
+      free(pBuffer);
    }
 }
 
@@ -591,6 +572,7 @@ static void handleClient(SOCKET sock)
    byte buffer[64];
    int read;
    const int rxBufferSize = 1024; // max size of unfamed package
+   const int valueBufferSize = 64; // max size of encoded primitive BER value
    const struct timeval timeout = {0, 50 * 1000}; // 50 milliseconds timeout for select()
    const int noDelay = 1;
    const int streamBufferSize = 128;
@@ -599,9 +581,10 @@ static void handleClient(SOCKET sock)
    ClientInfo client;
 
    // allocate large objects on the heap
-   GlowReader *pReader = newobj(GlowReader);
-   byte *pRxBuffer = newarr(byte, rxBufferSize);
-   byte *pStreamBuffer = newarr(byte, streamBufferSize);
+   GlowReader *pReader = (GlowReader *)malloc(sizeof(GlowReader));
+   byte *pRxBuffer = (byte *)malloc(rxBufferSize);
+   byte *pValueBuffer = (byte *)malloc(valueBufferSize);
+   byte *pStreamBuffer = (byte *)malloc(streamBufferSize);
 
    srand((unsigned int)time(NULL));
 
@@ -612,7 +595,7 @@ static void handleClient(SOCKET sock)
    client.sock = sock;
 
    // only handle parameters and commands
-   glowReader_init(pReader, NULL, onParameter, onCommand, NULL, (voidptr)&client, pRxBuffer, rxBufferSize);
+   glowReader_init(pReader, pValueBuffer, valueBufferSize, NULL, onParameter, onCommand, NULL, (voidptr)&client, pRxBuffer, rxBufferSize);
    pReader->onPackageReceived = onPackageReceived;
 
    while(true)
@@ -652,9 +635,10 @@ static void handleClient(SOCKET sock)
 
    closesocket(sock);
    glowReader_free(pReader);
-   freeMemory(pStreamBuffer);
-   freeMemory(pRxBuffer);
-   freeMemory(pReader);
+   free(pStreamBuffer);
+   free(pValueBuffer);
+   free(pRxBuffer);
+   free(pReader);
 }
 
 static void initSockets()
@@ -708,37 +692,11 @@ static void acceptClient(int port)
 //
 // ====================================================================
 
-static int allocCount = 0;
-
-static void *allocMemoryImpl(size_t size)
-{
-   void *pMemory = malloc(size);
-
-   //if(sizeof(void *) == 8)
-   //   printf("allocate %lu bytes: %llX\n", size, (unsigned long long)pMemory);
-   //else
-   //   printf("allocate %lu bytes: %lX\n", size, (unsigned long)pMemory);
-
-   allocCount++;
-   return pMemory;
-}
-
-static void freeMemoryImpl(void *pMemory)
-{
-   //if(sizeof(void *) == 8)
-   //   printf("free: %llX\n", (unsigned long long)pMemory);
-   //else
-   //   printf("free: %lX\n", (unsigned long)pMemory);
-
-   allocCount--;
-   free(pMemory);
-}
-
 void runProvider(int argc, char **argv)
 {
    int port;
 
-   ember_init(onThrowError, onFailAssertion, malloc, free);
+   ember_init(onThrowError, onFailAssertion);
    initializePpmStreams();
    buildTree(&_root);
 
@@ -751,5 +709,4 @@ void runProvider(int argc, char **argv)
    }
 
    sampleNode_free(&_root);
-   freePpmStreams();
 }

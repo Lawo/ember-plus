@@ -28,14 +28,11 @@ namespace libember { namespace glow
 { 
     /** Forward declaration **/
     class GlowNodeFactory;
-    class GlowNodeBase;
-    class GlowParameterBase;
-    class GlowRootElementCollection;
+    class GlowNode;
+    class GlowParameter;
+    class GlowQualifiedNode;
+    class GlowQualifiedParameter;
 
-    /**
-     * The GlowCommand contains a command code (called number) and it is usually attached to the 
-     * RootElementCollection, a Node or a Parameter.
-     */ 
     class LIBEMBER_API GlowCommand : public GlowElement
     {
         friend class GlowNodeFactory;
@@ -46,34 +43,43 @@ namespace libember { namespace glow
              * @param number The command number to initialize this instance with.
              * @param mask Optional mask that indicates the properties a consumer is interested in.
              */
-            GlowCommand(CommandType const& number, DirFieldMask const& mask = DirFieldMask::Default);
+            GlowCommand(CommandType const& number, DirFieldMask const& mask = DirFieldMask::None);
 
             /**
              * Initializes a command and attaches it to the provided parent.
              * @note The application tag will be set to ContextSpecific-0.
-             * @param parent The parent this command refers to.
+             * @param parent The parameter this command refers to.
              * @param number The command number to initialize this instance with.
              * @param mask Optional mask that indicates the properties a consumer is interested in.
              */
-            explicit GlowCommand(GlowRootElementCollection* parent, CommandType const& number, DirFieldMask const& mask = DirFieldMask::Default);
+            explicit GlowCommand(GlowParameter* parent, CommandType const& number, DirFieldMask const& mask = DirFieldMask::None);
 
             /**
              * Initializes a command and attaches it to the provided parent.
              * @note The application tag will be set to ContextSpecific-0.
-             * @param parent The parent this command refers to.
+             * @param parent The parameter this command refers to.
              * @param number The command number to initialize this instance with.
              * @param mask Optional mask that indicates the properties a consumer is interested in.
              */
-            explicit GlowCommand(GlowParameterBase* parent, CommandType const& number, DirFieldMask const& mask = DirFieldMask::Default);
+            explicit GlowCommand(GlowQualifiedParameter* parent, CommandType const& number, DirFieldMask const& mask = DirFieldMask::None);
 
             /**
              * Initializes a command and attaches it to the provided parent.
              * @note The application tag will be set to ContextSpecific-0.
-             * @param parent The parent this command refers to.
+             * @param parent The node this command refers to.
              * @param number The command number to initialize this instance with.
              * @param mask Optional mask that indicates the properties a consumer is interested in.
              */
-            explicit GlowCommand(GlowNodeBase* parent, CommandType const& number, DirFieldMask const& mask = DirFieldMask::Default);
+            explicit GlowCommand(GlowNode* parent, CommandType const& number, DirFieldMask const& mask = DirFieldMask::None);
+
+            /**
+             * Initializes a command and attaches it to the provided parent.
+             * @note The application tag will be set to ContextSpecific-0.
+             * @param parent The node this command refers to.
+             * @param number The command number to initialize this instance with.
+             * @param mask Optional mask that indicates the properties a consumer is interested in.
+             */
+            explicit GlowCommand(GlowQualifiedNode* parent, CommandType const& number, DirFieldMask const& mask = DirFieldMask::None);
 
             /**
              * Returns the command number.
@@ -108,7 +114,7 @@ namespace libember { namespace glow
 }
 
 #ifdef LIBEMBER_HEADER_ONLY
-#  include "impl/GlowCommand.ipp"
+#   include "impl/GlowCommand.ipp"
 #endif
 
 #endif  // __LIBEMBER_GLOW_GLOWCOMMAND_HPP

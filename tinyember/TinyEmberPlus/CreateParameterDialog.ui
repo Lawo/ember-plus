@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>350</width>
-    <height>179</height>
+    <height>150</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -27,7 +27,7 @@
    <property name="geometry">
     <rect>
      <x>10</x>
-     <y>140</y>
+     <y>110</y>
      <width>331</width>
      <height>33</height>
     </rect>
@@ -74,7 +74,7 @@
      <x>10</x>
      <y>10</y>
      <width>332</width>
-     <height>121</height>
+     <height>101</height>
     </rect>
    </property>
    <layout class="QFormLayout" name="formLayout">
@@ -127,18 +127,6 @@
         <string>Enumeration</string>
        </property>
       </item>
-      <item>
-       <property name="text">
-        <string>Boolean</string>
-       </property>
-      </item>
-     </widget>
-    </item>
-    <item row="5" column="1">
-     <widget class="QLabel" name="statusText">
-      <property name="text">
-       <string/>
-      </property>
      </widget>
     </item>
    </layout>

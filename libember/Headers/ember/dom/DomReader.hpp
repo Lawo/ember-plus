@@ -47,11 +47,9 @@ namespace libember { namespace dom
 
             /**
              * Constructs a node structure from an octet stream. The stream must contain
-             * the complete data of the previously encoded structure. The returned root node
-             * must be deleted manually when it is no longer needed.
+             * the complete data of the previously encoded structure.
              * @param input Input stream containing the encoded data.
-             * @param factory The node factory to use when a new item has been read.
-             * @throw std::runtime_error when the decoded root node is not a container.
+             * @param factory 
              */
             Node* decodeTree(util::OctetStream& input, NodeFactory const& factory);
 
@@ -120,7 +118,6 @@ namespace libember { namespace dom
              * Reads the total length, the application tag, the inner length and the type tag
              * of the next item. Returns true if a valid item has been detected.
              * @return True if another item can be decoded, otherwise false.
-             * @throw std::runtime_error when an invalid tag or length has been detected.
              */
             bool read();
 

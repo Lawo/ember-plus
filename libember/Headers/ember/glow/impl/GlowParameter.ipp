@@ -24,7 +24,8 @@
 #include "../util/ValueConverter.hpp"
 #include "../GlowStringIntegerPair.hpp"
 #include "../GlowTags.hpp"
-#include "../GlowNodeBase.hpp"
+#include "../GlowNode.hpp"
+#include "../GlowQualifiedNode.hpp"
 
 namespace libember { namespace glow 
 {
@@ -36,7 +37,20 @@ namespace libember { namespace glow
     }
 
     LIBEMBER_INLINE
-    GlowParameter::GlowParameter(GlowNodeBase* parent, int number)
+    GlowParameter::GlowParameter(GlowNode* parent, int number)
+        : GlowParameterBase(GlowType::Parameter, GlowTags::ElementDefault(), GlowTags::Parameter::Contents(), GlowTags::Parameter::Children())
+    {
+        insert(begin(), new dom::VariantLeaf(GlowTags::Parameter::Number(), number));
+        if (parent)
+        {
+            GlowElementCollection* children = parent->children();
+            GlowElementCollection::iterator const where = children->end();
+            children->insert(where, this);
+        }
+    }
+
+    LIBEMBER_INLINE
+    GlowParameter::GlowParameter(GlowQualifiedNode* parent, int number)
         : GlowParameterBase(GlowType::Parameter, GlowTags::ElementDefault(), GlowTags::Parameter::Contents(), GlowTags::Parameter::Children())
     {
         insert(begin(), new dom::VariantLeaf(GlowTags::Parameter::Number(), number));
@@ -63,19 +77,8 @@ namespace libember { namespace glow
     LIBEMBER_INLINE
     int GlowParameter::number() const
     {
-        ber::Tag const tag = GlowTags::Parameter::Number();
-        const_iterator const first = begin();
-        const_iterator const last = end();
-        const_iterator const result = util::find_tag(first, last, tag);
-        if (result != last)
-        {
-            int const value = util::ValueConverter::valueOf(&*result, -1);
-            return value;
-        }
-        else
-        {
-            return -1;
-        }
+        dom::VariantLeaf const* leaf = find_node<dom::VariantLeaf>(begin(), end(), GlowTags::Parameter::Number());
+        return util::ValueConverter::toValue(leaf, -1);
     }
 }
 }

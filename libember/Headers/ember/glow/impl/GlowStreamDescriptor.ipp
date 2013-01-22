@@ -24,7 +24,6 @@
 #include "../../dom/VariantLeaf.hpp"
 #include "../GlowTags.hpp"
 #include "../util/ValueConverter.hpp"
-#include "../StreamFormat.hpp"
 
 namespace libember { namespace glow 
 {
@@ -45,36 +44,18 @@ namespace libember { namespace glow
     StreamFormat GlowStreamDescriptor::format() const
     {
         ber::Tag const tag = GlowTags::StreamDescriptor::Format();
-        const_iterator const first = begin();
-        const_iterator const last = end();
-        const_iterator const result = util::find_tag(first, last, tag);
-        if (result != last)
-        {
-            int const value = util::ValueConverter::valueOf(&*result, 0);
-            return static_cast<StreamFormat::_Domain>(value);
-        }
-        else
-        {
-            return StreamFormat::UnsignedInt8;
-        }
+        int const value = util::ValueConverter::toValue(find_node<dom::VariantLeaf>(begin(), end(), tag), 1);
+
+        return static_cast<StreamFormat::_Domain>(value);
     }
 
     LIBEMBER_INLINE
     int GlowStreamDescriptor::offset() const
     {
         ber::Tag const tag = GlowTags::StreamDescriptor::Offset();
-        const_iterator const first = begin();
-        const_iterator const last = end();
-        const_iterator const result = util::find_tag(first, last, tag);
-        if (result != last)
-        {
-            int const value = util::ValueConverter::valueOf(&*result, 0);
-            return value;
-        }
-        else
-        {
-            return 0;
-        }
+        int const value = util::ValueConverter::toValue(find_node<dom::VariantLeaf>(begin(), end(), tag), 0);
+
+        return value;
     }
 }
 }

@@ -5,9 +5,6 @@
 
 namespace gadget
 {
-    /**
-     * Scoped enumeration containing the symbolic names of all node properties.
-     */
     struct NodeField
     {
         enum _Domain
@@ -26,10 +23,6 @@ namespace gadget
 
         typedef unsigned int value_type;
 
-        /**
-         * Initializes a new NodeField.
-         * @param value The node fields to initialize this instance with.
-         */
         NodeField(value_type value)
             : value(value)
         {

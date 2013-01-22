@@ -39,7 +39,7 @@ namespace glow
         m_server = nullptr;
     }
 
-    Consumer* ConsumerProxy::create(QTcpSocket* socket)
+    net::TcpClient* ConsumerProxy::create(QTcpSocket* socket)
     {
         return new Consumer(m_provider, socket);
     }
@@ -113,7 +113,7 @@ namespace glow
                 auto const& parameters = node->parameters();
                 for each(auto parameter in parameters)
                 {
-                    if (manager.isParameterTransmittedViaStream(parameter) && parameter->dirtyState().isSet(gadget::ParameterField::ForceUpdate) == false)
+                    if (manager.isParameterTransmittedViaStream(parameter))
                     {
                         auto const state = parameter->dirtyState().mask(~gadget::ParameterField::Value);
                         if (state.isDirty())
@@ -203,7 +203,7 @@ namespace glow
     {
         auto const& manager = gadget::StreamManager::instance();
         auto state = parameter->dirtyState();
-        if (manager.isParameterTransmittedViaStream(parameter) && state.isSet(gadget::ParameterField::ForceUpdate) == false)
+        if (manager.isParameterTransmittedViaStream(parameter))
         {
             /**
              * Do not notify the value when it is already transmitted via a stream.

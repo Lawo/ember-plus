@@ -5,10 +5,6 @@
 
 namespace gadget
 {
-    /**
-     * Scoped enumeration which contains the symbolic names of all parameter properties.
-     * The properties can be used as flags.
-     */
     struct ParameterField
     {
         enum _Domain
@@ -34,9 +30,8 @@ namespace gadget
             StreamDescriptor = (1U << 21U),
 
             SubscriptionCount = (1U << 30U),
-            ForceUpdate = (1U << 31),
             All = (
-                     Identifier | Description | IsOnline | Access | IsStream | ValueMin |
+                     Identifier | Description | IsOnline | Access | Type | IsStream | ValueMin |
                      ValueMax | ValueEnumeration | Value | ValueFactor | ValueFormat | ValueStep | ValueFormula | 
                      StreamIdentifier | StreamDescriptor
                   )
@@ -44,10 +39,6 @@ namespace gadget
 
         typedef unsigned int value_type;
 
-        /**
-         * Initializes a new ParameterField with the passed properties.
-         * @param value Value containing the parameter properties to set.
-         */
         ParameterField(value_type value)
             : value(value)
         {

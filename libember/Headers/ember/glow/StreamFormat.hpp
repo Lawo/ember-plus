@@ -49,7 +49,7 @@ namespace libember { namespace glow
                 IeeeFloat32BigEndian = 20,          /* 00010 10 0 */
                 IeeeFloat32LittleEndian = 21,       /* 00010 10 1 */
                 IeeeFloat64BigEndian = 22,          /* 00010 11 0 */
-                IeeeFloat64LittleEndian = 23        /* 00010 11 1 */
+                IeeeFloat64LittleEndian = 23,       /* 00010 11 1 */
             };
 
             typedef std::size_t value_type;

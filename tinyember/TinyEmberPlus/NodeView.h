@@ -4,34 +4,21 @@
 #include <qframe.h>
 #include "ui_NodeView.h"
 
-/** Forward declaration */
 namespace gadget
 {
     class Node;
 }
 
-/**
- * A view which displays the node properties.
- */
 class NodeView : public QFrame
 {
     Q_OBJECT
     public:
-        /**
-         * Constructor.
-         * @param parent The parent widget of this ivew.
-         * @param node The node to display.
-         */
         NodeView(QWidget* parent, gadget::Node* node);
 
-        /** Destructor */
         virtual ~NodeView(void);
 
     private slots:
-        /** Reloads all properties. */
         void updateUi();
-
-        /** Updates the node's description string. */
         void updateDescription();
 
     private:

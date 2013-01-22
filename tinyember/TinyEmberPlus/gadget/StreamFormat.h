@@ -3,9 +3,6 @@
 
 namespace gadget
 {
-    /**
-     * Scoped enumeration containing the supported stream formats.
-     */
     struct StreamFormat
     {
         public:
@@ -35,27 +32,15 @@ namespace gadget
 
             typedef std::size_t value_type;
 
-            /**
-             * Initializes a new StreamFormat with the passed value.
-             * @param value The value to initialize this instance with.
-             */
             StreamFormat(_Domain value)
                 : m_value(value)
             {}
 
-            /**
-             * Returns the numeric value of the current stream format.
-             * @return The numeric value of the current stream format.
-             */
             value_type value() const
             {
                 return m_value;
             }
 
-            /**
-             * Returns the number of bytes the stream value consumes in the current format.
-             * @return The number of bytes the stream value consumes.
-             */
             std::size_t size() const
             {
                 auto const bits = ((m_value >> 1) & 3);

@@ -101,7 +101,7 @@ namespace glow
                     std::cerr << ex.what();
                 }
 
-                if (flags.value() & libs101::PackageFlag::LastPackage)
+                if (flags.value & libs101::PackageFlag::LastPackage)
                 {
                     m_reader.reset();
                 }

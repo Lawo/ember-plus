@@ -82,10 +82,6 @@ namespace libember { namespace glow
             Value value() const;
     };
 
-    /**************************************************************************
-     * Inline implementation                                                  *
-     **************************************************************************/
-
     template<typename InputIterator>
     inline GlowStreamEntry::GlowStreamEntry(int streamIdentifier, InputIterator first, InputIterator last)
         : GlowContainer(GlowType::StreamEntry)
@@ -97,7 +93,7 @@ namespace libember { namespace glow
 }
 
 #ifdef LIBEMBER_HEADER_ONLY
-#  include "impl/GlowStreamEntry.ipp"
+#   include "impl/GlowStreamEntry.ipp"
 #endif
 
 #endif  // __LIBEMBER_GLOW_GLOWSTREAMENTRY_HPP

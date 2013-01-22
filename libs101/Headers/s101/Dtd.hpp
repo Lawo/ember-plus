@@ -34,26 +34,19 @@ namespace libs101
 
 
         typedef unsigned char value_type;
-        public:
-            /**
-             * Non-explicit constructor to allow implicit conversion.
-             * @param value A value from _Domain to initialize this instance with.
-             */
-            Dtd(_Domain value)
-                : m_value(static_cast<value_type>(value))
-            {}
 
-            /**
-             * Return the raw value currently represented by this instance.
-             * @return The raw value currently represented by this instance.
-             */
-            value_type value() const
-            {
-                return m_value;
-            }
+        /**
+         * Non-explicit constructor to allow implicit conversion.
+         * @param value A value from _Domain to initialize this instance with.
+         */
+        Dtd(_Domain value)
+            : value(value)
+        {}
 
-        private:
-            value_type m_value;
+        /**
+         * DTD value.
+         */
+        value_type const value;
     };
 }
 

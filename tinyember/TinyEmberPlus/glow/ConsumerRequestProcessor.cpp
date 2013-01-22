@@ -1,6 +1,5 @@
 #include "ConsumerRequestProcessor.h"
 #include "..\gadget\Node.h"
-#include "..\gadget\BooleanParameter.h"
 #include "..\gadget\EnumParameter.h"
 #include "..\gadget\IntegerParameter.h"
 #include "..\gadget\RealParameter.h"
@@ -229,37 +228,30 @@ namespace glow
             {
                 auto const value = request->value();
                 auto const type = parameter->type();
-                auto const forceNotification = true;
                 switch(type.value())
                 {
-                    case gadget::ParameterType::Boolean:
-                    {
-                        auto boolean = dynamic_cast<gadget::BooleanParameter*>(parameter);
-                        boolean->setValue(value.toBoolean(), forceNotification);
-                        break;
-                    }
                     case gadget::ParameterType::Enum:
                     {
                         auto enumeration = dynamic_cast<gadget::EnumParameter*>(parameter);
-                        enumeration->setIndex(static_cast<gadget::EnumParameter::size_type>(value.toInteger()), forceNotification);
+                        enumeration->setIndex(static_cast<gadget::EnumParameter::size_type>(value.toInteger()));
                         break;
                     }
                     case gadget::ParameterType::Integer:
                     {
                         auto integer = dynamic_cast<gadget::IntegerParameter*>(parameter);
-                        integer->setValue(value.toInteger(), forceNotification);
+                        integer->setValue(value.toInteger());
                         break;
                     }
                     case gadget::ParameterType::Real:
                     {
                         auto real = dynamic_cast<gadget::RealParameter*>(parameter);
-                        real->setValue(value.toReal(), forceNotification);
+                        real->setValue(value.toReal());
                         break;
                     }
                     case gadget::ParameterType::String:
                     {
                         auto string = dynamic_cast<gadget::StringParameter*>(parameter);
-                        string->setValue(value.toString(), forceNotification);
+                        string->setValue(value.toString());
                         break;
                     }
                 }

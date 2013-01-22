@@ -48,11 +48,11 @@ void RealView::updateUi()
     if (m_view->formatText->text() != format)
         m_view->formatText->setText(format);
 
-    if (m_view->minBox->value() != m_parameter->minimum())
-        m_view->minBox->setValue(m_parameter->minimum());
+    if (m_view->minBox->value() != m_parameter->min())
+        m_view->minBox->setValue(m_parameter->min());
 
-    if (m_view->maxBox->value() != m_parameter->maximum())
-        m_view->maxBox->setValue(m_parameter->maximum());
+    if (m_view->maxBox->value() != m_parameter->max())
+        m_view->maxBox->setValue(m_parameter->max());
 
     if (m_view->valueBox->value() != m_parameter->value())
         m_view->valueBox->setValue(m_parameter->value());

@@ -1,10 +1,11 @@
 #include "ViewFactory.h"
 #include "NodeView.h"
-#include "BooleanView.h"
 #include "EnumerationView.h"
 #include "IntegerView.h"
 #include "RealView.h"
 #include "StringView.h"
+
+
 
 QFrame* ViewFactory::createView(QWidget* parent, gadget::Node* node)
 {
@@ -28,11 +29,6 @@ ViewFactory::ViewFactoryImpl::ViewFactoryImpl(QWidget* parent, gadget::Parameter
 QFrame* ViewFactory::ViewFactoryImpl::view() const
 {
     return m_view;
-}
-
-void ViewFactory::ViewFactoryImpl::visit(gadget::BooleanParameter* parameter)
-{
-    m_view = new BooleanView(m_parent, parameter);
 }
 
 void ViewFactory::ViewFactoryImpl::visit(gadget::EnumParameter* parameter)

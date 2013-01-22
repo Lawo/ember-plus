@@ -30,11 +30,6 @@
 
 void throwError(int error, pcstr pMessage);
 void failAssertion(pcstr pFileName, int lineNumber);
-void *allocMemory(size_t size);
-void freeMemory(void *pMemory);
-
-#define newobj(type) ((type *)allocMemory(sizeof(type)))
-#define newarr(type, count) ((type *)allocMemory(sizeof(type) * (count)))
 
 #ifndef ASSERT
 

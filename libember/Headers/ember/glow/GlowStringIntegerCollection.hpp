@@ -31,20 +31,10 @@ namespace libember { namespace glow
     {
         public:
             /**
-             * Initializes an empty GlowStringIntegerCollection collection with the provided application tag.
+             * Initializes an empty stream collection with the provided application tag.
              * @param tag Application tag.
              */
             explicit GlowStringIntegerCollection(ber::Tag const& tag);
-
-            /**
-             * Initializes a new GlowStringIntegerCollection with the passed tag and the provided enumeration.
-             * The iterator's value type must be a string-integer pair.
-             * @param tag The application tag of this collection.
-             * @param first A reference to the first enumeration entry in a collection.
-             * @param last Points to the first item beyond the enumeration entry collection.
-             */
-            template<typename InputIterator>
-            GlowStringIntegerCollection(ber::Tag const& tag, InputIterator first, InputIterator last);
 
             /**
              * Inserts a new StreamEntry into the collection.
@@ -54,25 +44,11 @@ namespace libember { namespace glow
              */
             void insert(std::string const& name, int value);
     };
-
-    /**************************************************************************
-     * Mandatory inline implementation                                        *
-     **************************************************************************/
-
-    template<typename InputIterator>
-    inline GlowStringIntegerCollection::GlowStringIntegerCollection(ber::Tag const& tag, InputIterator first, InputIterator last)
-        : GlowElement(GlowType::StringIntegerCollection, tag)
-    {
-        for ( ; first != last; ++first)
-        {
-            insert(first->first, first->second);
-        }
-    }
 }
 }
 
 #ifdef LIBEMBER_HEADER_ONLY
-#  include "impl/GlowStringIntegerCollection.ipp"
+#   include "impl/GlowStringIntegerCollection.ipp"
 #endif
 
 #endif  // __LIBEMBER_GLOW_GLOWSTRINGINTEGERCOLLECTION_HPP

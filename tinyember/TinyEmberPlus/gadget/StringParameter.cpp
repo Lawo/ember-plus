@@ -10,10 +10,6 @@ namespace gadget
     {
     }
     
-    void StringParameter::setValueImpl(value_type value, bool forceNotification)
-    {
-    }
-
     void StringParameter::accept(ParameterTypeVisitorConst const& visitor) const
     {
         visitor.visit(this);
@@ -53,13 +49,12 @@ namespace gadget
         }
     }
 
-    void StringParameter::setValue(const_reference value, bool forceNotification)
+    void StringParameter::setValue(const_reference value)
     {
-        if (m_value != value || forceNotification)
+        if (m_value != value)
         {
             m_value = value;
-            setValueImpl(value, forceNotification);
-            markDirty(ParameterField::Value | (forceNotification ? ParameterField::ForceUpdate : 0), true);
+            markDirty(ParameterField::Value, true);
         }
     }
 }

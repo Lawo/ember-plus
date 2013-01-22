@@ -68,15 +68,11 @@ typedef struct SBerReader
   * Must be called before any other operations on the
   * BerReader instance are invoked.
   * @param pThis pointer to the object to process.
+  * @param pBuffer pointer to the memory location to store
+  *     encoded values to.
+  * @param bufferSize maximum length of a encoded value.
   */
-void berReader_init(BerReader *pThis);
-
-/**
-  * Frees all memory allocated by a BerReader instance.
-  * BerReader instance are invoked.
-  * @param pThis pointer to the object to process.
-  */
-void berReader_free(BerReader *pThis);
+void berReader_init(BerReader *pThis, byte *pBuffer, unsigned int bufferSize);
 
 /**
   * Resets a BerReader instance.

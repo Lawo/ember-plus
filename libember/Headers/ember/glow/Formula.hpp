@@ -26,7 +26,7 @@ namespace libember { namespace glow
 {
     /**
      * A class that stores the terms to compute the display value from
-     * a device value and vice versa.
+     * a device value and vice versa.s
      */
     class Formula
     {

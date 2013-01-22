@@ -1,0 +1,181 @@
+﻿=============================================
+
+EmberLib.net
+L-S-B Broadcast Technologies GmbH
+
+=============================================
+
+author:  pbo@l-s-b.de
+date:    2012-10-23
+
+
+------------------------------- Change Log:
+- 1.1.1:
+  - FIXED: REAL decoder bug that only took effect on very few numbers whose encoding
+    yielded a "bit gap"
+
+- 1.1.0:
+  - NOTE: this version introduces code-breaking changes!
+  - EmberLib: removed parameter "encodable" from EmberNode.BuildTree,
+    removed protected and internal constructors from entire dom tree.
+    All dom objects are now lazily encodable.
+    This is a code-breaking change.
+  - EmberLib: moved all methods primarily used for legacy purposes (Ember1)
+    to a new assembly (targeting .net 3.5) called "EmberLib.Legacy.Extensions".
+    This assembly defines extension methods for the multitude of "Get" and
+    "Insert" overloads previously found in the class EmberLib.EmberNode.
+    This is a code-breaking change for projects using Ember v1.
+  - EmberLib: Added the index operator to EmberLib.EmberNode, which supersedes
+    the "Get" and "GetChildNode" methods.
+  - EmberLib: removed method EmberNode.Unchain since it basically is identical
+    to EmberNode.Remove.
+    This is a possibly code-breaking change.
+  - EmberLib: moved method CreateApplicationDefinedSet from EmberSet to
+    EmberApplicationInterface
+    This is a possibly code-breaking change.
+  - EmberLib: moved method CreateApplicationDefinedSequence from EmberSequence to
+    EmberApplicationInterface
+    This is a possibly code-breaking change.
+  - EmberLib: Added the DecoderValidation class. This class can be used by classes
+    derived from EmberNode to raise validation error events after being decoded.
+  - EmberLib: added static method "CreateOrderedSequence" to EmberSequence, which
+    creates a sequence whose children are encoded ordered by tag.
+  - EmberLib: Refactored EmberNode to better match libember::dom::Node:
+    - Renamed method "Write" to "Encode"
+    - Renamed method "BuildTree" to "Decode"
+    - Internalized property "Length" and renamed to "EncodedLength"
+    - Removed property "IsContainer". Change "if(node.IsContainer)" to
+      "if(node is EmberContainer)".
+    - Removed property "HasIndefiniteLength". The Ember DOM now only uses
+      the definite length form.
+    - Removed protected property "EncodedHeader".
+    This is a possibly code-breaking change.
+  - EmberLib: Internalized or sealed many overridables which were of no use
+    outside of the library.
+    This is a possibly code-breaking change.
+  - EmberLib: FIXED: RelativeOid encoding was limited to maximum length of 127 bytes.
+  - EmberLib.Framing: added parameter "keepAliveCallback" to constructor
+    of FramingReader and events "KeepAliveRequestReceived" and
+    "KeepAliveResponseReceived" to FramingReader.
+    These events supersede usage of the PackageReceived event.
+    This is a code-breaking change.
+  - EmberLib.Glow: Enabled setting parameter content properties
+    and node content properties more often than once.
+  - EmberLib.Glow: Changed behavior of property "EffectiveParameterType"
+    of type GlowParameterBase to pay attention to the "Trigger" type.
+  - EmberLib.Glow: added parameter "keepAliveCallback" to constructor
+    of EmberLib.Glow.Framing.GlowReader.
+    This is a code-breaking change.
+  - EmberLib.Glow: removed parameter "isEncodable" from
+    EmberLib.Glow.Framing.GlowReader constructor.
+    This is a code-breaking change.
+  - EmberLib.Glow: GlowParameterBase and GlowNodeBase validate the identifier
+    in the setter of property "Identifier" and after being decoded (using
+    the new EmberLib.DecoderValidation class).
+  - EmberLib.Glow: added support for "isOnline" field of EmberPlus-Glow.NodeContents
+  - EmberLib.Glow: added class "GlowWalker' which implements the IGlowVisitor interface.
+    This class provides an easier way to walk a Glow tree by making iterations over
+    element collections transparent. It also removes the need to differentiate between
+    element types and their qualified counterparts (e.g. Parameter and QualifiedParameter).
+    See EmberPlusRegistryProvider for an example.
+  - EmberLib.Glow: Internalized or sealed many overridables which were of no use
+    outside of the library.
+    This is a possibly code-breaking change.
+  - EmberLib.Glow: FIXED: StreamDescription type was decoded
+    with wrong type (StreamCollection instead of StreamDescription)
+  - EmberLib.Glow.Formulas: Added functions abs and sgn
+  - Added new project/assembly "EmberLib.Glow.PowerPack", which provides tools
+    for parameter value conversion.
+  - Released as source code under LGPL. No more binary releases are planned.
+    The source codes uses C# 4 and F# 2, but targets .net framework 2.0.
+    The solution and projects are in VS2010 format.
+
+- 1.0.13:
+  - EmberLib.Framing: Added restrictions for maximum package length.
+  - EmberLib.Glow: Added a new constructor to EmberLib.Glow.Framing.GlowOutput
+    with the default (maximum) package length.
+  - EmberLib.Glow.Formulas: added parameter "emitIlFlag" to Compiler.Compile().
+    This flag tells the compiler to emit the formula as IL code, which results
+    in a huge speedup for formula evaluation.
+  - EmberLib: Replaced property EmberLib.EmberNode.HasChildren with property
+    Count.
+
+- 1.0.12:
+  - FIXED: EmberLib.Framing: wrong position of "flags" byte in S101 frame.
+
+- 1.0.11:
+  - Implements Glow DTD 2.5
+  - EmberEncoding v1.6:
+    - Fixed RelativeOid encoding to adhere to the standard:
+      It now encodes an array of integers instead of an ulong value.
+  - Renamed "RelativeObject..." to "RelativeOid..." (e.g. RelativeObjectLeaf)
+  - Added constants for glow command numbers:
+    EmberLib.Glow.GlowCommands.Dir, EmberLib.Glow.GlowCommands.Subscribe etc.
+  - Renamed "EmberLib.Glow.GlowCommands" to "GlowCommandType" for better
+    alignment with libember.
+  - Added property "EffectiveParameterType" to EmberLib.Glow.GlowParameter.
+  - Added type: EmberLib.Glow.GlowParameterType.
+  - Added type: EmberLib.Glow.GlowAccess.
+  - Internalized property EmberLib.Glow.GlowParameter.Formula.
+  - Added Methods EmberLib.Glow.GlowParameter.GetFormula() and
+    EmberLib.Glow.GlowParameter.SetFormula().
+  - Added type: EmberLib.Glow.GlowFormulaSource
+  - Added assembly "EmberLib.Glow.Formula", which includes a formula compiler.
+  - Added static methods WriteKeepAliveRequest and WriteKeepAliveRequest to
+    EmberLib.Framing.BerFramingOutput.
+  - Implements new framing parameters.
+
+- 1.0.10:
+  - Implements Glow DTD 2.4
+  - EmberLib.Framing.FramingBerOutput.MaximumPackageLength now
+    includes length of header.
+
+
+------------------------------- Requirements:
+- .net framework 2.0 / mono 2.6 or higher
+- C# 4.0 Compiler
+- Only for EmberLib.Glow.Formula:
+  - F# 2.0 Runtime
+    http://www.microsoft.com/en-us/download/details.aspx?id=13450
+  - F# PowerPack
+    http://fsharppowerpack.codeplex.com/releases/view/45593
+  - F# 2.0 Compiler
+
+
+------------------------------- Description:
+EmberLib.net is an implementation of the Ember+ standard for the .net framework.
+The component version numbers are defined in the following constants:
+
+EmberLib.Glow.GlowDtd.Version
+   the version of the glow DTD supported by the library
+
+EmberLib.EmberEncoding.Version
+   the version of the ember encoding supported by the libary
+
+Assembly Version of any included assembly
+   the version of the library implementation
+
+EmberLib.net provides classes to convert ember data to XML and back - see
+EmberLib.Xml.Export and EmberLib.Xml.Import.
+This may be very useful for debugging.
+
+
+------------------------------- Using the Library:
+-  Unpack the zip file to any directory
+-  In your project, add references to the files "BerLib.dll",
+   "EmberLib.dll", "EmberLib.Framing.dll" and "EmberLib.Glow.dll".
+
+
+------------------------------- Getting Started with the Code:
+
+-  Build the sample project "EmberPlusWalk.net" (which is actually a .net 4 /
+   mono 2.10 application).
+-  EmberPlusWalk.net is a small console shell allowing you to navigate through
+   the glow tree provided by any Ember+ provider (e.g. TinyEmberPlus).
+-  Type "help" in the GlowWalk.net shell to see a list of supported commands.
+-  Have a look at "GlowEndPoint.cs" to learn how to set up an
+   EmberLib.Glow.Framing.GlowReader instance for reading and an
+   EmberLib.Glow.Framing.GlowOutput instance for writing.
+-  Have a look at "Model.cs" to learn how to build glow trees ready for
+   dispatch and how to read glow data into the local object model.
+-  All public methods and properties in EmberLib.net have XML doc comments.

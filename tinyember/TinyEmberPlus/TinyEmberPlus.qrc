@@ -1,0 +1,43 @@
+<RCC>
+   <qresource prefix="TinyEmberPlus">
+   </qresource>
+   <qresource prefix="/image">
+      <file>resources/folder.png</file>
+      <file>resources/folder--arrow.png</file>
+      <file>resources/folder-tree.png</file>
+      <file>resources/ui-tooltip--pencil.png</file>
+      <file>resources/lock--pencil.png</file>
+      <file>resources/lock.png</file>
+      <file>resources/lock--arrow.png</file>
+      <file>resources/lock-unlock.png</file>
+      <file>resources/ui-combo-box-blue.png</file>
+      <file>resources/ui-ruler.png</file>
+      <file>resources/ui-slider.png</file>
+      <file>resources/flag-blue.png</file>
+      <file>resources/ui-slider-100.png</file>
+      <file>resources/ui-text-area.png</file>
+      <file>resources/ui-text-field-format.png</file>
+      <file>resources/ui-tooltip-balloon-bottom.png</file>
+      <file>resources/ui-tooltip--exclamation.png</file>
+      <file>resources/minus.png</file>
+      <file>resources/plus.png</file>
+      <file>resources/ui-combo-box-edit.png</file>
+      <file>resources/node-delete-child.png</file>
+      <file>resources/node-insert-child.png</file>
+      <file>resources/node-insert-next.png</file>
+      <file>resources/node-delete-next.png</file>
+      <file>resources/node-select.png</file>
+      <file>resources/node.png</file>
+      <file>resources/leaf.png</file>
+      <file>resources/blue-document-node.png</file>
+      <file>resources/sort-number.png</file>
+      <file>resources/drive--arrow.png</file>
+      <file>resources/drive-download.png</file>
+      <file>resources/drive-upload.png</file>
+      <file>resources/cross.png</file>
+      <file>resources/globe-medium.png</file>
+      <file>resources/application-wave.png</file>
+      <file>resources/globe-small.png</file>
+      <file>resources/document-globe.png</file>
+   </qresource>
+</RCC>

@@ -31,20 +31,19 @@ namespace libember { namespace glow
         public:
             enum _Domain
             {
-                Default = 0,
-                Identifier = 1,
-                Description = 2,
-                Tree = 3,
-                Value = 4,
-                Connections = 5,
-                All = 0xFFFFFFFF
+                None = 0,
+                Identifier = (1 << 0),
+                Description = (1 << 1),
+                Value = (1 << 2),
+
+                All = 0xFFFFFFFF,
             };
 
             typedef int value_type;
 
         public:
             /**
-             * Initializes a new instance of DirFieldMask. 
+             * Initializes a new instance of DirFieldFlags. 
              * @param flag The flag to initializes the instance with.
              */
             DirFieldMask(_Domain flag)
@@ -52,7 +51,7 @@ namespace libember { namespace glow
             {}
 
             /**
-             * Initializes a new instance of DirFieldMask. 
+             * Initializes a new instance of DirFieldFlags. 
              * @param flags The flags to initializes the instance with.
              */
             explicit DirFieldMask(value_type flags)

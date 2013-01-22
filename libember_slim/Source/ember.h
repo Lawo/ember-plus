@@ -35,7 +35,14 @@
   * The upper byte is the major version number.
   * The lower byte is the minor version number.
   */
-#define EMBER_ENCODING_VERSION (0x0107)
+#define EMBER_ENCODING_VERSION (0x0106)
+
+/**
+  * The version of the library implementation as an uint16.
+  * The upper byte is the major version number.
+  * The lower byte is the minor version number.
+  */
+#define EMBER_LIBRARY_VERSION (0x0105)
 
 
 // ====================================================================
@@ -58,18 +65,15 @@ typedef void (*throwError_t)(int error, pcstr pMessage);
   */
 typedef void (*failAssertion_t)(pcstr pFileName, int lineNumber);
 
-
 /**
-  * Type of the callback used to allocate memory.
-  * @param size number of bytes to allocate.
+  * Initializes internal parameters of the ember library.
+  * @param throwError the callback to invoke when a fatal runtime
+  *      error occurs.
+  * @param failAssertion the callback to invoke when a runtime
+  *      assertion fails. Only used if the _DEBUG preprocessor
+  *      flag is defined.
   */
-typedef void *(*allocMemory_t)(size_t size);
-
-/**
-  * Type of the callback used to free memory.
-  * @param pMemory pointer to the chunk of memory to free.
-  */
-typedef void (*freeMemory_t)(void *pMemory);
+void ember_init(throwError_t throwError, failAssertion_t failAssertion);
 
 
 // ====================================================================

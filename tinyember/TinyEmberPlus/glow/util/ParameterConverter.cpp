@@ -1,7 +1,6 @@
 #include <ember\Ember.hpp>
 #include "NodeConverter.h"
 #include "ParameterConverter.h"
-#include "../../gadget/BooleanParameter.h"
 #include "../../gadget/EnumParameter.h"
 #include "../../gadget/StringParameter.h"
 #include "../../gadget/IntegerParameter.h"
@@ -64,7 +63,7 @@ namespace glow { namespace util
         if (m_fields.isSet(ParameterField::Description) && parameter->description().size() > 0)
             m_parameter->setDescription(parameter->description());
 
-        if (m_fields.isSet(ParameterField::Type) || parameter->type().value() == gadget::ParameterType::Trigger)
+        if (m_fields.isSet(ParameterField::Type))
         {
             switch(parameter->type().value())
             {
@@ -143,12 +142,6 @@ namespace glow { namespace util
         parameter->accept(*this);
     }
 
-    void ParameterConverter::visit(gadget::BooleanParameter const* parameter) const
-    {
-        if (m_fields.isSet(ParameterField::Value))
-            m_parameter->setValue(parameter->value());
-    }
-
     void ParameterConverter::visit(gadget::EnumParameter const* parameter) const
     {
         if (m_fields.isSet(ParameterField::ValueEnumeration))
@@ -172,10 +165,10 @@ namespace glow { namespace util
         auto const format = m_parameter->format();
 
         if (m_fields.isSet(ParameterField::ValueMax))
-            m_parameter->setMaximum(parameter->maximum());
+            m_parameter->setMaximum(parameter->max());
 
         if (m_fields.isSet(ParameterField::ValueMin))
-            m_parameter->setMinimum(parameter->minimum());
+            m_parameter->setMinimum(parameter->min());
 
         if (m_fields.isSet(ParameterField::ValueFormat) && format.size() > 0)
             m_parameter->setFormat(format);
@@ -189,10 +182,10 @@ namespace glow { namespace util
         auto const format = m_parameter->format();
 
         if (m_fields.isSet(ParameterField::ValueMax))
-            m_parameter->setMaximum(parameter->maximum());
+            m_parameter->setMaximum(parameter->max());
 
         if (m_fields.isSet(ParameterField::ValueMin))
-            m_parameter->setMinimum(parameter->minimum());
+            m_parameter->setMinimum(parameter->min());
 
         if (m_fields.isSet(ParameterField::ValueFormat) && format.size() > 0)
             m_parameter->setFormat(format);

@@ -12,7 +12,6 @@ namespace gadget
         , m_type(type)
         , m_streamIdentifier(-1)
         , m_access(gadget::Access::ReadWrite)
-        , m_state(ParameterField::All)
     {
     }
 

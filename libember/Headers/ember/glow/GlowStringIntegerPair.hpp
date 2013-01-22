@@ -59,7 +59,7 @@ namespace libember { namespace glow
 }
 
 #ifdef LIBEMBER_HEADER_ONLY
-#  include "impl/GlowStringIntegerPair.ipp"
+#   include "impl/GlowStringIntegerPair.ipp"
 #endif
 
 #endif  // __LIBEMBER_GLOW_GLOWSTRINGINTEGERPAIR_HPP

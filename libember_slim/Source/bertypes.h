@@ -88,6 +88,7 @@ typedef void *voidptr;
 #endif
 
 #if !defined(__cplusplus) && !defined(BOOL_DEFINED)
+
 /**
   * true/false
   */

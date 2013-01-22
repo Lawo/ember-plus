@@ -61,8 +61,6 @@ static void writeOuterHeader(BerOutput *pOut, const BerTag *pTag, int length)
 
 extern throwError_t _pThrowError;
 extern failAssertion_t _pFailAssertion;
-extern allocMemory_t _pAllocMemory;
-extern freeMemory_t _pFreeMemory;
 
 
 // ====================================================================
@@ -71,12 +69,10 @@ extern freeMemory_t _pFreeMemory;
 //
 // ====================================================================
 
-void ember_init(throwError_t throwError, failAssertion_t failAssertion, allocMemory_t allocMemory, freeMemory_t freeMemory)
+void ember_init(throwError_t throwError, failAssertion_t failAssertion)
 {
    _pThrowError = throwError;
    _pFailAssertion = failAssertion;
-   _pAllocMemory = allocMemory;
-   _pFreeMemory = freeMemory;
 }
 
 void ember_writeContainerBegin(BerOutput *pOut, const BerTag *pTag, bertype type)
@@ -176,7 +172,7 @@ void ember_writeString(BerOutput *pOut, const BerTag *pTag, pcstr pValue)
    ASSERT(pTag != NULL);
    ASSERT(pValue != NULL);
 
-   valueLength = (int)strlen(pValue);
+   valueLength = strlen(pValue);
    berTag_init(&innerTag, BerClass_Universal, BerType_UTF8String);
 
    writeOuterHeader(pOut, pTag, valueLength + ber_getHeaderLength(&innerTag, valueLength));
@@ -203,18 +199,20 @@ void ember_writeOctetString(BerOutput *pOut, const BerTag *pTag, const byte *pVa
 
 void ember_writeRelativeOid(BerOutput *pOut, const BerTag *pTag, const berint *pValue, int count)
 {
+   BerMemoryOutput out;
+   byte buffer[16];
    int valueLength;
-   BerTag innerTag;
 
    ASSERT(pOut != NULL);
    ASSERT(pTag != NULL);
    ASSERT(pValue != NULL || count == 0);
 
-   valueLength = ber_getRelativeOidLength(pValue, count);
-   berTag_init(&innerTag, BerClass_Universal, BerType_RelativeOid);
+   berMemoryOutput_init(&out, buffer, sizeof(buffer));
 
-   writeOuterHeader(pOut, pTag, valueLength + ber_getHeaderLength(&innerTag, valueLength));
-   ber_encodeTag(pOut, &innerTag);
+   valueLength = ber_encodeRelativeOid(&out.base, pValue, count);
+
+   writeOuterHeader(pOut, pTag, valueLength + 2);
+   writeTypeTag(pOut, BerType_RelativeOid, false);
    ber_encodeLength(pOut, valueLength);
-   ber_encodeRelativeOid(pOut, pValue, count);
+   pOut->writeBytes(pOut, out.pMemory, valueLength);
 }

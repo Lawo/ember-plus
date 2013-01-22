@@ -8,7 +8,6 @@ namespace gadget
         : m_identifier(identifier)
         , m_number(number)
         , m_parent(parent)
-        , m_state(NodeField::All)
     {
     }
 
@@ -56,7 +55,17 @@ namespace gadget
         return m_children;
     }
 
+    Node::NodeCollection& Node::nodes() 
+    {
+        return m_children;
+    }
+
     Node::ParameterCollection const& Node::parameters() const
+    {
+        return m_parameters;
+    }
+
+    Node::ParameterCollection& Node::parameters() 
     {
         return m_parameters;
     }
@@ -140,27 +149,23 @@ namespace gadget
         }
     }
 
-    bool Node::remove(Node *const node)
+    bool Node::remove(Node const* node)
     {
         auto const first = std::begin(m_children);
         auto const last = std::end(m_children);
         auto const where = std::find(first, last, node);
         auto const result = where != last;
-        if (node)
-            node->m_parent = nullptr;
-
+        
         m_children.remove(where);
         return result;
     }
 
-    bool Node::remove(Parameter *const parameter)
+    bool Node::remove(Parameter const* parameter)
     {
         auto const first = std::begin(m_parameters);
         auto const last = std::end(m_parameters);
         auto const where = std::find(first, last, parameter);
         auto const result = where != last;
-        if (parameter)
-            parameter->m_parent = nullptr;
 
         m_parameters.remove(where);
         return result;

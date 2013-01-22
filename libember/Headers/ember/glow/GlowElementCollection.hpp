@@ -21,7 +21,6 @@
 #define __LIBEMBER_GLOW_GLOWELEMENTCOLLECTION_HPP
 
 #include "GlowContainer.hpp"
-#include "util/TypeFilter.hpp"
 
 namespace libember { namespace glow
 {
@@ -29,7 +28,8 @@ namespace libember { namespace glow
     class GlowElement;
 
     /**
-     * An Element Collection is used by content elements to store children.
+     * An Element Collection is usually used as root element and also used
+     * by nodes and parameters to store children and commands.
      */
     class LIBEMBER_API GlowElementCollection : public GlowContainer
     {
@@ -45,29 +45,12 @@ namespace libember { namespace glow
              * @param tag Application tag to set.
              */
             explicit GlowElementCollection(ber::Tag const& tag);
-
-            /**
-             * Extracts all GlowElement objects from this sequence into the passed OutputIterator.
-             * @return The number of copied pointers.
-             */
-            template<typename OutputIterator>
-            size_type elements(OutputIterator dest) const;
     };
-
-    /**************************************************************************/
-    /* Mandatory inline implementation                                        */
-    /**************************************************************************/
-
-    template<typename OutputIterator>
-    inline GlowContainer::size_type GlowElementCollection::elements(OutputIterator dest) const
-    {
-        return util::TypeFilter<GlowElement>::collect(begin(), end(), dest);
-    }
 }
 }
 
 #ifdef LIBEMBER_HEADER_ONLY
-#  include "impl/GlowElementCollection.ipp"
+#   include "impl/GlowElementCollection.ipp"
 #endif
 
 #endif  // __LIBEMBER_GLOW_GLOWELEMENTCOLLECTION_HPP

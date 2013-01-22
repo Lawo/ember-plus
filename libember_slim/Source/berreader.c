@@ -29,22 +29,13 @@
 //
 // ====================================================================
 
-void berReader_init(BerReader *pThis)
+void berReader_init(BerReader *pThis, byte *pBuffer, unsigned int bufferSize)
 {
    ASSERT(pThis != NULL);
 
    bzero(*pThis);
 
-   byteBuffer_initDynamic(&pThis->buffer, 0);
-}
-
-void berReader_free(BerReader *pThis)
-{
-   ASSERT(pThis != NULL);
-
-   byteBuffer_free(&pThis->buffer);
-
-   bzero(*pThis);
+   byteBuffer_init(&pThis->buffer, pBuffer, bufferSize);
 }
 
 void berReader_reset(BerReader *pThis)

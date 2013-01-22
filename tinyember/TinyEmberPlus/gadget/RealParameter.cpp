@@ -13,10 +13,6 @@ namespace gadget
         , m_value(value)
     {
     }
-
-    void RealParameter::setValueImpl(value_type value, bool forceNotification)
-    {
-    }
     
     void RealParameter::accept(ParameterTypeVisitorConst const& visitor) const
     {
@@ -40,8 +36,8 @@ namespace gadget
 
         if (m_format.size() > 0)
         {
-            char buffer[256];
-            sprintf_s(buffer, 256, m_format.c_str(), value);
+            char buffer[128];
+            sprintf_s(buffer, 128, m_format.c_str(), value);
             return std::string(buffer);
         }
         else
@@ -52,12 +48,12 @@ namespace gadget
         }
     }
 
-    RealParameter::value_type RealParameter::minimum() const
+    RealParameter::value_type RealParameter::min() const
     {
         return m_min;
     }
 
-    RealParameter::value_type RealParameter::maximum() const
+    RealParameter::value_type RealParameter::max() const
     {
         return m_max;
     }
@@ -90,13 +86,12 @@ namespace gadget
         }
     }
 
-    void RealParameter::setValue(value_type value, bool forceNotification)
+    void RealParameter::setValue(value_type value)
     {
-        if (m_value != value || forceNotification)
+        if (m_value != value)
         {
             m_value = value;
-            setValueImpl(value, forceNotification);
-            markDirty(ParameterField::Value | (forceNotification ? ParameterField::ForceUpdate : 0), true);
+            markDirty(ParameterField::Value, true);
         }
     }
 

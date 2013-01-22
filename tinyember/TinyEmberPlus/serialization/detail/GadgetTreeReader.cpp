@@ -1,6 +1,5 @@
 #include <vector>
 #include "GadgetTreeReader.h"
-#include "../../gadget/BooleanParameter.h"
 #include "../../gadget/EnumParameter.h"
 #include "../../gadget/IntegerParameter.h"
 #include "../../gadget/RealParameter.h"
@@ -95,13 +94,13 @@ namespace serialization { namespace detail
                         switch(paramtype.value())
                         {
                             case libember::glow::ParameterType::Boolean:
-                                transform(gadget::ParameterFactory::create(parent, identifier, false), &glowparam);
                                 break;
 
                             case libember::glow::ParameterType::Enum:
+                            {
                                 transform(gadget::ParameterFactory::create(parent, identifier), &glowparam);
                                 break;
-
+                            }
                             case libember::glow::ParameterType::Integer:
                                 transform(gadget::ParameterFactory::create(parent, identifier, 0, 1000, 0), &glowparam);
                                 break;
@@ -114,7 +113,7 @@ namespace serialization { namespace detail
                                 break;
 
                             case libember::glow::ParameterType::String:
-                                transform(gadget::ParameterFactory::create(parent, identifier, std::string("text")), &glowparam);
+                                transform(gadget::ParameterFactory::create(parent, identifier, "text"), &glowparam);
                                 break;
 
                             case libember::glow::ParameterType::Trigger:
@@ -207,14 +206,6 @@ namespace serialization { namespace detail
 
         if (source->contains(libember::glow::ParameterProperty::Value))
             param->setValue(source->value().toString());
-    }
-
-    void GadgetTreeReader::transform(gadget::BooleanParameter* param, libember::glow::GlowParameter* source) const
-    {
-        transformBase(param, source);
-
-        if (source->contains(libember::glow::ParameterProperty::Value))
-            param->setValue(source->value().toBoolean());
     }
 }
 }

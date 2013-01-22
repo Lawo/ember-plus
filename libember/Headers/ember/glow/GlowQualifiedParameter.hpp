@@ -78,7 +78,7 @@ namespace libember { namespace glow
 }
 
 #ifdef LIBEMBER_HEADER_ONLY
-#  include "impl/GlowQualifiedParameter.ipp"
+#   include "impl/GlowQualifiedParameter.ipp"
 #endif
 
 #endif  // __LIBEMBER_GLOW_GLOWQUALIFIEDPARAMETER_HPP

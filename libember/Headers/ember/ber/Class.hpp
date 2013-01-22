@@ -38,7 +38,7 @@ namespace libember { namespace ber
                 ContextSpecific     = 0x80,         //  Tags that have a meaning specific to the location where seen and used.
                 Private             = 0xC0,         //  Special version of Context Specific Tag. 
 
-                Mask                = 0xC0
+                Mask                = 0xC0,
             };
 
         public:

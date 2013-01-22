@@ -22,6 +22,7 @@
 
 #include <algorithm>
 #include "../../util/Inline.hpp"
+#include "../detail/NodeApplicationTagEquals.hpp"
 #include "../traits/ValueTypeToBerType.hpp"
 #include "../GlowTags.hpp"
 
@@ -41,14 +42,14 @@ namespace libember { namespace glow
     {
         if (m_container == 0)
         {
-            iterator const first = m_parent.begin();
-            iterator const last = m_parent.end();
-            iterator const it = util::find_tag(first, last, m_contentTag);
+            iterator const begin = m_parent.begin();
+            iterator const end = m_parent.end();
+            iterator const it = std::find_if(begin, end, detail::NodeApplicationTagEquals(m_contentTag));
 
-            if (it == last)
+            if (it == end)
             {
                 m_container = new dom::Set(m_contentTag);
-                m_parent.insert(last, m_container);
+                m_parent.insert(end, m_container);
             }
             else
             {
@@ -108,6 +109,24 @@ namespace libember { namespace glow
         assureContainer();
         return m_container->end();
     }
+
+    LIBEMBER_INLINE
+    void Contents::insert(iterator where, dom::Node* child)
+    {
+        assureContainer();
+        
+        ber::Tag const tag = child->applicationTag();
+
+        m_propertyFlags |= (tag.getClass() == ber::Class::Application ? (1 << tag.number()) : 0);
+        m_container->insert(where, child);
+    }
+
+    LIBEMBER_INLINE
+    void Contents::push_back(dom::Node* child)
+    {
+        insert(end(), child);
+    }
+
 
 #ifdef _MSC_VER
 #  pragma warning(push)

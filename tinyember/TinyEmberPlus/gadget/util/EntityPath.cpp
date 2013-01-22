@@ -9,7 +9,7 @@ namespace gadget { namespace util
         std::size_t depth = 0;
         while(entity != nullptr)
         {
-            depth += 1;
+            ++depth;
             entity = entity->parent();
         }
 
@@ -34,7 +34,7 @@ namespace gadget { namespace util
         auto container = std::vector<int>();
         
         container.reserve(depth);
-        for(/** Nothing */; entity != nullptr; entity = entity->parent())
+        for(; entity != nullptr; entity = entity->parent())
         {
             container.push_back(entity->number());
         }

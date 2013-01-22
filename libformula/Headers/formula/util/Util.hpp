@@ -54,10 +54,6 @@ namespace libformula { namespace util
                 return "sqrt";
             case FunctionType::Pow:
                 return "pow";
-            case FunctionType::Abs:
-                return "abs";
-            case FunctionType::Sgn:
-                return "sgn";
             default:
                 return "invalid";
         }

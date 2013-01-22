@@ -7,47 +7,11 @@ L-S-B Broadcast Technologies GmbH
 
 =============================================
 
-authors: pbo@l-s-b.de, rni@l-s-b.de
-date:    2012-10-23
+author:  pbo@l-s-b.de
+date:    2012-07-24
 
 
 ------------------------------- Change Log:
-- 1.11:
-  - FIXED: REAL decoder bug that only took effect on very few numbers whose
-    encoding yielded a "bit gap"
-
-- 1.10:
-  - Implements Glow DTD 2.10 (matrix extensions)
-  - Added top header "emberplus.h"
-  - Moved define EMBER_LIBRARY_VERSION from ember.h to emberplus.h
-  - Moved prototype for ember_init to from ember.h to emberplus.h
-    to enforce usage of new top header.
-  - Validates identifiers when writing and after decoding.
-  - The "onNode" callback type (used by GlowReader) has changed: it now
-    received the "fields" parameter as defined by the "onParameter" callback.
-  - Added support for "isOnline" field of EmberPlus-Glow.NodeContents.
-  - Removed reliance on fixed-size buffers. ember_init now has two
-    additional parameters: allocMemory and freeMemory.
-    The passed callbacks are used to allocate memory dynamically.
-    Therefore, you no longer need to initialize a GlowReader with
-    a dedicated value buffer.
-    The following members have been changed from buffers to pointers:
-    - GlowParameter.identifier -> pIdentifier
-    - GlowParameter.description -> pDescription
-    - GlowOctetsValue.octets -> pOctets
-    - GlowNode.identifier -> pIdentifier
-    - GlowNode.description -> pDescription
-    - GlowValue.string -> pString
-  - Added free() functions for each type that contains pointers:
-    - glowParameter_free
-    - glowNode_free
-    - glowValue_free
-    The application does not need to call these functions on the RX side
-    (since the GlowReader calls them), only on the TX side.
-  - Removed defines GLOW_MAX_VALUE_LENGTH, GLOW_MAX_IDENTIFIER_LENGTH and
-    GLOW_MAX_DESCRIPTION_LENGTH.
-  - FIXED: RELATIVE-OID encoding was limited to a length of 16 bytes.
-
 - 1.5:
   - Put under LGPL
   - Implemented fragmented packages on TX side:
@@ -92,7 +56,7 @@ date:    2012-10-23
   - Streamlined naming of preprocessor defines:
     - _INCLUDE_BER_CUSTOM_H renamed to INCLUDE_BERCUSTOM_H
     - _SECURE_CRT renamed to SECURE_CRT
-    - _EMBER_MAX_TREE_DEPTH renamed to EMBER_MAX_TREE_DEPTH
+    - _MAX_EMBER_TREE_DEPTH renamed to MAX_EMBER_TREE_DEPTH
     - EMBER_EncodingVersion renamed to EMBER_ENCODING_VERSION
     - EMBER_LibraryVersion renamed to EMBER_LIBRARY_VERSION
     - GLOW_DtdVersion renamed to GLOW_SCHEMA_VERSION
@@ -178,15 +142,12 @@ libember_slim differs from libember in the following ways:
 -  Glow: Parameter.enumeration is supported for TX only.
 -  Glow: Parameter.formula is supported for TX only.
 -  Glow: Parameter.format is supported for TX only.
--  Glow: Matrix.labels is not supported.
 
 
 ------------------------------- Using the Library:
 -  copy all code files and header files (except the sample "__sample_program.c")
    to your project and include the C files in the makefile/project file.
 -  supported preprocessor defines (to be set in makefile):
-   -  _DEBUG
-      if defined, debugging checks (ASSERTs) are enabled.
    -  SECURE_CRT
       if defined, secure versions of the C runtime calls from stdio.h
       and string.h are used (e.g. strcpy_s instead of strcpy).
@@ -197,20 +158,14 @@ libember_slim differs from libember in the following ways:
       in bertypes.h. In this header you can adjust standard typedefs to the
       target platform. The standard typedefs used by libember_slim can be
       found in bertypes.h.
-   -  EMBER_MAX_TREE_DEPTH=<value>
+   -  MAX_EMBER_TREE_DEPTH=<value>
       defines the maximum depth of a decodable ember tree.
       default is 65.
--  When using the library in a C++ environment, make sure you tell
-   the compiler to compile the library as C++ - this forces use of
-   the native C++ bool type instead of the typedef from "bertypes.h".
--  If the type bool is already defined in another location of your project,
-   make sure you adjust the typedef used by libember_slim (using bercustom.h),
-   so that both definitions of the bool type have the same sizeof.
 
 
 ------------------------------- Getting Started with the Code:
 
--  include "emberplus.h" in your implementation file.
+-  include "emberglow.h" in your implementation file.
 -  call "ember_init(throwError_t, failAssertion_t)" in your entry-point
    function to configure error reporting.
 -  NOTE: all functions and types are documented (doxygen-style) in the

@@ -31,30 +31,23 @@ namespace libs101
         {
             FirstPackage = 0x80,
             LastPackage = 0x40,
-            EmptyPackage = 0x20
+            EmptyPackage = 0x20,
         };
 
         typedef unsigned char value_type;
-        public:
-            /**
-             * Non-explicit constructor to allow implicit conversion.
-             * @param value Package flags.
-             */
-            PackageFlag(value_type value)
-                : m_value(static_cast<value_type>(value))
-            {}
 
-            /**
-             * Return the raw value currently represented by this instance.
-             * @return The raw value currently represented by this instance.
-             */
-            value_type value() const
-            {
-                return m_value;
-            }
-            
-        private:
-            value_type m_value;
+        /**
+         * Non-explicit constructor to allow implicit conversion.
+         * @param value Package flags.
+         */
+        PackageFlag(value_type value)
+            : value(value)
+        {}
+
+        /**
+         * Flags
+         */
+        value_type const value;
     };
 }
 

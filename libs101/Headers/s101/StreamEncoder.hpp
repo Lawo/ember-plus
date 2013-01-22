@@ -71,7 +71,8 @@ namespace libs101
              * Encodes a single byte.
              * @param input The byte to append to the buffer.
              */
-            void encode(value_type input);
+            template<typename InputType>
+            void encode(InputType input);
 
             /**
              * Encodes n bytes.
@@ -170,7 +171,8 @@ namespace libs101
     }
 
     template<typename ValueType>
-    inline void StreamEncoder<ValueType>::encode(value_type input)
+    template<typename InputType>
+    inline void StreamEncoder<ValueType>::encode(InputType input)
     {
         if (m_bytes.empty())
         {

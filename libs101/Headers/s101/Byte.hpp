@@ -34,33 +34,24 @@ namespace libs101
             BoF = 0xFE,
             EoF = 0xFF,
             XOR = 0x20,
-            Invalid = 0xF8
+            Invalid = 0xF8,
         };
 
+
         typedef unsigned char value_type;
-        public:
-            /**
-             * Non-explicit constructor to allow implicit conversion.
-             * @param value A value from _Domain to initialize this instance with.
-             */
-            Byte(_Domain value)
-                : m_value(static_cast<value_type>(value))
-            {}
 
-            /**
-             * Return the raw value currently represented by this instance.
-             * @return The raw value currently represented by this instance.
-             */
-            value_type value() const
-            {
-                return m_value;
-            }
+        /**
+         * Non-explicit constructor to allow implicit conversion.
+         * @param value A value from _Domain to initialize this instance with.
+         */
+        Byte(_Domain value)
+            : value(value)
+        {}
 
-        private:
-            /**
-             * The byte value.
-             */
-            value_type m_value;
+        /**
+         * The byte value.
+         */
+        value_type const value;
     };
 }
 

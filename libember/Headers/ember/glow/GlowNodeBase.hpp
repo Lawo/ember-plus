@@ -42,16 +42,16 @@ namespace libember { namespace glow
             bool contains(NodeProperty const& property) const;
 
             /**
-             * Sets the identifier string.
-             * @param identifier The identifier string.
-             */
-            void setIdentifier(std::string const& identifier);
-
-            /**
              * Sets the description string.
              * @param description The description string to set.
              */
             void setDescription(std::string const& description);
+
+            /**
+             * Sets the identifier string.
+             * @param identifier The identifier string.
+             */
+            void setIdentifier(std::string const& identifier);
 
             /**
              * Sets the root property. This property may be used if a provider acts as proxy
@@ -62,29 +62,11 @@ namespace libember { namespace glow
             void setRoot(bool isRoot);
 
             /**
-             * Adds the online state of the node.
-             * @param isOnline The current online state of the node.
-             */
-            void setIsOnline(bool isOnline);
-
-            /**
              * Returns a modifiable element collection that contains the children.
              * The element will be inserted if it doesn't already exist.
              * @return The element collection.
              */
             GlowElementCollection* children();
-
-            /**
-             * Returns the identifier string.
-             * @return The identifier string.
-             */
-            std::string identifier() const;
-
-            /**
-             * Returns the description string.
-             * @return The description string.
-             */
-            std::string description() const;
 
             /**
              * Returns the root node flag
@@ -93,11 +75,16 @@ namespace libember { namespace glow
             bool isRoot() const;
 
             /**
-             * Returns the online state of the node, if available.
-             * @return The online state of the node. If the property is not set, true 
-             *      is being returned.
+             * Returns the description string.
+             * @return The description string.
              */
-            bool isOnline() const;
+            std::string description() const;
+
+            /**
+             * Returns the identifier string.
+             * @return The identifier string.
+             */
+            std::string identifier() const;
 
             /**
              * Returns the constant element collection. If no children are attached,
@@ -123,7 +110,7 @@ namespace libember { namespace glow
 }
 
 #ifdef LIBEMBER_HEADER_ONLY
-#  include "impl/GlowNodeBase.ipp"
+#   include "impl/GlowNodeBase.ipp"
 #endif
 
 #endif  // __LIBEMBER_GLOW_GLOWNODEBASE_HPP

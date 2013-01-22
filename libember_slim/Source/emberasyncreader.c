@@ -60,7 +60,7 @@ static __EmberAsyncContainer *containerStack_push(__EmberAsyncContainerStack *pT
 {
    __EmberAsyncContainer *pItem;
 
-   if(pThis->length < EMBER_MAX_TREE_DEPTH)
+   if(pThis->length < MAX_EMBER_TREE_DEPTH)
    {
       pItem = &pThis->items[pThis->length];
       container_init(pItem, pTag, type, length);
@@ -269,10 +269,7 @@ static bool readByte_Value(EmberAsyncReader *pThis, byte b)
    BerReader *pBase = &pThis->base;
 
    if(pThis->bytesRead == 0)
-   {
       pThis->bytesExpected = pBase->length;
-      byteBuffer_resize(&pThis->base.buffer, pBase->length);
-   }
 
    pThis->bytesRead++;
 
@@ -362,17 +359,17 @@ static bool endContainer(EmberAsyncReader *pThis)
 //
 // ======================================================
 
-void emberAsyncReader_init(EmberAsyncReader *pThis)
+void emberAsyncReader_init(EmberAsyncReader *pThis, byte *pBuffer, int bufferSize)
 {
    ASSERT(pThis != NULL);
 
    bzero(*pThis);
 
-   berReader_init(&pThis->base);
+   berReader_init(&pThis->base, pBuffer, bufferSize);
 
    resetState(pThis, DecodeState_Tag);
 
-   pThis->pContainerStack = newobj(__EmberAsyncContainerStack);
+   pThis->pContainerStack = (__EmberAsyncContainerStack *)malloc(sizeof(__EmberAsyncContainerStack));
    containerStack_init(pThis->pContainerStack);
 }
 
@@ -391,9 +388,7 @@ void emberAsyncReader_free(EmberAsyncReader *pThis)
    ASSERT(pThis != NULL);
 
    if(pThis->pContainerStack != NULL)
-      freeMemory(pThis->pContainerStack);
-
-   berReader_free(&pThis->base);
+      free(pThis->pContainerStack);
 
    bzero(*pThis);
 }

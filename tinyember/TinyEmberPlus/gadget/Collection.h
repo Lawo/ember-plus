@@ -6,9 +6,6 @@
 
 namespace gadget
 {
-    /**
-     * Simple collection class which is used by the node class to store child nodes and parameters.
-     */
     template<typename ValueType>
     class Collection
     {
@@ -20,85 +17,32 @@ namespace gadget
             typedef typename Container::const_iterator const_iterator;
 
         public:
-            /**
-             * Initializes a new Collection with the specified collection of elements.
-             * @param first Reference to the first element to copy.
-             * @param last Reference to the first element beyond the collection of items to copy.
-             */
             template<typename InputIterator>
             Collection(InputIterator first, InputIterator last);
 
-            /**
-             * Initializes an empty collection
-             */
             Collection();
 
-            /**
-             * Returns the number of elements the collection contains.
-             * @return The number of elements the collection contains.
-             */
             size_type size() const;
 
-            /**
-             * Returns a reference to the first element of this collection.
-             * @return A reference to the first element of this collection.
-             */
             iterator begin();
 
-            /**
-             * Returns an iterator referring to the element one past the last element
-             * of this collection.
-             * @return An iterator referring to the element one past the last element
-             * of this collection.
-             */
             iterator end();
 
-            /**
-             * Returns a reference to the first element of this collection.
-             * @return A reference to the first element of this collection.
-             */
             const_iterator begin() const;
 
-            /**
-             * Returns an iterator referring to the element one past the last element
-             * of this collection.
-             * @return An iterator referring to the element one past the last element
-             * of this collection.
-             */
             const_iterator end() const;
 
-            /**
-             * Returns true if the collection is empty.
-             * @return true if the collection is empty.
-             */
             bool empty() const;
 
-            /**
-             * Returns true if the collection contains at least one element.
-             * @return true if the collection contains at least one element.
-             */
             bool any() const;
 
-            /**
-             * Inserts a new element at the specified location.
-             * @param where An iterator pointing the location where the value should be inserted.
-             * @param value The value to add to the collection.
-             */
             void insert(iterator where, ValueType value);
 
-            /**
-             * Removes an item at the specified location.
-             * @param where An iterator pointing to the element to remove.
-             */
             void remove(iterator where);
 
         private:
             Container m_container;
     };
-
-    /**************************************************************************
-     * Mandatory inline implementation                                        *
-     **************************************************************************/
 
     template<typename ValueType>
     template<typename InputIterator>

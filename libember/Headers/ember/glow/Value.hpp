@@ -25,7 +25,7 @@
 #include "../ber/Encoding.hpp"
 #include "../ber/Octets.hpp"
 #include "../ber/Value.hpp"
-#include "util/ValueConverter.hpp"
+#include "../dom/VariantLeaf.hpp"
 
 namespace libember { namespace glow 
 {
@@ -38,10 +38,18 @@ namespace libember { namespace glow
     {
         public:
             /**
+             * Creates a value instance from the provided variant leaf.
+             * @param leaf The leaf to get the value from
+             * @return Returns the created Value instance.
+             */
+            static Value fromLeaf(dom::VariantLeaf const* leaf);
+
+        public:
+            /**
              * Initializes a Value instance that contains an integer value.
              * @param value The value to store
              */
-            Value(long value);
+            Value(int value);
 
             /**
              * Initializes a Value instance that contains an real value.
@@ -74,12 +82,6 @@ namespace libember { namespace glow
             Value(Value const& other);
 
             /**
-             * Initializes a new Value instance from a type erased ber::Value.
-             * @param The type erased ber value to read the value from.
-             */
-            Value(ber::Value const& value);
-
-            /**
              * Destructor
              */
             ~Value();
@@ -95,7 +97,7 @@ namespace libember { namespace glow
              * @note If the data type is not an integer, the implementation will try to convert it.
              * @return The current value as integer
              */
-            long toInteger() const;
+            int toInteger() const;
 
             /**
              * Returns the current value as double. 
@@ -146,41 +148,39 @@ namespace libember { namespace glow
      * Inline Implementation                              *
      ******************************************************/
 
-    inline Value::Value(ber::Value const& value)
-        : m_value(0)
+    inline Value Value::fromLeaf(dom::VariantLeaf const* leaf)
     {
-        ber::Tag const type = value.universalTag();
-        if (type.getClass() == ber::Class::Universal)
+        if (leaf != 0)
         {
-            switch(type.number())
+            ber::Value const value = leaf->value();
+            ber::Tag const tag = leaf->typeTag();
+            switch(tag.number())
             {
                 case ber::Type::Integer:
-                    m_value = Variant::create(util::ValueConverter::valueOf(value, long(0)));
-                    return;
+                    return Value(value.as<int>());
+
                 case ber::Type::Real:
-                    m_value = Variant::create(util::ValueConverter::valueOf(value, double(0.0)));
-                    return;
+                    return Value(value.as<double>());
+
                 case ber::Type::UTF8String:
-                    m_value = Variant::create(util::ValueConverter::valueOf(value, std::string()));
-                    return;
+                    return Value(value.as<std::string>());
+
                 case ber::Type::OctetString:
-                    m_value = Variant::create(util::ValueConverter::valueOf(value, ber::Octets()));
-                    return;
+                    return Value(value.as<ber::Octets>());
+
                 case ber::Type::Boolean:
-                    m_value = Variant::create(util::ValueConverter::valueOf(value, false));
-                    return;
+                    return Value(value.as<bool>());
             }
         }
 
-        if (m_value == 0)
-            m_value = Variant::create(0L);
+        return Value(0);
     }
 
     inline Value::Value(double value)
         : m_value(Variant::create(value))
     {}
 
-    inline Value::Value(long value)
+    inline Value::Value(int value)
         : m_value(Variant::create(value))
     {}
 
@@ -210,7 +210,7 @@ namespace libember { namespace glow
         return m_value->type();
     }
 
-    inline long Value::toInteger() const
+    inline int Value::toInteger() const
     {
         return m_value->toInteger();
     }

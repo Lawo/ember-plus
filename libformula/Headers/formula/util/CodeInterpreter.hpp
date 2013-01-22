@@ -86,7 +86,7 @@ namespace libformula { namespace util
                     Idiv,
                     Mod,
                     Call,
-                    Negate
+                    Negate,
                 };
 
                 /**
@@ -454,20 +454,6 @@ namespace libformula { namespace util
                         {
                             auto const x = m_stack.pop<real_type>();
                             auto const r = std::sqrt(x);
-                            m_stack.push(r);
-                            break;
-                        }
-                        case FunctionType::Abs:
-                        {
-                            auto const x = m_stack.pop();
-                            auto const r = detail::ValueStackItemOperation::abs(x);
-                            m_stack.push(r);
-                            break;
-                        }
-                        case FunctionType::Sgn:
-                        {
-                            auto const x = m_stack.pop();
-                            auto const r = detail::ValueStackItemOperation::sgn(x);
                             m_stack.push(r);
                             break;
                         }

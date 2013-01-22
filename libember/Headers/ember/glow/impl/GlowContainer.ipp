@@ -38,25 +38,6 @@ namespace libember { namespace glow
     {}
 
     LIBEMBER_INLINE
-    GlowContainer::iterator GlowContainer::insertImpl(iterator, Node* child)
-    {
-        iterator const last = end();
-        if (child != 0)
-        {
-            ber::Tag const tag = child->applicationTag();
-            for (iterator i = begin(); i != last; ++i)
-            {
-                ber::Tag const other = i->applicationTag();
-                if (other > tag)
-                {
-                    return dom::detail::ListContainer::insertImpl(i, child);
-                }
-            }
-        }
-        return dom::detail::ListContainer::insertImpl(last, child);
-    }
-
-    LIBEMBER_INLINE
     ber::Tag GlowContainer::typeTagImpl() const
     {
         return m_universalTag;

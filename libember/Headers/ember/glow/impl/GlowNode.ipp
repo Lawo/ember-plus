@@ -23,7 +23,8 @@
 #include "../../util/Inline.hpp"
 #include "../util/ValueConverter.hpp"
 #include "../GlowRootElementCollection.hpp"
-#include "../GlowNodeBase.hpp"
+#include "../GlowElementCollection.hpp"
+#include "../GlowQualifiedNode.hpp"
 
 namespace libember { namespace glow 
 {
@@ -47,7 +48,32 @@ namespace libember { namespace glow
     }
 
     LIBEMBER_INLINE
-    GlowNode::GlowNode(GlowNodeBase* parent, int number)
+    GlowNode::GlowNode(GlowElementCollection* parent, int number)
+        : GlowNodeBase(GlowType::Node, GlowTags::ElementDefault(), GlowTags::Node::Contents(), GlowTags::Node::Children())
+    {
+        insert(begin(), new dom::VariantLeaf(GlowTags::Node::Number(), number));
+        if (parent)
+        {
+            GlowElementCollection::iterator const where = parent->end();
+            parent->insert(where, this);
+        }
+    }
+
+    LIBEMBER_INLINE
+    GlowNode::GlowNode(GlowNode* parent, int number)
+        : GlowNodeBase(GlowType::Node, GlowTags::ElementDefault(), GlowTags::Node::Contents(), GlowTags::Node::Children())
+    {
+        insert(begin(), new dom::VariantLeaf(GlowTags::Node::Number(), number));
+        if (parent)
+        {
+            GlowElementCollection* children = parent->children();
+            GlowElementCollection::iterator const where = children->end();
+            children->insert(where, this);
+        }
+    }
+
+    LIBEMBER_INLINE
+    GlowNode::GlowNode(GlowQualifiedNode* parent, int number)
         : GlowNodeBase(GlowType::Node, GlowTags::ElementDefault(), GlowTags::Node::Contents(), GlowTags::Node::Children())
     {
         insert(begin(), new dom::VariantLeaf(GlowTags::Node::Number(), number));
@@ -74,18 +100,12 @@ namespace libember { namespace glow
     LIBEMBER_INLINE
     int GlowNode::number() const
     {
-        ber::Tag const tag = GlowTags::Node::Number();
         const_iterator const first = begin();
         const_iterator const last = end();
-        const_iterator const result = util::find_tag(first, last, tag);
-        if (result != last)
-        {
-            return util::ValueConverter::valueOf(&*result, -1);
-        }
-        else
-        {
-            return -1;
-        }
+        ber::Tag const tag = GlowTags::Node::Number();
+        dom::VariantLeaf const* leaf = find_node<dom::VariantLeaf>(first, last, tag);
+
+        return util::ValueConverter::toValue(leaf, -1);
     }
 }
 }

@@ -18,13 +18,13 @@ EditEnumerationDialog::~EditEnumerationDialog(void)
 
 EditEnumerationDialog::const_iterator EditEnumerationDialog::begin() const
 {
-    synchronize();
+    assure();
     return std::begin(m_items);
 }
 
 EditEnumerationDialog::const_iterator EditEnumerationDialog::end() const
 {
-    synchronize();
+    assure();
     return std::end(m_items);
 }
 
@@ -38,7 +38,7 @@ void EditEnumerationDialog::discard()
     m_items.clear();
 }
 
-void EditEnumerationDialog::synchronize() const
+void EditEnumerationDialog::assure() const
 {
     if (m_items.empty())
     {

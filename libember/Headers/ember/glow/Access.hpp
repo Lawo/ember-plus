@@ -24,7 +24,7 @@ namespace libember { namespace glow
 {
     /**
      * A scoped enumeration type containing the symbolic names
-     * for the parameter access types supported by Ember+.
+     * for the parameter access types supported by Glow.
      */
     class Access
     {
@@ -34,7 +34,7 @@ namespace libember { namespace glow
                 None = 0,
                 ReadOnly = 1,
                 WriteOnly = 2,
-                ReadWrite = 3
+                ReadWrite = 3,
             };
 
             typedef int value_type;

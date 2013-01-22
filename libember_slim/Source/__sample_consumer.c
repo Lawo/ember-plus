@@ -12,8 +12,7 @@
 //$$ MSVCRT specific
 #include <WinSock2.h>
 
-#include "emberplus.h"
-#include "emberinternal.h"
+#include "emberglow.h"
 
 //$$ MSVCRT specific
 // Need to link with Ws2_32.lib
@@ -31,8 +30,9 @@
    do { strncpy_s(dest, size, source, (size) - 1); dest[(size) - 1] = 0; } while(0)
 #endif
 
-#define stringDup(pStr) \
-   (pStr != NULL ? _strdup(pStr) : NULL)
+#define newobj(type) ((type *)malloc(sizeof(type)))
+#define newarr(type, size) ((type *)malloc(sizeof(type) * (size)))
+
 
 // ====================================================================
 //
@@ -67,185 +67,74 @@ static void shutdownSockets()
 
 // ====================================================================
 //
-// Linked List
-//
-// ====================================================================
-
-typedef struct SPtrListNode
-{
-   voidptr value;
-   struct SPtrListNode *pNext;
-} PtrListNode;
-
-typedef struct SPtrList
-{
-   PtrListNode *pHead;
-   PtrListNode *pLast;
-   int count;
-} PtrList;
-
-void ptrList_init(PtrList *pThis)
-{
-   bzero(*pThis);
-}
-
-void ptrList_addLast(PtrList *pThis, voidptr value)
-{
-   PtrListNode *pNode = newobj(PtrListNode);
-   pNode->value = value;
-   pNode->pNext = NULL;
-
-   if(pThis->pLast == NULL)
-   {
-      pThis->pHead = pNode;
-      pThis->pLast = pNode;
-   }
-   else
-   {
-      pThis->pLast->pNext = pNode;
-      pThis->pLast = pNode;
-   }
-
-   pThis->count++;
-}
-
-void ptrList_free(PtrList *pThis)
-{
-   PtrListNode *pNode = pThis->pHead;
-   PtrListNode *pPrev;
-
-   while(pNode != NULL)
-   {
-      pPrev = pNode;
-      pNode = pNode->pNext;
-
-      freeMemory(pPrev);
-   }
-
-   bzero(*pThis);
-}
-
-
-// ====================================================================
-//
 // Model
 //
 // ====================================================================
 
-typedef struct STarget
-{
-   berint number;
-   berint *pConnectedSources;
-   int connectedSourcesCount;
-} Target;
-
-typedef struct SSource
-{
-   berint number;
-} Source;
+#define ELEMENT_MAX_CHILDREN (100)
 
 typedef struct SElement
 {
    berint number;
-   GlowElementType type;
+   bool isParameter;
    GlowFieldFlags paramFields;
 
    union
    {
       GlowNode node;
       GlowParameter param;
-
-      struct
-      {
-         GlowMatrix matrix;
-         PtrList targets;
-         PtrList sources;
-      };
    };
 
-   PtrList children;
+   int childrenCount;
+   struct SElement *children[ELEMENT_MAX_CHILDREN];
    struct SElement *pParent;
 } Element;
 
-static void element_init(Element *pThis, Element *pParent, GlowElementType type, berint number)
+static void element_init(Element *pThis, Element *pParent, bool isParameter, berint number)
 {
    bzero(*pThis);
 
    pThis->pParent = pParent;
-   pThis->type = type;
+   pThis->isParameter = isParameter;
    pThis->number = number;
 
-   ptrList_init(&pThis->children);
-
    if(pParent != NULL)
-      ptrList_addLast(&pParent->children, pThis);
-
-   if(pThis->type == GlowElementType_Node)
-      pThis->node.isOnline = true;
+   {
+      if(pParent->childrenCount < ELEMENT_MAX_CHILDREN)
+      {
+         pParent->children[pParent->childrenCount] = pThis;
+         pParent->childrenCount++;
+      }
+   }
 }
 
 static void element_free(Element *pThis)
 {
+   int index;
    Element *pChild;
-   Target *pTarget;
-   PtrListNode *pNode;
 
-   for(pNode = pThis->children.pHead; pNode != NULL; pNode = pNode->pNext)
+   for(index = 0; index < pThis->childrenCount; index++)
    {
-      pChild = (Element *)pNode->value;
-      element_free(pChild);
-      freeMemory(pChild);
+      pChild = pThis->children[index];
+
+      if(pChild != NULL)
+      {
+         element_free(pChild);
+         free(pChild);
+      }
    }
 
-   ptrList_free(&pThis->children);
-
-   if(pThis->type == GlowElementType_Parameter)
+   if(pThis->isParameter)
    {
-      glowValue_free(&pThis->param.value);
-
       if(pThis->param.enumeration != NULL)
-         freeMemory((void *)pThis->param.enumeration);
+         free((void *)pThis->param.enumeration);
       if(pThis->param.formula != NULL)
-         freeMemory((void *)pThis->param.formula);
+         free((void *)pThis->param.formula);
       if(pThis->param.format != NULL)
-         freeMemory((void *)pThis->param.format);
-   }
-
-   if(pThis->type == GlowElementType_Matrix)
-   {
-      for(pNode = pThis->targets.pHead; pNode != NULL; pNode = pNode->pNext)
-      {
-         pTarget = (Target *)pNode->value;
-
-         if(pTarget->pConnectedSources != NULL)
-            freeMemory(pTarget->pConnectedSources);
-
-         freeMemory(pTarget);
-      }
-
-      for(pNode = pThis->sources.pHead; pNode != NULL; pNode = pNode->pNext)
-      {
-         if(pNode->value != NULL)
-            freeMemory(pNode->value);
-      }
-
-      ptrList_free(&pThis->targets);
-      ptrList_free(&pThis->sources);
+         free((void *)pThis->param.format);
    }
 
    bzero(*pThis);
-}
-
-static pcstr element_getIdentifier(const Element *pThis)
-{
-   switch(pThis->type)
-   {
-      case GlowElementType_Node: return pThis->node.pIdentifier;
-      case GlowElementType_Parameter: return pThis->param.pIdentifier;
-      case GlowElementType_Matrix: return pThis->matrix.pIdentifier;
-   }
-
-   return NULL;
 }
 
 static berint *element_getPath(const Element *pThis, berint *pBuffer, int *pCount)
@@ -284,8 +173,12 @@ static pcstr element_getIdentifierPath(const Element *pThis, pstr pBuffer, int b
       if(*pPosition != 0)
          *--pPosition = '/';
 
-      pIdentifier = element_getIdentifier(pElement);
-      length = (int)strlen(pIdentifier);
+      if(pElement->isParameter)
+         pIdentifier = pElement->param.identifier;
+      else
+         pIdentifier = pElement->node.identifier;
+
+      length = strlen(pIdentifier);
       pPosition -= length;
 
       if(pPosition < pBuffer)
@@ -299,12 +192,12 @@ static pcstr element_getIdentifierPath(const Element *pThis, pstr pBuffer, int b
 
 static Element *element_findChild(const Element *pThis, berint number)
 {
+   int index;
    Element *pChild;
-   PtrListNode *pNode;
 
-   for(pNode = pThis->children.pHead; pNode != NULL; pNode = pNode->pNext)
+   for(index = 0; index < pThis->childrenCount; index++)
    {
-      pChild = (Element *)pNode->value;
+      pChild = pThis->children[index];
 
       if(pChild->number == number)
          return pChild;
@@ -315,14 +208,18 @@ static Element *element_findChild(const Element *pThis, berint number)
 
 static Element *element_findChildByIdentifier(const Element *pThis, pcstr pIdentifier)
 {
+   int index;
    Element *pChild;
    pcstr pIdent;
-   PtrListNode *pNode;
 
-   for(pNode = pThis->children.pHead; pNode != NULL; pNode = pNode->pNext)
+   for(index = 0; index < pThis->childrenCount; index++)
    {
-      pChild = (Element *)pNode->value;
-      pIdent = element_getIdentifier(pChild);
+      pChild = pThis->children[index];
+
+      if(pChild->isParameter)
+         pIdent = pChild->param.identifier;
+      else
+         pIdent = pChild->node.identifier;
 
       if(_stricmp(pIdent, pIdentifier) == 0)
          return pChild;
@@ -361,7 +258,7 @@ static Element *element_findDescendant(const Element *pThis, const berint *pPath
 
 static GlowParameterType element_getParameterType(const Element *pThis)
 {
-   if(pThis->type == GlowElementType_Parameter)
+   if(pThis->isParameter)
    {
       if(pThis->paramFields & GlowFieldFlag_Enumeration)
          return GlowParameterType_Enum;
@@ -374,51 +271,6 @@ static GlowParameterType element_getParameterType(const Element *pThis)
    }
 
    return (GlowParameterType)0;
-}
-
-static Target *element_findOrCreateTarget(Element *pThis, berint number)
-{
-   Target *pTarget;
-   PtrListNode *pNode;
-
-   if(pThis->type == GlowElementType_Matrix)
-   {
-      for(pNode = pThis->targets.pHead; pNode != NULL; pNode = pNode->pNext)
-      {
-         pTarget = (Target *)pNode->value;
-
-         if(pTarget->number == number)
-            return pTarget;
-      }
-
-      pTarget = newobj(Target);
-      bzero(*pTarget);
-      pTarget->number = number;
-
-      ptrList_addLast(&pThis->targets, pTarget);
-      return pTarget;
-   }
-
-   return NULL;
-}
-
-static Source *element_findSource(const Element *pThis, berint number)
-{
-   Source *pSource;
-   PtrListNode *pNode;
-
-   if(pThis->type == GlowElementType_Matrix)
-   {
-      for(pNode = pThis->sources.pHead; pNode != NULL; pNode = pNode->pNext)
-      {
-         pSource = (Source *)pNode->value;
-
-         if(pSource->number == number)
-            return pSource;
-      }
-   }
-
-   return NULL;
 }
 
 static void printValue(const GlowValue *pValue)
@@ -434,7 +286,7 @@ static void printValue(const GlowValue *pValue)
          break;
 
       case GlowParameterType_String:
-         printf_s("string '%s'", pValue->pString);
+         printf_s("string '%s'", pValue->string);
          break;
 
       case GlowParameterType_Boolean:
@@ -467,24 +319,22 @@ static void printMinMax(const GlowMinMax *pMinMax)
    }
 }
 
-static void element_print(const Element *pThis, bool isVerbose)
+static void element_print(const Element *pElement, bool isVerbose)
 {
    GlowFieldFlags fields;
    const GlowParameter *pParameter;
-   const GlowMatrix *pMatrix;
-   int index;
 
-   if(pThis->type == GlowElementType_Parameter)
+   if(pElement->isParameter)
    {
-      pParameter = &pThis->param;
-      printf_s("P %04ld %s\n", pThis->number, pParameter->pIdentifier);
+      pParameter = &pElement->param;
+      printf_s("P %04ld %s\n", pElement->number, pParameter->identifier);
 
       if(isVerbose)
       {
-         fields = pThis->paramFields;
+         fields = pElement->paramFields;
 
          if(fields & GlowFieldFlag_Description)
-            printf_s("  description:      %s\n", pParameter->pDescription);
+            printf_s("  description:      %s\n", pParameter->description);
 
          if(fields & GlowFieldFlag_Value)
          {
@@ -535,58 +385,12 @@ static void element_print(const Element *pThis, bool isVerbose)
             printf_s("  formula:\n%s\n", pParameter->formula);
       }
    }
-   else if(pThis->type == GlowElementType_Node)
+   else
    {
-      printf_s("N %04ld %s\n", pThis->number, pThis->node.pIdentifier);
+      printf_s("N %04ld %s\n", pElement->number, pElement->node.identifier);
 
       if(isVerbose)
-      {
-         printf_s("  description: %s\n", pThis->node.pDescription);
-         printf_s("  isRoot:      %s\n", pThis->node.isRoot ? "true" : "false");
-         printf_s("  isOnline:    %s\n", pThis->node.isOnline ? "true" : "false");
-      }
-   }
-   else if(pThis->type == GlowElementType_Matrix)
-   {
-      pMatrix = &pThis->matrix;
-      printf_s("M %04ld %s\n", pThis->number, pMatrix->pIdentifier);
-
-      if(isVerbose)
-      {
-         if(pMatrix->pDescription != NULL)
-            printf_s("  description:                 %s\n", pMatrix->pDescription);
-         if(pMatrix->type != GlowMatrixType_OneToN)
-            printf_s("  type:                        %d\n", pMatrix->type);
-         if(pMatrix->addressingMode != GlowMatrixAddressingMode_Linear)
-            printf_s("  addressingMode:              %d\n", pMatrix->addressingMode);
-         printf_s("  targetCount:                 %d\n", pMatrix->targetCount);
-         printf_s("  sourceCount:                 %d\n", pMatrix->sourceCount);
-         if(pMatrix->maximumTotalConnects != 0)
-            printf_s("  maximumTotalConnects:        %d\n", pMatrix->maximumTotalConnects);
-         if(pMatrix->maximumConnectsPerTarget != 0)
-            printf_s("  maximumConnectsPerTarget:    %d\n", pMatrix->maximumConnectsPerTarget);
-         if(glowParametersLocation_isValid(&pMatrix->parametersLocation))
-         {
-            printf_s("  parametersLocation:          ");
-
-            if(pMatrix->parametersLocation.kind == GlowParametersLocationKind_BasePath)
-            {
-               for(index = 0; index < pMatrix->parametersLocation.basePath.length; index++)
-               {
-                  printf_s("%d", pMatrix->parametersLocation.basePath.ids[index]);
-
-                  if(index < pMatrix->parametersLocation.basePath.length - 1)
-                     printf_s(".");
-               }
-
-               printf_s("\n");
-            }
-            else if(pMatrix->parametersLocation.kind == GlowParametersLocationKind_Inline)
-            {
-               printf_s("%d\n", pMatrix->parametersLocation.inlineId);
-            }
-         }
-      }
+         printf_s("  description: %s\n", pElement->node.description);
    }
 }
 
@@ -597,14 +401,14 @@ static void element_print(const Element *pThis, bool isVerbose)
 //
 // ====================================================================
 
-typedef struct SSession
+typedef struct __Session
 {
    SOCKET sock;
    pcstr remoteAddress;
    int remotePort;
    Element root;
    Element *pCursor;
-   berint cursorPathBuffer[GLOW_MAX_TREE_DEPTH];
+   berint cursorPathBuffer[MAX_GLOW_TREE_DEPTH];
    berint *pCursorPath;
    int cursorPathLength;
 
@@ -614,7 +418,7 @@ typedef struct SSession
    pstr pFormat;
 } Session;
 
-static void onNode(const GlowNode *pNode, GlowFieldFlags fields, const berint *pPath, int pathLength, voidptr state)
+static void onNode(const GlowNode *pNode, const berint *pPath, int pathLength, voidptr state)
 {
    Session *pSession = (Session *)state;
    Element *pElement;
@@ -623,29 +427,24 @@ static void onNode(const GlowNode *pNode, GlowFieldFlags fields, const berint *p
    // if received element is a child of current cursor, print it
    if(memcmp(pPath, pSession->pCursorPath, pSession->cursorPathLength * sizeof(berint)) == 0
    && pathLength == pSession->cursorPathLength + 1)
-      printf_s("* N %04ld %s\n", pPath[pathLength - 1], pNode->pIdentifier);
+      printf_s("* N %04ld %s\n", pPath[pathLength - 1], pNode->identifier);
 
-   pElement = element_findDescendant(&pSession->root, pPath, pathLength, &pParent);
-
-   if(pParent != NULL)
+   if(pNode->identifier[0] != 0)
    {
-      if(pElement == NULL)
+      pElement = element_findDescendant(&pSession->root, pPath, pathLength, &pParent);
+
+      if(pParent != NULL)
       {
-         pElement = newobj(Element);
-         element_init(pElement, pParent, GlowElementType_Node, pPath[pathLength - 1]);
+         if(pElement == NULL)
+         {
+            pElement = newobj(Element);
+            element_init(pElement, pParent, false, pPath[pathLength - 1]);
+            stringCopy(pElement->node.identifier, GLOW_MAX_IDENTIFIER_LENGTH, pNode->identifier);
+         }
 
-         if(fields & GlowFieldFlag_Identifier)
-            pElement->node.pIdentifier = stringDup(pNode->pIdentifier);
+         if(pNode->description[0] != 0)
+            stringCopy(pElement->node.description, GLOW_MAX_DESCRIPTION_LENGTH, pNode->description);
       }
-
-      if(fields & GlowFieldFlag_Description)
-         pElement->node.pDescription = stringDup(pNode->pDescription);
-
-      if(fields & GlowFieldFlag_IsOnline)
-         pElement->node.isOnline = pNode->isOnline;
-
-      if(fields & GlowFieldFlag_IsRoot)
-         pElement->node.isRoot = pNode->isRoot;
    }
 }
 
@@ -658,7 +457,7 @@ static void onParameter(const GlowParameter *pParameter, GlowFieldFlags fields, 
    // if received element is a child of current cursor, print it
    if(memcmp(pPath, pSession->pCursorPath, pSession->cursorPathLength * sizeof(berint)) == 0
    && pathLength == pSession->cursorPathLength + 1)
-      printf_s("* P %04ld %s\n", pPath[pathLength - 1], pParameter->pIdentifier);
+      printf_s("* P %04ld %s\n", pPath[pathLength - 1], pParameter->identifier);
 
    pElement = element_findDescendant(&pSession->root, pPath, pathLength, &pParent);
 
@@ -667,18 +466,15 @@ static void onParameter(const GlowParameter *pParameter, GlowFieldFlags fields, 
       if(pElement == NULL)
       {
          pElement = newobj(Element);
-         element_init(pElement, pParent, GlowElementType_Parameter, pPath[pathLength - 1]);
+         element_init(pElement, pParent, true, pPath[pathLength - 1]);
       }
 
-      if((fields & GlowFieldFlag_Identifier) == GlowFieldFlag_Identifier)
-         pElement->param.pIdentifier = stringDup(pParameter->pIdentifier);
+      if(fields & GlowFieldFlag_Identifier)
+         stringCopy(pElement->param.identifier, GLOW_MAX_IDENTIFIER_LENGTH, pParameter->identifier);
       if(fields & GlowFieldFlag_Description)
-         pElement->param.pDescription = stringDup(pParameter->pDescription);
+         stringCopy(pElement->param.description, GLOW_MAX_DESCRIPTION_LENGTH, pParameter->description);
       if(fields & GlowFieldFlag_Value)
-      {
-         glowValue_free(&pElement->param.value);
-         glowValue_copyTo(&pParameter->value, &pElement->param.value);
-      }
+         memcpy(&pElement->param.value, &pParameter->value, sizeof(GlowValue));
       if(fields & GlowFieldFlag_Minimum)
          memcpy(&pElement->param.minimum, &pParameter->minimum, sizeof(GlowMinMax));
       if(fields & GlowFieldFlag_Maximum)
@@ -722,117 +518,6 @@ static void onParameter(const GlowParameter *pParameter, GlowFieldFlags fields, 
       {
          printValue(&pParameter->value);
          printf_s("\n");
-      }
-   }
-}
-
-static void onMatrix(const GlowMatrix *pMatrix, const berint *pPath, int pathLength, voidptr state)
-{
-   Session *pSession = (Session *)state;
-   Element *pElement;
-   Element *pParent;
-
-   // if received element is a child of current cursor, print it
-   if(memcmp(pPath, pSession->pCursorPath, pSession->cursorPathLength * sizeof(berint)) == 0
-   && pathLength == pSession->cursorPathLength + 1)
-      printf_s("* M %04ld %s\n", pPath[pathLength - 1], pMatrix->pIdentifier);
-
-   pElement = element_findDescendant(&pSession->root, pPath, pathLength, &pParent);
-
-   if(pParent != NULL)
-   {
-      if(pElement == NULL)
-      {
-         pElement = newobj(Element);
-         element_init(pElement, pParent, GlowElementType_Matrix, pPath[pathLength - 1]);
-      }
-
-      memcpy(&pElement->matrix, pMatrix, sizeof(*pMatrix));
-      pElement->matrix.pIdentifier = stringDup(pMatrix->pIdentifier);
-      pElement->matrix.pDescription = stringDup(pMatrix->pDescription);
-   }
-}
-
-static void onTarget(const GlowSignal *pSignal, const berint *pPath, int pathLength, voidptr state)
-{
-   Session *pSession = (Session *)state;
-   Element *pElement;
-
-   // if signal resides in cursor element, print it
-   if(memcmp(pPath, pSession->pCursorPath, pSession->cursorPathLength * sizeof(berint)) == 0
-   && pathLength == pSession->cursorPathLength)
-      printf_s("* T %04ld\n", pSignal->number);
-
-   pElement = element_findDescendant(&pSession->root, pPath, pathLength, NULL);
-
-   if(pElement != NULL
-   && pElement->type == GlowElementType_Matrix)
-      element_findOrCreateTarget(pElement, pSignal->number);
-}
-
-static void onSource(const GlowSignal *pSignal, const berint *pPath, int pathLength, voidptr state)
-{
-   Session *pSession = (Session *)state;
-   Element *pElement;
-   Source *pSource;
-
-   // if signal resides in cursor element, print it
-   if(memcmp(pPath, pSession->pCursorPath, pSession->cursorPathLength * sizeof(berint)) == 0
-   && pathLength == pSession->cursorPathLength)
-      printf_s("* S %04ld\n", pSignal->number);
-
-   pElement = element_findDescendant(&pSession->root, pPath, pathLength, NULL);
-
-   if(pElement != NULL
-   && pElement->type == GlowElementType_Matrix)
-   {
-      pSource = newobj(Source);
-      bzero(*pSource);
-      pSource->number = pSignal->number;
-
-      ptrList_addLast(&pElement->sources, pSource);
-   }
-}
-
-static void onConnection(const GlowConnection *pConnection, const berint *pPath, int pathLength, voidptr state)
-{
-   Session *pSession = (Session *)state;
-   Element *pElement;
-   int index;
-   Target *pTarget;
-
-   // if signal resides in cursor element, print it
-   if(memcmp(pPath, pSession->pCursorPath, pSession->cursorPathLength * sizeof(berint)) == 0
-   && pathLength == pSession->cursorPathLength)
-   {
-      printf_s("* C %04ld <- [", pConnection->target);
-
-      for(index = 0; index < pConnection->sourcesLength; index++)
-      {
-         printf_s("%04ld", pConnection->pSources[index]);
-
-         if(index < pConnection->sourcesLength - 1)
-            printf_s(", ");
-      }
-
-      printf_s("]\n");
-   }
-
-   pElement = element_findDescendant(&pSession->root, pPath, pathLength, NULL);
-
-   if(pElement != NULL
-   && pElement->type == GlowElementType_Matrix)
-   {
-      pTarget = element_findOrCreateTarget(pElement, pConnection->target);
-
-      if(pTarget != NULL)
-      {
-         if(pTarget->pConnectedSources != NULL)
-            freeMemory(pTarget->pConnectedSources);
-
-         pTarget->pConnectedSources = newarr(berint, pConnection->sourcesLength);
-         memcpy(pTarget->pConnectedSources, pConnection->pSources, pConnection->sourcesLength * sizeof(berint));
-         pTarget->connectedSourcesCount = pConnection->sourcesLength;
       }
    }
 }
@@ -901,7 +586,7 @@ static void writePrompt(Session *pSession)
 
    printf_s(">");
 
-   freeMemory(pIdentPathBuffer);
+   free(pIdentPathBuffer);
 }
 
 static Element *findElement(pcstr pIdentifier, const Session *pSession)
@@ -948,7 +633,7 @@ static bool setParameterValue(const Session *pSession, pcstr pValueString)
          break;
 
       case GlowParameterType_String:
-         parameter.value.pString = (pstr)pValueString;
+         stringCopy(parameter.value.string, sizeof(parameter.value.string), pValueString);
          parameter.value.flag = GlowParameterType_String;
          break;
 
@@ -961,69 +646,8 @@ static bool setParameterValue(const Session *pSession, pcstr pValueString)
    glowOutput_beginPackage(&output, true);
    glow_writeQualifiedParameter(&output, &parameter, GlowFieldFlag_Value, pSession->pCursorPath, pSession->cursorPathLength);
    send(pSession->sock, (char *)pBuffer, glowOutput_finishPackage(&output), 0);
-   freeMemory(pBuffer);
+   free(pBuffer);
    return true;
-}
-
-static pcstr parseInteger(pcstr pString, berint *pInteger)
-{
-   berint integer = 0;
-
-   while(isspace(*pString))
-      pString++;
-
-   if(isdigit(*pString))
-   {
-      for( ; isdigit(*pString); pString++)
-         integer = integer * 10 + (*pString - '0');
-
-      *pInteger = integer;
-      return pString;
-   }
-
-   return NULL;
-}
-
-static bool issueConnect(const Session *pSession, pcstr pArguments, GlowConnectionOperation operation)
-{
-   GlowOutput output;
-   const int bufferSize = 512;
-   byte *pBuffer;
-   const Element *pElement = pSession->pCursor;
-   GlowConnection connection;
-   bool result = false;
-
-   bzero(connection);
-
-   if(pElement->type == GlowElementType_Matrix)
-   {
-      pArguments = parseInteger(pArguments, &connection.target);
-
-      if(pArguments != NULL)
-      {
-         connection.operation = operation;
-         connection.pSources = newarr(berint, 64);
-
-         while((pArguments = parseInteger(pArguments, &connection.pSources[connection.sourcesLength])) != NULL)
-            connection.sourcesLength++;
-
-         if(connection.sourcesLength > 0)
-         {
-            pBuffer = newarr(byte, bufferSize);
-            glowOutput_init(&output, pBuffer, bufferSize, 0);
-            glowOutput_beginPackage(&output, true);
-            glow_writeConnectionsPrefix(&output, pSession->pCursorPath, pSession->cursorPathLength);
-            glow_writeConnection(&output, &connection);
-            glow_writeConnectionsSuffix(&output);
-            send(pSession->sock, (char *)pBuffer, glowOutput_finishPackage(&output), 0);
-            freeMemory(pBuffer);
-            result = true;
-         }
-      }
-   }
-
-   glowConnection_free(&connection);
-   return result;
 }
 
 static bool handleInput(Session *pSession, pcstr pInput)
@@ -1034,7 +658,7 @@ static bool handleInput(Session *pSession, pcstr pInput)
    GlowCommand command;
    pcstr pArgument;
    Element *pElement;
-   PtrListNode *pNode;
+   int index;
 
    if(strcmp(pInput, "dir") == 0)
    {
@@ -1045,22 +669,17 @@ static bool handleInput(Session *pSession, pcstr pInput)
 
       glowOutput_init(&output, pBuffer, bufferSize, 0);
       glowOutput_beginPackage(&output, true);
-      glow_writeQualifiedCommand(
-         &output,
-         &command,
-         pSession->pCursorPath,
-         pSession->cursorPathLength,
-         pSession->pCursor->type);
+      glow_writeQualifiedCommand(&output, &command, pSession->pCursorPath, pSession->cursorPathLength, pSession->pCursor->isParameter);
       send(pSession->sock, (char *)pBuffer, glowOutput_finishPackage(&output), 0);
 
-      freeMemory(pBuffer);
+      free(pBuffer);
 
       printf_s("|>\n");
    }
    else if(strcmp(pInput, "ls") == 0)
    {
-      for(pNode = pSession->pCursor->children.pHead; pNode != NULL; pNode = pNode->pNext)
-         element_print((Element *)pNode->value, false);
+      for(index = 0; index < pSession->pCursor->childrenCount; index++)
+         element_print(pSession->pCursor->children[index], false);
 
       writePrompt(pSession);
    }
@@ -1071,7 +690,7 @@ static bool handleInput(Session *pSession, pcstr pInput)
 
       if(pElement != NULL)
       {
-         pSession->cursorPathLength = GLOW_MAX_TREE_DEPTH;
+         pSession->cursorPathLength = MAX_GLOW_TREE_DEPTH;
          pSession->pCursorPath = element_getPath(pElement, pSession->cursorPathBuffer, &pSession->cursorPathLength);
          pSession->pCursor = pElement;
       }
@@ -1084,7 +703,7 @@ static bool handleInput(Session *pSession, pcstr pInput)
 
       if(pElement != NULL)
       {
-         pSession->cursorPathLength = GLOW_MAX_TREE_DEPTH;
+         pSession->cursorPathLength = MAX_GLOW_TREE_DEPTH;
          pSession->pCursorPath = element_getPath(pElement, pSession->cursorPathBuffer, &pSession->cursorPathLength);
          pSession->pCursor = pElement;
       }
@@ -1116,40 +735,20 @@ static bool handleInput(Session *pSession, pcstr pInput)
       else
          writePrompt(pSession);
    }
-   else if(strncmp(pInput, "connect ", 8) == 0)
+   else if(*pInput == 0)
    {
-      pArgument = &pInput[8];
-
-      if(issueConnect(pSession, pArgument, GlowConnectionOperation_Connect))
-         printf_s("|>\n");
-      else
-         writePrompt(pSession);
-   }
-   else if(strncmp(pInput, "disconnect ", 11) == 0)
-   {
-      pArgument = &pInput[11];
-
-      if(issueConnect(pSession, pArgument, GlowConnectionOperation_Disconnect))
-         printf_s("|>\n");
-      else
-         writePrompt(pSession);
+      writePrompt(pSession);
    }
    else if(strcmp(pInput, "?") == 0)
    {
       printf_s("dir             - send GetDirectory command\n"
-               "cd IDENT        - change to child with identifier IDENT\n"
+               "cd <ident>      - change to child with identifier <ident>\n"
                "ls              - list children\n"
-               "print [IDENT]   - print child with identifier IDENT\n"
-               "set VALUE       - set parameter value to VALUE\n"
-               "connect T S     - connect S to T\n"
-               "disconnect T S  - disconnect S from T\n"
+               "print [<ident>] - print child with identifier <ident>\n"
+               "set <value>     - set parameter value to <value>\n"
                "quit            - exit application\n"
-               "for IDENT you can also write '.' or '..'.\n");
+               "for <ident> you can also write '.' or '..'.\n");
 
-      writePrompt(pSession);
-   }
-   else if(*pInput == 0)
-   {
       writePrompt(pSession);
    }
    else if(strcmp(pInput, "quit") == 0)
@@ -1174,18 +773,16 @@ static void run(Session *pSession)
    int inputLength = 0;
    bool isQuit = false;
    const struct timeval timeout = {0, 16 * 1000}; // 16 milliseconds timeout for select()
-   const int rxBufferSize = 1290; // max size of unescaped package
+   const int rxBufferSize = 64 * 1024; // max size of unframed package
+   const int valueBufferSize = 64; // max size of encoded primitive BER value
    fd_set fdset;
    int fdsReady;
    GlowReader *pReader = newobj(GlowReader);
    byte *pRxBuffer = newarr(byte, rxBufferSize);
+   byte *pValueBuffer = newarr(byte, valueBufferSize);
    SOCKET sock = pSession->sock;
 
-   glowReader_init(pReader, onNode, onParameter, NULL, NULL, (voidptr)pSession, pRxBuffer, rxBufferSize);
-   pReader->base.onMatrix = onMatrix;
-   pReader->base.onTarget = onTarget;
-   pReader->base.onSource = onSource;
-   pReader->base.onConnection = onConnection;
+   glowReader_init(pReader, pValueBuffer, valueBufferSize, onNode, onParameter, NULL, NULL, (voidptr)pSession, pRxBuffer, rxBufferSize);
    pReader->onPackageReceived = onPackageReceived;
    pReader->base.onUnsupportedTltlv = onUnsupportedTltlv;
 
@@ -1197,6 +794,7 @@ static void run(Session *pSession)
       if(_kbhit())
       {
          ch = (char)_getch();
+         _putch(ch);
 
          if(ch == '\n' || ch == '\r')
          {
@@ -1210,20 +808,12 @@ static void run(Session *pSession)
          else if(ch == '\b')
          {
             if(inputLength > 0)
-            {
-               _putch(ch);
-               _putch(' ');
-               _putch(ch);
-
                inputLength--;
-            }
          }
          else
          {
             if(inputLength < sizeof(s_input) - 1)
             {
-               _putch(ch);
-
                s_input[inputLength] = ch;
                inputLength++;
             }
@@ -1255,9 +845,9 @@ static void run(Session *pSession)
       }
    }
 
-   glowReader_free(pReader);
-   freeMemory(pRxBuffer);
-   freeMemory(pReader);
+   free(pValueBuffer);
+   free(pRxBuffer);
+   free(pReader);
 }
 
 
@@ -1266,32 +856,6 @@ static void run(Session *pSession)
 // consumer sample entry point
 //
 // ====================================================================
-
-static volatile int allocCount = 0;
-
-static void *allocMemoryImpl(size_t size)
-{
-   void *pMemory = malloc(size);
-
-   //if(sizeof(void *) == 8)
-   //   printf("allocate %lu bytes: %llX\n", size, (unsigned long long)pMemory);
-   //else
-   //   printf("allocate %lu bytes: %lX\n", size, (unsigned long)pMemory);
-
-   allocCount++;
-   return pMemory;
-}
-
-static void freeMemoryImpl(void *pMemory)
-{
-   //if(sizeof(void *) == 8)
-   //   printf("free: %llX\n", (unsigned long long)pMemory);
-   //else
-   //   printf("free: %lX\n", (unsigned long)pMemory);
-
-   allocCount--;
-   free(pMemory);
-}
 
 void runConsumer(int argc, char **argv)
 {
@@ -1302,7 +866,7 @@ void runConsumer(int argc, char **argv)
    int result;
    Session session;
 
-   ember_init(onThrowError, onFailAssertion, allocMemoryImpl, freeMemoryImpl);
+   ember_init(onThrowError, onFailAssertion);
 
    initSockets();
 
@@ -1331,7 +895,7 @@ void runConsumer(int argc, char **argv)
             session.pCursor = &session.root;
             session.remoteAddress = argv[1];
             session.remotePort = port;
-            element_init(&session.root, NULL, GlowElementType_Node, 0);
+            element_init(&session.root, NULL, false, 0);
 
             run(&session);
 
@@ -1347,11 +911,6 @@ void runConsumer(int argc, char **argv)
       {
          printf_s("address or port error.\n");
       }
-   }
-
-   if(allocCount > 0)
-   {
-      printf("UNFREED MEMORY DETECTED %d!\n", allocCount);
    }
 
    shutdownSockets();

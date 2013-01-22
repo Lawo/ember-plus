@@ -37,7 +37,7 @@ namespace libember { namespace glow
                 Boolean = 4,
                 Trigger = 5,
                 Enum = 6,
-                Octets = 7
+                Octets = 7,
             };
 
             typedef int value_type;

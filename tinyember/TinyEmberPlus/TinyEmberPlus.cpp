@@ -437,8 +437,6 @@ void TinyEmberPlus::synchronizedNotify(void* nodeptr, void* subscriberptr)
 
             delete response;
         }
-
-        delete node;
     }
 
     if (subscriber != nullptr)

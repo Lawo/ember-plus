@@ -39,12 +39,6 @@ namespace libember { namespace ber
         using std::swap;
         swap(m_items, other.m_items);
     }
-
-    LIBEMBER_INLINE
-    size_t ObjectIdentifier::operator[](int index) const
-    {
-       return m_items[index];
-    }
 }
 }
 

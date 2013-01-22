@@ -78,13 +78,6 @@ int ber_getMultiByteIntegerLength(dword value);
 int ber_getStringLength(pcstr pValue);
 
 /**
-  * Get the encoded length of an integer array encoded as RELATIVE-OID.
-  * @param pValue pointer to the first subidentifier of the oid.
-  * @return the encoded length of the oid.
-  */
-int ber_getRelativeOidLength(const berint *pValue, int count);
-
-/**
   * Copies a human-readable name of the passed @p type into the buffer
   * pointed to by @p pBuffer.
   * @param pBuffer pointer to the buffer that receives the typename.

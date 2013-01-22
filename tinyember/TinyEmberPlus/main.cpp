@@ -16,29 +16,18 @@
 #include "glow\ConsumerProxy.h"
 #include "glow\ProviderInterface.h"
 
-/**
- * The LocalScheduler class marshalls asynchronous consumer request to the ui thread,
- * where the requests are being handled.
- */
 class LocalScheduler : public glow::ProviderInterface
 {
     public:
-        /** Constructor */
         LocalScheduler()
             : m_provider(nullptr)
         {
         }
 
-        /** Destructor */
         virtual ~LocalScheduler()
         {
         }
 
-        /**
-         * Forwards the request to the attached provider implementation.
-         * @param node The gadget tree sent by a consumer.
-         * @param subscriber The subscriber object representing the consumer.
-         */
         virtual void notifyAsync(libember::dom::Node* node, gadget::Subscriber* subscriber)
         {
             auto provider = m_provider;
@@ -46,10 +35,6 @@ class LocalScheduler : public glow::ProviderInterface
                 provider->notifyAsync(node, subscriber);
         }
 
-        /**
-         * Forwards the register request to the attached provider implementation.
-         * @param subscriber The subscriber object representing the consumer.
-         */
         virtual void registerSubscriberAsync(gadget::Subscriber* subscriber) 
         {
             auto provider = m_provider;
@@ -57,10 +42,6 @@ class LocalScheduler : public glow::ProviderInterface
                 provider->registerSubscriberAsync(subscriber);
         }
 
-        /**
-         * Forwards the unregister request to the attached provider implementation.
-         * @param subscriber The subscriber object representing the consumer.
-         */
         virtual void unregisterSubscriberAsync(gadget::Subscriber* subscriber) 
         {
             auto provider = m_provider;
@@ -68,10 +49,6 @@ class LocalScheduler : public glow::ProviderInterface
                 provider->unregisterSubscriberAsync(subscriber);
         }
 
-        /**
-         * Updates the provider where consumer requests are forwarded to.
-         * @param provider The provider to forward consumer requests to.
-         */
         void setSynchronizationObject(glow::ProviderInterface* provider)
         {
             m_provider = provider;

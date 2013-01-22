@@ -66,7 +66,7 @@ namespace libember { namespace glow
 }
 
 #ifdef LIBEMBER_HEADER_ONLY
-#  include "impl/GlowStreamDescriptor.ipp"
+#   include "impl/GlowStreamDescriptor.ipp"
 #endif
 
 #endif  // __LIBEMBER_GLOW_GLOWSTREAMDESCRIPTOR_HPP

@@ -1,6 +1,5 @@
 #include <algorithm>
 #include "ParameterFactory.h"
-#include "BooleanParameter.h"
 #include "EnumParameter.h"
 #include "IntegerParameter.h"
 #include "RealParameter.h"
@@ -9,31 +8,21 @@
 
 namespace gadget
 {
-    BooleanParameter* ParameterFactory::create(Node* parent, String const& identifier, bool value)
+    IntegerParameter* ParameterFactory::create(Node* parent, String const& identifier, int min, int max, int value)
     {
         auto const number = util::NumberFactory::create(parent);
         auto const where = std::end(parent->m_parameters);
-        auto parameter = new BooleanParameter(parent, identifier, number, value);
+        auto parameter = new IntegerParameter(parent, identifier, number, min, max, value);
         parent->m_parameters.insert(where, parameter);
 
         return parameter;
     }
 
-    IntegerParameter* ParameterFactory::create(Node* parent, String const& identifier, int minimum, int maximum, int value)
+    RealParameter* ParameterFactory::create(Node* parent, String const& identifier, double min, double max, double value)
     {
         auto const number = util::NumberFactory::create(parent);
         auto const where = std::end(parent->m_parameters);
-        auto parameter = new IntegerParameter(parent, identifier, number, minimum, maximum, value);
-        parent->m_parameters.insert(where, parameter);
-
-        return parameter;
-    }
-
-    RealParameter* ParameterFactory::create(Node* parent, String const& identifier, double minimum, double maximum, double value)
-    {
-        auto const number = util::NumberFactory::create(parent);
-        auto const where = std::end(parent->m_parameters);
-        auto parameter = new RealParameter(parent, identifier, number, minimum, maximum, value);
+        auto parameter = new RealParameter(parent, identifier, number, min, max, value);
         parent->m_parameters.insert(where, parameter);
 
         return parameter;

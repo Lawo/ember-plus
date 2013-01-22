@@ -33,12 +33,6 @@
 #include "../GlowStreamEntry.hpp"
 #include "../GlowQualifiedNode.hpp"
 #include "../GlowQualifiedParameter.hpp"
-#include "../GlowMatrix.hpp"
-#include "../GlowQualifiedMatrix.hpp"
-#include "../GlowTarget.hpp"
-#include "../GlowSource.hpp"
-#include "../GlowConnection.hpp"
-#include "../GlowLabel.hpp"
 
 namespace libember { namespace glow 
 {
@@ -89,24 +83,6 @@ namespace libember { namespace glow
 
             case GlowType::StreamDescriptor:
                 return new GlowStreamDescriptor(tag);
-
-            case GlowType::Matrix:
-                return new GlowMatrix(tag);
-
-            case GlowType::QualifiedMatrix:
-                return new GlowQualifiedMatrix(tag);
-
-            case GlowType::Target:
-                return new GlowTarget(tag);
-
-            case GlowType::Source:
-                return new GlowSource(tag);
-
-            case GlowType::Connection:
-                return new GlowConnection(tag);
-
-            case GlowType::Label:
-                return new GlowLabel(tag);
 
             default:
                 return 0;

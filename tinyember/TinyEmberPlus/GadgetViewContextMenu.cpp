@@ -1,4 +1,3 @@
-#include <algorithm>
 #include <qmenu.h>
 #include "CreateNodeDialog.h"
 #include "CreateParameterDialog.h"
@@ -8,7 +7,6 @@
 #include "gadget\NodeFactory.h"
 #include "gadget\Parameter.h"
 #include "gadget\ParameterFactory.h"
-#include "gadget\BooleanParameter.h"
 #include "gadget\EnumParameter.h"
 #include "gadget\IntegerParameter.h"
 #include "gadget\RealParameter.h"
@@ -22,8 +20,7 @@ GadgetViewContextMenu::GadgetViewContextMenu(QTreeWidget* view, QPoint const& cu
     , m_item(view->currentItem())
     , m_position(view->mapToGlobal(cursor))
     , m_removeItem(false)
-{
-}
+{}
 
 void GadgetViewContextMenu::exec()
 {
@@ -67,7 +64,7 @@ void GadgetViewContextMenu::exec()
         auto const selection = menu.exec(m_position);
         if (selection == newnode)
         {
-            CreateNodeDialog dialog(m_view, nullptr);
+            CreateNodeDialog dialog(m_view);
             if (dialog.exec() == QDialog::Accepted)
             {
                 auto const identifier = dialog.identifier();
@@ -79,8 +76,6 @@ void GadgetViewContextMenu::exec()
                 item->setIcon(0, QIcon(":/image/resources/globe-medium.png"));
                 item->setText(0, ::util::StringConverter::toUtf8QString(root->identifier()));
                 item->setData(1, 0, QVariant::fromValue(TreeWidgetItemData(root)));
-
-                m_view->setCurrentItem(item);
             }
         }
     }
@@ -100,7 +95,7 @@ void GadgetViewContextMenu::exec(gadget::Node* parent)
     }
     else if (selection == newnode)
     {
-        CreateNodeDialog dialog(m_view, parent);
+        CreateNodeDialog dialog(m_view);
         if (dialog.exec() == QDialog::Accepted)
         {
             auto const identifier = dialog.identifier();
@@ -116,7 +111,7 @@ void GadgetViewContextMenu::exec(gadget::Node* parent)
     }
     else if (selection == newparameter)
     {
-        CreateParameterDialog dialog(m_view, parent);
+        CreateParameterDialog dialog(m_view);
         if (dialog.exec() == QDialog::Accepted)
         {
             auto const type = dialog.type();
@@ -139,14 +134,7 @@ void GadgetViewContextMenu::exec(gadget::Node* parent)
                     break;
 
                 case ParameterType::String:
-                    parameter = ParameterFactory::create(parent, identifier, std::string("text"));
-                    break;
-                
-                case ParameterType::Boolean:
-                    parameter = ParameterFactory::create(parent, identifier, false);
-                    break;
-
-                default:
+                    parameter = ParameterFactory::create(parent, identifier, "text");
                     break;
             }
 

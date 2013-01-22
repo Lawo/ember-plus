@@ -22,7 +22,6 @@
 
 #include "../../util/Inline.hpp"
 #include "../util/ValueConverter.hpp"
-#include "../util/Validation.hpp"
 
 namespace libember { namespace glow 
 {
@@ -41,91 +40,94 @@ namespace libember { namespace glow
     LIBEMBER_INLINE
     void GlowNodeBase::setDescription(std::string const& description)
     {
-        contents().set(GlowTags::NodeContents::Description(), description);
+        Contents& content = contents();
+        Contents::iterator const where = content.end();
+        ber::Tag const tag = GlowTags::NodeContents::Description();
+
+        content.insert(where, new dom::VariantLeaf(tag, description));
     }
 
     LIBEMBER_INLINE
     void GlowNodeBase::setIdentifier(std::string const& identifier)
     {
-#ifndef LIBEMBER_DISABLE_IDENTIFIER_VALIDATION
-        libember::glow::util::Validation::assertIdentifierValid(identifier);
-#endif//LIBEMBER_DISABLE_IDENTIFIER_VALIDATION
+        Contents& content = contents();
+        Contents::iterator const where = content.end();
+        ber::Tag const tag = GlowTags::NodeContents::Identifier();
 
-        contents().set(GlowTags::NodeContents::Identifier(), identifier);
+        content.insert(where, new dom::VariantLeaf(tag, identifier));
     }
 
     LIBEMBER_INLINE
     void GlowNodeBase::setRoot(bool isRoot)
     {
-        contents().set(GlowTags::NodeContents::IsRoot(), isRoot);
-    }
+        Contents& content = contents();
+        Contents::iterator const where = content.end();
+        ber::Tag const tag = GlowTags::NodeContents::IsRoot();
 
-    LIBEMBER_INLINE
-    void GlowNodeBase::setIsOnline(bool isOnline)
-    {
-        contents().set(GlowTags::NodeContents::IsOnline(), isOnline);
+        content.insert(where, new dom::VariantLeaf(tag, isRoot));
     }
 
     LIBEMBER_INLINE
     GlowElementCollection* GlowNodeBase::children()
     {
-        iterator const first = begin();
-        iterator const last = end();
-        iterator const result = util::find_tag(first, last, m_childrenTag);
-        if (result != last)
+        Contents::iterator const first = begin();
+        Contents::iterator const last = end();
+        dom::Node* collection = find_node<dom::Node>(first, last, m_childrenTag);
+
+        if (collection == 0)
         {
-            return dynamic_cast<GlowElementCollection*>(&*result);
-        }
-        else
-        {
-            GlowElementCollection* collection = new GlowElementCollection(m_childrenTag);
+            collection = new GlowElementCollection(m_childrenTag);
             insert(last, collection);
-            return collection;
         }
+
+        return dynamic_cast<GlowElementCollection*>(collection);
     }
+
 
     LIBEMBER_INLINE
     bool GlowNodeBase::isRoot() const
     {
-        ber::Value const value = contents().get(GlowTags::NodeContents::IsRoot());
-        return util::ValueConverter::valueOf(value, false);
+        Contents const& content = contents();
+        Contents::const_iterator const first = content.begin();
+        Contents::const_iterator const last = content.end();
+        ber::Tag const tag = GlowTags::NodeContents::IsRoot();
+        dom::VariantLeaf const* leaf = find_node<dom::VariantLeaf>(first, last, tag);
+        
+        return util::ValueConverter::toValue(leaf, false);
     }
 
     LIBEMBER_INLINE
     std::string GlowNodeBase::description() const
     {
-        ber::Value const value = contents().get(GlowTags::NodeContents::Description());
-        return util::ValueConverter::valueOf(value, std::string());
+        Contents const& content = contents();
+        Contents::const_iterator const first = content.begin();
+        Contents::const_iterator const last = content.end();
+        ber::Tag const tag = GlowTags::NodeContents::Description();
+        dom::VariantLeaf const* leaf = find_node<dom::VariantLeaf>(first, last, tag);
+        
+        return util::ValueConverter::toValue(leaf, std::string());
     }
 
     LIBEMBER_INLINE
     std::string GlowNodeBase::identifier() const
     {
-        ber::Value const value = contents().get(GlowTags::NodeContents::Identifier());
-        return util::ValueConverter::valueOf(value, std::string());
-    }
-
-    LIBEMBER_INLINE
-    bool GlowNodeBase::isOnline() const
-    {
-        ber::Value const value = contents().get(GlowTags::NodeContents::IsOnline());
-        return util::ValueConverter::valueOf(value, true);
+        Contents const& content = contents();
+        Contents::const_iterator const first = content.begin();
+        Contents::const_iterator const last = content.end();
+        ber::Tag const tag = GlowTags::NodeContents::Identifier();
+        dom::VariantLeaf const* leaf = find_node<dom::VariantLeaf>(first, last, tag);
+        
+        return util::ValueConverter::toValue(leaf, std::string());
     }
 
     LIBEMBER_INLINE
     GlowElementCollection const* GlowNodeBase::children() const
     {
-        const_iterator const first = begin();
-        const_iterator const last = end();
-        const_iterator const result = util::find_tag(first, last, m_childrenTag);
-        if (result != last)
-        {
-            return dynamic_cast<GlowElementCollection const*>(&*result);
-        }
-        else
-        {
-            return 0;
-        }
+        Contents::const_iterator const first = begin();
+        Contents::const_iterator const last = end();
+        dom::Node const* collection = find_node<dom::Node>(first, last, m_childrenTag);
+
+        return dynamic_cast<GlowElementCollection const*>(collection);
     }
 }
 }

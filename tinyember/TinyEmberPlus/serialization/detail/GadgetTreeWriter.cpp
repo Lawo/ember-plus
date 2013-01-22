@@ -53,7 +53,7 @@ namespace serialization { namespace detail
 
     void GadgetTreeWriter::write(gadget::Parameter const* param, libember::glow::GlowContainer* parent) const
     {
-        glow::util::ParameterConverter::create(parent, param, gadget::ParameterField::All | gadget::ParameterField::Type);
+        glow::util::ParameterConverter::create(parent, param, gadget::ParameterField::All);
     }
 }
 }

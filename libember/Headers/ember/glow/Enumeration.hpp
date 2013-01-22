@@ -61,7 +61,7 @@ namespace libember { namespace glow
                 {
                     *output = *first;
                 }
-            }
+            };
         };
 
         /**
@@ -87,7 +87,7 @@ namespace libember { namespace glow
                 {
                     *output = std::make_pair(*first, index);
                 }
-            }
+            };
         };
     }
 

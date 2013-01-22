@@ -26,7 +26,8 @@ namespace libember { namespace glow
 {
     /** Forward declarations **/
     class GlowNodeFactory;
-    class GlowNodeBase;
+    class GlowNode;
+    class GlowQualifiedNode;
 
     /**
      * Class representing a parameter description.
@@ -51,7 +52,15 @@ namespace libember { namespace glow
              * @param parent The parent node of this parameter.
              * @param number The parameter number.
              */
-            GlowParameter(GlowNodeBase* parent, int number);
+            GlowParameter(GlowNode* parent, int number);
+
+            /**
+             * Initializes a new GlowParameter and adds it as child node to children collection
+             * of the provided parent.
+             * @param parent The parent node of this parameter.
+             * @param number The parameter number.
+             */
+            GlowParameter(GlowQualifiedNode* parent, int number);
 
             /**
              * Constructor that initializes a parameter with the specified application tag.
@@ -79,7 +88,8 @@ namespace libember { namespace glow
 }
 
 #ifdef LIBEMBER_HEADER_ONLY
-#  include "impl/GlowParameter.ipp"
+#   include "impl/GlowParameter.ipp"
 #endif
 
 #endif  // __LIBEMBER_GLOW_GLOWPARAMETER_HPP
+

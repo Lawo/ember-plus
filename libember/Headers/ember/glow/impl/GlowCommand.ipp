@@ -22,11 +22,11 @@
 
 #include "../../util/Inline.hpp"
 #include "../util/ValueConverter.hpp"
-#include "../CommandType.hpp"
 #include "../GlowTags.hpp"
-#include "../GlowParameterBase.hpp"
-#include "../GlowNodeBase.hpp"
-#include "../GlowRootElementCollection.hpp"
+#include "../GlowParameter.hpp"
+#include "../GlowQualifiedParameter.hpp"
+#include "../GlowNode.hpp"
+#include "../GlowQualifiedNode.hpp"
 
 namespace libember { namespace glow 
 {
@@ -35,24 +35,13 @@ namespace libember { namespace glow
         : GlowElement(GlowType::Command)
     {
         insert(begin(), new dom::VariantLeaf(GlowTags::Command::Number(), number.value()));
-        if (mask.value() != DirFieldMask::Default)
+        if (mask.value() != DirFieldMask::None)
             setDirFieldMask(mask);
     }
 
-    LIBEMBER_INLINE
-    GlowCommand::GlowCommand(GlowRootElementCollection* parent, CommandType const& number, DirFieldMask const& mask)
-        : GlowElement(GlowType::Command)
-    {
-        insert(begin(), new dom::VariantLeaf(GlowTags::Command::Number(), number.value()));
-        if (parent)
-            parent->insert(parent->end(), this);
-
-        if (mask.value() != DirFieldMask::Default)
-            setDirFieldMask(mask);
-    }
 
     LIBEMBER_INLINE
-    GlowCommand::GlowCommand(GlowNodeBase* parent, CommandType const& number, DirFieldMask const& mask)
+    GlowCommand::GlowCommand(GlowParameter* parent, CommandType const& number, DirFieldMask const& mask)
         : GlowElement(GlowType::Command)
     {
         insert(begin(), new dom::VariantLeaf(GlowTags::Command::Number(), number.value()));
@@ -63,12 +52,12 @@ namespace libember { namespace glow
             children->insert(where, this);
         }
 
-        if (mask.value() != DirFieldMask::Default)
+        if (mask.value() != DirFieldMask::None)
             setDirFieldMask(mask);
     }
 
     LIBEMBER_INLINE
-    GlowCommand::GlowCommand(GlowParameterBase* parent, CommandType const& number, DirFieldMask const& mask)
+    GlowCommand::GlowCommand(GlowQualifiedParameter* parent, CommandType const& number, DirFieldMask const& mask)
         : GlowElement(GlowType::Command)
     {
         insert(begin(), new dom::VariantLeaf(GlowTags::Command::Number(), number.value()));
@@ -79,7 +68,39 @@ namespace libember { namespace glow
             children->insert(where, this);
         }
 
-        if (mask.value() != DirFieldMask::Default)
+        if (mask.value() != DirFieldMask::None)
+            setDirFieldMask(mask);
+    }
+
+    LIBEMBER_INLINE
+    GlowCommand::GlowCommand(GlowNode* parent, CommandType const& number, DirFieldMask const& mask)
+        : GlowElement(GlowType::Command)
+    {
+        insert(begin(), new dom::VariantLeaf(GlowTags::Command::Number(), number.value()));
+        if (parent)
+        {
+            GlowElementCollection* children = parent->children();
+            GlowElementCollection::iterator const where = children->end();
+            children->insert(where, this);
+        }
+
+        if (mask.value() != DirFieldMask::None)
+            setDirFieldMask(mask);
+    }
+
+    LIBEMBER_INLINE
+    GlowCommand::GlowCommand(GlowQualifiedNode* parent, CommandType const& number, DirFieldMask const& mask)
+        : GlowElement(GlowType::Command)
+    {
+        insert(begin(), new dom::VariantLeaf(GlowTags::Command::Number(), number.value()));
+        if (parent)
+        {
+            GlowElementCollection* children = parent->children();
+            GlowElementCollection::iterator const where = children->end();
+            children->insert(where, this);
+        }
+
+        if (mask.value() != DirFieldMask::None)
             setDirFieldMask(mask);
     }
 
@@ -92,36 +113,15 @@ namespace libember { namespace glow
     CommandType GlowCommand::number() const
     {
         ber::Tag const tag = GlowTags::Command::Number();
-        const_iterator const first = begin();
-        const_iterator const last = end();
-        const_iterator const result = util::find_tag(first, last, tag);
-        if (result != last)
-        {
-            int const value = util::ValueConverter::valueOf(&*result, -1);
-            return static_cast<CommandType::_Domain>(value);
-        }
-        else
-        {
-            return static_cast<CommandType::_Domain>(-1);
-        }
+        return static_cast<CommandType::_Domain>(util::ValueConverter::toValue(find_node<dom::VariantLeaf>(begin(), end(), tag), -1));
     }
 
     LIBEMBER_INLINE
     DirFieldMask GlowCommand::dirFieldMask() const
     {
         ber::Tag const tag = GlowTags::Command::DirFieldMask();
-        const_iterator const first = begin();
-        const_iterator const last = end();
-        const_iterator const result = util::find_tag(first, last, tag);
-        if (result != last)
-        {
-            int const value = util::ValueConverter::valueOf(&*result, 0);
-            return DirFieldMask(value);
-        }
-        else
-        {
-            return DirFieldMask(0);
-        }
+        int const result = util::ValueConverter::toValue(find_node<dom::VariantLeaf>(begin(), end(), tag), static_cast<int>(DirFieldMask::All));
+        return DirFieldMask(result);
     }
 
     LIBEMBER_INLINE

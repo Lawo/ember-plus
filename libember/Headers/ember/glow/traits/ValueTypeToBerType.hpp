@@ -29,7 +29,7 @@ namespace libember { namespace glow { namespace traits
 {
     /** 
      * Structure used to determine the corresponding ber type of a value type.
-     * Currently the supported types are bool, int, double, ber::Octets, ber::ObjectIdentifier and std::string.
+     * Currently the supported types are bool, int, double, ber::Octets and std::string.
      */
     template<typename ValueType>
     struct ValueTypeToBerType;
@@ -55,30 +55,6 @@ namespace libember { namespace glow { namespace traits
         static ber::Type berType()
         {
             return ber::Type::Integer;
-        }
-    };
-
-    /** 
-     * Specialization for the long type.
-     */
-    template<>
-    struct ValueTypeToBerType<long>
-    {
-        static ber::Type berType()
-        {
-            return ber::Type::Integer;
-        }
-    };
-
-    /** 
-     * Specialization for the float type.
-     */
-    template<>
-    struct ValueTypeToBerType<float>
-    {
-        static ber::Type berType()
-        {
-            return ber::Type::Real;
         }
     };
 

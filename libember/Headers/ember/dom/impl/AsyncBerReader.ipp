@@ -338,7 +338,7 @@ namespace libember { namespace dom
             m_valueBuffer.clear();
 
         m_valueBuffer.swap(m_buffer);
-        m_valueLength = std::min(m_length, m_valueBuffer.size());
+        m_valueLength = m_bytesRead;
 
         reset(DecodeState::Tag);
         itemReady();

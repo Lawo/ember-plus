@@ -38,12 +38,6 @@
 #include "GlowStreamCollection.hpp"
 #include "GlowStreamEntry.hpp"
 #include "GlowTags.hpp"
-#include "GlowMatrix.hpp"
-#include "GlowQualifiedMatrix.hpp"
-#include "GlowTarget.hpp"
-#include "GlowSource.hpp"
-#include "GlowConnection.hpp"
-#include "GlowLabel.hpp"
 
 #endif  // __LIBEMBER_GLOW_GLOW_HPP
 

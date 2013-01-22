@@ -62,19 +62,8 @@ namespace libember { namespace glow
     LIBEMBER_INLINE
     ber::ObjectIdentifier GlowQualifiedParameter::path() const
     {
-        ber::ObjectIdentifier default_;
-        ber::Tag const tag = GlowTags::QualifiedParameter::Path();
-        const_iterator const first = begin();
-        const_iterator const last = end();
-        const_iterator const result = util::find_tag(first, last, tag);
-        if (result != last)
-        {
-            return util::ValueConverter::valueOf(&*result, default_);
-        }
-        else
-        {
-            return default_;
-        }
+        dom::VariantLeaf const* leaf = find_node<dom::VariantLeaf>(begin(), end(), GlowTags::QualifiedParameter::Path());
+        return util::ValueConverter::toValue(leaf, ber::ObjectIdentifier());
     }
 }
 }

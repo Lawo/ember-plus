@@ -47,9 +47,8 @@ namespace libember { namespace ber
              * @param input the stream buffer from which the explicitly tagged
              *      value should be decoded.
              * @return A tagged, type erased value wrapping the decoded value.
-             * @throw std::runtime_error if the decoded tag does not match the universal
-             *      tag of the specified type or if there is no decoder registered for the
-             *      specified type.
+             * @todo Specify what exceptions will be thrown if decoding fails for
+             *      various reasons
              */
             Value decode(util::OctetStream& input) const;
 

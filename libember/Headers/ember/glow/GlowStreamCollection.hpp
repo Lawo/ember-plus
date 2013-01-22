@@ -37,8 +37,7 @@ namespace libember { namespace glow
         friend class GlowNodeFactory;
         public:
             /**
-             * Creates a new GlowStreamCollection, which is used as root node. The returned instance must
-             * be deleted manually when it is no longer needed.
+             * Creates a new GlowStreamCollection, which is used as root node.
              * @return A new instance of GlowStreamCollection.
              */
             static GlowStreamCollection* create();
@@ -100,7 +99,7 @@ namespace libember { namespace glow
 }
 
 #ifdef LIBEMBER_HEADER_ONLY
-#  include "impl/GlowStreamCollection.ipp"
+#   include "impl/GlowStreamCollection.ipp"
 #endif
 
 #endif  // __LIBEMBER_GLOW_GLOWSTREAMCOLLECTION_HPP

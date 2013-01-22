@@ -1,4 +1,3 @@
-#include <algorithm>
 #include <qapplication.h>
 #include "TcpClient.h"
 #include "TcpClientFactory.h"

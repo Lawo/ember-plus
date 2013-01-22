@@ -22,7 +22,6 @@
 
 #include <list>
 #include <sstream>
-#include "../ber/Octets.hpp"
 #include "Access.hpp"
 #include "Enumeration.hpp"
 #include "Formula.hpp"
@@ -55,16 +54,16 @@ namespace libember { namespace glow
             bool contains(ParameterProperty const& property) const;
 
             /**
-             * Sets the identifier of this parameter
-             * @param identifier Identifier of this parameter.
-             */
-            void setIdentifier(std::string const& identifier);
-
-            /**
              * Sets the description of this parameter.
              * @param description Description string.
              */
             void setDescription(std::string const& description);
+
+            /**
+             * Sets the identifier of this parameter
+             * @param identifier Identifier of this parameter.
+             */
+            void setIdentifier(std::string const& identifier);
 
             /**
              * Sets the formula.
@@ -123,13 +122,6 @@ namespace libember { namespace glow
             void setMinimum(int minimum);
 
             /**
-             * Sets the smallest value allowed for this parameter.
-             * @param minimum Smallest value allowed, as integer.
-             * @note The minimum should be provided in the same type like the value.
-             */
-            void setMinimum(long minimum);
-
-            /**
              * Sets the biggest value allowed for this parameter.
              * @param maximum Biggest value allowed, as double.
              * @note The maximum should be provided in the same type like the value.
@@ -144,13 +136,6 @@ namespace libember { namespace glow
             void setMaximum(int maximum);
 
             /**
-             * Sets the biggest value allowed for this parameter.
-             * @param maximum Biggest value allowed, as integer.
-             * @note The maximum should be provided in the same type like the value.
-             */
-            void setMaximum(long maximum);
-
-            /**
              * Sets the factor the value has to be divded by when being displayed.
              * @param factor The parameter's factor, must not be 0.
              */
@@ -161,7 +146,7 @@ namespace libember { namespace glow
              * by when being displayed.
              * @param step The step of this parameter
              */
-            void setStep(int step);
+            void setStep(double step);
 
             /**
              * Sets the default value.
@@ -179,25 +164,7 @@ namespace libember { namespace glow
              * Sets the default value.
              * @param value default value.
              */
-            void setDefault(long value);
-
-            /**
-             * Sets the default value.
-             * @param value default value.
-             */
             void setDefault(std::string const& value);
-
-            /**
-             * Sets the default value.
-             * @param value default value.
-             */
-            void setDefault(bool value);
-
-            /**
-             * Sets the default value.
-             * @param value default value.
-             */
-            void setDefault(ber::Octets const& value);
 
             /**
              * Sets the value of this parameter.
@@ -215,29 +182,9 @@ namespace libember { namespace glow
 
             /**
              * Sets the value of this parameter.
-             * @param value Parameter value, as integer.
-             * @note The integer type must also be used when the parameter contains an enumeration.
-             *      The value then contains the index of the enumeration entries.
-             */
-            void setValue(long value);
-
-            /**
-             * Sets the value of this parameter.
              * @param value Parameter value, as string.
              */
             void setValue(std::string const& value);
-
-            /**
-             * Sets the value of this parameter.
-             * @param value Parameter value, as bool.
-             */
-            void setValue(bool value);
-            
-            /**
-             * Sets the value of this parameter.
-             * @param value Parameter value, as octets.
-             */
-            void setValue(ber::Octets const& value);
 
             /**
              * Sets the way the parameter can be accessed.
@@ -246,12 +193,6 @@ namespace libember { namespace glow
              *      shall consider the parameter as read-only by default.
              */
             void setAccess(Access const& access);
-
-            /**
-             * Adds the online state of the parameter.
-             * @param isOnline The current online state of the parameter.
-             */
-            void setIsOnline(bool isOnline);
 
             /**
              * Sets the parameter type.
@@ -282,16 +223,16 @@ namespace libember { namespace glow
             GlowElementCollection* children();
 
             /**
-             * Returns the identifier string.
-             * @return The identifier or an empty string if not set.
-             */
-            std::string identifier() const;
-
-            /**
              * Returns the description of this parameter.
-             * @return The description of this parameter or an empty string if not set.
+             * @return The description of this parameter or "" if not set.
              */
             std::string description() const;
+
+            /**
+             * Returns the identifier string.
+             * @return The identifier or "" if not set.
+             */
+            std::string identifier() const;
 
             /**
              * Returns the formula.
@@ -301,7 +242,7 @@ namespace libember { namespace glow
 
             /**
              * Returns the format string
-             * @return The format string of this parameter or an empty string if not set.
+             * @return The format string of this parameter or "" if not set.
              */
             std::string format() const;
 
@@ -355,20 +296,13 @@ namespace libember { namespace glow
              * Returns the parameter's step or 1.0 if the property is not set.
              * @return The parameter's step.
              */
-            int step() const;
+            double step() const;
 
             /**
              * Returns whether the parameter is writeable or not.
              * @return True if the parameter is writeable.
              */
             bool isWriteable() const;
-
-            /**
-             * Returns the online state of the parameter, if available.
-             * @return The online state of the parameter. If the property is not set, true 
-             *      is being returned.
-             */
-            bool isOnline() const;
 
             /**
              * Returns the access modifier of this parameter.
@@ -389,16 +323,16 @@ namespace libember { namespace glow
             int streamIdentifier() const;
 
             /**
-             * Returns the StreamDescriptor, if available.
-             * @return The StreamDescriptor object, if set. Otherwise, null is being returned.
-             */
-            GlowStreamDescriptor const* streamDescriptor() const;
-
-            /**
              * Returns a immutable element collection containing the children of this parameter.
              * @return The element collection which may contain commands.
              */
             GlowElementCollection const* children() const;
+
+            /**
+             * Returns the StreamDescriptor, if available.
+             * @return The StreamDescriptor object, if set. Otherwise, null is being returned.
+             */
+            GlowStreamDescriptor const* streamDescriptor() const;
 
         protected:
             /**
@@ -441,34 +375,26 @@ namespace libember { namespace glow
     template<typename InputIterator>
     inline void GlowParameterBase::setEnumerationMap(InputIterator first, InputIterator last)
     {
+        Contents& content = contents();
+        Contents::iterator const where = content.end();
         ber::Tag const tag = GlowTags::ParameterContents::EnumMap();
-        contents().set(new GlowStringIntegerCollection(tag, first, last));
-    }
+        GlowStringIntegerCollection* enumeration = new GlowStringIntegerCollection(tag);
 
-    inline void GlowParameterBase::setMaximum(int maximum)
-    {
-        setMaximum(long(maximum));
-    }
+        for(/** Nothing */; first != last; ++first)
+        {
+            std::string const& name = first->first;
+            int const& value = first->second;
 
-    inline void GlowParameterBase::setMinimum(int minimum)
-    {
-        setMinimum(long(minimum));
-    }
+            enumeration->insert(name, value);
+        }
 
-    inline void GlowParameterBase::setValue(int value)
-    {
-        setValue(long(value));
-    }
-
-    inline void GlowParameterBase::setDefault(int value)
-    {
-        setDefault(long(value));
+        content.insert(where, enumeration);
     }
 }
 }
 
 #ifdef LIBEMBER_HEADER_ONLY
-#  include "impl/GlowParameterBase.ipp"
+#   include "impl/GlowParameterBase.ipp"
 #endif
 
 #endif  // __LIBEMBER_GLOW_GLOWPARAMETERBASE_HPP

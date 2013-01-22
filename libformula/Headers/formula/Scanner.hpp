@@ -186,9 +186,7 @@ namespace libformula
         {
             *cursor++ = ::tolower(*it++);
         }
-
         *cursor = 0;
-
         if (std::strncmp(buffer, "sqrt", 4) == 0)
             push(value_type(SymbolType::Sqrt, size(), first, it));
         else if (std::strncmp(buffer, "log", 3) == 0)
@@ -227,10 +225,6 @@ namespace libformula
             push(value_type(SymbolType::Pi, size(), first, it));
         else if (std::strncmp(buffer, "e", 1) == 0)
             push(value_type(SymbolType::E, size(), first, it));
-        else if (std::strncmp(buffer, "abs", 3) == 0)
-            push(value_type(SymbolType::Abs, size(), first, it));
-        else if (std::strncmp(buffer, "sgn", 3) == 0)
-            push(value_type(SymbolType::Sgn, size(), first, it));
         else
         {
             error->push(ErrorType::UnknownFunction, buffer);

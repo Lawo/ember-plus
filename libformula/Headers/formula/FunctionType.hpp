@@ -32,8 +32,6 @@ namespace libformula
                 Ceil,
                 Sqrt,
                 Pow,
-                Abs,
-                Sgn
             };
 
             typedef unsigned int value_type;
@@ -82,8 +80,6 @@ namespace libformula
                     case SymbolType::Float:
                     case SymbolType::Exp:
                     case SymbolType::Powf:
-                    case SymbolType::Abs:
-                    case SymbolType::Sgn:
                         return true;
 
                     default:
@@ -138,10 +134,6 @@ namespace libformula
                         return FunctionType::Exp;
                     case SymbolType::Powf:
                         return FunctionType::Pow;
-                    case SymbolType::Abs:
-                        return FunctionType::Abs;
-                    case SymbolType::Sgn:
-                        return FunctionType::Sgn;
                     default:
                         return FunctionType::Invalid;
                 }
@@ -172,8 +164,6 @@ namespace libformula
                     case FunctionType::Int:
                     case FunctionType::Float:
                     case FunctionType::Exp:
-                    case FunctionType::Abs:
-                    case FunctionType::Sgn:
                         return 1;
                     case FunctionType::Pow:
                         return 2;
@@ -205,8 +195,6 @@ namespace libformula
                     case FunctionType::Int:
                     case FunctionType::Float:
                     case FunctionType::Exp:
-                    case FunctionType::Abs:
-                    case FunctionType::Sgn:
                         return 1;
                     case FunctionType::Log:
                     case FunctionType::Pow:

@@ -1,91 +1,146 @@
-/*
-    libember -- C++ 03 implementation of the Ember+ Protocol
-    Copyright (C) 2012  L-S-B Broadcast Technologies GmbH
-
-    This library is free software; you can redistribute it and/or
-    modify it under the terms of the GNU Lesser General Public
-    License as published by the Free Software Foundation; either
-    version 2.1 of the License, or (at your option) any later version.
-
-    This library is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-    Lesser General Public License for more details.
-
-    You should have received a copy of the GNU Lesser General Public
-    License along with this library; if not, write to the Free Software
-    Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
-*/
-
 #ifndef __LIBEMBER_GLOW_GLOWNODE_IPP
 #define __LIBEMBER_GLOW_GLOWNODE_IPP
 
 #include "../../util/Inline.hpp"
-#include "../util/ValueConverter.hpp"
-#include "../GlowRootElementCollection.hpp"
-#include "../GlowNodeBase.hpp"
+#include "../util/ValueTypeToVariantLeaf.hpp"
+#include "../util/LeafToValueType.hpp"
 
 namespace libember { namespace glow 
 {
     LIBEMBER_INLINE
     GlowNode::GlowNode(int number)
-        : GlowNodeBase(GlowType::Node, GlowTags::ElementDefault(), GlowTags::Node::Contents(), GlowTags::Node::Children())
+        : GlowContentElement(GlowType::Node, GlowTags::ElementDefault(), GlowTags::Node::Contents())
     {
-        insert(begin(), new dom::VariantLeaf(GlowTags::Node::Number(), number));
-    }
-
-    LIBEMBER_INLINE
-    GlowNode::GlowNode(GlowRootElementCollection* parent, int number)
-        : GlowNodeBase(GlowType::Node, GlowTags::ElementDefault(), GlowTags::Node::Contents(), GlowTags::Node::Children())
-    {
-        insert(begin(), new dom::VariantLeaf(GlowTags::Node::Number(), number));
-        if (parent)
-        {
-            GlowRootElementCollection::iterator const where = parent->end();
-            parent->insert(where, this);
-        }
-    }
-
-    LIBEMBER_INLINE
-    GlowNode::GlowNode(GlowNodeBase* parent, int number)
-        : GlowNodeBase(GlowType::Node, GlowTags::ElementDefault(), GlowTags::Node::Contents(), GlowTags::Node::Children())
-    {
-        insert(begin(), new dom::VariantLeaf(GlowTags::Node::Number(), number));
-        if (parent)
-        {
-            GlowElementCollection* children = parent->children();
-            GlowElementCollection::iterator const where = children->end();
-            children->insert(where, this);
-        }
+        insert(begin(), util::ValueTypeToVariantLeaf::create(GlowTags::Node::Number(), number));
     }
 
     LIBEMBER_INLINE
     GlowNode::GlowNode(int number, ber::Tag const& tag)
-        : GlowNodeBase(GlowType::Node, tag, GlowTags::Node::Contents(), GlowTags::Node::Children())
+        : GlowContentElement(GlowType::Node, tag, GlowTags::Node::Contents())
     {
-        insert(begin(), new dom::VariantLeaf(GlowTags::Node::Number(), number));
+        insert(begin(), util::ValueTypeToVariantLeaf::create(GlowTags::Node::Number(), number));
     }
 
     LIBEMBER_INLINE
     GlowNode::GlowNode(ber::Tag const& tag)
-        : GlowNodeBase(GlowType::Node, tag, GlowTags::Node::Contents(), GlowTags::Node::Children())
+        : GlowContentElement(GlowType::Node, tag, GlowTags::Node::Contents())
     {}
+
+    LIBEMBER_INLINE
+    bool GlowNode::contains(NodeProperty const& property) const
+    {
+        return contents().contains(property);
+    }
+
+    LIBEMBER_INLINE
+    void GlowNode::setDescription(std::string const& description)
+    {
+        Contents& content = contents();
+        Contents::iterator const where = content.end();
+        ber::Tag const tag = GlowTags::Node::Description();
+        dom::VariantLeaf* leaf = util::ValueTypeToVariantLeaf::create(tag, description);
+
+        content.insert(where, leaf);
+    }
+
+    LIBEMBER_INLINE
+    void GlowNode::setIdentifier(std::string const& identifier)
+    {
+        Contents& content = contents();
+        Contents::iterator const where = content.end();
+        ber::Tag const tag = GlowTags::Node::Identifier();
+        dom::VariantLeaf* leaf = util::ValueTypeToVariantLeaf::create(tag, identifier);
+
+        content.insert(where, leaf);
+    }
+
+    LIBEMBER_INLINE
+    void GlowNode::setRoot(bool isRoot)
+    {
+        Contents& content = contents();
+        Contents::iterator const where = content.end();
+        ber::Tag const tag = GlowTags::Node::IsRoot();
+        dom::VariantLeaf* leaf = util::ValueTypeToVariantLeaf::create(tag, isRoot);
+
+        content.insert(where, leaf);
+    }
+
+    LIBEMBER_INLINE
+    GlowElementCollection* GlowNode::children()
+    {
+        Contents& content = contents();
+        Contents::iterator const first = content.begin();
+        Contents::iterator const last = content.end();
+        ber::Tag const tag = GlowTags::Node::Children();
+        dom::Node* collection = find<dom::Node>(first, last, tag);
+
+        if (collection == 0)
+        {
+            collection = new GlowElementCollection(tag);
+            content.insert(last, collection);
+        }
+
+        return dynamic_cast<GlowElementCollection*>(collection);
+    }
 
     LIBEMBER_INLINE
     int GlowNode::number() const
     {
-        ber::Tag const tag = GlowTags::Node::Number();
         const_iterator const first = begin();
         const_iterator const last = end();
-        const_iterator const result = util::find_tag(first, last, tag);
-        if (result != last)
-        {
-            return util::ValueConverter::valueOf(&*result, -1);
-        }
-        else
-        {
-            return -1;
-        }
+        ber::Tag const tag = GlowTags::Node::Number();
+        dom::VariantLeaf const* leaf = find<dom::VariantLeaf>(first, last, tag);
+
+        return util::LeafToValueType::as(leaf, -1);
+    }
+
+
+    LIBEMBER_INLINE
+    bool GlowNode::isRoot() const
+    {
+        Contents const& content = contents();
+        Contents::const_iterator const first = content.begin();
+        Contents::const_iterator const last = content.end();
+        ber::Tag const tag = GlowTags::Node::IsRoot();
+        dom::VariantLeaf const* leaf = find<dom::VariantLeaf>(first, last, tag);
+        
+        return util::LeafToValueType::as(leaf, false);
+    }
+
+    LIBEMBER_INLINE
+    std::string GlowNode::description() const
+    {
+        Contents const& content = contents();
+        Contents::const_iterator const first = content.begin();
+        Contents::const_iterator const last = content.end();
+        ber::Tag const tag = GlowTags::Node::Description();
+        dom::VariantLeaf const* leaf = find<dom::VariantLeaf>(first, last, tag);
+        
+        return util::LeafToValueType::as(leaf, std::string());
+    }
+
+    LIBEMBER_INLINE
+    std::string GlowNode::identifier() const
+    {
+        Contents const& content = contents();
+        Contents::const_iterator const first = content.begin();
+        Contents::const_iterator const last = content.end();
+        ber::Tag const tag = GlowTags::Node::Identifier();
+        dom::VariantLeaf const* leaf = find<dom::VariantLeaf>(first, last, tag);
+        
+        return util::LeafToValueType::as(leaf, std::string());
+    }
+
+    LIBEMBER_INLINE
+    GlowElementCollection const* GlowNode::children() const
+    {
+        Contents const& content = contents();
+        Contents::const_iterator const first = content.begin();
+        Contents::const_iterator const last = content.end();
+        ber::Tag const tag = GlowTags::Node::Children();
+        dom::Node const* collection = find<dom::Node>(first, last, tag);
+
+        return dynamic_cast<GlowElementCollection const*>(collection);
     }
 }
 }

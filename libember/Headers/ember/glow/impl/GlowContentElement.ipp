@@ -1,27 +1,9 @@
-/*
-    libember -- C++ 03 implementation of the Ember+ Protocol
-    Copyright (C) 2012  L-S-B Broadcast Technologies GmbH
-
-    This library is free software; you can redistribute it and/or
-    modify it under the terms of the GNU Lesser General Public
-    License as published by the Free Software Foundation; either
-    version 2.1 of the License, or (at your option) any later version.
-
-    This library is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-    Lesser General Public License for more details.
-
-    You should have received a copy of the GNU Lesser General Public
-    License along with this library; if not, write to the Free Software
-    Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
-*/
-
 #ifndef __LIBEMBER_GLOW_GLOWCONTENTELEMENT_IPP
 #define __LIBEMBER_GLOW_GLOWCONTENTELEMENT_IPP
 
 #include <algorithm>
 #include "../../util/Inline.hpp"
+#include "../detail/CompareNodeTag.hpp"
 #include "../traits/ValueTypeToBerType.hpp"
 #include "../GlowTags.hpp"
 
@@ -41,14 +23,14 @@ namespace libember { namespace glow
     {
         if (m_container == 0)
         {
-            iterator const first = m_parent.begin();
-            iterator const last = m_parent.end();
-            iterator const it = util::find_tag(first, last, m_contentTag);
+            iterator const begin = m_parent.begin();
+            iterator const end = m_parent.end();
+            iterator const it = std::find_if(begin, end, detail::CompareNodeTag(m_contentTag));
 
-            if (it == last)
+            if (it == end)
             {
                 m_container = new dom::Set(m_contentTag);
-                m_parent.insert(last, m_container);
+                m_parent.insert(end, m_container);
             }
             else
             {
@@ -108,6 +90,20 @@ namespace libember { namespace glow
         assureContainer();
         return m_container->end();
     }
+
+    LIBEMBER_INLINE
+    void Contents::insert(iterator where, dom::Node* child)
+    {
+        assureContainer();
+        
+        ber::Tag const tag = child->applicationTag();
+
+        m_propertyFlags |= (tag.getClass() == ber::Class::Application ? (1 << tag.number()) : 0);
+        m_container->insert(where, child);
+    }
+
+
+
 
 #ifdef _MSC_VER
 #  pragma warning(push)

@@ -1,34 +1,14 @@
-/*
-    libember -- C++ 03 implementation of the Ember+ Protocol
-    Copyright (C) 2012  L-S-B Broadcast Technologies GmbH
-
-    This library is free software; you can redistribute it and/or
-    modify it under the terms of the GNU Lesser General Public
-    License as published by the Free Software Foundation; either
-    version 2.1 of the License, or (at your option) any later version.
-
-    This library is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-    Lesser General Public License for more details.
-
-    You should have received a copy of the GNU Lesser General Public
-    License along with this library; if not, write to the Free Software
-    Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
-*/
-
 #ifndef __LIBEMBER_GLOW_CONTENTELEMENT_HPP
 #define __LIBEMBER_GLOW_CONTENTELEMENT_HPP
 
-#include "../ber/Value.hpp"
 #include "../dom/Set.hpp"
-#include "../dom/VariantLeaf.hpp"
-#include "util/Find.hpp"
 #include "GlowElement.hpp"
 
 namespace libember { namespace glow
 {
     /** Forward declarations **/
+    struct GlowProperty;
+
     class GlowContentElement;
 
     /**
@@ -40,17 +20,10 @@ namespace libember { namespace glow
     {
         friend class GlowContentElement;
         public:
-            typedef unsigned int flag_type;
+            typedef std::size_t flag_type;
 
             typedef dom::Set::iterator iterator;
             typedef dom::Set::const_iterator const_iterator;
-            typedef dom::Set::size_type size_type;
-
-            /**
-             * Returns the number of nodes this container stores.
-             * @return The number of nodes this container stores.
-             */
-            size_type size() const;
 
             /**
              * Returns the first element of the content set.
@@ -77,25 +50,11 @@ namespace libember { namespace glow
             const_iterator end() const;
 
             /**
-             * Adds an Ember Container to the content set.
-             * @param value the ember element to add.
+             * Inserts a child node into the set.
+             * @param where the location where the node shall be inserted.
+             * @param child The node to insert.
              */
-            void set(dom::Container* value);
-
-            /**
-             * Adds or changes the leaf node with the provided application tag and value.
-             * @param tag The application tag of the leaf to add or update.
-             * @param value The value to set.
-             */
-            template<typename ValueType>
-            void set(ber::Tag const& tag, ValueType value);
-
-            /**
-             * Searches for a VariantLeaf with the specified application tag and returns its value.
-             * @param tag The tag of the node to get the value from.
-             * @return The node's value if found, otherwise a Value in an irregular state will be returned.
-             */
-            ber::Value get(ber::Tag const& tag) const;
+            void insert(iterator where, dom::Node* child);
 
             /**
              * Checks if the passed property exists in the content set.
@@ -131,6 +90,7 @@ namespace libember { namespace glow
              */
             flag_type generatePropertyFlags(const_iterator first, const_iterator last) const;
 
+        private:
             /** Prohibit assignment */
             Contents& operator=(Contents const&);
 
@@ -177,81 +137,22 @@ namespace libember { namespace glow
     };
 
 
-    /**************************************************************************
-     * Inline Implementation                                                  *
-     **************************************************************************/
-
+    /******************************************************
+     * Inline Implementation                              *
+     ******************************************************/
     template<typename PropertyType>
     inline bool Contents::contains(PropertyType const& property) const
     {
         assureContainer();
+
         bool const result = (m_propertyFlags & (1 << property.value)) != 0;
         return result;
-    }
-
-    inline Contents::size_type Contents::size() const
-    {
-        assureContainer();
-        return m_container->size();
-    }
-
-    template<typename ValueType>
-    inline void Contents::set(ber::Tag const& tag, ValueType value)
-    {
-        iterator const first = begin();
-        iterator const last = end();
-        iterator const result = util::find_tag(first, last, tag);
-        if (result != last)
-        {
-            dom::VariantLeaf* node = dynamic_cast<dom::VariantLeaf*>(&*result);
-            if (node != 0)
-                node->setValue(value);
-            else
-                return;
-        }
-        else
-        {
-            if (m_container != 0)
-                m_container->insert(last, new dom::VariantLeaf(tag, value));
-            else
-                return;
-        }
-
-        m_propertyFlags |= (tag.getClass() == ber::Class::ContextSpecific ? (1 << tag.number()) : 0);
-    }
-
-    inline void Contents::set(dom::Container* value)
-    {
-        ber::Tag const tag = value->applicationTag();
-        iterator const where = end();
-        if (m_container != 0)
-        {
-            m_container->insert(where, value);
-            m_propertyFlags |= (tag.getClass() == ber::Class::ContextSpecific ? (1 << tag.number()) : 0);
-        }
-    }
-
-    inline ber::Value Contents::get(ber::Tag const& tag) const
-    {
-        const_iterator const first = begin();
-        const_iterator const last = end();
-        const_iterator const result = util::find_tag(first, last, tag);
-        if (result != last)
-        {
-            dom::VariantLeaf const* node = dynamic_cast<dom::VariantLeaf const*>(&*result);
-            if (node != 0)
-            {
-                return node->value();
-            }
-        }
-
-        return ber::Value();
     }
 }
 }
 
 #ifdef LIBEMBER_HEADER_ONLY
-#  include "impl/GlowContentElement.ipp"
+#   include "impl/GlowContentElement.ipp"
 #endif
 
 #endif  // __LIBEMBER_GLOW_CONTENTELEMENT_HPP

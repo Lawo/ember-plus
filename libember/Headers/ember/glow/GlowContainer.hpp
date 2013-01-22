@@ -1,27 +1,8 @@
-/*
-    libember -- C++ 03 implementation of the Ember+ Protocol
-    Copyright (C) 2012  L-S-B Broadcast Technologies GmbH
-
-    This library is free software; you can redistribute it and/or
-    modify it under the terms of the GNU Lesser General Public
-    License as published by the Free Software Foundation; either
-    version 2.1 of the License, or (at your option) any later version.
-
-    This library is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-    Lesser General Public License for more details.
-
-    You should have received a copy of the GNU Lesser General Public
-    License along with this library; if not, write to the Free Software
-    Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
-*/
-
 #ifndef __LIBEMBER_GLOW_CONTAINER_HPP
 #define __LIBEMBER_GLOW_CONTAINER_HPP
 
 #include "../dom/Sequence.hpp"
-#include "util/Find.hpp"
+#include "detail/CompareNodeTag.hpp"
 #include "traits/ValueTypeToBerType.hpp"
 #include "GlowTags.hpp"
 #include "GlowType.hpp"
@@ -29,7 +10,7 @@
 namespace libember { namespace glow
 {
     /**
-     * Base class for all glow object types.
+     * Base class for all glow types.
      */
     class LIBEMBER_API GlowContainer : public dom::Sequence
     {
@@ -54,15 +35,29 @@ namespace libember { namespace glow
              */
             virtual ber::Tag typeTagImpl() const;
 
-        protected:
             /**
-             * Since the entries within a GlowContainer need to be ordered by tag
-             * in the ASN.1 notation of Ember+, this override does exactly that.
-             * The provided iterator will be ignored. Instead, the node's tag determines
-             * the insert location of the node.
-             * @param child The node to insert.
+             * Searches for a node with the specified application tag and tries 
+             * to cast it to the specified type.
+             * @param first Start element of the container to traverse.
+             * @param last End element of the container to traverse
+             * @param tag Tag to look for
+             * @return If the node exists, this method returns a pointer to the node. Otherwise, it 
+             *      returns null.
              */
-            virtual iterator insertImpl(iterator, Node* child);
+            template<typename GlowType>
+            GlowType* find(iterator first, iterator last, ber::Tag const& tag);
+
+            /**
+             * Searches for a node with the specified application tag and tries 
+             * to cast it to the specified type.
+             * @param first Start element of the container to traverse.
+             * @param last End element of the container to traverse
+             * @param tag Tag to look for
+             * @return If the node exists, this method returns a pointer to the node. Otherwise, it 
+             *      returns null.
+             */
+            template<typename GlowType>
+            GlowType const* find(const_iterator first, const_iterator last, ber::Tag const& tag) const;
 
         private:
             /** Prohibit assignment */
@@ -71,11 +66,29 @@ namespace libember { namespace glow
         private:
             ber::Tag const m_universalTag;
     };
+
+    /**************************************************************************/
+    /* Mandatory inline implementation                                        */
+    /**************************************************************************/
+
+    template<typename GlowType>
+    inline GlowType* GlowContainer::find(iterator first, iterator last, ber::Tag const& tag)
+    {
+        iterator const it = std::find_if(first, last, detail::CompareNodeTag(tag));
+        return it != last ? &dynamic_cast<GlowType&>(*it) : 0;
+    }
+
+    template<typename GlowType>
+    inline GlowType const* GlowContainer::find(const_iterator first, const_iterator last, ber::Tag const& tag) const
+    {
+        const_iterator const it = std::find_if(first, last, detail::CompareNodeTag(tag));
+        return it != last ? &dynamic_cast<GlowType const&>(*it) : 0;
+    }
 }
 }
 
 #ifdef LIBEMBER_HEADER_ONLY
-#  include "impl/GlowContainer.ipp"
+#   include "impl/GlowContainer.ipp"
 #endif
 
 #endif  // __LIBEMBER_GLOW_CONTAINER_HPP

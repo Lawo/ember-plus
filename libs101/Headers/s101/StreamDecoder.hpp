@@ -1,22 +1,3 @@
-/*
-    libs101 -- C++ 03 implementation of the S101 encoding and decoding
-    Copyright (C) 2012  L-S-B Broadcast Technologies GmbH
-
-    This library is free software; you can redistribute it and/or
-    modify it under the terms of the GNU Lesser General Public
-    License as published by the Free Software Foundation; either
-    version 2.1 of the License, or (at your option) any later version.
-
-    This library is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-    Lesser General Public License for more details.
-
-    You should have received a copy of the GNU Lesser General Public
-    License along with this library; if not, write to the Free Software
-    Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
-*/
-
 #ifndef __LIBS101_STREAMDECODER_HPP
 #define __LIBS101_STREAMDECODER_HPP
 
@@ -35,7 +16,7 @@ namespace libs101
         typedef std::vector<ValueType> ByteVector;
 
     public:
-        typedef ValueType value_type;
+        typedef typename ValueType value_type;
         typedef typename ByteVector::iterator iterator;
         typedef typename ByteVector::const_iterator const_iterator;
         typedef typename ByteVector::pointer pointer;
@@ -68,21 +49,6 @@ namespace libs101
         void read(InputIterator first, InputIterator last, CallbackType callback, StateType state);
 
         /**
-         * Reads n bytes from the provided input buffer. Each time a 
-         * valid message has been decoded, the provided callback function will
-         * be invoked with the decoded result. The result contains the decoded
-         * data buffer.
-         * @param first First item of the buffer to decode the data from.
-         * @param last Last item of the buffer to decode the data from.
-         * @param callback Callback function that will be called when a valid
-         *      message has been decoded. The function must have the following 
-         *      signature: (const_iterator, const_iterator)
-         * @note Each time a message has been decoded this method calls reset.
-         */
-        template<typename InputIterator, typename CallbackType>
-        void read(InputIterator first, InputIterator last, CallbackType callback);
-
-        /**
          * Decodes a single byte. If this is the last byte of a S101 message
          * the provided callback function will be invoked.
          * @param input The byte to decode.
@@ -94,33 +60,12 @@ namespace libs101
          * @note Each time a message has been decoded this method calls reset.
          */
         template<typename InputType, typename CallbackType, typename StateType>
-        void readByte(InputType input, CallbackType callback, StateType state);
-
-        /**
-         * Decodes a single byte. If this is the last byte of a S101 message
-         * the provided callback function will be invoked.
-         * @param input The byte to decode.
-         * @param callback Callback function that will be called when a valid
-         *      message has been decoded. The function must have the following 
-         *      signature: (const_iterator, const_iterator)
-         * @note Each time a message has been decoded this method calls reset.
-         */
-        template<typename InputType, typename CallbackType>
-        void readByte(InputType input, CallbackType callback);
+        void read(InputType input, CallbackType callback, StateType state);
 
         /** Resets the current decoding buffer. */
         void reset();
 
     private:
-        /**
-         * This static method is used to invoke a callback which doesn't have a state parameter.
-         * @param first Start of the buffer containing a decoded S101 message.
-         * @param last End of the buffer.
-         * @param callback The stateless callback, which only expects the data buffer.
-         */
-        template<typename CallbackType>
-        static void invokeStatelessCallback(const_iterator first, const_iterator last, CallbackType callback);
-
         ByteVector m_bytes;
         bool m_escape;
         util::Crc16::value_type m_crc;
@@ -141,13 +86,6 @@ namespace libs101
     {}
 
     template<typename ValueType>
-    template<typename CallbackType>
-    inline void StreamDecoder<ValueType>::invokeStatelessCallback(const_iterator first, const_iterator last, CallbackType callback)
-    {
-        callback(first, last);
-    }
-
-    template<typename ValueType>
     inline void StreamDecoder<ValueType>::reset()
     {
         m_bytes.clear();
@@ -160,29 +98,12 @@ namespace libs101
     inline void StreamDecoder<ValueType>::read(InputIterator first, InputIterator last, CallbackType callback, StateType state)
     {
         for(; first != last; ++first)
-            readByte(*first, callback, state);
-    }
-
-    template<typename ValueType>
-    template<typename InputIterator, typename CallbackType>
-    inline void StreamDecoder<ValueType>::read(InputIterator first, InputIterator last, CallbackType callback)
-    {
-        for(; first != last; ++first)
-            readByte(*first, callback);
-    }
-
-    template<typename ValueType>
-    template<typename InputType, typename CallbackType>
-    inline void StreamDecoder<ValueType>::readByte(InputType input, CallbackType callback)
-    {
-        typedef void (*CallbackBindType)(const_iterator, const_iterator, CallbackType);
-
-        readByte<InputType, CallbackBindType, CallbackType>(input, invokeStatelessCallback, callback);
+            read(*first, callback, state);
     }
 
     template<typename ValueType>
     template<typename InputType, typename CallbackType, typename StateType>
-    inline void StreamDecoder<ValueType>::readByte(InputType input, CallbackType callback, StateType state)
+    inline void StreamDecoder<ValueType>::read(InputType input, CallbackType callback, StateType state)
     {
         value_type const byte = static_cast<value_type>(input);
 

@@ -1,22 +1,3 @@
-/*
-    libember -- C++ 03 implementation of the Ember+ Protocol
-    Copyright (C) 2012  L-S-B Broadcast Technologies GmbH
-
-    This library is free software; you can redistribute it and/or
-    modify it under the terms of the GNU Lesser General Public
-    License as published by the Free Software Foundation; either
-    version 2.1 of the License, or (at your option) any later version.
-
-    This library is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-    Lesser General Public License for more details.
-
-    You should have received a copy of the GNU Lesser General Public
-    License along with this library; if not, write to the Free Software
-    Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
-*/
-
 #ifndef __LIBEMBER_DOM_DOMREADER_HPP
 #define __LIBEMBER_DOM_DOMREADER_HPP
 
@@ -47,11 +28,9 @@ namespace libember { namespace dom
 
             /**
              * Constructs a node structure from an octet stream. The stream must contain
-             * the complete data of the previously encoded structure. The returned root node
-             * must be deleted manually when it is no longer needed.
+             * the complete data of the previously encoded structure.
              * @param input Input stream containing the encoded data.
-             * @param factory The node factory to use when a new item has been read.
-             * @throw std::runtime_error when the decoded root node is not a container.
+             * @param factory 
              */
             Node* decodeTree(util::OctetStream& input, NodeFactory const& factory);
 
@@ -94,7 +73,7 @@ namespace libember { namespace dom
 
             /**
              * Returns the decoded application tag.
-             * @return The decoded application tag.
+             * @retunr The decoded application tag.
              */
             ber::Tag applicationTag() const;
 
@@ -120,7 +99,6 @@ namespace libember { namespace dom
              * Reads the total length, the application tag, the inner length and the type tag
              * of the next item. Returns true if a valid item has been detected.
              * @return True if another item can be decoded, otherwise false.
-             * @throw std::runtime_error when an invalid tag or length has been detected.
              */
             bool read();
 
@@ -159,7 +137,7 @@ namespace libember { namespace dom
              * @param factory Node factory.
              */
             static void decodeTreeRecursive(DomReader& reader, Container* parent, NodeFactory const& factory);
-
+            
         private:
             util::OctetStream* m_input;
             DomReader* m_parentReader;

@@ -1,22 +1,3 @@
-/*
-    libember -- C++ 03 implementation of the Ember+ Protocol
-    Copyright (C) 2012  L-S-B Broadcast Technologies GmbH
-
-    This library is free software; you can redistribute it and/or
-    modify it under the terms of the GNU Lesser General Public
-    License as published by the Free Software Foundation; either
-    version 2.1 of the License, or (at your option) any later version.
-
-    This library is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-    Lesser General Public License for more details.
-
-    You should have received a copy of the GNU Lesser General Public
-    License along with this library; if not, write to the Free Software
-    Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
-*/
-
 #ifndef __LIBEMBER_UTIL_STREAMBUFFER_HPP
 #define __LIBEMBER_UTIL_STREAMBUFFER_HPP
 
@@ -29,9 +10,6 @@ namespace libember { namespace util
      * overhead of a simple deque. It allows appending elements to the back of
      * the controlled sequence, forward iteration over all elements in the
      * sequence and consuming elements from the front of the sequence.
-     * The StreamBuffer calls the flush method when its size reaches the provided maxSize.
-     * Afterwards, the content will be reset. To avoid automatic flushing, set the maxSize
-     * to 0.
      */
     template<typename ValueType, unsigned short ChunkSize = 256>
     class StreamBuffer
@@ -49,13 +27,8 @@ namespace libember { namespace util
             typedef detail::StreamBufferIterator<ValueType const, ChunkSize>    const_iterator;
 
         public:
-            /** 
-             * Default constructor, initializes an empty stream buffer. 
-             * @param maxSize The maximum size the buffer may have. Whenever it reaches this limit
-             *      the virtual flush is being called and the buffer content will be reset. Set this value
-             *      to zero to avoid flushing.
-             */
-            explicit StreamBuffer(size_type maxSize = 0);
+            /** Default constructor, initializes an empty stream buffer. */
+            StreamBuffer();
 
             /**
              * Copy constructor that initializes the instance with a copy
@@ -66,7 +39,7 @@ namespace libember { namespace util
             StreamBuffer(StreamBuffer const& other);
 
             /** Destructor. Releases memory allocated to the controlled sequence. */
-            virtual ~StreamBuffer();
+            ~StreamBuffer();
 
             /**
              * Clear the stream buffer. Releasing all memory allocated to the
@@ -85,13 +58,6 @@ namespace libember { namespace util
              * @return The current number of items stored in the buffer.
              */
             size_type size() const;
-
-            /**
-             * Returns the maximum size the stream may have. This value is set by the MaxSize 
-             * template parameter.
-             * @return The maximum size the stream may have.
-             */
-            size_type max_size() const;
 
             /**
              * Returns the first item in the stream
@@ -185,20 +151,6 @@ namespace libember { namespace util
              */
             StreamBuffer& operator=(StreamBuffer other);
 
-        protected:
-            /**
-             * This method is called when the maximum size of the stream has been reached
-             * and the stream is about to reset itself. A derived class that overrides
-             * this method can use the provided iterator pair to copy the data or send
-             * it to a client. The stream will be reset after this method has been called.
-             * The default implementation is empty.
-             * @param first an iterator referring the first element of the sequence
-             *        of elements to add.
-             * @param last an iterator referring to the element one past the last
-             *        element of the sequence of elements to add.
-             */
-            virtual void flush(iterator first, iterator last);
-
         private:
             typedef detail::StreamBufferNode<ValueType, ChunkSize> node_type;
 
@@ -242,8 +194,6 @@ namespace libember { namespace util
         private:
             node_type *m_head;
             node_type *m_tail;
-            size_type m_size;
-            size_type m_maxsize;
    };
 
 
@@ -252,13 +202,13 @@ namespace libember { namespace util
    /**************************************************************************/
 
     template<typename ValueType, unsigned short ChunkSize>
-    inline StreamBuffer<ValueType, ChunkSize>::StreamBuffer(size_type maxSize)
-        : m_head(0), m_tail(0), m_size(0), m_maxsize(maxSize ? maxSize : 0xFFFFFFFF)
+    inline StreamBuffer<ValueType, ChunkSize>::StreamBuffer()
+        : m_head(0), m_tail(0)
     {}
 
     template<typename ValueType, unsigned short ChunkSize>
     inline StreamBuffer<ValueType, ChunkSize>::StreamBuffer(StreamBuffer const& other)
-        : m_head(0), m_tail(0), m_size(other.m_size), m_maxsize(other.m_maxsize)
+        : m_head(0), m_tail(0)
     {
         node_type const* currentSource = other.m_head;
         while (currentSource != 0)
@@ -314,60 +264,24 @@ namespace libember { namespace util
     }
 
     template<typename ValueType, unsigned short ChunkSize>
-    inline typename StreamBuffer<ValueType, ChunkSize>::size_type StreamBuffer<ValueType, ChunkSize>::max_size() const
-    {
-        return m_maxsize;
-    }
-
-    template<typename ValueType, unsigned short ChunkSize>
     inline void StreamBuffer<ValueType, ChunkSize>::append(value_type value)
     {
-        if (m_size + 1 > max_size())
-        {
-            iterator const first = begin();
-            iterator const last = end();
-            flush(first, last);
-            clear();
-        }
-
         assureHead();
         if (!m_tail->append(value))
         {
             grow()->append(value);
         }
-
-        m_size++;
     }
 
     template<typename ValueType, unsigned short ChunkSize>
     template<typename InputIterator>
     inline void StreamBuffer<ValueType, ChunkSize>::append(InputIterator first, InputIterator last)
     {
-        size_type const distance = std::distance(first, last);
-        size_type const maxsize = max_size();
-        if (distance > maxsize)
+        assureHead();
+        InputIterator current = m_tail->append(first, last);
+        while (current != last)
         {
-            for( /* Nothing */; first != last; ++first)
-            {
-                append(*first);
-            }
-        }
-        else
-        {
-            if (m_size + distance > maxsize)
-            {
-                flush(begin(), end());
-                clear();
-            }
-
-            assureHead();
-            InputIterator current = m_tail->append(first, last);
-            while (current != last)
-            {
-                current = grow()->append(current, last);
-            }
-
-            m_size += distance;
+            current = grow()->append(current, last);
         }
     }
 
@@ -383,10 +297,7 @@ namespace libember { namespace util
                 shrink();
             }
         }
-
-        size_type const consumed = howMany - toConsume;
-        m_size -= consumed;
-        return consumed;
+        return (howMany - toConsume);
     }
 
     template<typename ValueType, unsigned short ChunkSize>
@@ -412,8 +323,6 @@ namespace libember { namespace util
                 shrink();
             }
         }
-
-        m_size -= consumed;
         return consumed;
     }
 
@@ -423,7 +332,6 @@ namespace libember { namespace util
         using std::swap;
         swap(m_head, other.m_head);
         swap(m_tail, other.m_tail);
-        swap(m_size, other.m_size);
     }
 
     template<typename ValueType, unsigned short ChunkSize>
@@ -465,11 +373,6 @@ namespace libember { namespace util
     }
 
     template<typename ValueType, unsigned short ChunkSize>
-    inline void StreamBuffer<ValueType, ChunkSize>::flush(iterator, iterator)
-    {
-    }
-
-    template<typename ValueType, unsigned short ChunkSize>
     inline bool StreamBuffer<ValueType, ChunkSize>::assureHead()
     {
         bool const createHead = (m_head == 0);
@@ -477,7 +380,6 @@ namespace libember { namespace util
         {
             m_head = allocate();
             m_tail = m_head;
-            m_size = 0;
         }
         return createHead;
     }

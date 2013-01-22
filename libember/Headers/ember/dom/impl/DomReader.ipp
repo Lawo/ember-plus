@@ -1,22 +1,3 @@
-/*
-    libember -- C++ 03 implementation of the Ember+ Protocol
-    Copyright (C) 2012  L-S-B Broadcast Technologies GmbH
-
-    This library is free software; you can redistribute it and/or
-    modify it under the terms of the GNU Lesser General Public
-    License as published by the Free Software Foundation; either
-    version 2.1 of the License, or (at your option) any later version.
-
-    This library is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-    Lesser General Public License for more details.
-
-    You should have received a copy of the GNU Lesser General Public
-    License along with this library; if not, write to the Free Software
-    Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
-*/
-
 #ifndef __LIBEMBER_DOM_IMPL_DOMREADER_IPP
 #define __LIBEMBER_DOM_IMPL_DOMREADER_IPP
 
@@ -33,7 +14,7 @@ namespace libember { namespace dom
     LIBEMBER_INLINE
     DomReader::DomReader()
         : m_input(0), m_parentReader(0), m_length(0), m_outerLength(0)
-        , m_bytesRead(0), m_bytesAvailable(0), m_handledEof(false), m_isContainer(false)
+        , m_bytesRead(0), m_bytesAvailable(0),m_handledEof(false), m_isContainer(false)
     {}
 
     LIBEMBER_INLINE
@@ -46,7 +27,6 @@ namespace libember { namespace dom
     Node* DomReader::decodeTree(util::OctetStream& input, NodeFactory const& factory)
     {
         m_input = &input;
-        m_bytesAvailable = input.size();
 
         Node* root = 0;
 
@@ -114,21 +94,22 @@ namespace libember { namespace dom
                 {
                     case ber::Type::Boolean:
                         return new VariantLeaf(tag, decode<bool>());
+                        break;              
 
                     case ber::Type::Integer:
                         if (length() > 4)
                             return new VariantLeaf(tag, decode<long>());
                         else
                             return new VariantLeaf(tag, decode<int>());
+                        break;
 
                     case ber::Type::Real:
                         return new VariantLeaf(tag, decode<double>());
+                        break;
 
                     case ber::Type::UTF8String:
                         return new VariantLeaf(tag, decode<std::string>());
-
-                    case ber::Type::RelativeObject:
-                        return new VariantLeaf(tag, decode<ber::ObjectIdentifier>());
+                        break;
 
                     default:
                         skipCurrentItem();
@@ -165,7 +146,7 @@ namespace libember { namespace dom
     LIBEMBER_INLINE
     bool DomReader::eof() const
     {
-        return (m_bytesRead >= m_bytesAvailable && (m_bytesAvailable != length_type::INDEFINITE)) || m_input->empty();
+        return m_bytesRead >= m_bytesAvailable;
     }
 
     LIBEMBER_INLINE
@@ -219,7 +200,6 @@ namespace libember { namespace dom
         {
             throw std::runtime_error("Zero outer length");
         }
-        
         if (!(m_applicationTag.isContainer() && m_applicationTag.getClass() != ber::Class::Universal))
         {
             throw std::runtime_error("Implicit tag or universal outer tag found");

@@ -1,22 +1,3 @@
-/*
-    libember -- C++ 03 implementation of the Ember+ Protocol
-    Copyright (C) 2012  L-S-B Broadcast Technologies GmbH
-
-    This library is free software; you can redistribute it and/or
-    modify it under the terms of the GNU Lesser General Public
-    License as published by the Free Software Foundation; either
-    version 2.1 of the License, or (at your option) any later version.
-
-    This library is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-    Lesser General Public License for more details.
-
-    You should have received a copy of the GNU Lesser General Public
-    License along with this library; if not, write to the Free Software
-    Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
-*/
-
 #ifndef __LIBEMBER_UTIL_DETAIL_STREAMBUFFERNODE_HPP
 #define __LIBEMBER_UTIL_DETAIL_STREAMBUFFERNODE_HPP
 
@@ -136,7 +117,7 @@ namespace libember { namespace util { namespace detail
              *      that the specified cursor position refers to a valid
              *      element.
              */
-            reference at(cursor_type pos);
+            value_type& at(cursor_type pos);
 
             /**
              * Return the element stored at the cursor position passed
@@ -149,7 +130,7 @@ namespace libember { namespace util { namespace detail
              *      that the specified cursor position refers to a valid
              *      element.
              */
-            const_reference at(cursor_type pos) const;
+            value_type at(cursor_type pos) const;
 
             /**
              * Append a single element to the range of valid elements within
@@ -283,7 +264,7 @@ namespace libember { namespace util { namespace detail
     }
 
     template<typename ValueType, unsigned short ChunkSize>
-    inline typename StreamBufferNode<ValueType, ChunkSize>::const_reference StreamBufferNode<ValueType, ChunkSize>::at(cursor_type pos) const
+    inline typename StreamBufferNode<ValueType, ChunkSize>::value_type StreamBufferNode<ValueType, ChunkSize>::at(cursor_type pos) const
     {
         return m_data[pos];
     }

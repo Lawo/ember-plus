@@ -1,41 +1,20 @@
-/*
-    libember -- C++ 03 implementation of the Ember+ Protocol
-    Copyright (C) 2012  L-S-B Broadcast Technologies GmbH
-
-    This library is free software; you can redistribute it and/or
-    modify it under the terms of the GNU Lesser General Public
-    License as published by the Free Software Foundation; either
-    version 2.1 of the License, or (at your option) any later version.
-
-    This library is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-    Lesser General Public License for more details.
-
-    You should have received a copy of the GNU Lesser General Public
-    License along with this library; if not, write to the Free Software
-    Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
-*/
-
 #ifndef __LIBEMBER_GLOW_GLOWNODE_HPP
 #define __LIBEMBER_GLOW_GLOWNODE_HPP
 
-#include "GlowNodeBase.hpp"
+#include "GlowContentElement.hpp"
+#include "GlowElementCollection.hpp"
 
 namespace libember { namespace glow
 {
     /** Forward declaration **/
     class GlowNodeFactory;
-    class GlowElementCollection;
-    class GlowRootElementCollection;
-    class GlowNodeBase;
 
     /**
      * Class representing a single node.
      * The methods to access a property of this object return a default value if a property doesn't exist.
      * To assure that the property exists, the contains method should be used.
      */
-    class LIBEMBER_API GlowNode : public GlowNodeBase
+    class LIBEMBER_API GlowNode : public GlowContentElement
     {
         friend class GlowNodeFactory;
         public:
@@ -47,22 +26,6 @@ namespace libember { namespace glow
             explicit GlowNode(int number);
 
             /**
-             * Initializes a new GlowNode with the specified number and adds it as child node
-             * to the provided parent.
-             * @param parent The root collection owning this node.
-             * @param number The internal node number.
-             */
-            GlowNode(GlowRootElementCollection* parent, int number);
-
-            /**
-             * Initializes a new GlowNode with the specified number and adds it as child node
-             * to the provided parent.
-             * @param parent The node owning this node.
-             * @param number The internal node number.
-             */
-            GlowNode(GlowNodeBase* parent, int number);
-
-            /**
              * Constructor, initializes a Glow node with an application tag.
              * @param number The internal node number.
              * @param tag Application tag.
@@ -70,10 +33,55 @@ namespace libember { namespace glow
             GlowNode(int number, ber::Tag const& tag);
 
             /**
+             * Tests if the node contains the passed property.
+             * @param property The property the look for.
+             * @return Returns true if the property exists, false otherwise.
+             */
+            bool contains(GlowProperty const& property) const;
+
+            /**
+             * Sets the description string.
+             * @param description The description string to set.
+             */
+            void setDescription(std::string const& description);
+
+            /**
+             * Sets the identifir string.
+             * @param identifier The identifier string.
+             */
+            void setIdentifier(std::string const& identifier);
+
+            /**
+             * Returns a modifiable element collection that contains the children.
+             * The element will be inserted if it doesn't already exist.
+             * @return The element collection.
+             */
+            GlowElementCollection* children();
+
+            /**
              * Returns the number of this node.
              * @return The node number.
              */
             int number() const;
+
+            /**
+             * Returns the description string.
+             * @return The description string.
+             */
+            std::string description() const;
+
+            /**
+             * Returns the identifier string.
+             * @return The identifier string.
+             */
+            std::string identifier() const;
+
+            /**
+             * Returns the constant element collection. If no children are attached,
+             * this method returns null.
+             * @return Element collection containing the children of this node.
+             */
+            GlowElementCollection const* children() const;
 
         private:
             /**

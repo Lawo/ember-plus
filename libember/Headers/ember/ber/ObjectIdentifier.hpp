@@ -1,112 +1,46 @@
-/*
-    libember -- C++ 03 implementation of the Ember+ Protocol
-    Copyright (C) 2012  L-S-B Broadcast Technologies GmbH
-
-    This library is free software; you can redistribute it and/or
-    modify it under the terms of the GNU Lesser General Public
-    License as published by the Free Software Foundation; either
-    version 2.1 of the License, or (at your option) any later version.
-
-    This library is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-    Lesser General Public License for more details.
-
-    You should have received a copy of the GNU Lesser General Public
-    License along with this library; if not, write to the Free Software
-    Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
-*/
-
 #ifndef __LIBEMBER_BER_OBJECTIDENTIFIER_HPP
 #define __LIBEMBER_BER_OBJECTIDENTIFIER_HPP
 
 #include <algorithm>
-#include <vector>
-#include "../util/Api.hpp"
 
 namespace libember { namespace ber
 {
     /**
-     * A simple template type that wraps an array of signed integer values representing a
-     * relative object identifier.
+     * A simple template type that wraps an (unsigned) 64-Bit integer
+     * representing an object identifier.
      */
-    class LIBEMBER_API ObjectIdentifier
+    class ObjectIdentifier
     {
-        typedef std::vector<std::size_t> Vector;
-
         public:
-            typedef Vector::value_type value_type;
-            typedef Vector::size_type size_type;
-            typedef Vector::iterator iterator;
-            typedef Vector::const_iterator const_iterator;
+            typedef unsigned long long value_type;
 
         public:
             /**
              * Default constructor. Initializes the wrapped object identifier
-             * with an empty array.
+             * with 0.
              */
             ObjectIdentifier();
 
             /**
-             * Constructor that copies the passed buffer containing a relative object identifier.
+             * Constructor that wraps the passed value.
              * @param value the value to wrap.
+             * @note Please note that this constructor is intentionally non-explicit
+             *      to allow for convenient implicit conversion, where it might be
+             *      suitable.
              */
-            template<typename InputIterator>
-            ObjectIdentifier(InputIterator first, InputIterator last);
+            ObjectIdentifier(value_type value);
 
             /**
-             * Initializes a new ObjectIdentifier which contains only one element.
-             * @param value The single value to initialize the ObjectIdentifier with.
+             * Accessor method that returns a copy of the stored identifier.
+             * @return A copy of the stored object identifier.
              */
-            explicit ObjectIdentifier(value_type value);
+            value_type value() const;
 
             /**
-             * Returns true if the ObjectIdentifier does not contain any elements.
-             * @retunr True if the ObjectIdentifier does not contain any elements.
+             * Accessor method that returns a reference to the stored identifier.
+             * @return A reference to the stored object identifier.
              */
-            bool empty() const;
-
-            /**
-             * Returns the number of elements this oid contains.
-             * @return The number of elements this oid contains.
-             */
-            size_type size() const;
-
-            /**
-             * Return a const iterator referring to the first identifier contained 
-             * within this object identifier
-             * @return A const iterator referring to the first identifier contained
-             *      within this object identifier.
-             */
-            const_iterator begin() const;
-
-            /**
-             * Return a const iterator referring to the element one past the last
-             * element in the sequence of identifiers contained within this
-             * object identifier.
-             * @return A const iterator referring to the element one past the last
-             *      element in the sequence of identifiers contained within
-             *      this object identifier.
-             */
-            const_iterator end() const;
-
-            /**
-             * Return an iterator referring to the first identifier contained 
-             * within this object identifier
-             * @return An iterator referring to the first identifier contained
-             *      within this object identifier.
-             */
-            iterator begin();
-
-            /**
-             * Return an iterator referring to the element one past the last
-             * element in the sequence of identifiers contained within this
-             * object identifier.
-             * @return An iterator referring to the element one past the last
-             *      element in the sequence of identifiers contained within
-             *      this object identifier.
-             */
-            iterator end();
+            value_type& value();
 
             /**
              * Swap method that exchanges the object identifier stored within
@@ -116,21 +50,8 @@ namespace libember { namespace ber
              */
             void swap(ObjectIdentifier& other);
 
-            /**
-             * Gets the sub-id at position @p index.
-             * @param index the position of the sub-id to return.
-             */
-            std::size_t operator[](int index) const;
-
         private:
-#ifdef _MSC_VER
-#  pragma warning(push)
-#  pragma warning(disable : 4251)
-#endif
-            Vector m_items;
-#ifdef _MSC_VER
-#  pragma warning(pop)
-#endif
+            value_type m_value;
     };
 
 
@@ -152,48 +73,8 @@ namespace libember { namespace ber
         lhs.swap(rhs);
     }
 
-    template<typename InputIterator>
-    ObjectIdentifier::ObjectIdentifier(InputIterator first, InputIterator last)
-    {
-        m_items.assign(first, last);
-    }
-
-    inline bool ObjectIdentifier::empty() const
-    {
-        return m_items.empty();
-    }
-
-    inline ObjectIdentifier::const_iterator ObjectIdentifier::begin() const
-    {
-        return m_items.begin();
-    }
-
-    inline ObjectIdentifier::const_iterator ObjectIdentifier::end() const
-    {
-        return m_items.end();
-    }
-
-    inline ObjectIdentifier::iterator ObjectIdentifier::begin() 
-    {
-        return m_items.begin();
-    }
-
-    inline ObjectIdentifier::iterator ObjectIdentifier::end() 
-    {
-        return m_items.end();
-    }
-
-    inline ObjectIdentifier::size_type ObjectIdentifier::size() const
-    {
-        return m_items.size();
-    }
 }
 }
-
-#ifdef LIBEMBER_HEADER_ONLY
-#  include "impl/ObjectIdentifier.ipp"
-#endif
-
 
 #endif  // __LIBEMBER_BER_OBJECTIDENTIFIER_HPP
 

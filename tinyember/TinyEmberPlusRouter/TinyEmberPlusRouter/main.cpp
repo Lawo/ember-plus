@@ -150,7 +150,7 @@ void createDynamic(model::Node* router, int nodeNumber, glow::Dispatcher* dispat
 
 void createProductInfo(model::Node* router, int nodeNumber)
 {
-   auto productInfo = new model::Node(nodeNumber, router, "productInfo");
+   auto productInfo = new model::Node(nodeNumber, router, "__productInfo");
 
    auto moniker = new model::StringParameter(1, productInfo, "moniker", nullptr);
    moniker->setReadOnly(true);

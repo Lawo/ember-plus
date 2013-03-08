@@ -130,6 +130,9 @@ namespace libember { namespace dom
                     case ber::Type::RelativeObject:
                         return new VariantLeaf(tag, decode<ber::ObjectIdentifier>());
 
+                    case ber::Type::OctetString:
+                        return new dom::VariantLeaf(tag, decode<ber::Octets>());
+
                     default:
                         skipCurrentItem();
                         break;

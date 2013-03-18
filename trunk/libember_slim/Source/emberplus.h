@@ -25,7 +25,7 @@
   * The upper byte is the major version number.
   * The lower byte is the minor version number.
   */
-#define EMBER_LIBRARY_VERSION (0x010B)
+#define EMBER_LIBRARY_VERSION (0x010C)
 
 #include "emberglow.h"
 

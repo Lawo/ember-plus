@@ -212,13 +212,19 @@ static void createGain(SampleNode *pParent)
    pParam->param.value.flag = GlowParameterType_Integer;
    fields |= GlowFieldFlag_Value;
 
-   pParam->param.minimum.integer = -64;
+   pParam->param.minimum.integer = 0;
    pParam->param.minimum.flag = GlowParameterType_Integer;
    fields |= GlowFieldFlag_Minimum;
 
-   pParam->param.maximum.integer = 15;
+   pParam->param.maximum.integer = 65535;
    pParam->param.maximum.flag = GlowParameterType_Integer;
    fields |= GlowFieldFlag_Maximum;
+
+   pParam->param.factor = 64;
+   fields |= GlowFieldFlag_Factor;
+
+   pParam->param.format = "%Lf db";
+   fields |= GlowFieldFlag_Format;
 
    pParam->fields = (GlowFieldFlags)fields;
 }
@@ -235,13 +241,16 @@ static void createVolume(SampleNode *pParent)
    pParam->param.value.flag = GlowParameterType_Real;
    fields |= GlowFieldFlag_Value;
 
-   pParam->param.minimum.real = 0.0;
+   pParam->param.minimum.real = -1000.0;
    pParam->param.minimum.flag = GlowParameterType_Real;
    fields |= GlowFieldFlag_Minimum;
 
    pParam->param.maximum.real = 1000.0;
    pParam->param.maximum.flag = GlowParameterType_Real;
    fields |= GlowFieldFlag_Maximum;
+
+   pParam->param.format = "%Lf db";
+   fields |= GlowFieldFlag_Format;
 
    pParam->fields = (GlowFieldFlags)fields;
 }
@@ -411,7 +420,7 @@ static SampleNode *findNode(SampleNode *pRoot, const berint *pPath, int *pPathLe
 
    for(pathIndex = 0; pathIndex < *pPathLength; pathIndex++)
    {
-      nodeIndex = pPath[pathIndex] - 1;
+      nodeIndex = pPath[pathIndex];
 
       if(nodeIndex < pCursor->childrenCount)
          pCursor = pCursor->children[nodeIndex];
@@ -492,7 +501,7 @@ static void onCommand(const GlowCommand *pCommand, const berint *pPath, int path
             if(pCurrent != NULL)
             {
                glowOutput_beginPackage(&output, nodeIndex == pCursor->childrenCount - 1);
-               pOutPath[pathLength] = nodeIndex + 1;
+               pOutPath[pathLength] = nodeIndex;
                fields = pCurrent->fields & pCommand->dirFieldMask;
 
                if(pCurrent->isParameter)

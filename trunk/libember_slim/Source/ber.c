@@ -148,7 +148,7 @@ int ber_getIntegerLength(berint value)
    return length;
 }
 
-int ber_getLongLength(berlong value)
+static int getLongLength(berlong value, bool isSigned)
 {
    qword qwValue = (qword)value;
    qword mask = 0xFF80000000000000LL;
@@ -170,11 +170,16 @@ int ber_getLongLength(berlong value)
          length--;
       }
 
-      if(qwValue & topBitMask)
+      if((qwValue & topBitMask) != 0 && isSigned)
          length++;
    }
 
    return length;
+}
+
+int ber_getLongLength(berlong value)
+{
+   return getLongLength(value, true);
 }
 
 int ber_getMultiByteIntegerLength(dword value)
@@ -407,7 +412,7 @@ int ber_encodeReal(BerOutput *pOut, double value)
 
             size++;
             size += ber_encodeLong(pOut, exponent, exponentLength);
-            size += ber_encodeLong(pOut, mantissa, ber_getLongLength(mantissa));
+            size += ber_encodeLong(pOut, mantissa, getLongLength(mantissa, false));
          }
       }
    }
@@ -452,7 +457,7 @@ int ber_encodeReal(BerOutput *pOut, double value)
 
             size++;
             size += ber_encodeLong(pOut, exponent, exponentLength);
-            size += ber_encodeLong(pOut, mantissa, ber_getLongLength(mantissa));
+            size += ber_encodeLong(pOut, mantissa, getLongLength(mantissa, false));
          }
       }
    }
@@ -596,7 +601,7 @@ berint ber_decodeInteger(BerInput *pIn, int length)
    return value;
 }
 
-berlong ber_decodeLong(BerInput *pIn, int length)
+static berlong decodeLong(BerInput *pIn, int length, bool isSigned)
 {
    berlong value = 0;
    berlong b;
@@ -608,13 +613,20 @@ berlong ber_decodeLong(BerInput *pIn, int length)
    {
       b = pIn->readByte(pIn);
 
-      if(count == 0 && (b & 0x80))
+      if(count == 0
+      && (b & 0x80) != 0
+      && isSigned)
          b -= 0x100; // negative value, invert upper 7 bytes
 
       value = (value << 8) | b;
    }
 
    return value;
+}
+
+berlong ber_decodeLong(BerInput *pIn, int length)
+{
+   return decodeLong(pIn, length, true);
 }
 
 double ber_decodeReal(BerInput *pIn, int length)
@@ -652,8 +664,8 @@ double ber_decodeReal(BerInput *pIn, int length)
             ff = (preamble >> 2) & 3;
 
             // Unpack mantissa & decrement exponent for base 2
-            exponent = ber_decodeLong(pIn, exponentLength);
-            mantissa = ber_decodeLong(pIn, length - exponentLength - 1) << ff;
+            exponent = decodeLong(pIn, exponentLength, true);
+            mantissa = decodeLong(pIn, length - exponentLength - 1, false) << ff;
 
             // de-normalize mantissa (required by CER and DER)
             while((mantissa & 0x7FFFF00000000000LL) == 0x0)
@@ -694,8 +706,8 @@ double ber_decodeReal(BerInput *pIn, int length)
             ff = (preamble >> 2) & 3;
 
             // Unpack mantissa & decrement exponent for base 2
-            exponent = ber_decodeLong(pIn, exponentLength);
-            mantissa = ber_decodeLong(pIn, length - exponentLength - 1) << ff;
+            exponent = decodeLong(pIn, exponentLength, true);
+            mantissa = decodeLong(pIn, length - exponentLength - 1, false) << ff;
 
             // de-normalize mantissa (required by CER and DER)
             while((mantissa & 0x0FFF0000L) == 0)

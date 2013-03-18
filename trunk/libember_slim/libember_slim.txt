@@ -2,16 +2,19 @@
 ============================================
 
 libember_slim
-Copyright (C) 2012
+Copyright (C) 2012-2013
 L-S-B Broadcast Technologies GmbH
 
 =============================================
 
 authors: pbo@l-s-b.de, rni@l-s-b.de
-date:    2012-10-23
+date:    2013-03-18
 
 
 ------------------------------- Change Log:
+- 1.12:
+  - FIXED: REAL bug that treated the mantissa as signed
+
 - 1.11:
   - FIXED: REAL decoder bug that only took effect on very few numbers whose
     encoding yielded a "bit gap"
@@ -24,7 +27,7 @@ date:    2012-10-23
     to enforce usage of new top header.
   - Validates identifiers when writing and after decoding.
   - The "onNode" callback type (used by GlowReader) has changed: it now
-    received the "fields" parameter as defined by the "onParameter" callback.
+    receives the "fields" parameter as defined by the "onParameter" callback.
   - Added support for "isOnline" field of EmberPlus-Glow.NodeContents.
   - Removed reliance on fixed-size buffers. ember_init now has two
     additional parameters: allocMemory and freeMemory.
@@ -165,11 +168,6 @@ libember_slim differs from libember in the following ways:
    suffixed with a container terminator.
    all implementations of the ember/glow standard are required to handle
    both length forms when decoding.
--  libember_slim does not support package fragmentation on the tx side.
-   this means libember_slim is not able to split an ember tree into
-   framed packages of a specific maximum length.
-   On the rx side, libember_slim reads and decodes ember trees split into
-   multiple packages without problems.
 
 
 ------------------------------- Known Issues:

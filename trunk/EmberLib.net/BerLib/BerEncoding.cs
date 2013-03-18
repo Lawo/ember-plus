@@ -46,14 +46,14 @@ namespace BerLib
 
          if(value < 0)
          {
-            for( ; (dword & mask) == mask && length > 1; mask >>= 8)
+            for(; (dword & mask) == mask && length > 1; mask >>= 8)
                length--;
          }
          else
          {
             uint topBitMask = 0x80000000;
 
-            for( ; (dword & mask) == 0 && length > 1; mask >>= 8)
+            for(; (dword & mask) == 0 && length > 1; mask >>= 8)
             {
                topBitMask >>= 8;
                length--;
@@ -68,30 +68,7 @@ namespace BerLib
 
       public static int GetLongLength(long value)
       {
-         var qword = (ulong)value;
-         ulong mask = 0xFF80000000000000UL;
-         var length = 8;
-
-         if(value < 0)
-         {
-            for( ; (qword & mask) == mask && length > 1; mask >>= 8)
-               length--;
-         }
-         else
-         {
-            ulong topBitMask = 0x8000000000000000UL;
-
-            for( ; (qword & mask) == 0 && length > 1; mask >>= 8)
-            {
-               topBitMask >>= 8;
-               length--;
-            }
-
-            if((qword & topBitMask) != 0)
-               length++;
-         }
-
-         return length;
+         return GetLongLength(value, true);
       }
 
       public static int GetMultiByteIntegerLength(uint value)
@@ -433,8 +410,8 @@ namespace BerLib
                output.WriteByte(preamble);
 
                size++;
-               size += EncodeLong(output, exponent, exponentLength);
-               size += EncodeLong(output, mantissa, GetLongLength(mantissa));
+               size += EncodeLong(output, exponent, exponentLength); // signed exponent
+               size += EncodeLong(output, mantissa, GetLongLength(mantissa, false)); // unsigned mantissa
             }
          }
 
@@ -619,20 +596,7 @@ namespace BerLib
 
       public static long DecodeLong(IBerInput input, int length)
       {
-         long value = 0;
-         long readByte;
-
-         for(uint byteCount = 0; byteCount < length; byteCount++)
-         {
-            readByte = input.ReadByte();
-
-            if(byteCount == 0 && (readByte & 0x80) != 0)
-               readByte -= 0x100;
-
-            value = (value << 8) | readByte;
-         }
-
-         return value;
+         return DecodeLong(input, length, true);
       }
 
       public static double DecodeReal(IBerInput input, int length)
@@ -661,7 +625,7 @@ namespace BerLib
 
                // Unpack mantissa & decrement exponent for base 2
                long exponent = DecodeLong(input, exponentLength);
-               long mantissa = DecodeLong(input, (length - exponentLength - 1)) << ff;
+               long mantissa = DecodeLong(input, length - exponentLength - 1, false) << ff;
 
                // de-normalize mantissa (required by CER and DER)
                while((mantissa & 0x7FFFF00000000000L) == 0x0)
@@ -855,6 +819,54 @@ namespace BerLib
       static long DoubleToInt64Bits(double value)
       {
          return BitConverter.ToInt64(BitConverter.GetBytes(value), 0);
+      }
+
+      static int GetLongLength(long value, bool isSigned)
+      {
+         var qword = (ulong)value;
+         ulong mask = 0xFF80000000000000UL;
+         var length = 8;
+
+         if(value < 0)
+         {
+            for(; (qword & mask) == mask && length > 1; mask >>= 8)
+               length--;
+         }
+         else
+         {
+            ulong topBitMask = 0x8000000000000000UL;
+
+            for(; (qword & mask) == 0 && length > 1; mask >>= 8)
+            {
+               topBitMask >>= 8;
+               length--;
+            }
+
+            if((qword & topBitMask) != 0 && isSigned)
+               length++;
+         }
+
+         return length;
+      }
+
+      static long DecodeLong(IBerInput input, int length, bool isSigned)
+      {
+         long value = 0;
+         long readByte;
+
+         for(uint byteCount = 0; byteCount < length; byteCount++)
+         {
+            readByte = input.ReadByte();
+
+            if(byteCount == 0
+            && (readByte & 0x80) != 0
+            && isSigned)
+               readByte -= 0x100;
+
+            value = (value << 8) | readByte;
+         }
+
+         return value;
       }
       #endregion
    }

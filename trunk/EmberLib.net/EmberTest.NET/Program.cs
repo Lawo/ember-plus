@@ -32,6 +32,7 @@ namespace EmberTest.NET
       void Run()
       {
          Test_Real();
+         Test_Real2();
          //Test_GlowFormula();
          //Test_DOM();
          //Test_InteropDom();
@@ -72,6 +73,15 @@ namespace EmberTest.NET
 
             Console.WriteLine("value={0} decoded={1}", value, decodedValue);
          }
+      }
+
+      void Test_Real2()
+      {
+         var encoded = new byte[] { 0xC0, 0x04, 0xDF };
+         var input = new BerMemoryInput(encoded);
+         var decoded = BerEncoding.DecodeReal(input, encoded.Length);
+
+         Console.WriteLine("value={0}", decoded);
       }
       #endregion
 

@@ -109,17 +109,17 @@
     <Compile Include="Xml\XmlExport.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\BerLib\BerLib.csproj">
-      <Project>{5FC199CE-DA11-4D54-B52D-B9CEC1E3FF8E}</Project>
-      <Name>BerLib</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <None Include="Documentation\EmberLib.cd" />
     <None Include="Documentation\Ember.doc" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Documentation\EmberLib.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\BerLib\BerLib.csproj">
+      <Project>{5fc199ce-da11-4d54-b52d-b9cec1e3ff8e}</Project>
+      <Name>BerLib</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -6,10 +6,13 @@ L-S-B Broadcast Technologies GmbH
 =============================================
 
 author:  pbo@l-s-b.de
-date:    2012-10-23
+date:    2013-03-18
 
 
 ------------------------------- Change Log:
+- 1.1.2:
+  - FIXED: REAL bug that treated the mantissa as signed
+
 - 1.1.1:
   - FIXED: REAL decoder bug that only took effect on very few numbers whose encoding
     yielded a "bit gap"

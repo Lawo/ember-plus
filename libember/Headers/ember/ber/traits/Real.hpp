@@ -51,75 +51,79 @@ namespace libember { namespace ber
         {
             typedef RealType value_type;
 
-            /**
-             * Normalize the passed mantissa as required by CER and DER
-             * and return it.
-             * @param mantissa the unnormalized mantissa
-             * @return The normalized mantissa.
-             */
-            static long long normalizeMantissa(long long mantissa)
-            {
-                while ((mantissa & 0xFF) == 0x00)
-                {
-                    mantissa >>= 8;
-                }
-                while ((mantissa & 0x01) == 0x00)
-                {
-                    mantissa >>= 1;
-                }
-                return mantissa;
-            }
-
-            static std::size_t encodedLength(value_type value)
-            {
-                if ((value == +std::numeric_limits<value_type>::infinity()) ||
-                    (value == -std::numeric_limits<value_type>::infinity()))
-                {
-                    return 1;
-                }
-                else
-                {
-                    double const real = value;
-                    unsigned long long const quadWord = *reinterpret_cast<unsigned long long const*>(&real);
-                    if (quadWord != 0)
-                    {
-                        long long const exponent = ((0x7FF0000000000000ULL & quadWord) >> 52) - 1023;
-                        long long const mantissa =  (0x000FFFFFFFFFFFFFULL & quadWord) | 0x0010000000000000ULL;
-                        return 1 + ber::encodedLength(exponent) + ber::encodedLength(normalizeMantissa(mantissa));
-                    }
-                }
-                return 0;
-            }
-
             static void encode(util::OctetStream& output, value_type value)
             {
                 if (value == +std::numeric_limits<value_type>::infinity())
                 {
                     // 0x40 Indicates positive infinity
-                    output.append(0x40);            
+                    output.append(0x40);
                 }
                 else if (value == -std::numeric_limits<value_type>::infinity())
                 {
                     // 0x41 Indicates positive infinity
-                    output.append(0x41);            
+                    output.append(0x41);
                 }
                 else
                 {
                     double const real = value;
-                    unsigned long long const quadWord = *reinterpret_cast<const unsigned long long *>(&real);
+                    unsigned long long const bits = *reinterpret_cast<unsigned long long const*>(&real);
 
-                    if (quadWord != 0)
+                    if (bits != 0)
                     {
-                        long long const exponent = ((0x7FF0000000000000ULL & quadWord) >> 52) - 1023;
-                        long long const mantissa =  (0x000FFFFFFFFFFFFFULL & quadWord) | 0x0010000000000000ULL;
+                        long long const exponent = ((0x7FF0000000000000LL & bits) >> 52) - 1023;
+                        unsigned long long mantissa = 0x000FFFFFFFFFFFFFULL & bits;
+                        mantissa |= 0x0010000000000000ULL;
 
-                        std::size_t const exponentLength = ber::encodedLength(exponent);
-                        unsigned char const preamble = static_cast<unsigned char>(0x80 | (exponentLength - 1) | (((quadWord & 0x8000000000000000ULL) != 0) ? 0x40 : 0x00));
-                        
+                        while((mantissa & 0xFF) == 0x00)
+                            mantissa >>= 8;
+
+                        while((mantissa & 0x01) == 0x00)
+                            mantissa >>= 1;
+
+                        int const exponentLength = ber::encodedLength<long long>(exponent);
+                        unsigned char preamble = static_cast<unsigned char>(0x80 | (exponentLength - 1));
+
+                        if((bits & 0x8000000000000000ULL) != 0)
+                            preamble |= 0x40;
+
                         output.append(preamble);
-                        ber::encode(output, exponent);
-                        ber::encode(output, normalizeMantissa(mantissa));
+                        ber::encode<long long>(output, exponent);
+                        ber::encode<unsigned long long>(output, mantissa);
                     }
+                }
+            }
+
+            static std::size_t encodedLength(value_type value)
+            {
+                if (value == +std::numeric_limits<value_type>::infinity()
+                ||  value == -std::numeric_limits<value_type>::infinity())
+                {
+                    return 1;
+                }
+                else
+                {
+                    std::size_t encodedLength = 0;
+                    double const real = value;
+                    unsigned long long const bits = *reinterpret_cast<unsigned long long const*>(&real);
+
+                    if (bits != 0)
+                    {
+                        long long const exponent = ((0x7FF0000000000000LL & bits) >> 52) - 1023;
+                        unsigned long long mantissa =   0x000FFFFFFFFFFFFFULL & bits;
+                        mantissa |= 0x0010000000000000ULL;
+
+                        while((mantissa & 0xFF) == 0x00)
+                            mantissa >>= 8;
+
+                        while((mantissa & 0x01) == 0x00)
+                            mantissa >>= 1;
+
+                        encodedLength += 1;     // preamble
+                        encodedLength += ber::encodedLength<long long>(exponent);
+                        encodedLength += ber::encodedLength<unsigned long long>(mantissa);
+                    }
+
+                    return encodedLength;
                 }
             }
         };
@@ -144,56 +148,47 @@ namespace libember { namespace ber
              */
             typedef meta::FunctionTraits<value_type (*)(util::OctetStream&, std::size_t)> signature;
 
-            static long long denormalizeMantissa(long long mantissa)
-            {
-                while ((mantissa & 0x7FFFF00000000000LL) == 0)
-                {
-                    mantissa <<= 8;
-                }
-                while ((mantissa & 0x7FF0000000000000LL) == 0)
-                {
-                    mantissa <<= 1;
-                }
-                mantissa &= 0x0FFFFFFFFFFFFFULL;
-                return mantissa;
-            }
-
             static value_type decode(util::OctetStream& input, std::size_t encodedLength)
             {
                 if (encodedLength == 0)
-                {
                     return static_cast<value_type>(0.0);
-                }
 
-                util::OctetStream::value_type const preamble = input.front();
+                unsigned char const preamble = input.front();
                 input.consume();
 
-                // Check for positive or negative infinity
-                if (encodedLength == 1)
+                if (encodedLength == 1 && preamble == 0x40)
                 {
-                    if (preamble == 0x40)
-                    {
-                        return +std::numeric_limits<value_type>::infinity();
-                    }
-                    else if (preamble == 0x41)
-                    {
-                        return -std::numeric_limits<value_type>::infinity();
-                    }
-                    else
-                    {
-                        return value_type(0);
-                    }
+                    return +std::numeric_limits<value_type>::infinity();
                 }
+                else if (encodedLength == 1 && preamble == 0x41)
+                {
+                    return -std::numeric_limits<value_type>::infinity();
+                }
+                else
+                {
+                    unsigned long long bits = 0;
+                    int const sign = (preamble & 0x40);
+                    int const exponentLength = 1 + (preamble & 3);
+                    int const mantissaShift = ((preamble >> 2) & 3);
 
-                std::size_t const exponentLength = 1 + (preamble & 3);
-                util::OctetStream::value_type const sign = preamble & 0x40;
-                util::OctetStream::value_type const ff = (preamble >> 2) & 3;
+                    long long exponent = ber::decode<long long>(input, exponentLength);
+                    long long mantissa = ber::decode<unsigned long long>(input, encodedLength - exponentLength - 1) << mantissaShift;
 
-                long long const exponent = ber::decode<long long>(input, exponentLength);
-                long long const mantissa = denormalizeMantissa(ber::decode<long long>(input, encodedLength - exponentLength - 1) << ff);
+                    while((mantissa & 0x7FFFF00000000000LL) == 0x00)
+                        mantissa <<= 8;
 
-                unsigned long long const quadWord = static_cast<unsigned long long>(((exponent + 1023) << 52) | mantissa) | ((sign != 0) ? 0x8000000000000000ULL : 0ULL);
-                return static_cast<value_type>(*reinterpret_cast<double const*>(&quadWord));
+                    while((mantissa & 0x7FF0000000000000LL) == 0x00)
+                        mantissa <<= 1;
+
+                    mantissa &= 0x0FFFFFFFFFFFFFLL;
+                    bits = ((exponent + 1023) << 52) | mantissa;
+
+                    if (sign != 0)
+                        bits |= (0x8000000000000000ULL);
+
+                    double const real = *reinterpret_cast<double const*>(&bits);
+                    return static_cast<value_type>(real);
+                }
             }
         };
     }

@@ -59,17 +59,13 @@ namespace libember { namespace ber
 
             static std::size_t encodedLength(value_type value)
             {
-                // Create a bit-mask that has the nine most significant bits set
-                value_type mask = static_cast<value_type>(~((static_cast<value_type>(1U) << (((sizeof(value_type) - 1) * 8) - 1)) - 1));
+                // Create a bit-mask that has the eight most significant bits set
+                value_type mask = static_cast<value_type>(value_type(0xFF) << (sizeof(value_type) * 8 - 8));
                 std::size_t length = sizeof(IntegralType);
-                while ((length > 1) && ((value & mask) == 0))
+
+                for (; (value & mask) == 0 && length > 1; mask >>= 8)
                 {
                     length -= 1;
-                    mask >>= 8;
-                }
-                if ((value >> (length * 8 - 1)) != 0)
-                {
-                    length += 1;
                 }
                 return length;
             }
@@ -144,14 +140,16 @@ namespace libember { namespace ber
             static value_type decode(util::OctetStream& input, std::size_t encodedLength)
             {
                 typedef typename meta::MakeUnsigned<value_type>::type unsigned_type;
-
                 value_type value = 0;
                 for (std::size_t index = 0; index < encodedLength; ++index)
                 {
                     util::OctetStream::value_type byte = input.front();
-                    if ((index == 0) && (static_cast<unsigned_type>(byte) & 0x80U))
+                    if(meta::IsSigned<value_type>())
                     {
-                        value = static_cast<value_type>(-1);
+                        if ((index == 0) && (static_cast<unsigned_type>(byte) & 0x80U))
+                        {
+                            value = static_cast<value_type>(-1);
+                        }
                     }
                     value = static_cast<value_type>((value << 8) | byte);
                     input.consume();

@@ -142,7 +142,9 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <None Include="Documentation\Ember+ Functions.docx" />
     <None Include="Documentation\Ember+ Matrix.docx" />
+    <None Include="Documentation\Ember+ Standard Parameters.docx" />
     <None Include="Documentation\EmberLib.Glow.cd" />
     <None Include="Documentation\GlowDtd.asn1" />
   </ItemGroup>

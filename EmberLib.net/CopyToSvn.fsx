@@ -2,7 +2,7 @@
 open System.IO
 open System.Text.RegularExpressions
 
-let targetBaseDir = @"N:\MyProjects.svn\ember-sdk\Library\trunk\EmberLib.net\"
+let targetBaseDir = @"N:\MyProjects.svn\ember-sdk\trunk\EmberLib.net\"
 
 
 let isBinObjDir (path : string) =

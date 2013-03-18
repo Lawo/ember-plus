@@ -31,6 +31,7 @@ namespace EmberLib.Framing
       Glow = 1,
       Panel,
       Monitoring,
+      Discovery,
    }
 
    /// <summary>

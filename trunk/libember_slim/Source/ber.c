@@ -151,7 +151,9 @@ int ber_getIntegerLength(berint value)
 static int getLongLength(berlong value, bool isSigned)
 {
    qword qwValue = (qword)value;
-   qword mask = 0xFF80000000000000LL;
+   qword mask = isSigned
+                ? 0xFF80000000000000LL
+                : 0xFF00000000000000LL;
    int length = 8;
    qword topBitMask;
 

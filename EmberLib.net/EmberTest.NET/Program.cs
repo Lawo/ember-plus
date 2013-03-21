@@ -80,8 +80,13 @@ namespace EmberTest.NET
          var encoded = new byte[] { 0xC0, 0x04, 0xDF };
          var input = new BerMemoryInput(encoded);
          var decoded = BerEncoding.DecodeReal(input, encoded.Length);
+         Console.WriteLine("decoded={0}", decoded);
 
-         Console.WriteLine("value={0}", decoded);
+         var output = new BerMemoryOutput();
+         var reencoded = BerEncoding.EncodeReal(output, decoded);
+
+         var bytes = output.ToArray();
+         Console.WriteLine("reencoded={0}", BytesToString(bytes));
       }
       #endregion
 
@@ -326,6 +331,18 @@ namespace EmberTest.NET
          }
 
          return null;
+      }
+      #endregion
+
+      #region Implementation
+      string BytesToString(byte[] bytes)
+      {
+         var buffer = new StringBuilder();
+
+         foreach(var b in bytes)
+            buffer.AppendFormat("{0:X2} ", b);
+
+         return buffer.ToString().TrimEnd();
       }
       #endregion
    }

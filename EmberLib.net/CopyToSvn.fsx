@@ -5,12 +5,11 @@ open System.Text.RegularExpressions
 let targetBaseDir = @"N:\MyProjects.svn\ember-sdk\trunk\EmberLib.net\"
 
 
-let isBinObjDir (path : string) =
-    let path = path.ToLower()
-    path.Contains(@"\bin\")
-    || path.EndsWith(@"\bin")
-    || path.Contains(@"\obj\")
-    || path.EndsWith(@"\obj")
+let isBinObjDir =
+    // contains full word "\bin" or full word "\obj"
+    let regex = new Regex(@"(?:\\bin\b)|(?:\\obj\b)", RegexOptions.Compiled ||| RegexOptions.IgnoreCase)
+    fun (path : string) ->
+        regex.IsMatch(path)
 
 
 // copy new directories

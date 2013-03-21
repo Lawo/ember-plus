@@ -824,7 +824,9 @@ namespace BerLib
       static int GetLongLength(long value, bool isSigned)
       {
          var qword = (ulong)value;
-         ulong mask = 0xFF80000000000000UL;
+         var mask = isSigned
+                    ? 0xFF80000000000000UL
+                    : 0xFF00000000000000UL;
          var length = 8;
 
          if(value < 0)
@@ -836,7 +838,7 @@ namespace BerLib
          {
             ulong topBitMask = 0x8000000000000000UL;
 
-            for(; (qword & mask) == 0 && length > 1; mask >>= 8)
+            for( ; (qword & mask) == 0 && length > 1; mask >>= 8)
             {
                topBitMask >>= 8;
                length--;

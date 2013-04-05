@@ -187,6 +187,33 @@ namespace libember { namespace ber
     {
         return m_items.size();
     }
+
+    inline bool operator==(ObjectIdentifier const& left, ObjectIdentifier const& right)
+    {
+        if (left.size() == right.size())
+        {
+            ObjectIdentifier::const_iterator leftIt = left.begin();
+            ObjectIdentifier::const_iterator rightIt = right.begin();
+            ObjectIdentifier::const_iterator const leftLast = left.end();
+
+            for (/* Nothing */; leftIt != leftLast; ++leftIt, ++rightIt)
+            {
+                if (*leftIt != *rightIt)
+                    return false;
+            }
+
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+    inline bool operator!=(ObjectIdentifier const& left, ObjectIdentifier const& right)
+    {
+        return !(left == right);
+    }
 }
 }
 

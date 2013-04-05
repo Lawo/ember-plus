@@ -34,6 +34,11 @@ namespace libember { namespace glow
     {
         public:
             /**
+             * Default constructor, which initializes the type with ParameterType::None.
+             */
+            MinMax();
+
+            /**
              * Initialzes an integer value.
              * @param value Value to store.
              */
@@ -99,6 +104,11 @@ namespace libember { namespace glow
     /******************************************************
      * Inline Implementation                              *
      ******************************************************/
+
+    inline MinMax::MinMax()
+        : m_value(Variant::create<void*>(0))
+    {
+    }
 
     inline MinMax::MinMax(ber::Value const& value)
         : m_value(0)

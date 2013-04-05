@@ -38,6 +38,11 @@ namespace libember { namespace glow
     {
         public:
             /**
+             * Default constructor, which initializes the type with ParameterType::None.
+             */
+            Value();
+
+            /**
              * Initializes a Value instance that contains an integer value.
              * @param value The value to store
              */
@@ -145,6 +150,12 @@ namespace libember { namespace glow
     /******************************************************
      * Inline Implementation                              *
      ******************************************************/
+
+    inline Value::Value()
+        : m_value(Variant::create<void*>(0))
+    {
+
+    }
 
     inline Value::Value(ber::Value const& value)
         : m_value(0)

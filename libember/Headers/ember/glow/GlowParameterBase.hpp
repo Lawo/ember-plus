@@ -377,10 +377,23 @@ namespace libember { namespace glow
             Access access() const;
 
             /**
-             * Returns the parameter's value type.
+             * Returns the parameter's value type. If no type information is set, ParameterType::None is
+             * being returned.
              * @return The parameter's value type.
              */
             ParameterType type() const;
+
+            /**
+             * Returns the effective type of a parameter.
+             * @return The effective parameter type.
+             */
+            ParameterType effectiveType() const;
+
+            /**
+             * Test if this parameter contains an enumeration.
+             * @return true if the parameter contains an enumeration, otherwise false.
+             */
+            bool hasEnumeration() const;
 
             /**
              * Returns the unique stream identifier.

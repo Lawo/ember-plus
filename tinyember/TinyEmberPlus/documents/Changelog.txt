@@ -1,6 +1,16 @@
 TinyEmber+ Changelog
 ---------------------------------------
 
+Version 2.10.4
+- Fixed: when no DirFieldMask is set in a GetDirectory request, the response only contained the node number.
+- To import an existing gadget tree, the parameter type must no longer be set. The value can now also be used
+  to determine the parameter type.
+- Added the possibility to "unmount" a node. Unmounted nodes will not be reported in GetDirectory requests.
+- Added the possibility to mark a node as offline.
+
+Version 2.10.3
+- Added options to mark a node offline and to unmount a node.
+
 Version 2.10.1
 - Compiled with new libember (Dtd 2.10), which fixed a bug in the real encoding.
 

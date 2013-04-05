@@ -79,10 +79,29 @@ namespace gadget
             bool isDirty() const;
 
             /**
+             * Returns true if this node is online, otherwise false.
+             * @return true if this node is online, otherwise false.
+             */
+            bool isOnline() const;
+
+            /**
+             * Returns true if this node is mounted. An unmounted node
+             * will not be reported in GetDirectory requests.
+             * @return true if the node is mounted, otherwise false.
+             */
+            bool isMounted() const;
+
+            /**
              * Updates the description string of this node.
              * @param value The new description string to take.
              */
             void setDescription(String const& value);
+
+            /**
+             * Changes the online state of this node.
+             * @param isOnline The new online state.
+             */
+            void setIsOnline(bool isOnline);
 
             /**
              * Resets the dirty state if this node and optionally all children's states
@@ -91,6 +110,16 @@ namespace gadget
              *      cleared as well.
              */
             void clearDirtyState(bool recursive) const;
+
+            /**
+             * Remounts the node. Marks the node dirty and notifies its current state.
+             */
+            void mount();
+
+            /**
+             * Unmounts the node. Marks the node offline, dirty and notifies its current state.
+             */
+            void unmount();
 
             /**
              * Adds a new dirty state listener which receives a notification when
@@ -156,6 +185,8 @@ namespace gadget
             NodeCollection m_children;
             ParameterCollection m_parameters;
             std::list<DirtyStateListener*> m_listeners;
+            bool m_isOnline;
+            bool m_isMounted;
             mutable NodeFieldState m_state;
     };
 

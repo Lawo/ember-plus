@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>670</width>
-    <height>675</height>
+    <height>690</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -19,13 +19,13 @@
   <property name="minimumSize">
    <size>
     <width>670</width>
-    <height>675</height>
+    <height>690</height>
    </size>
   </property>
   <property name="maximumSize">
    <size>
     <width>670</width>
-    <height>675</height>
+    <height>690</height>
    </size>
   </property>
   <property name="windowTitle">
@@ -58,7 +58,7 @@
       <x>5</x>
       <y>40</y>
       <width>350</width>
-      <height>581</height>
+      <height>601</height>
      </rect>
     </property>
     <property name="animated">
@@ -114,7 +114,7 @@
       <x>370</x>
       <y>440</y>
       <width>271</width>
-      <height>181</height>
+      <height>201</height>
      </rect>
     </property>
     <property name="title">
@@ -307,6 +307,19 @@
      <property name="icon">
       <iconset resource="TinyEmberPlus.qrc">
        <normaloff>:/image/resources/flag-blue.png</normaloff>:/image/resources/flag-blue.png</iconset>
+     </property>
+    </widget>
+    <widget class="QCheckBox" name="alwaysReportOnlineStateCheckBox">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>170</y>
+       <width>221</width>
+       <height>17</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Always report online state</string>
      </property>
     </widget>
    </widget>
@@ -581,6 +594,22 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>alwaysReportOnlineStateCheckBox</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>TinyEmberPlusClass</receiver>
+   <slot>updateAlwaysReportOnlineState(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>490</x>
+     <y>639</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>334</x>
+     <y>344</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>loadFile()</slot>
@@ -596,5 +625,6 @@
   <slot>generateRandomValuesStateChanged(bool)</slot>
   <slot>updateStreamTimer()</slot>
   <slot>updateSendKeepAliveState(bool)</slot>
+  <slot>updateAlwaysReportOnlineState(bool)</slot>
  </slots>
 </ui>

@@ -122,6 +122,32 @@
     <pixmap resource="TinyEmberPlus.qrc">:/image/resources/ui-tooltip-balloon-bottom.png</pixmap>
    </property>
   </widget>
+  <widget class="QCheckBox" name="isOnlineCheckBox">
+   <property name="geometry">
+    <rect>
+     <x>100</x>
+     <y>70</y>
+     <width>70</width>
+     <height>17</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Is Online</string>
+   </property>
+  </widget>
+  <widget class="QCheckBox" name="unmountCheckBox">
+   <property name="geometry">
+    <rect>
+     <x>100</x>
+     <y>90</y>
+     <width>70</width>
+     <height>17</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Unmount</string>
+   </property>
+  </widget>
  </widget>
  <resources>
   <include location="TinyEmberPlus.qrc"/>
@@ -143,9 +169,44 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>isOnlineCheckBox</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>NodeView</receiver>
+   <slot>updateOnlineState(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>134</x>
+     <y>78</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>137</x>
+     <y>87</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>unmountCheckBox</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>NodeView</receiver>
+   <slot>updateUnmountState(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>134</x>
+     <y>128</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>137</x>
+     <y>87</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>updateUi()</slot>
   <slot>updateDescription()</slot>
+  <slot>updateOfflineState(bool)</slot>
+  <slot>updateOnlineState(bool)</slot>
+  <slot>updateUnmountState(bool)</slot>
  </slots>
 </ui>

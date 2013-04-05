@@ -34,6 +34,12 @@ class NodeView : public QFrame
         /** Updates the node's description string. */
         void updateDescription();
 
+        /** Updates the online state of this node. */
+        void updateOnlineState(bool state);
+
+        /** Updates the report state of this node. */
+        void updateUnmountState(bool state);
+
     private:
         Ui::NodeView* m_view;
         gadget::Node* m_node;

@@ -98,6 +98,13 @@ namespace glow
             NotificationBehavior notificationBehavior() const;
 
             /**
+             * Returns true if the online state should always be reported;
+             * false if it will be only be reported when the node is online.
+             * @return true if the online state should always be reported.
+             */ 
+            bool alwaysReportOnlineState() const;
+
+            /**
              * Updates the response behavior.
              * @param value The new response behavior.
              */
@@ -108,11 +115,20 @@ namespace glow
              * @param value The new notification behavior.
              */
             void setNotificationBehavior(NotificationBehavior const& value);
-            
+
+            /**
+             * Updates the "Always Report Online State" property. If set to
+             * true, a node always reports its online state. Otherwise,
+             * it is only reported when the node is offline.
+             * @param value The new value for this option.
+             */
+            void setAlwaysReportOnlineState(bool value);
+
         private:
             /** Constructor */
             Settings();
 
+            bool m_alwaysReportOnlineState;
             ResponseBehavior m_responseBehavior;
             NotificationBehavior m_notificationBehavior;
     };
@@ -120,6 +136,11 @@ namespace glow
     /**************************************************************************
      * Inline implementation                                                  *
      **************************************************************************/
+
+    inline bool Settings::alwaysReportOnlineState() const
+    {
+        return m_alwaysReportOnlineState;
+    }
 
     inline ResponseBehavior Settings::responseBehavior() const
     {
@@ -139,6 +160,11 @@ namespace glow
     inline void Settings::setNotificationBehavior(NotificationBehavior const& value)
     {
         m_notificationBehavior = value;
+    }
+
+    inline void Settings::setAlwaysReportOnlineState(bool value)
+    {
+        m_alwaysReportOnlineState = value;
     }
             
     inline Settings::Settings()

@@ -39,7 +39,27 @@ namespace libember { namespace ber
 
         static std::size_t encodedLength(value_type length)
         {
-            return 1U + ((length.value < 0x80 || length.isIndefinite()) ? 0U : EncodingTraits<LengthType>::encodedLength(length.value));  
+            if ((length.value < 0x80 || length.isIndefinite()))
+            {
+                return 1;
+            }
+            else
+            {
+                // Create a bit-mask that has the nine most significant bits set
+                LengthType const value = length.value;
+                LengthType mask = static_cast<LengthType>(~((static_cast<LengthType>(1U) << (((sizeof(LengthType) - 1) * 8) - 1)) - 1));
+                std::size_t encodedLength = sizeof(LengthType);
+                while ((encodedLength > 1) && ((value & mask) == 0))
+                {
+                    encodedLength -= 1;
+                    mask >>= 8;
+                }
+                if ((value >> (encodedLength * 8 - 1)) != 0)
+                {
+                    encodedLength += 1;
+                }
+                return 1 + encodedLength;
+            }
         }
 
         static void encode(util::OctetStream& output, value_type length)

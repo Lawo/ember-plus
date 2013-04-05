@@ -26,7 +26,7 @@ namespace libember { namespace ber
 {
     LIBEMBER_INLINE
     ObjectIdentifier::ObjectIdentifier(value_type value)
-        : m_items(value)
+        : m_items(1, value)
     {}
 
     LIBEMBER_INLINE

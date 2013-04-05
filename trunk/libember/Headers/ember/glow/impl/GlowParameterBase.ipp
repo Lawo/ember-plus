@@ -325,14 +325,14 @@ namespace libember { namespace glow
     MinMax GlowParameterBase::minimum() const
     {
         ber::Value const value = contents().get(GlowTags::ParameterContents::Minimum());
-        return MinMax(value);
+        return value ? MinMax(value) : MinMax();
     }
 
     LIBEMBER_INLINE
     MinMax GlowParameterBase::maximum() const
     {
         ber::Value const value = contents().get(GlowTags::ParameterContents::Maximum());
-        return MinMax(value);
+        return value ? MinMax(value) : MinMax();
     }
 
     LIBEMBER_INLINE
@@ -346,14 +346,14 @@ namespace libember { namespace glow
     Value GlowParameterBase::defaultValue() const
     {
         ber::Value const value = contents().get(GlowTags::ParameterContents::Default());
-        return Value(value);
+        return value ? Value(value) : Value();
     }
 
     LIBEMBER_INLINE
     Value GlowParameterBase::value() const
     {
         ber::Value const value = contents().get(GlowTags::ParameterContents::Value());
-        return Value(value);
+        return value ? Value(value) : Value();
     }
 
     LIBEMBER_INLINE
@@ -382,8 +382,32 @@ namespace libember { namespace glow
     ParameterType GlowParameterBase::type() const
     {
         ber::Value const value = contents().get(GlowTags::ParameterContents::Type());
-        int const type = util::ValueConverter::valueOf(value, int(1));
+        int const type = util::ValueConverter::valueOf(value, int(ParameterType::None));
         return static_cast<ParameterType::_Domain>(type);
+    }
+
+    LIBEMBER_INLINE
+    ParameterType GlowParameterBase::effectiveType() const
+    {
+        ParameterType const embeddedType = type();
+        if (embeddedType.value() == ParameterType::Trigger)
+            return embeddedType;
+
+        if (hasEnumeration())
+            return ParameterType::Enum;
+
+        Value const embeddedValue = value();
+
+        if (embeddedValue.type().value() != ParameterType::None)
+            return embeddedValue.type();
+
+        return embeddedType;
+    }
+
+    LIBEMBER_INLINE
+    bool GlowParameterBase::hasEnumeration() const
+    {
+        return contains(ParameterProperty::Enumeration) || contains(ParameterProperty::EnumMap);
     }
 
     LIBEMBER_INLINE

@@ -38,6 +38,10 @@ namespace libember { namespace glow { namespace util
             {
                 return static_cast<value_type>(value.as<long>());
             }
+            else if (value.typeId() == typeid(long long))
+            {
+                return static_cast<value_type>(value.as<long long>());
+            }
             return default_;
         }
     };
@@ -60,6 +64,37 @@ namespace libember { namespace glow { namespace util
             else if (value.typeId() == typeid(long))
             {
                 return value.as<long>();
+            }
+            else if (value.typeId() == typeid(long long))
+            {
+                return static_cast<value_type>(value.as<long long>());
+            }
+            return default_;
+        }
+    };
+
+    /**
+     * This specialization checks whether the leaf contains an int or long value and
+     * safely converts it.
+     */
+    template<>
+    struct ValueConverterTraits<long long>
+    {
+        typedef long long value_type;
+
+        static value_type valueOf(ber::Value const& value, value_type const& default_)
+        {
+            if (value.typeId() == typeid(int))
+            {
+                return value.as<int>();
+            }
+            else if (value.typeId() == typeid(long))
+            {
+                return value.as<long>();
+            }
+            else if (value.typeId() == typeid(long long))
+            {
+                return value.as<long long>();
             }
             return default_;
         }

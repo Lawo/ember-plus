@@ -31,6 +31,7 @@ namespace libember { namespace glow
         public:
             enum _Domain
             {
+                None = 0,
                 Integer = 1,
                 Real = 2,
                 String = 3,

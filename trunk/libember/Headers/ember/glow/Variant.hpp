@@ -38,7 +38,7 @@ namespace libember { namespace glow
         /** 
          * Factory method used to create a new instance of a variant.
          * @param value The value to store in the variant class.
-         * @return Returns the created Variant instance.
+         * @return The created Variant instance.
          * @note The Variant class uses reference counting, so release Ref must be called
          *      in order to indicate that the instance when it is no longer needed.
          */
@@ -431,6 +431,55 @@ namespace libember { namespace glow
 
             private:
                 value_type const m_value;
+            };
+
+
+        /**
+         * Variant specialization for the void type, which is used when no value exists.
+         */
+        template<>
+        struct VariantImpl<void*> : Variant
+        {
+            friend struct Variant;
+            typedef void* value_type;
+            public:
+                virtual long toInteger() const
+                {
+                    return 0;
+                }
+
+                virtual double toReal() const
+                {
+                    return 0.0;
+                }
+
+                virtual std::string toString() const
+                {
+                    return std::string();
+                }
+
+                virtual ber::Octets toOctets() const
+                {
+                    return ber::Octets();
+                }
+
+                virtual bool toBoolean() const
+                {
+                    return false;
+                }
+
+            private:
+                /**
+                 * Constructor initializing the variant with the provided octet string.
+                 * @param value Value to initialize the variant with.
+                 */
+                template<typename T>
+                VariantImpl(T const&)
+                    : Variant(ParameterType::None)
+                {}
+
+                /** Prohibit assignment */
+                VariantImpl& operator=(VariantImpl const&);
             };
     }
     

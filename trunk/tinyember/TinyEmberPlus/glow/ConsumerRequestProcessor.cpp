@@ -38,15 +38,18 @@ namespace glow
                         auto const responseType = settings.responseBehavior();
                         auto const flags = toNodeFieldFlags(glow.dirFieldMask());
 
-                        if (responseType.value() == ResponseBehavior::ForceQualifiedContainer)
+                        if(root->isMounted())
                         {
-                            util::NodeConverter::createQualified(response, root, flags.value);
+                            if (responseType.value() == ResponseBehavior::ForceQualifiedContainer)
+                            {
+                                util::NodeConverter::createQualified(response, root, flags.value);
+                            }
+                            else
+                            {
+                                util::NodeConverter::create(response, root, flags.value);
+                            }
+                            context.setTransmitResponse(true);
                         }
-                        else
-                        {
-                            util::NodeConverter::create(response, root, flags.value);
-                        }
-                        context.setTransmitResponse(true);
                     }
                     break;
                 }
@@ -101,7 +104,7 @@ namespace glow
 
     void ConsumerRequestProcessor::executeNode(GlowNodeBase const* request, Node* node, GlowRootElementCollection* response, Context& context)
     {
-        if (request->empty() == false)
+        if (request->empty() == false && node->isMounted() && node->isOnline())
         {
             auto children = request->children();
             
@@ -195,7 +198,10 @@ namespace glow
                 {
                     for each(auto child in nodes)
                     {
-                        util::NodeConverter::createQualified(response, child, nodeFlags.value);
+                        if(child->isMounted())
+                        {
+                            util::NodeConverter::createQualified(response, child, nodeFlags.value);
+                        }
                     }
 
                     for each(auto parameter in parameters)
@@ -316,7 +322,11 @@ namespace glow
     gadget::NodeField ConsumerRequestProcessor::toNodeFieldFlags(libember::glow::DirFieldMask const& mask)
     {
         auto const value = mask.value();
-        if (value != libember::glow::DirFieldMask::All)
+        if (value == libember::glow::DirFieldMask::Default)
+        {
+            return gadget::NodeField::All;
+        }
+        else if (value != libember::glow::DirFieldMask::All)
         {
             auto flags = 0;
             if (value & libember::glow::DirFieldMask::Description)
@@ -336,7 +346,12 @@ namespace glow
     gadget::ParameterField ConsumerRequestProcessor::toParameterFieldFlags(libember::glow::DirFieldMask const& mask)
     {
         auto const value = mask.value();
-        if (value != libember::glow::DirFieldMask::All)
+
+        if (value == libember::glow::DirFieldMask::Default)
+        {
+            return gadget::ParameterField::All;
+        }
+        else if (value != libember::glow::DirFieldMask::All)
         {
             auto flags = 0;
             if (value & libember::glow::DirFieldMask::Description)

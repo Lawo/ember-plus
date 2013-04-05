@@ -147,6 +147,10 @@ class TinyEmberPlus : public QMainWindow, public glow::ProviderInterface
          */
         void updateSendKeepAliveState(bool state);
 
+        /**
+         * Updates the "Always Report Online State" option
+         */
+        void updateAlwaysReportOnlineState(bool state);
     private:
         /**
          * Gets the stored root node from the tree view.
@@ -195,6 +199,7 @@ class TinyEmberPlus : public QMainWindow, public glow::ProviderInterface
         static const QString ConfigurationName;
         static const QString StreamTimerInterval;
         static const QString SendKeepAliveRequest;
+        static const QString AlwaysReportOnlineState;
 };
 
 #endif // TINYEMBERPLUS_H

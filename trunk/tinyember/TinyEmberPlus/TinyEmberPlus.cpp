@@ -22,6 +22,7 @@ using namespace ::serialization;
 
 const QString TinyEmberPlus::NotificationBehavior = "NotificationBehavior";
 const QString TinyEmberPlus::ResponseBehavior = "ResponseBehavior";
+const QString TinyEmberPlus::AlwaysReportOnlineState = "AlwaysReportOnlineState";
 const QString TinyEmberPlus::AutoLoadConfig = "AutoLoadConfig";
 const QString TinyEmberPlus::ConfigurationName = "ConfigurationName";
 const QString TinyEmberPlus::GenerateRandomValues = "GenerateRandomValues";
@@ -69,6 +70,10 @@ TinyEmberPlus::TinyEmberPlus(::glow::ConsumerProxy* proxy, QWidget *parent, Qt::
     {
         m_dialog.boxResponseBehavior->setCurrentIndex(0);
     }
+
+    auto const alwaysReportOnlineState = m_settingsSerializer.getOption(AlwaysReportOnlineState).toLower() == "true";
+    m_dialog.alwaysReportOnlineStateCheckBox->setChecked(alwaysReportOnlineState);
+
 
     auto const loadConfig = m_settingsSerializer.getOption(AutoLoadConfig).toLower() == "true";
     if (loadConfig)
@@ -266,6 +271,11 @@ void TinyEmberPlus::treeItemChanged(QTreeWidgetItem* item, QTreeWidgetItem*)
         {
             auto node = data.payload<gadget::Node>();
             view = ViewFactory::createView(parent, node);
+
+            if (node->parent() == nullptr)
+            {
+                node->registerListener(m_proxy);
+            }
         }
         else if (type.value() == TreeWidgetItemDataType::Parameter)
         {
@@ -372,6 +382,13 @@ void TinyEmberPlus::updateSendKeepAliveState(bool state)
     m_settingsSerializer.setOption(SendKeepAliveRequest, state ? "true" : "false");
     m_settingsSerializer.save();
     m_sendKeepAlive = state;
+}
+
+void TinyEmberPlus::updateAlwaysReportOnlineState(bool state)
+{
+    m_proxy->settings().setAlwaysReportOnlineState(state);
+    m_settingsSerializer.setOption(AlwaysReportOnlineState, state ? "true" : "false");
+    m_settingsSerializer.save();
 }
 
 void TinyEmberPlus::notifyAsync(libember::dom::Node* node, gadget::Subscriber* subscriber)

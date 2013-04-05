@@ -91,7 +91,7 @@ namespace serialization { namespace detail
                     {
                         auto& glowparam = dynamic_cast<GlowParameter&>(child);
                         auto identifier = glowparam.identifier();
-                        auto paramtype = glowparam.type();
+                        auto paramtype = glowparam.effectiveType();
                         switch(paramtype.value())
                         {
                             case libember::glow::ParameterType::Boolean:

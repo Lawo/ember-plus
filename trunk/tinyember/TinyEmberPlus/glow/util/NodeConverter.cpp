@@ -1,6 +1,7 @@
 #include <ember\Ember.hpp>
 #include "../../gadget/Node.h"
 #include "../../gadget/util/EntityPath.h"
+#include "glow/ConsumerProxy.h"
 #include "NodeConverter.h"
 
 using namespace gadget;
@@ -72,6 +73,18 @@ namespace glow { namespace util
 
         if (fields.isSet(NodeField::Description))
             m_node->setDescription(node->description());
+
+        if(ConsumerProxy::settings().alwaysReportOnlineState())
+        {
+            m_node->setIsOnline(node->isOnline());
+        }
+        else
+        {
+            if (node->isOnline() == false)
+            {
+                m_node->setIsOnline(false);
+            }
+        }
     }
 }
 }

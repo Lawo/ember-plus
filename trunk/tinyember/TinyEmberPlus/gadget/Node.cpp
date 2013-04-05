@@ -9,6 +9,8 @@ namespace gadget
         , m_number(number)
         , m_parent(parent)
         , m_state(NodeField::All)
+        , m_isOnline(true)
+        , m_isMounted(true)
     {
     }
 
@@ -66,6 +68,43 @@ namespace gadget
         return m_state.isDirty();
     }
 
+    bool Node::isOnline() const
+    {
+        return m_isOnline;
+    }
+
+    bool Node::isMounted() const
+    {
+        return m_isMounted;
+    }
+
+    void Node::mount()
+    {
+        if (m_isMounted == false)
+        {
+            m_isMounted = true;
+            m_state.set(NodeField::IsOnline);
+
+            notify();
+            markDirty();
+        }
+    }
+
+    void Node::unmount()
+    {
+        if (m_isMounted)
+        {
+            m_isOnline = false;
+            m_state.set(NodeField::IsOnline);
+
+            markDirty();
+
+            m_isMounted = false;
+            notify();
+        }
+    }
+
+
     NodeFieldState const& Node::dirtyState() const
     {
         return m_state;
@@ -77,6 +116,21 @@ namespace gadget
         {
             m_description = value;
             m_state.set(NodeField::Description);
+
+            notify();
+            markDirty();
+        }
+    }
+
+    void Node::setIsOnline(bool isOnline)
+    {
+        if (m_isOnline != isOnline)
+        {
+            m_isOnline = isOnline;
+            m_state.set(NodeField::IsOnline);
+
+            if (m_isOnline)
+                m_isMounted = true;
 
             notify();
             markDirty();

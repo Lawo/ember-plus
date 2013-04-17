@@ -58,6 +58,20 @@ namespace glow
         }
     }
 
+    void ConsumerProxy::writeProviderState(bool state)
+    {
+        auto const result = Encoder::createProviderStateMessage(state);
+        auto server = m_server;
+        if (server != nullptr)
+        {
+            auto const last = result.end();
+            for(auto it = result.begin(); it != last; ++it)
+            {
+                server->write(it->begin(), it->end());
+            }
+        }
+    }
+
     void ConsumerProxy::write(libember::glow::GlowContainer const* container)
     {
         // The createEmberMessage returns an Encoder which may contain several packets

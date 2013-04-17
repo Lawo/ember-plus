@@ -79,6 +79,13 @@ namespace glow
             static Encoder createEmberMessage(libember::glow::GlowContainer const* container);
 
             /**
+             * Creates a new provider state message.
+             * @param state The current provider state.
+             * @return A new Encoder instance which contains the encoded provider state message.
+             */
+            static Encoder createProviderStateMessage(bool state);
+
+            /**
              * Creates a new keep-alive request.
              * @return A new Encoder instance which contains the encoded keep-alive request.
              */

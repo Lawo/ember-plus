@@ -39,5 +39,7 @@
       <file>resources/application-wave.png</file>
       <file>resources/globe-small.png</file>
       <file>resources/document-globe.png</file>
+      <file>resources/control--yellow.png</file>
+      <file>resources/control.png</file>
    </qresource>
 </RCC>

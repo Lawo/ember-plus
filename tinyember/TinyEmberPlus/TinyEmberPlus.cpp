@@ -290,7 +290,7 @@ void TinyEmberPlus::treeItemChanged(QTreeWidgetItem* item, QTreeWidgetItem*)
 
 void TinyEmberPlus::showContextMenu(QPoint cursor)
 {
-    auto menu = GadgetViewContextMenu(m_dialog.gadgetTreeView, cursor);
+    auto menu = GadgetViewContextMenu(m_proxy, m_dialog.gadgetTreeView, cursor);
     menu.exec();
 }
 

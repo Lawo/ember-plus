@@ -13,12 +13,14 @@
 #include "gadget\IntegerParameter.h"
 #include "gadget\RealParameter.h"
 #include "gadget\StringParameter.h"
+#include "glow\ConsumerProxy.h"
 #include "util/StringConverter.h"
 
 using namespace gadget;
 
-GadgetViewContextMenu::GadgetViewContextMenu(QTreeWidget* view, QPoint const& cursor)
+GadgetViewContextMenu::GadgetViewContextMenu(::glow::ConsumerProxy* proxy, QTreeWidget* view, QPoint const& cursor)
     : m_view(view)
+    , m_proxy(proxy)
     , m_item(view->currentItem())
     , m_position(view->mapToGlobal(cursor))
     , m_removeItem(false)
@@ -92,9 +94,26 @@ void GadgetViewContextMenu::exec(gadget::Node* parent)
     auto const newnode = menu.addAction(QIcon(":/image/resources/node-insert-child.png"), "Create Node...");
     auto const newparameter = menu.addAction(QIcon(":/image/resources/node-insert-next.png"), "Create Parameter...");
     auto const deleteentity = menu.addAction(QIcon(":/image/resources/node-delete-child.png"), "Delete Node");
+    auto const sendProviderStateActive = parent != nullptr && parent->parent() == NULL
+        ? menu.addAction(QIcon(":/image/resources/control.png"), "Send 'Provider active' message")
+        : static_cast<QAction*>(nullptr);
+    auto const sendProviderStateBackup = parent != nullptr && parent->parent() == NULL
+        ? menu.addAction(QIcon(":/image/resources/control--yellow.png"), "Send 'Provider passive' message")
+        : static_cast<QAction*>(nullptr);
+
     auto const selection = menu.exec(m_position);
     
-    if (selection == deleteentity)
+    if(selection == sendProviderStateActive && sendProviderStateActive != nullptr)
+    {
+        if (m_proxy)
+            m_proxy->writeProviderState(true);
+    }
+    else if(selection == sendProviderStateBackup && sendProviderStateBackup != nullptr)
+    {
+        if (m_proxy)
+            m_proxy->writeProviderState(false);
+    }
+    else if (selection == deleteentity)
     {
         m_removeItem = true;
     }

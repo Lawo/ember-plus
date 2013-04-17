@@ -1,6 +1,12 @@
 TinyEmber+ Changelog
 ---------------------------------------
 
+Version 2.10.6
+- Fixed length encoding bug in libember.
+
+Version 2.10.5
+- Added the possibility to send a ProviderState message.
+
 Version 2.10.4
 - Fixed: when no DirFieldMask is set in a GetDirectory request, the response only contained the node number.
 - To import an existing gadget tree, the parameter type must no longer be set. The value can now also be used

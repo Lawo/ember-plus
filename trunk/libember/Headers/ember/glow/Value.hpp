@@ -44,21 +44,28 @@ namespace libember { namespace glow
 
             /**
              * Initializes a Value instance that contains an integer value.
-             * @param value The value to store
+             * @param value The value to store.
              */
             Value(long value);
 
             /**
              * Initializes a Value instance that contains an real value.
-             * @param value The value to store
+             * @param value The value to store.
              */
             Value(double value);
 
             /**
              * Initializes a Value instance that contains a std::string value.
-             * @param value The value to store
+             * @param value The value to store/
              */
             Value(std::string const& value);
+
+            /**
+             * Initializes a Value instance that contains a std::string value. The passed
+             * character pointer will be transformed into an std::string.
+             * @param value The value to store.
+             */
+            Value(char const* value);
 
             /**
              * Initializes a Value instance that contains a byte array, called Octet String.
@@ -197,6 +204,10 @@ namespace libember { namespace glow
 
     inline Value::Value(std::string const& value)
         : m_value(Variant::create(value))
+    {}
+
+    inline Value::Value(char const* value)
+        : m_value(Variant::create(std::string(value)))
     {}
 
     inline Value::Value(ber::Octets const& value)

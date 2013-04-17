@@ -213,14 +213,14 @@ namespace glow
                 {
                     auto local = util::NodeConverter::createStructured(response, node);
                     auto container = local->children();
-                    for each(auto child in nodes)
-                    {
-                        util::NodeConverter::create(container, child, nodeFlags.value);
-                    }
 
                     for each(auto parameter in parameters)
                     {
                         util::ParameterConverter::create(container, parameter, parameterFlags.value);
+                    }
+                    for each(auto child in nodes)
+                    {
+                        util::NodeConverter::create(container, child, nodeFlags.value);
                     }
                 }
             }

@@ -74,8 +74,8 @@ namespace libember { namespace ber
             }
             else
             {
-                output.append(static_cast<util::OctetStream::value_type>(0x80 | ber::encodedLength(length.value)));
-                ber::encode(output, length.value);
+                output.append(static_cast<util::OctetStream::value_type>(0x80 | ber::encodedLength(static_cast<int>(length.value))));
+                ber::encode(output, static_cast<int>(length.value));
             }
         }
     };

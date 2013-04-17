@@ -60,6 +60,12 @@ namespace glow
             void writeRequestKeepAlive();
 
             /**
+             * Sends a provider state message to all connected clients.
+             * @param state The current provider state.
+             */
+            void writeProviderState(bool state);
+
+            /**
              * Closes the tcp/ip listener and initiates a disconnect of all consumers.
              */
             void close();

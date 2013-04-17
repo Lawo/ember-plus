@@ -57,6 +57,18 @@ namespace glow
         return Encoder(encoder.begin(), encoder.end());
     }
 
+    Encoder Encoder::createProviderStateMessage(bool state)
+    {
+        libs101::StreamEncoder<unsigned char> encoder;
+        encoder.encode(0x00);                                           // Slot
+        encoder.encode(libs101::MessageType::EmBER);                    // Message type
+        encoder.encode(libs101::CommandType::ProviderState);            // Command
+        encoder.encode(0x01);                                           // Version
+        encoder.encode(state ? 0x01 : 0x00);
+        encoder.finish();
+        return Encoder(encoder.begin(), encoder.end());
+    }
+
     Encoder::Encoder(libember::dom::Node const* node)
         : m_isFirstPacket(true)
     {

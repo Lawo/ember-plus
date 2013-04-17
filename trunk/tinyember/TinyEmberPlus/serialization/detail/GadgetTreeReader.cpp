@@ -119,6 +119,10 @@ namespace serialization { namespace detail
 
                             case libember::glow::ParameterType::Trigger:
                                 break;
+
+                            default:
+                                volatile int x = paramtype.value();
+                                break;
                         }
                     }
                 }

@@ -43,7 +43,12 @@ namespace libs101
             /**
              * The response to the keep-alive request.
              */
-            KeepAliveResponse = 0x02
+            KeepAliveResponse = 0x02,
+
+            /**
+             * Reports the server status.
+             */
+            ProviderState = 0x03
         };
 
 

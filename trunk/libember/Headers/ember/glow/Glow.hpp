@@ -44,6 +44,10 @@
 #include "GlowSource.hpp"
 #include "GlowConnection.hpp"
 #include "GlowLabel.hpp"
+#include "GlowInvocation.hpp"
+#include "GlowInvocationResult.hpp"
+#include "GlowFunction.hpp"
+#include "GlowQualifiedFunction.hpp"
 
 #endif  // __LIBEMBER_GLOW_GLOW_HPP
 

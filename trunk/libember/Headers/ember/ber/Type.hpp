@@ -35,6 +35,8 @@ namespace libember { namespace ber
 
             enum _Domain
             {
+                None               = 0,
+
                 Boolean            = 1,
                 Integer            = 2,
                 Bitstring          = 3,

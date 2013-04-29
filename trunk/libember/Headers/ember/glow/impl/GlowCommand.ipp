@@ -23,6 +23,7 @@
 #include "../../util/Inline.hpp"
 #include "../util/ValueConverter.hpp"
 #include "../CommandType.hpp"
+#include "../GlowInvocation.hpp"
 #include "../GlowTags.hpp"
 #include "../GlowParameterBase.hpp"
 #include "../GlowNodeBase.hpp"
@@ -97,12 +98,29 @@ namespace libember { namespace glow
         const_iterator const result = util::find_tag(first, last, tag);
         if (result != last)
         {
-            int const value = util::ValueConverter::valueOf(&*result, -1);
+            int const value = util::ValueConverter::valueOf(&*result, static_cast<int>(CommandType::None));
             return static_cast<CommandType::_Domain>(value);
         }
         else
         {
-            return static_cast<CommandType::_Domain>(-1);
+            return CommandType::None;
+        }
+    }
+
+    LIBEMBER_INLINE
+    GlowInvocation const* GlowCommand::invocation() const
+    {
+        const_iterator const first = begin();
+        const_iterator const last = end();
+        const_iterator const result = util::find_tag(first, last, GlowTags::Command::Invocation());
+
+        if (result != last)
+        {
+            return dynamic_cast<GlowInvocation const*>(&*result);
+        }
+        else
+        {
+            return 0;
         }
     }
 
@@ -128,6 +146,19 @@ namespace libember { namespace glow
     void GlowCommand::setDirFieldMask(DirFieldMask const& value)
     {
         insert(end(), new dom::VariantLeaf(GlowTags::Command::DirFieldMask(), value.value()));
+    }
+
+    LIBEMBER_INLINE
+    void GlowCommand::setInvocation(GlowInvocation* value)
+    {
+        iterator const first = begin();
+        iterator const last = end();
+        iterator const result = util::find_tag(first, last, GlowTags::Command::Invocation());
+
+        if (result == last)
+        {
+            insert(last, value);
+        }
     }
 }
 }

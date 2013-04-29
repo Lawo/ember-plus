@@ -56,6 +56,12 @@ namespace libember { namespace glow
         return ber::make_tag(ber::Class::ContextSpecific, 1);
     }
 
+    LIBEMBER_INLINE
+    ber::Tag GlowTags::Command::Invocation()
+    {
+        return ber::make_tag(ber::Class::ContextSpecific, 2);
+    }
+
     /**
      * QualifiedNode Tags
      */
@@ -528,6 +534,132 @@ namespace libember { namespace glow
     ber::Tag GlowTags::Label::Description()
     {
         return ber::make_tag(ber::Class::ContextSpecific, 1);
+    }
+
+    /**
+     * Function tags
+     */
+
+    LIBEMBER_INLINE
+    ber::Tag GlowTags::Function::Number()
+    {
+        return ber::make_tag(ber::Class::ContextSpecific, 0);
+    }
+
+    LIBEMBER_INLINE
+    ber::Tag GlowTags::Function::Contents()
+    {
+        return ber::make_tag(ber::Class::ContextSpecific, 1);
+    }
+
+    LIBEMBER_INLINE
+    ber::Tag GlowTags::Function::Children()
+    {
+        return ber::make_tag(ber::Class::ContextSpecific, 2);
+    }
+
+    /**
+     * QualifiedFunction tags
+     */
+
+    LIBEMBER_INLINE
+    ber::Tag GlowTags::QualifiedFunction::Path()
+    {
+        return ber::make_tag(ber::Class::ContextSpecific, 0);
+    }
+
+    LIBEMBER_INLINE
+    ber::Tag GlowTags::QualifiedFunction::Contents()
+    {
+        return ber::make_tag(ber::Class::ContextSpecific, 1);
+    }
+
+    LIBEMBER_INLINE
+    ber::Tag GlowTags::QualifiedFunction::Children()
+    {
+        return ber::make_tag(ber::Class::ContextSpecific, 2);
+    }
+
+    /**
+     * FunctionContents tags
+     */
+
+    LIBEMBER_INLINE
+    ber::Tag GlowTags::FunctionContents::Identifier()
+    {
+        return ber::make_tag(ber::Class::ContextSpecific, 0);
+    }
+
+    LIBEMBER_INLINE
+    ber::Tag GlowTags::FunctionContents::Description()
+    {
+        return ber::make_tag(ber::Class::ContextSpecific, 1);
+    }
+
+    LIBEMBER_INLINE
+    ber::Tag GlowTags::FunctionContents::Arguments()
+    {
+        return ber::make_tag(ber::Class::ContextSpecific, 2);
+    }
+
+    LIBEMBER_INLINE
+    ber::Tag GlowTags::FunctionContents::Result()
+    {
+        return ber::make_tag(ber::Class::ContextSpecific, 2);
+    }
+
+    /**
+     * TupleItemDescription tags
+     */
+
+    LIBEMBER_INLINE
+    ber::Tag GlowTags::TupleItemDescription::Type()
+    {
+        return ber::make_tag(ber::Class::ContextSpecific, 0);
+    }
+
+    LIBEMBER_INLINE
+    ber::Tag GlowTags::TupleItemDescription::Name()
+    {
+        return ber::make_tag(ber::Class::ContextSpecific, 1);
+    }
+
+    /**
+     * Invocation tags
+     */
+
+    LIBEMBER_INLINE
+    ber::Tag GlowTags::Invocation::InvocationId()
+    {
+        return ber::make_tag(ber::Class::ContextSpecific, 0);
+    }
+
+    LIBEMBER_INLINE
+    ber::Tag GlowTags::Invocation::Arguments()
+    {
+        return ber::make_tag(ber::Class::ContextSpecific, 1);
+    }
+
+    /**
+     * InvocationResult tags
+     */
+
+    LIBEMBER_INLINE
+    ber::Tag GlowTags::InvocationResult::InvocationId()
+    {
+        return ber::make_tag(ber::Class::ContextSpecific, 0);
+    }
+
+    LIBEMBER_INLINE
+    ber::Tag GlowTags::InvocationResult::Success()
+    {
+        return ber::make_tag(ber::Class::ContextSpecific, 1);
+    }
+
+    LIBEMBER_INLINE
+        ber::Tag GlowTags::InvocationResult::Result()
+    {
+        return ber::make_tag(ber::Class::ContextSpecific, 2);
     }
 }
 }

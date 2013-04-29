@@ -36,7 +36,7 @@ namespace libember { namespace glow
             typedef value_type const& const_reference;
 
             /**
-             * Initializes a new Formula instance
+             * Initializes a new Formula instance.
              * @param providerToConsumer The term that can be used to compute the device value
              *      from a display value.
              * @param consumerToProvider The term that can be used to compute the display value
@@ -78,6 +78,17 @@ namespace libember { namespace glow
     inline Formula::const_reference Formula::providerToConsumer() const
     {
         return m_providerToConsumer;
+    }
+
+    inline bool operator ==(Formula const& lhs, Formula const& rhs)
+    {
+        return lhs.consumerToProvider() == rhs.consumerToProvider()
+            && lhs.providerToConsumer() == rhs.providerToConsumer();
+    }
+
+    inline bool operator !=(Formula const& lhs, Formula const& rhs)
+    {
+        return !(lhs == rhs);
     }
 }
 }

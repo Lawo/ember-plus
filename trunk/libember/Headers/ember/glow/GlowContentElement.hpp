@@ -185,7 +185,7 @@ namespace libember { namespace glow
     inline bool Contents::contains(PropertyType const& property) const
     {
         assureContainer();
-        bool const result = (m_propertyFlags & (1 << property.value)) != 0;
+        bool const result = (m_propertyFlags & (1 << property.value())) != 0;
         return result;
     }
 

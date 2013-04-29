@@ -44,6 +44,13 @@ namespace libember { namespace glow
              * @return The tag of the dir field mask.
              */
             static ber::Tag DirFieldMask();
+
+            /**
+             * Returns the tag of the invocation property, which contains a function that shall be executed
+             * by the provider.
+             * @return The tag of the invocation property.
+             */
+            static ber::Tag Invocation();
         };
 
         struct LIBEMBER_API NodeContents
@@ -519,6 +526,126 @@ namespace libember { namespace glow
              * @return Returns the context-specific tag identifying the label description.
              */
             static ber::Tag Description();
+        };
+
+        struct LIBEMBER_API Function
+        {
+            /**
+             * Returns the context-specific tag identifying the function number.
+             * @return The context-specific tag identifying the function number.
+             */
+            static ber::Tag Number();
+
+            /**
+             * Returns the context-specific tag identifying the function contents.
+             * @return The context-specific tag identifying the function contents.
+             */
+            static ber::Tag Contents();
+
+            /**
+             * Returns the context-specific tag identifying the function children.
+             * @return The context-specific tag identifying the function children.
+             */
+            static ber::Tag Children();
+        };
+
+        struct LIBEMBER_API QualifiedFunction
+        {
+            /**
+             * Returns the context-specific tag identifying the function path.
+             * @return The context-specific tag identifying the function path.
+             */
+            static ber::Tag Path();
+
+            /**
+             * Returns the context-specific tag identifying the function contents.
+             * @return The context-specific tag identifying the function contents.
+             */
+            static ber::Tag Contents();
+
+            /**
+             * Returns the context-specific tag identifying the function children.
+             * @return The context-specific tag identifying the function children.
+             */
+            static ber::Tag Children();
+        };
+
+        struct LIBEMBER_API FunctionContents
+        {
+            /**
+             * Returns the context-specific tag identifying the identifier of a function.
+             * @return The context-specific tag identifying the identifier of a function.
+             */
+            static ber::Tag Identifier();
+
+            /**
+             * Returns the context-specific tag identifying the description of a function.
+             * @return The context-specific tag identifying the description of a function.
+             */
+            static ber::Tag Description();
+
+            /**
+             * Returns the context-specific tag identifying the arguments of a function.
+             * @return The context-specific tag identifying the arguments of a function.
+             */
+            static ber::Tag Arguments();
+
+            /**
+             * Returns the context-specific tag identifying the result of a function.
+             * @return The context-specific tag identifying the result of a function.
+             */
+            static ber::Tag Result();
+        };
+
+        struct LIBEMBER_API TupleItemDescription
+        {
+            /**
+             * Returns the context-specific tag identifying the type of a TupleItemDescription.
+             * @return The context-specific tag identifying the type of a TupleItemDescription.
+             */
+            static ber::Tag Type();
+
+            /**
+             * Returns the context-specific tag identifying the name of a TupleItemDescription.
+             * @return The context-specific tag identifying the name of a TupleItemDescription.
+             */
+            static ber::Tag Name();
+        };
+
+        struct LIBEMBER_API Invocation
+        {
+            /**
+             * Returns the context-specific tag identifying the identifier of an Invocation.
+             * @return The context-specific tag identifying the identifier of an Invocation.
+             */
+            static ber::Tag InvocationId();
+
+            /**
+             * Returns the context-specific tag identifying the arguments of an Invocation.
+             * @return The context-specific tag identifying the arguments of an Invocation.
+             */
+            static ber::Tag Arguments();
+        };
+
+        struct LIBEMBER_API InvocationResult
+        {
+            /**
+             * Returns the context-specific tag identifying the identifier of an InvocationResult.
+             * @return The context-specific tag identifying the identifier of an InvocationResult.
+             */
+            static ber::Tag InvocationId();
+
+            /**
+             * Returns the context-specific tag identifying the success field of an InvocationResult.
+             * @return The context-specific tag identifying the success field of an InvocationResult.
+             */
+            static ber::Tag Success();
+
+            /**
+             * Returns the context-specific tag identifying the result value of an InvocationResult.
+             * @return The context-specific tag identifying the result value of an InvocationResult.
+             */
+            static ber::Tag Result();
         };
     };
 }

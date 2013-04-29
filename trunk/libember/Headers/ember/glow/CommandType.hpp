@@ -32,6 +32,12 @@ namespace libember { namespace glow
             enum _Domain
             {
                 /**
+                 * This value is returned when a GlowCommand instance does not contain
+                 * a command.
+                 */
+                None = 0,
+
+                /**
                  * The command number for a subscription request. The main
                  * purpose of this command is to subscribe to a stream parameter
                  * which contains audio level data.
@@ -49,15 +55,21 @@ namespace libember { namespace glow
                  * The command number for a GetDirectory command. This command
                  * is used to query the children of a node.
                  */
-                GetDirectory = 32
+                GetDirectory = 32,
+
+                /**
+                 * The command number for an invocation request. This command
+                 * is used let the provider execute a function.
+                 */
+                Invoke = 33
             };
 
             typedef int value_type;
 
         public:
             /**
-             * Initializes a command. 
-             * @param command Command type to initialize this instance with.
+             * Initializes a CommandType.
+             * @param command The command type to initialize this instance with.
              */
             CommandType(_Domain command)
                 : m_value(command)

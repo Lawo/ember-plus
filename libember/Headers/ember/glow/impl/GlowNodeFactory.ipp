@@ -23,6 +23,9 @@
 #include "../../util/Inline.hpp"
 #include "../GlowCommand.hpp"
 #include "../GlowElementCollection.hpp"
+#include "../GlowFunction.hpp"
+#include "../GlowInvocation.hpp"
+#include "../GlowInvocationResult.hpp"
 #include "../GlowStringIntegerCollection.hpp"
 #include "../GlowStringIntegerPair.hpp"
 #include "../GlowNode.hpp"
@@ -31,6 +34,8 @@
 #include "../GlowStreamCollection.hpp"
 #include "../GlowStreamDescriptor.hpp"
 #include "../GlowStreamEntry.hpp"
+#include "../GlowTupleItemDescription.hpp"
+#include "../GlowQualifiedFunction.hpp"
 #include "../GlowQualifiedNode.hpp"
 #include "../GlowQualifiedParameter.hpp"
 #include "../GlowMatrix.hpp"
@@ -107,6 +112,21 @@ namespace libember { namespace glow
 
             case GlowType::Label:
                 return new GlowLabel(tag);
+
+            case GlowType::Function:
+                return new GlowFunction(tag);
+
+            case GlowType::QualifiedFunction:
+                return new GlowQualifiedFunction(tag);
+
+            case GlowType::Invocation:
+                return new GlowInvocation(tag);
+
+            case GlowType::InvocationResult:
+                return new GlowInvocationResult(tag);
+
+            case GlowType::TupleItemDescription:
+                return new GlowTupleItemDescription(tag);
 
             default:
                 return 0;

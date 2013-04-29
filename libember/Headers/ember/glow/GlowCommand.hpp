@@ -27,6 +27,7 @@
 namespace libember { namespace glow
 { 
     /** Forward declaration **/
+    class GlowInvocation;
     class GlowNodeFactory;
     class GlowNodeBase;
     class GlowParameterBase;
@@ -89,11 +90,24 @@ namespace libember { namespace glow
             DirFieldMask dirFieldMask() const;
 
             /**
+             * Returns the invocation that contains a function to execute. If no
+             * invocation is present, this method returns null.
+             * @return An invocation associated with this command.
+             */
+            GlowInvocation const* invocation() const;
+
+            /**
              * Sets the dirFieldFlags. This property is only considered when the command type is
              * set to 'GetDirectory'.
              * @param value The flags value to set.
              */
             void setDirFieldMask(DirFieldMask const& value);
+
+            /**
+             * Sets an invocation request.
+             * @param value The invocation to attach to this command.
+             */
+            void setInvocation(GlowInvocation* value);
 
         private:
             /**

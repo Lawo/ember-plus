@@ -17,33 +17,13 @@
     Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
-#ifndef __LIBEMBER_GLOW_GLOWDTD_HPP
-#define __LIBEMBER_GLOW_GLOWDTD_HPP
-
-#include "../util/Api.hpp"
-
-#define LIBEMBER_GLOWDTD_VERSION_MAJOR    2
-#define LIBEMBER_GLOWDTD_VERSION_MINOR    20
-
-namespace libember { namespace glow
-{ 
-    /**
-     * Provides methods to retrieve the current dtd version
-     */
-    struct LIBEMBER_API GlowDtd
-    {
-         /**
-          * Returns the current dtd version, where the high byte contains the major version
-          * and the lower byte the minor version.
-          * @return The current dtd version.
-          */
-         static unsigned short version();
-    };
-}
-}
-
+/*
+ * Explicitly undefine the macro and include the implementation file manually afterwards.
+ * This is required in order to avoid multiply defined symbols when linking because of the
+ * definition being transitively set in headers indirectly included.
+ */
 #ifdef LIBEMBER_HEADER_ONLY
-#  include "impl/GlowDtd.ipp"
+#  undef LIBEMBER_HEADER_ONLY
 #endif
-
-#endif //  __LIBEMBER_GLOW_GLOWDTD_HPP
+#include "ember/glow/GlowInvocationResult.hpp"
+#include "ember/glow/impl/GlowInvocationResult.ipp"

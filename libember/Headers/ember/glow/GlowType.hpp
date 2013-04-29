@@ -50,7 +50,12 @@ namespace libember { namespace glow
                 Source = 15,
                 Connection = 16,
                 QualifiedMatrix = 17,
-                Label = 18
+                Label = 18,
+                Function = 19,
+                QualifiedFunction = 20,
+                TupleItemDescription = 21,
+                Invocation = 22,
+                InvocationResult = 23
             };
 
             typedef unsigned int value_type;
@@ -58,12 +63,12 @@ namespace libember { namespace glow
         public:
             /**
              * Constructor 
-             * @param type Glow Type.
+             * @param type The glow type to initialize this instance with.
              */
             GlowType(_Domain type);
 
             /**
-             * Return the type identifier.
+             * Returns the type identifier.
              * @return Returns the type identifier.
              */
             value_type value() const;
@@ -98,4 +103,4 @@ namespace libember { namespace glow
 }
 }
 
-#endif//__LIBEMBER_GLOW_GLOWTYPE_HPP
+#endif  // __LIBEMBER_GLOW_GLOWTYPE_HPP

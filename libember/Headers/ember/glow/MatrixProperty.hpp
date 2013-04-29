@@ -54,13 +54,18 @@ namespace libember { namespace glow
          * @param value The property type
          */
         MatrixProperty(_Domain value)
-            : value(value)
+            : m_value(value)
         {}
+
+        value_type value() const
+        {
+            return m_value;
+        }
 
         /**
          * Contains the property value passed to the constructor. 
          */
-        value_type value;
+        value_type m_value;
     };
 }
 }

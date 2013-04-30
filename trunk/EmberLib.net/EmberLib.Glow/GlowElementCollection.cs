@@ -59,12 +59,13 @@ namespace EmberLib.Glow
          && node.Tag != GlowTags.CollectionItem)
             throw new ArgumentException("When inserted into a GlowElementCollection, the GlowElement must have the ElementDefaultTag");
 
-         switch(node.Type)
+         switch(node.BerTypeNumber)
          {
             case GlowType.Command:
             case GlowType.Parameter:
             case GlowType.Node:
             case GlowType.Matrix:
+            case GlowType.Function:
                break;
 
             default:

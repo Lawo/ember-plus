@@ -33,11 +33,11 @@ namespace EmberLib.Glow
       /// Creates a new instance of GlowRootElementCollection.
       /// </summary>
       /// <remarks>
-      /// Usually, objects of type GlowRootStreamCollection are created using
+      /// Usually, objects of type GlowRootElementCollection are created using
       /// the Method CreateRoot(), which assigns the root tag to the new
       /// object.
       /// </remarks>
-      public GlowRootElementCollection(BerTag tag)
+      protected internal GlowRootElementCollection(BerTag tag)
       : base(tag, GlowType.RootElementCollection)
       {
       }

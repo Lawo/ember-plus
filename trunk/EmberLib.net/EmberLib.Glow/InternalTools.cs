@@ -29,32 +29,37 @@ namespace EmberLib.Glow
       public static GlowValue GetValue(EmberContainer container, BerTag tag)
       {
          var node = container[tag];
+
+         return node != null
+                ? GetValue(node)
+                : null;
+      }
+
+      public static GlowValue GetValue(EmberNode leaf)
+      {
          var value = null as GlowValue;
 
-         if(node != null)
+         switch(leaf.BerTypeNumber)
          {
-            switch(node.Type)
-            {
-               case BerType.Integer:
-                  value = new GlowValue(GetIntegerNodeValue(node));
-                  break;
+            case BerType.Integer:
+               value = new GlowValue(GetIntegerNodeValue(leaf));
+               break;
 
-               case BerType.Real:
-                  value = new GlowValue(((RealEmberLeaf)node).Value);
-                  break;
+            case BerType.Real:
+               value = new GlowValue(((RealEmberLeaf)leaf).Value);
+               break;
 
-               case BerType.UTF8String:
-                  value = new GlowValue(((StringEmberLeaf)node).Value);
-                  break;
+            case BerType.UTF8String:
+               value = new GlowValue(((StringEmberLeaf)leaf).Value);
+               break;
 
-               case BerType.Boolean:
-                  value = new GlowValue(((BooleanEmberLeaf)node).Value);
-                  break;
+            case BerType.Boolean:
+               value = new GlowValue(((BooleanEmberLeaf)leaf).Value);
+               break;
 
-               case BerType.OctetString:
-                  value = new GlowValue(((OctetStringEmberLeaf)node).Value);
-                  break;
-            }
+            case BerType.OctetString:
+               value = new GlowValue(((OctetStringEmberLeaf)leaf).Value);
+               break;
          }
 
          return value;
@@ -62,31 +67,26 @@ namespace EmberLib.Glow
 
       public static void InsertValue(EmberContainer container, BerTag tag, GlowValue value)
       {
+         var leaf = ValueToLeaf(tag, value);
+         
+         if(leaf == null)
+            throw new ArgumentException("Type not supported");
+
+         container.Insert(leaf);
+      }
+
+      public static EmberNode ValueToLeaf(BerTag tag, GlowValue value)
+      {
          switch(value.Type)
          {
-            case GlowParameterType.Integer:
-               container.Insert(new LongEmberLeaf(tag, value.Integer));
-               break;
-
-            case GlowParameterType.Real:
-               container.Insert(new RealEmberLeaf(tag, value.Real));
-               break;
-
-            case GlowParameterType.String:
-               container.Insert(new StringEmberLeaf(tag, value.String));
-               break;
-
-            case GlowParameterType.Boolean:
-               container.Insert(new BooleanEmberLeaf(tag, value.Boolean));
-               break;
-
-            case GlowParameterType.Octets:
-               container.Insert(new OctetStringEmberLeaf(tag, value.Octets));
-               break;
-
-            default:
-               throw new ArgumentException("Type not supported");
+            case GlowParameterType.Integer: return new LongEmberLeaf(tag, value.Integer);
+            case GlowParameterType.Real:    return new RealEmberLeaf(tag, value.Real);
+            case GlowParameterType.String:  return new StringEmberLeaf(tag, value.String);
+            case GlowParameterType.Boolean: return new BooleanEmberLeaf(tag, value.Boolean);
+            case GlowParameterType.Octets:  return new OctetStringEmberLeaf(tag, value.Octets);
          }
+
+         return null;
       }
 
       public static GlowMinMax GetMinMax(EmberContainer container, BerTag tag)
@@ -96,7 +96,7 @@ namespace EmberLib.Glow
 
          if(node != null)
          {
-            switch(node.Type)
+            switch(node.BerTypeNumber)
             {
                case BerType.Integer:
                   value = new GlowMinMax(GetIntegerNodeValue(node));
@@ -162,6 +162,17 @@ namespace EmberLib.Glow
 
             if(item != null)
                yield return item;
+         }
+      }
+
+      public static IEnumerable<GlowValue> EnumerateValues(EmberContainer container)
+      {
+         foreach(var ember in container)
+         {
+            var value = GetValue(ember);
+
+            if(value != null)
+               yield return value;
          }
       }
 

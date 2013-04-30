@@ -14,6 +14,7 @@ using EmberLib.Glow.Framing;
 using EmberLib.Glow.Formula;
 using EmberLib.Legacy.Extensions;
 using System.Globalization;
+using EmberLib.Glow.PowerPack.Xml;
 
 namespace EmberTest.NET
 {
@@ -31,8 +32,9 @@ namespace EmberTest.NET
 
       void Run()
       {
-         Test_Real();
-         Test_Real2();
+         Test_Functions();
+         //Test_Real();
+         //Test_Real2();
          //Test_GlowFormula();
          //Test_DOM();
          //Test_InteropDom();
@@ -44,19 +46,119 @@ namespace EmberTest.NET
       }
       #endregion
 
-      string GetXml(EmberNode node)
+      #region Functions
+      void Test_Functions()
       {
-         var xmlBuffer = new StringBuilder();
-         var xmlSettings = new XmlWriterSettings
+         Action<EmberSequence, string> fillTupleDescription =
+            (sequence, namePrefix) =>
+            {
+               sequence.Insert(new GlowTupleItemDescription(GlowParameterType.Integer) { Name = namePrefix + "1:integer" });
+               sequence.Insert(new GlowTupleItemDescription(GlowParameterType.Boolean) { Name = namePrefix + "2:boolean" });
+               sequence.Insert(new GlowTupleItemDescription(GlowParameterType.Octets) { Name = namePrefix + "3:octets" });
+               sequence.Insert(new GlowTupleItemDescription(GlowParameterType.Real) { Name = namePrefix + "4:real" });
+               sequence.Insert(new GlowTupleItemDescription(GlowParameterType.String) { Name = namePrefix + "5:string" });
+            };
+
+         // --------------- Invocation Command
+         var glowCommand = new GlowCommand(GlowCommandType.Invoke)
          {
-            OmitXmlDeclaration = true,
+            Invocation = new GlowInvocation(GlowTags.Command.Invocation)
+            {
+               InvocationId = 123,
+            },
          };
 
-         using(var writer = XmlWriter.Create(xmlBuffer, xmlSettings))
-            XmlExport.Export(node, writer);
+         var argsTuple = glowCommand.Invocation.EnsureArguments();
+         argsTuple.Insert(new IntegerEmberLeaf(GlowTags.CollectionItem, 456));
+         argsTuple.Insert(new BooleanEmberLeaf(GlowTags.CollectionItem, true));
+         argsTuple.Insert(new OctetStringEmberLeaf(GlowTags.CollectionItem, new byte[] { 250, 251, 253 }));
+         argsTuple.Insert(new RealEmberLeaf(GlowTags.CollectionItem, 123.321));
+         argsTuple.Insert(new StringEmberLeaf(GlowTags.CollectionItem, "hallo"));
 
-         return xmlBuffer.ToString(); ;
+         AssertCodecSanity(glowCommand);
+         Console.WriteLine(GetGlowXml(glowCommand));
+
+         // --------------- Function
+         var glowFunction = new GlowFunction(100)
+         {
+            Identifier = "testFunction",
+            Description = "Test Function",
+         };
+
+         fillTupleDescription(glowFunction.EnsureArguments(), "arg");
+         fillTupleDescription(glowFunction.EnsureResult(), "res");
+         glowFunction.EnsureChildren().Insert(glowCommand);
+
+         AssertCodecSanity(glowFunction);
+         Console.WriteLine(GetXml(glowFunction));
+
+         // --------------- QualifiedFunction
+         var glowQualifiedFunction = new GlowQualifiedFunction(new[] { 1, 2, 3 })
+         {
+            Identifier = "testFunction",
+            Description = "Test Function",
+         };
+
+         fillTupleDescription(glowQualifiedFunction.EnsureArguments(), "arg");
+         fillTupleDescription(glowQualifiedFunction.EnsureResult(), "res");
+         glowQualifiedFunction.EnsureChildren().Insert(glowCommand);
+
+         AssertCodecSanity(glowQualifiedFunction);
+         Console.WriteLine(GetXml(glowQualifiedFunction));
+
+         var glowRoot = GlowRootElementCollection.CreateRoot();
+         glowRoot.Insert(glowQualifiedFunction);
+         AssertGlowXmlSanity(glowRoot);
+
+         // --------------- InvocationResult
+         var glowInvocationResult = GlowInvocationResult.CreateRoot(glowCommand.Invocation.InvocationId.Value);
+         var resTuple = glowInvocationResult.EnsureResult();
+         resTuple.Insert(new IntegerEmberLeaf(GlowTags.CollectionItem, 456));
+         resTuple.Insert(new BooleanEmberLeaf(GlowTags.CollectionItem, true));
+         resTuple.Insert(new OctetStringEmberLeaf(GlowTags.CollectionItem, new byte[] { 250, 251, 253 }));
+         resTuple.Insert(new RealEmberLeaf(GlowTags.CollectionItem, 123.321));
+         resTuple.Insert(new StringEmberLeaf(GlowTags.CollectionItem, "hallo"));
+
+         AssertCodecSanity(glowInvocationResult);
+         Console.WriteLine(GetXml(glowInvocationResult));
+
+         AssertGlowXmlSanity(glowInvocationResult);
       }
+
+      void AssertCodecSanity(EmberNode ember)
+      {
+         var originalXml = GetXml(ember);
+         var output = new BerMemoryOutput();
+
+         ember.Encode(output);
+
+         var input = new BerMemoryInput(output.Memory);
+         var reader = new EmberReader(input);
+
+         var decoded = EmberNode.Decode(reader, new GlowApplicationInterface());
+         var decodedXml = GetXml(decoded);
+
+         if(originalXml != decodedXml)
+            throw new Exception("Codec error!");
+      }
+
+      void AssertGlowXmlSanity(GlowContainer glow)
+      {
+         var originalXml = GetXml(glow);
+         var glowXml = GetGlowXml(glow);
+
+         GlowContainer decoded;
+
+         using(var reader = new StringReader(glowXml))
+         using(var xmlReader = XmlReader.Create(reader))
+            decoded = GlowXmlImport.Import(xmlReader);
+
+         var decodedXml = GetXml(decoded);
+
+         if(originalXml != decodedXml)
+            throw new Exception("Codec error!");
+      }
+      #endregion
 
       #region Real Debug
       void Test_Real()
@@ -343,6 +445,32 @@ namespace EmberTest.NET
             buffer.AppendFormat("{0:X2} ", b);
 
          return buffer.ToString().TrimEnd();
+      }
+
+      string GetXmlBody(Action<XmlWriter> export)
+      {
+         var buffer = new StringBuilder();
+         var xws = new XmlWriterSettings
+         {
+            OmitXmlDeclaration = true,
+            Indent = true,
+            IndentChars = "  ",
+         };
+
+         using(var writer = XmlWriter.Create(buffer, xws))
+            export(writer);
+
+         return buffer.ToString();
+      }
+
+      string GetXml(EmberNode ember)
+      {
+         return GetXmlBody(writer => XmlExport.Export(ember, writer));
+      }
+
+      string GetGlowXml(GlowContainer glow)
+      {
+         return GetXmlBody(writer => GlowXmlExport.Export(glow, writer));
       }
       #endregion
    }

@@ -25,92 +25,71 @@ using BerLib;
 namespace EmberLib.Glow
 {
    /// <summary>
-   /// EmberPlus-Glow.Command [APPLICATION 2] Type
+   /// EmberPlus-Glow.QualifiedFunction [APPLICATION 20] Type
    /// </summary>
-   public class GlowCommand : GlowElement
+   public class GlowQualifiedFunction : GlowFunctionBase
    {
       /// <summary>
-      /// Creates a new instance of GlowCommand.
+      /// Creates a new instance of GlowQualifiedFunction.
       /// </summary>
-      /// <param name="tag">Either a specific tag or null when the node
+      /// <param name="tag">Either a specific tag or null when the function
       /// is to be inserted into a GlowElementCollection. The tag will be
       /// set to GlowTags.CollectionItem if the passed tag is null.</param>
-      protected internal GlowCommand(BerTag? tag)
-      : base(tag, GlowType.Command)
+      protected internal GlowQualifiedFunction(BerTag? tag)
+      : base(tag, GlowType.QualifiedFunction)
       {
       }
 
       /// <summary>
-      /// Creates an encodable instance of GlowCommand, specifying the value
-      /// of the "number" field.
+      /// Creates a new instance of GlowQualifiedFunction, specifying the value
+      /// of the "path" field.
       /// </summary>
-      /// <param name="number">The value of the "number" field.</param>
-      /// <param name="tag">Either a specific tag or null when the node
+      /// <param name="path">The value of the "path" (RELATIVE-OID) field.</param>
+      /// <param name="tag">Either a specific tag or null when the function
       /// is to be inserted into a GlowElementCollection. The tag will be
       /// set to GlowTags.CollectionItem if the passed tag is null.</param>
-      public GlowCommand(int number, BerTag? tag = null)
+      public GlowQualifiedFunction(int[] path, BerTag? tag = null)
       : this(tag)
       {
-         Number = number;
+         if(path == null)
+            throw new ArgumentNullException("path");
+
+         if(path.Length == 0)
+            throw new ArgumentException("path must always contain at least one sub-identifier: the number of the current function!");
+
+         Path = path;
       }
 
       /// <summary>
-      /// Gets or sets the "number" field
+      /// Gets the "path" (RELATIVE-OID) field
       /// </summary>
-      public int Number
+      public int[] Path
       {
-         get { return GetChildValue<int>(GlowTags.Command.Number); }
+         get { return GetChildValue<int[]>(GlowTags.QualifiedFunction.Path); }
          private set
          {
-            var tag = GlowTags.Command.Number;
+            var tag = GlowTags.QualifiedFunction.Path;
 
             AssertNotPresent(tag);
 
-            Insert(new IntegerEmberLeaf(tag, value));
+            Insert(new RelativeOidEmberLeaf(tag, value));
          }
       }
 
       /// <summary>
-      /// Gets or sets the "dirFieldMask" field.
-      /// Getter returns null if field not present.
+      /// Overriden to return GlowTags.QualifiedFunction.Children
       /// </summary>
-      public int? DirFieldMask
+      internal override BerTag ChildrenTag
       {
-         get
-         {
-            var childNode = this[GlowTags.Command.DirFieldMask] as IntegerEmberLeaf;
-
-            if(childNode != null)
-               return childNode.Value;
-
-            return null;
-         }
-         set
-         {
-            var tag = GlowTags.Command.DirFieldMask;
-
-            Remove(tag);
-            Insert(new IntegerEmberLeaf(tag, value.Value));
-         }
+         get { return GlowTags.QualifiedFunction.Children; }
       }
 
       /// <summary>
-      /// Gets or sets the "invocation" field.
-      /// Getter returns null if field not present.
+      /// Overriden to return GlowTags.QualifiedFunction.Children
       /// </summary>
-      public GlowInvocation Invocation
+      internal override BerTag ContentsTag
       {
-         get { return this[GlowTags.Command.Invocation] as GlowInvocation; }
-         set
-         {
-            var tag = GlowTags.Command.Invocation;
-
-            if(value.Tag != tag)
-               throw new ArgumentException("tag mismatch");
-
-            Remove(tag);
-            Insert(value);
-         }
+         get { return GlowTags.QualifiedFunction.Contents; }
       }
 
       /// <summary>

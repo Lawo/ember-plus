@@ -346,6 +346,30 @@ namespace EmberPlusProxy
 
             return newQualified;
          }
+
+         public GlowContainer Visit(GlowFunction glow, object state)
+         {
+            return WrapWithEndPointNode(glow);
+         }
+
+         public GlowContainer Visit(GlowQualifiedFunction glow, object state)
+         {
+            var newPath = PrependPathWithEndPointNumber(glow.Path);
+            var newQualified = new GlowQualifiedFunction(newPath);
+
+            foreach(var ember in glow)
+            {
+               if(ember.Tag != GlowTags.QualifiedMatrix.Path)
+                  newQualified.Insert(ember);
+            }
+
+            return newQualified;
+         }
+
+         public GlowContainer Visit(GlowInvocationResult glow, object state)
+         {
+            return glow;
+         }
          #endregion
       }
       #endregion
@@ -469,6 +493,22 @@ namespace EmberPlusProxy
             yield return newQualified;
          }
 
+         public IEnumerable<GlowContainer> Visit(GlowQualifiedFunction glow, object state)
+         {
+            EndPointNumber = glow.Path[0];
+
+            var newPath = glow.Path.Skip(1).ToArray();
+            var newQualified = new GlowQualifiedFunction(newPath);
+
+            foreach(var ember in glow)
+            {
+               if(ember.Tag != GlowTags.QualifiedFunction.Path)
+                  newQualified.Insert(ember);
+            }
+
+            yield return newQualified;
+         }
+
          public IEnumerable<GlowContainer> Visit(GlowStreamCollection glow, object state)
          {
             yield return glow;
@@ -495,6 +535,16 @@ namespace EmberPlusProxy
          }
 
          public IEnumerable<GlowContainer> Visit(GlowMatrix glow, object state)
+         {
+            throw new NotImplementedException();
+         }
+
+         public IEnumerable<GlowContainer> Visit(GlowFunction glow, object state)
+         {
+            throw new NotImplementedException();
+         }
+
+         public IEnumerable<GlowContainer> Visit(GlowInvocationResult glow, object state)
          {
             throw new NotImplementedException();
          }

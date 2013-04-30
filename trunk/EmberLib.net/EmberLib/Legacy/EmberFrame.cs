@@ -72,7 +72,7 @@ namespace EmberLib.Legacy
       protected internal override void InsertChildNode(EmberNode node)
       {
          if(node.Tag == CrcTag
-         && node.Type == BerType.OctetString)
+         && node.BerTypeNumber == BerType.OctetString)
             _crcNode = node;
          else
             base.InsertChildNode(node);
@@ -86,7 +86,7 @@ namespace EmberLib.Legacy
       internal override int Update()
       {
          var output = new BerMemoryOutput();
-         var implicitTag = new BerTag(BerClass.Universal, Type, true);
+         var implicitTag = new BerTag(BerClass.Universal, BerTypeNumber, true);
 
          var childrenLength = 0;
 

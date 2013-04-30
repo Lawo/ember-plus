@@ -183,6 +183,11 @@ namespace EmberPlusRouter
                         options.IsCompleteMatrixEnquired = true;
                         glowRoot.Insert(_dispatcher.ElementToGlow(matrix, options));
                         _source.SubscribeToMatrix(matrix, subscribe: true);
+                     },
+                     function =>
+                     {
+                        // "dir" in function
+                        glowRoot.Insert(_dispatcher.ElementToGlow(function, options));
                      });
 
                   parent.Accept(visitor, null); // run inline visitor against parent
@@ -192,11 +197,30 @@ namespace EmberPlusRouter
                else if(glow.Number == GlowCommandType.Unsubscribe)
                {
                   var visitor = new Model.InlineElementVisitor(
-                     onNode: null,
-                     onParameter: null,
-                     onMatrix: matrix =>
+                     onMatrix: matrix => _source.SubscribeToMatrix(matrix, subscribe: false));
+
+                  parent.Accept(visitor, null); // run inline visitor against parent
+               }
+               else if(glow.Number == GlowCommandType.Invoke)
+               {
+                  var visitor = new Model.InlineElementVisitor(
+                     onFunction: function =>
                      {
-                        _source.SubscribeToMatrix(matrix, subscribe: false);
+                        var invocation = glow.Invocation;
+                        var invocationResult = null as GlowInvocationResult;
+
+                        try { invocationResult = function.Invoke(invocation); }
+                        catch
+                        {
+                           if(invocation != null && invocation.InvocationId != null)
+                           {
+                              invocationResult = GlowInvocationResult.CreateRoot(invocation.InvocationId.Value);
+                              invocationResult.Success = false;
+                           }
+                        }
+
+                        if(invocationResult != null)
+                           _source.Write(invocationResult);
                      });
 
                   parent.Accept(visitor, null); // run inline visitor against parent
@@ -292,6 +316,14 @@ namespace EmberPlusRouter
          }
 
          protected override void OnStreamEntry(GlowStreamEntry glow)
+         {
+         }
+
+         protected override void OnFunction(GlowFunctionBase glow, int[] path)
+         {
+         }
+
+         protected override void OnInvocationResult(GlowInvocationResult glow)
          {
          }
 
@@ -451,6 +483,44 @@ namespace EmberPlusRouter
          if(state.DirFieldMask == GlowFieldFlags.All)
          {
             glow.MatrixType = GlowMatrixType.OneToOne;
+         }
+
+         return glow;
+      }
+
+      GlowContainer Model.IElementVisitor<ElementToGlowOptions, GlowContainer>.Visit(Model.Function element, ElementToGlowOptions state)
+      {
+         var glow = new GlowQualifiedFunction(element.Path);
+         var dirFieldMask = state.DirFieldMask;
+
+         if(dirFieldMask.HasBits(GlowFieldFlags.Identifier))
+            glow.Identifier = element.Identifier;
+
+         if(dirFieldMask.HasBits(GlowFieldFlags.Description)
+         && String.IsNullOrEmpty(element.Description) == false)
+            glow.Description = element.Description;
+
+         if(dirFieldMask == GlowFieldFlags.All)
+         {
+            if(element.Arguments != null)
+            {
+               var tupleItemDescs = from tuple in element.Arguments
+                                    select new GlowTupleItemDescription(tuple.Item2) { Name = tuple.Item1 };
+               var arguments = glow.EnsureArguments();
+
+               foreach(var tupleItemDesc in tupleItemDescs)
+                  arguments.Insert(tupleItemDesc);
+            }
+
+            if(element.Result != null)
+            {
+               var tupleItemDescs = from tuple in element.Result
+                                    select new GlowTupleItemDescription(tuple.Item2) { Name = tuple.Item1 };
+               var result = glow.EnsureResult();
+
+               foreach(var tupleItemDesc in tupleItemDescs)
+                  result.Insert(tupleItemDesc);
+            }
          }
 
          return glow;

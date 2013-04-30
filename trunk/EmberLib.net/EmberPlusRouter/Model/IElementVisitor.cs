@@ -14,23 +14,27 @@ namespace EmberPlusRouter.Model
       TResult Visit(NToNMatrix element, TState state);
       TResult Visit(DynamicMatrix element, TState state);
       TResult Visit(OneToOneMatrix element, TState state);
+      TResult Visit(Function element, TState state);
    }
 
    class InlineElementVisitor : Model.IElementVisitor<object, object>
    {
       public InlineElementVisitor(Action<Model.Node> onNode = null,
                                   Action<Model.ParameterBase> onParameter = null,
-                                  Action<Model.Matrix> onMatrix = null)
+                                  Action<Model.Matrix> onMatrix = null,
+                                  Action<Model.Function> onFunction = null)
       {
          _onNode = onNode;
          _onParameter = onParameter;
          _onMatrix = onMatrix;
+         _onFunction = onFunction;
       }
 
       #region Implementation
       Action<Model.Node> _onNode;
       Action<Model.ParameterBase> _onParameter;
       Action<Model.Matrix> _onMatrix;
+      Action<Model.Function> _onFunction;
       #endregion
 
       #region IElementVisitor<object,object> Members
@@ -86,6 +90,14 @@ namespace EmberPlusRouter.Model
       {
          if(_onMatrix != null)
             _onMatrix(element);
+
+         return null;
+      }
+
+      object Model.IElementVisitor<object, object>.Visit(Model.Function element, object state)
+      {
+         if(_onFunction != null)
+            _onFunction(element);
 
          return null;
       }

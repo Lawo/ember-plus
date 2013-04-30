@@ -33,7 +33,12 @@ namespace EmberLib.Glow
       /// Creates a new instance of GlowStreamCollection.
       /// </summary>
       /// <param name="tag">The tag of the new StreamCollection.</param>
-      public GlowStreamCollection(BerTag tag)
+      /// <remarks>
+      /// Usually, objects of type GlowStreamCollection are created using
+      /// the Method CreateRoot(), which assigns the root tag to the new
+      /// object.
+      /// </remarks>
+      protected internal GlowStreamCollection(BerTag tag)
       : base(tag, GlowType.StreamCollection, isOrdered: false)
       {
       }

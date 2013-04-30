@@ -25,44 +25,44 @@ using BerLib;
 namespace EmberLib.Glow
 {
    /// <summary>
-   /// EmberPlus-Glow.Command [APPLICATION 2] Type
+   /// EmberPlus-Glow.Function [APPLICATION 19] Type
    /// </summary>
-   public class GlowCommand : GlowElement
+   public class GlowFunction : GlowFunctionBase
    {
       /// <summary>
-      /// Creates a new instance of GlowCommand.
+      /// Creates a new instance of GlowFunction.
       /// </summary>
-      /// <param name="tag">Either a specific tag or null when the node
+      /// <param name="tag">Either a specific tag or null when the fnction
       /// is to be inserted into a GlowElementCollection. The tag will be
       /// set to GlowTags.CollectionItem if the passed tag is null.</param>
-      protected internal GlowCommand(BerTag? tag)
-      : base(tag, GlowType.Command)
+      protected internal GlowFunction(BerTag? tag)
+      : base(tag, GlowType.Function)
       {
       }
 
       /// <summary>
-      /// Creates an encodable instance of GlowCommand, specifying the value
+      /// Creates an encodable instance of GlowFunction, specifying the value
       /// of the "number" field.
       /// </summary>
       /// <param name="number">The value of the "number" field.</param>
-      /// <param name="tag">Either a specific tag or null when the node
+      /// <param name="tag">Either a specific tag or null when the function
       /// is to be inserted into a GlowElementCollection. The tag will be
       /// set to GlowTags.CollectionItem if the passed tag is null.</param>
-      public GlowCommand(int number, BerTag? tag = null)
+      public GlowFunction(int number, BerTag? tag = null)
       : this(tag)
       {
          Number = number;
       }
 
       /// <summary>
-      /// Gets or sets the "number" field
+      /// Gets the "number" field
       /// </summary>
       public int Number
       {
-         get { return GetChildValue<int>(GlowTags.Command.Number); }
+         get { return GetChildValue<int>(GlowTags.Function.Number); }
          private set
          {
-            var tag = GlowTags.Command.Number;
+            var tag = GlowTags.Function.Number;
 
             AssertNotPresent(tag);
 
@@ -71,46 +71,19 @@ namespace EmberLib.Glow
       }
 
       /// <summary>
-      /// Gets or sets the "dirFieldMask" field.
-      /// Getter returns null if field not present.
+      /// Overriden to return GlowTags.Node.Contents
       /// </summary>
-      public int? DirFieldMask
+      internal override BerLib.BerTag ContentsTag
       {
-         get
-         {
-            var childNode = this[GlowTags.Command.DirFieldMask] as IntegerEmberLeaf;
-
-            if(childNode != null)
-               return childNode.Value;
-
-            return null;
-         }
-         set
-         {
-            var tag = GlowTags.Command.DirFieldMask;
-
-            Remove(tag);
-            Insert(new IntegerEmberLeaf(tag, value.Value));
-         }
+         get { return GlowTags.Function.Contents; }
       }
 
       /// <summary>
-      /// Gets or sets the "invocation" field.
-      /// Getter returns null if field not present.
+      /// Overriden to return GlowTags.Node.Children
       /// </summary>
-      public GlowInvocation Invocation
+      internal override BerLib.BerTag ChildrenTag
       {
-         get { return this[GlowTags.Command.Invocation] as GlowInvocation; }
-         set
-         {
-            var tag = GlowTags.Command.Invocation;
-
-            if(value.Tag != tag)
-               throw new ArgumentException("tag mismatch");
-
-            Remove(tag);
-            Insert(value);
-         }
+         get { return GlowTags.Function.Children; }
       }
 
       /// <summary>
@@ -121,7 +94,7 @@ namespace EmberLib.Glow
       /// <param name="visitor">The visitor instance to accept</param>
       /// <param name="state">State object to pass to the visitor</param>
       /// <returns>The result of the visiting method</returns>
-      public override sealed TResult Accept<TState, TResult>(IGlowVisitor<TState, TResult> visitor, TState state)
+      public override TResult Accept<TState, TResult>(IGlowVisitor<TState, TResult> visitor, TState state)
       {
          return visitor.Visit(this, state);
       }

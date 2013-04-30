@@ -185,7 +185,7 @@ namespace EmberLib.Legacy.Extensions
          var child = node[tag];
 
          if(child != null
-         && child.Type == BerType.Integer)
+         && child.BerTypeNumber == BerType.Integer)
          {
             var integerLeaf = child as EmberLeaf<int>;
 
@@ -222,7 +222,7 @@ namespace EmberLib.Legacy.Extensions
          var child = node[tag];
 
          if(child != null
-         && child.Type == BerType.RelativeOid)
+         && child.BerTypeNumber == BerType.RelativeOid)
          {
             var leaf = child as RelativeOidEmberLeaf;
 

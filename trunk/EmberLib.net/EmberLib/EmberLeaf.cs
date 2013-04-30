@@ -204,7 +204,7 @@ namespace EmberLib
       : base(tag)
       {
          Value = value;
-         Type = BerType.Boolean;
+         BerTypeNumber = BerType.Boolean;
       }
 
       public override TResult Accept<TState, TResult>(IEmberVisitor<TState, TResult> visitor, TState state)
@@ -253,7 +253,7 @@ namespace EmberLib
       : base(tag)
       {
          Value = value;
-         Type = BerType.Integer;
+         BerTypeNumber = BerType.Integer;
       }
 
       public override TResult Accept<TState, TResult>(IEmberVisitor<TState, TResult> visitor, TState state)
@@ -302,7 +302,7 @@ namespace EmberLib
       : base(tag)
       {
          Value = value;
-         Type = BerType.Integer;
+         BerTypeNumber = BerType.Integer;
       }
 
       public override TResult Accept<TState, TResult>(IEmberVisitor<TState, TResult> visitor, TState state)
@@ -348,7 +348,7 @@ namespace EmberLib
       : base(tag)
       {
          Value = value;
-         Type = BerType.Real;
+         BerTypeNumber = BerType.Real;
       }
 
       public override TResult Accept<TState, TResult>(IEmberVisitor<TState, TResult> visitor, TState state)
@@ -398,7 +398,7 @@ namespace EmberLib
       : base(tag)
       {
          Value = value ?? string.Empty;
-         Type = BerType.UTF8String;
+         BerTypeNumber = BerType.UTF8String;
       }
 
       internal override void EncodeOverride(IBerOutput output)
@@ -457,7 +457,7 @@ namespace EmberLib
             throw new ArgumentNullException("value");
 
          Value = value;
-         Type = BerType.OctetString;
+         BerTypeNumber = BerType.OctetString;
       }
 
       internal override void EncodeOverride(IBerOutput output)
@@ -521,7 +521,7 @@ namespace EmberLib
                  ? value
                  : new int[] { 0, 0 };
 
-         Type = BerType.ObjectIdentifier;
+         BerTypeNumber = BerType.ObjectIdentifier;
       }
 
       internal override void EncodeOverride(IBerOutput output)
@@ -577,7 +577,7 @@ namespace EmberLib
       : base(tag)
       {
          Value = value;
-         Type = BerType.RelativeOid;
+         BerTypeNumber = BerType.RelativeOid;
       }
 
       internal override void EncodeOverride(IBerOutput output)

@@ -194,6 +194,27 @@ namespace EmberLib.Framing
       }
 
       /// <summary>
+      /// Frames a "Provider State" message into a byte array.
+      /// </summary>
+      /// <param name="slotId">The S101 slot id to address.</param>
+      /// <param name="providerState">One of the values defined in the ProtocolParameters.ProviderState type.</param>
+      /// <param name="length">Receives the length of the framed package.</param>
+      /// <returns>A byte array containing the framed package.</returns>
+      public static byte[] WriteProviderState(int slotId, byte providerState, out int length)
+      {
+         var bytes = new byte[]
+         {
+            (byte)(slotId & 0xFF),
+            ProtocolParameters.MessageId,
+            ProtocolParameters.Commands.ProviderState,
+            1,
+            providerState,
+         };
+
+         return S101.TxFrame.WriteMessage(bytes, bytes.Length, out length);
+      }
+
+      /// <summary>
       /// Can be overridden to return application-defined header bytes.
       /// </summary>
       /// <param name="length">Receives the number of valid bytes in the returned byte array.</param>

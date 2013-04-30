@@ -36,5 +36,8 @@ namespace EmberLib.Glow
       TResult Visit(GlowSubContainer glow, TState state);
       TResult Visit(GlowMatrix glow, TState state);
       TResult Visit(GlowQualifiedMatrix glow, TState state);
+      TResult Visit(GlowFunction glow, TState state);
+      TResult Visit(GlowQualifiedFunction glow, TState state);
+      TResult Visit(GlowInvocationResult glow, TState state);
    }
 }

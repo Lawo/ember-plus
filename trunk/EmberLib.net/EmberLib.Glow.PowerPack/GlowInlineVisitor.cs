@@ -27,17 +27,20 @@ namespace EmberLib.Glow.PowerPack
    {
       public GlowInlineVisitor(Action<GlowNodeBase> onNode = null,
                                Action<GlowParameterBase> onParameter = null,
-                               Action<GlowMatrixBase> onMatrix = null)
+                               Action<GlowMatrixBase> onMatrix = null,
+                               Action<GlowFunctionBase> onFunction = null)
       {
          _onNode = onNode;
          _onParameter = onParameter;
          _onMatrix = onMatrix;
+         _onFunction = onFunction;
       }
 
       #region Implementation
       Action<GlowNodeBase> _onNode;
       Action<GlowParameterBase> _onParameter;
       Action<GlowMatrixBase> _onMatrix;
+      Action<GlowFunctionBase> _onFunction;
       #endregion
 
       #region IGlowVisitor<object,object> Members
@@ -107,6 +110,28 @@ namespace EmberLib.Glow.PowerPack
          return false;
       }
 
+      bool IGlowVisitor<object, bool>.Visit(GlowFunction glow, object state)
+      {
+         if(_onFunction != null)
+         {
+            _onFunction(glow);
+            return true;
+         }
+
+         return false;
+      }
+
+      bool IGlowVisitor<object, bool>.Visit(GlowQualifiedFunction glow, object state)
+      {
+         if(_onFunction != null)
+         {
+            _onFunction(glow);
+            return true;
+         }
+
+         return false;
+      }
+
       bool IGlowVisitor<object, bool>.Visit(GlowCommand glow, object state)
       {
          return false;
@@ -128,6 +153,11 @@ namespace EmberLib.Glow.PowerPack
       }
 
       bool IGlowVisitor<object, bool>.Visit(GlowSubContainer glow, object state)
+      {
+         return false;
+      }
+
+      bool IGlowVisitor<object, bool>.Visit(GlowInvocationResult glow, object state)
       {
          return false;
       }

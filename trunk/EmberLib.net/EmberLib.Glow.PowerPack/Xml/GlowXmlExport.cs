@@ -73,30 +73,7 @@ namespace EmberLib.Glow.PowerPack.Xml
 
       void ConvertValue(string elementName, GlowValue value, XmlWriter writer)
       {
-         var typeStr = null as string;
-
-         switch(value.Type)
-         {
-            case GlowParameterType.Boolean:
-               typeStr = "BOOLEAN";
-               break;
-
-            case GlowParameterType.Integer:
-               typeStr = "INTEGER";
-               break;
-
-            case GlowParameterType.Octets:
-               typeStr = "OCTET STRING";
-               break;
-
-            case GlowParameterType.Real:
-               typeStr = "REAL";
-               break;
-
-            case GlowParameterType.String:
-               typeStr = "UTF8";
-               break;
-         }
+         var typeStr = ConvertParameterType(value.Type);
 
          if(typeStr != null)
          {
@@ -105,6 +82,20 @@ namespace EmberLib.Glow.PowerPack.Xml
             writer.WriteString(value.ToString(CultureInfo.InvariantCulture));
             writer.WriteEndElement();
          }
+      }
+
+      string ConvertParameterType(int parameterType)
+      {
+         switch(parameterType)
+         {
+            case GlowParameterType.Boolean: return "BOOLEAN";
+            case GlowParameterType.Integer: return "INTEGER";
+            case GlowParameterType.Octets:  return "OCTET STRING";
+            case GlowParameterType.Real:    return "REAL";
+            case GlowParameterType.String:  return "UTF8";
+         }
+
+         return null;
       }
 
       void ConvertMinMax(string elementName, GlowMinMax value, XmlWriter writer)
@@ -160,7 +151,7 @@ namespace EmberLib.Glow.PowerPack.Xml
             glow.Format.Do(value => writer.WriteElementString("format", value));
             glow.Step.Do(value => writer.WriteElementString("step", XmlConvert.ToString(value)));
             glow.Access.Do(value => writer.WriteElementString("access", XmlConvert.ToString(value)));
-            glow.ParameterType.Do(value => writer.WriteElementString("type", XmlConvert.ToString(value)));
+            glow.Type.Do(value => writer.WriteElementString("type", XmlConvert.ToString(value)));
             glow.IsOnline.Do(value => writer.WriteElementString("isOnlin", XmlConvert.ToString(value)));
             glow.StreamIdentifier.Do(value => writer.WriteElementString("streamIdentifier", XmlConvert.ToString(value)));
 
@@ -326,6 +317,53 @@ namespace EmberLib.Glow.PowerPack.Xml
             writer.WriteEndElement();
          }
       }
+
+      void ConvertFunction(GlowFunctionBase glow, XmlWriter writer)
+      {
+         if(glow.HasContents)
+         {
+            writer.WriteStartElement("contents");
+            glow.Identifier.Do(value => writer.WriteElementString("identifier", value));
+            glow.Description.Do(value => writer.WriteElementString("description", value));
+
+            var arguments = glow.TypedArguments;
+            if(arguments != null)
+            {
+               writer.WriteStartElement("arguments");
+               ConvertTupleDescription(arguments, writer);
+               writer.WriteEndElement();
+            }
+
+            var result = glow.TypedResult;
+            if(result != null)
+            {
+               writer.WriteStartElement("result");
+               ConvertTupleDescription(result, writer);
+               writer.WriteEndElement();
+            }
+
+            writer.WriteEndElement();
+         }
+
+         var children = glow.Children;
+         if(children != null)
+         {
+            writer.WriteStartElement("children");
+            children.Accept(this, writer);
+            writer.WriteEndElement();
+         }
+      }
+
+      void ConvertTupleDescription(IEnumerable<GlowTupleItemDescription> tupleDescription, XmlWriter writer)
+      {
+         foreach(var itemDescriptor in tupleDescription)
+         {
+            writer.WriteStartElement("TupleItemDescription");
+            writer.WriteElementString("type", ConvertParameterType(itemDescriptor.Type));
+            itemDescriptor.Name.Do(value => writer.WriteElementString("name", value));
+            writer.WriteEndElement();
+         }
+      }
       #endregion
 
       #region IGlowVisitor<XmlWriter,object> Members
@@ -334,6 +372,25 @@ namespace EmberLib.Glow.PowerPack.Xml
          state.WriteStartElement("Command");
          state.WriteAttributeString("number", XmlConvert.ToString(glow.Number));
          glow.DirFieldMask.Do(value => state.WriteElementString("dirFieldMask", XmlConvert.ToString(value)));
+
+         var invocation = glow.Invocation;
+         if(invocation != null)
+         {
+            state.WriteStartElement("invocation");
+            invocation.InvocationId.Do(value => state.WriteElementString("invocationId", XmlConvert.ToString(value)));
+
+            var arguments = invocation.ArgumentValues;
+            if(arguments != null)
+            {
+               state.WriteStartElement("arguments");
+               foreach(var value in arguments)
+                  ConvertValue("Value", value, state);
+               state.WriteEndElement();
+            }
+
+            state.WriteEndElement();
+         }
+
          state.WriteEndElement();
          return null;
       }
@@ -436,6 +493,49 @@ namespace EmberLib.Glow.PowerPack.Xml
          state.WriteAttributeString("path", ConvertPath(glow.Path));
 
          ConvertMatrix(glow, state);
+
+         state.WriteEndElement();
+         return null;
+      }
+
+      object IGlowVisitor<XmlWriter, object>.Visit(GlowFunction glow, XmlWriter state)
+      {
+         state.WriteStartElement("Function");
+         state.WriteAttributeString("number", XmlConvert.ToString(glow.Number));
+
+         ConvertFunction(glow, state);
+
+         state.WriteEndElement();
+         return null;
+      }
+
+      object IGlowVisitor<XmlWriter, object>.Visit(GlowQualifiedFunction glow, XmlWriter state)
+      {
+         state.WriteStartElement("QualifiedFunction");
+         state.WriteAttributeString("path", ConvertPath(glow.Path));
+
+         ConvertFunction(glow, state);
+
+         state.WriteEndElement();
+         return null;
+      }
+
+      object IGlowVisitor<XmlWriter, object>.Visit(GlowInvocationResult glow, XmlWriter state)
+      {
+         state.WriteStartElement("Root");
+         state.WriteAttributeString("type", "InvocationResult");
+         state.WriteAttributeString("invocationId", XmlConvert.ToString(glow.InvocationId));
+
+         glow.Success.Do(value => state.WriteElementString("success", XmlConvert.ToString(value)));
+
+         var result = glow.ResultValues;
+         if(result != null)
+         {
+            state.WriteStartElement("result");
+            foreach(var value in result)
+               ConvertValue("Value", value, state);
+            state.WriteEndElement();
+         }
 
          state.WriteEndElement();
          return null;

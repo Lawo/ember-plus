@@ -40,3 +40,5 @@ using System.Runtime.InteropServices;
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
 [assembly: Guid("75ae271f-b007-4482-b02a-9c68c8367f39")]
+
+[assembly: InternalsVisibleTo("EmberLib.Glow.PowerPack")]

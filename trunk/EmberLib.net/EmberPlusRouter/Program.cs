@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using EmberLib.Framing;
+using EmberLib.Glow;
 using EmberLib.Glow.Framing;
 
 namespace EmberPlusRouter
@@ -75,8 +76,72 @@ namespace EmberPlusRouter
          CreateDynamic(router, 3, dispatcher);
          CreateSparse(router, 4, dispatcher);
          CreateOneToOne(router, 5, dispatcher);
+         CreateIdentity(router, 6, dispatcher);
 
          return root;
+      }
+
+      static void CreateIdentity(Model.Node router, int nodeNumber, Dispatcher dispatcher)
+      {
+         var identity = new Model.Node(nodeNumber, router, "identity");
+         var licensedParam = new Model.IntegerParameter(1, identity, "isLicensed", dispatcher, 0, 1, isWriteable: false) { Value = 0 };
+
+         new Model.Function(2,
+                            identity,
+                            "enterLicenseKey",
+                            new[] { Tuple.Create("licenseKey", GlowParameterType.String) },
+                            new[] { Tuple.Create("isKeyValid", GlowParameterType.Boolean) },
+                            args =>
+                            {
+                               var isLicensed = args[0].String == "123456";
+
+                               if(isLicensed)
+                                 licensedParam.Value = 1;
+
+                               return new[] { new GlowValue(isLicensed) };
+                            });
+
+         new Model.Function(3,
+                            identity,
+                            "add",
+                            new[] { Tuple.Create("arg1", GlowParameterType.Integer), Tuple.Create("arg2", GlowParameterType.Integer) },
+                            new[] { Tuple.Create("sum", GlowParameterType.Integer) },
+                            args =>
+                            {
+                               var sum = args[0].Integer + args[1].Integer;
+                               if(sum > 1000)
+                                  throw new Exception();
+                               return new[] { new GlowValue(sum) };
+                            });
+
+         new Model.Function(4,
+                            identity,
+                            "nothing",
+                            null,
+                            null,
+                            _ =>
+                            {
+                               Console.WriteLine("Doing Nothing!");
+                               return null;
+                            });
+
+         new Model.Function(5,
+                            identity,
+                            "manyArgs",
+                            new[]
+                            {
+                               Tuple.Create("arg1", GlowParameterType.Integer),
+                               Tuple.Create("arg2", GlowParameterType.Integer),
+                               Tuple.Create("arg3", GlowParameterType.Integer),
+                               Tuple.Create("arg4", GlowParameterType.Integer),
+                               Tuple.Create("arg5", GlowParameterType.Integer),
+                            },
+                            null,
+                            _ =>
+                            {
+                               Console.WriteLine("Many args but nothing to do!");
+                               return null;
+                            });
       }
 
       static string IdentOf(string baseStr, int n)

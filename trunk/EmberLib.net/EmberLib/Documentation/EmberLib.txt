@@ -6,10 +6,17 @@ L-S-B Broadcast Technologies GmbH
 =============================================
 
 author:  pbo@l-s-b.de
-date:    2013-03-18
+date:    2013-04-30
 
 
 ------------------------------- Change Log:
+- 1.2.0:
+  - Implements Glow DTD 2.20 (function extensions)
+
+- 1.1.90:
+  - EmberLib.Glow: Function extensions (alpha stage)
+  - EmberLib: Renamed property EmberNode.Type to BerTypeNumber
+
 - 1.1.2:
   - FIXED: REAL bug that treated the mantissa as signed
 

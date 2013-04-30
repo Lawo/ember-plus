@@ -8,10 +8,16 @@ L-S-B Broadcast Technologies GmbH
 =============================================
 
 authors: pbo@l-s-b.de, rni@l-s-b.de
-date:    2013-03-18
+date:    2013-04-30
 
 
 ------------------------------- Change Log:
+- 1.20:
+  - Implements Glow DTD 2.20 (function extensions)
+  - split files "emberglow.h" and "emberglow.c"
+    into "glow.h", "glowtx.h", "glowrx.h", "glow.c",
+    "glowtx.c" and "glowrx.c".
+
 - 1.12:
   - FIXED: REAL bug that treated the mantissa as signed
 

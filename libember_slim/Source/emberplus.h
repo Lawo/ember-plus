@@ -25,9 +25,10 @@
   * The upper byte is the major version number.
   * The lower byte is the minor version number.
   */
-#define EMBER_LIBRARY_VERSION (0x010C)
+#define EMBER_LIBRARY_VERSION (0x0114)
 
-#include "emberglow.h"
+#include "glowtx.h"
+#include "glowrx.h"
 
 /**
   * Initializes internal parameters of the ember library.
@@ -37,7 +38,7 @@
   *      assertion fails. Only used if the _DEBUG preprocessor
   *      flag is defined.
   * @param allocMemory the callback to invoke for memory allocation.
-  * @param failAssertion the callback to invoke to free memory.
+  * @param freeMemory the callback to invoke to free memory.
   */
 void ember_init(throwError_t throwError,
                 failAssertion_t failAssertion,

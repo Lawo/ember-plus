@@ -161,6 +161,8 @@ typedef struct SElement
          PtrList targets;
          PtrList sources;
       };
+
+      GlowFunction function;
    };
 
    PtrList children;
@@ -203,15 +205,14 @@ static void element_free(Element *pThis)
    {
       glowValue_free(&pThis->param.value);
 
-      if(pThis->param.enumeration != NULL)
-         freeMemory((void *)pThis->param.enumeration);
-      if(pThis->param.formula != NULL)
-         freeMemory((void *)pThis->param.formula);
-      if(pThis->param.format != NULL)
-         freeMemory((void *)pThis->param.format);
+      if(pThis->param.pEnumeration != NULL)
+         freeMemory((void *)pThis->param.pEnumeration);
+      if(pThis->param.pFormula != NULL)
+         freeMemory((void *)pThis->param.pFormula);
+      if(pThis->param.pFormat != NULL)
+         freeMemory((void *)pThis->param.pFormat);
    }
-
-   if(pThis->type == GlowElementType_Matrix)
+   else if(pThis->type == GlowElementType_Matrix)
    {
       for(pNode = pThis->targets.pHead; pNode != NULL; pNode = pNode->pNext)
       {
@@ -232,6 +233,14 @@ static void element_free(Element *pThis)
       ptrList_free(&pThis->targets);
       ptrList_free(&pThis->sources);
    }
+   else if(pThis->type == GlowElementType_Function)
+   {
+      glowFunction_free(&pThis->function);
+   }
+   else if(pThis->type == GlowElementType_Node)
+   {
+      glowNode_free(&pThis->node);
+   }
 
    bzero(*pThis);
 }
@@ -243,6 +252,7 @@ static pcstr element_getIdentifier(const Element *pThis)
       case GlowElementType_Node: return pThis->node.pIdentifier;
       case GlowElementType_Parameter: return pThis->param.pIdentifier;
       case GlowElementType_Matrix: return pThis->matrix.pIdentifier;
+      case GlowElementType_Function: return pThis->function.pIdentifier;
    }
 
    return NULL;
@@ -472,6 +482,7 @@ static void element_print(const Element *pThis, bool isVerbose)
    GlowFieldFlags fields;
    const GlowParameter *pParameter;
    const GlowMatrix *pMatrix;
+   const GlowFunction *pFunction;
    int index;
 
    if(pThis->type == GlowElementType_Parameter)
@@ -527,12 +538,12 @@ static void element_print(const Element *pThis, bool isVerbose)
             printf_s("    offset:         %d\n", pParameter->streamDescriptor.offset);
          }
 
-         if(pParameter->enumeration != NULL)
-            printf_s("  enumeration:\n%s\n", pParameter->enumeration);
-         if(pParameter->format != NULL)
-            printf_s("  format:           %s\n", pParameter->format);
-         if(pParameter->formula != NULL)
-            printf_s("  formula:\n%s\n", pParameter->formula);
+         if(pParameter->pEnumeration != NULL)
+            printf_s("  enumeration:\n%s\n", pParameter->pEnumeration);
+         if(pParameter->pFormat != NULL)
+            printf_s("  format:           %s\n", pParameter->pFormat);
+         if(pParameter->pFormula != NULL)
+            printf_s("  formula:\n%s\n", pParameter->pFormula);
       }
    }
    else if(pThis->type == GlowElementType_Node)
@@ -585,6 +596,29 @@ static void element_print(const Element *pThis, bool isVerbose)
             {
                printf_s("%d\n", pMatrix->parametersLocation.inlineId);
             }
+         }
+      }
+   }
+   else if(pThis->type == GlowElementType_Function)
+   {
+      pFunction = &pThis->function;
+      printf_s("F %04ld %s\n", pThis->number, pFunction->pIdentifier);
+
+      if(isVerbose)
+      {
+         if(pFunction->pDescription != NULL)
+            printf_s("  description:                 %s\n", pFunction->pDescription);
+         if(pFunction->pArguments != NULL)
+         {
+            printf_s("  arguments:\n");
+            for(index = 0; index < pFunction->argumentsLength; index++)
+               printf_s("    %s:%d\n", pFunction->pArguments[index].pName, pFunction->pArguments[index].type);
+         }
+         if(pFunction->pResult != NULL)
+         {
+            printf_s("  result:\n");
+            for(index = 0; index < pFunction->resultLength; index++)
+               printf_s("    %s:%d\n", pFunction->pResult[index].pName, pFunction->pResult[index].type);
          }
       }
    }
@@ -700,17 +734,17 @@ static void onParameter(const GlowParameter *pParameter, GlowFieldFlags fields, 
 
       if(pSession->pEnumeration != NULL)
       {
-         pElement->param.enumeration = pSession->pEnumeration;
+         pElement->param.pEnumeration = pSession->pEnumeration;
          pSession->pEnumeration = NULL;
       }
       if(pSession->pFormat != NULL)
       {
-         pElement->param.format = pSession->pFormat;
+         pElement->param.pFormat = pSession->pFormat;
          pSession->pFormat = NULL;
       }
       if(pSession->pFormula != NULL)
       {
-         pElement->param.formula = pSession->pFormula;
+         pElement->param.pFormula = pSession->pFormula;
          pSession->pFormula = NULL;
       }
 
@@ -833,6 +867,78 @@ static void onConnection(const GlowConnection *pConnection, const berint *pPath,
          pTarget->pConnectedSources = newarr(berint, pConnection->sourcesLength);
          memcpy(pTarget->pConnectedSources, pConnection->pSources, pConnection->sourcesLength * sizeof(berint));
          pTarget->connectedSourcesCount = pConnection->sourcesLength;
+      }
+   }
+}
+
+static void cloneTupleItemDescription(GlowTupleItemDescription *pDest, const GlowTupleItemDescription *pSource)
+{
+   memcpy(pDest, pSource, sizeof(*pSource));
+   pDest->pName = stringDup(pSource->pName);
+}
+
+static void onFunction(const GlowFunction *pFunction, const berint *pPath, int pathLength, voidptr state)
+{
+   Session *pSession = (Session *)state;
+   Element *pElement;
+   Element *pParent;
+   int index;
+
+   // if received element is a child of current cursor, print it
+   if(memcmp(pPath, pSession->pCursorPath, pSession->cursorPathLength * sizeof(berint)) == 0
+   && pathLength == pSession->cursorPathLength + 1)
+      printf_s("* F %04ld %s\n", pPath[pathLength - 1], pFunction->pIdentifier);
+
+   pElement = element_findDescendant(&pSession->root, pPath, pathLength, &pParent);
+
+   if(pParent != NULL)
+   {
+      if(pElement == NULL)
+      {
+         pElement = newobj(Element);
+         element_init(pElement, pParent, GlowElementType_Function, pPath[pathLength - 1]);
+      }
+
+      memcpy(&pElement->function, pFunction, sizeof(*pFunction));
+      pElement->function.pIdentifier = stringDup(pFunction->pIdentifier);
+      pElement->function.pDescription = stringDup(pFunction->pDescription);
+
+      // clone arguments
+      if(pFunction->pArguments != NULL)
+      {
+         pElement->function.pArguments = newarr(GlowTupleItemDescription, pFunction->argumentsLength);
+
+         for(index = 0; index < pFunction->argumentsLength; index++)
+            cloneTupleItemDescription(&pElement->function.pArguments[index], &pFunction->pArguments[index]);
+      }
+
+      // clone result
+      if(pFunction->pResult != NULL)
+      {
+         pElement->function.pResult = newarr(GlowTupleItemDescription, pFunction->resultLength);
+
+         for(index = 0; index < pFunction->resultLength; index++)
+            cloneTupleItemDescription(&pElement->function.pResult[index], &pFunction->pResult[index]);
+      }
+   }
+}
+
+static void onInvocationResult(const GlowInvocationResult *pInvocationResult, voidptr state)
+{
+   int index;
+   pcstr status = pInvocationResult->hasError
+                  ? "error"
+                  : "ok";
+
+   printf_s("* IR %04ld %s\n", pInvocationResult->invocationId, status);
+
+   if(pInvocationResult->hasError == false)
+   {
+      for(index = 0; index < pInvocationResult->resultLength; index++)
+      {
+         printf_s("    ");
+         printValue(&pInvocationResult->pResult[index]);
+         printf_s("\n");
       }
    }
 }
@@ -1026,6 +1132,45 @@ static bool issueConnect(const Session *pSession, pcstr pArguments, GlowConnecti
    return result;
 }
 
+static bool invoke(const Session *pSession, pcstr pArguments)
+{
+   printf_s("please implement this function\n");
+   return false;
+   // *** sample implementation for a function that takes two integer arguments
+   //GlowOutput output;
+   //const int bufferSize = 512;
+   //byte *pBuffer;
+   //const Element *pElement = pSession->pCursor;
+   //GlowCommand command;
+   //bool result = false;
+   //GlowValue value[2];
+
+   //value[0].flag = GlowParameterType_Integer;
+   //value[0].integer = 101;
+   //value[1].flag = GlowParameterType_Integer;
+   //value[1].integer = 202;
+
+   //bzero(command);
+
+   //if(pElement->type == GlowElementType_Function)
+   //{
+   //   command.number = GlowCommandType_Invoke;
+   //   command.invocation.invocationId = 1;
+   //   command.invocation.pArguments = value;
+   //   command.invocation.argumentsLength = 2;
+
+   //   pBuffer = newarr(byte, bufferSize);
+   //   glowOutput_init(&output, pBuffer, bufferSize, 0);
+   //   glowOutput_beginPackage(&output, true);
+   //   glow_writeQualifiedCommand(&output, &command, pSession->pCursorPath, pSession->cursorPathLength, pElement->type);
+   //   send(pSession->sock, (char *)pBuffer, glowOutput_finishPackage(&output), 0);
+   //   freeMemory(pBuffer);
+   //   result = true;
+   //}
+
+   //return result;
+}
+
 static bool handleInput(Session *pSession, pcstr pInput)
 {
    GlowOutput output;
@@ -1134,6 +1279,15 @@ static bool handleInput(Session *pSession, pcstr pInput)
       else
          writePrompt(pSession);
    }
+   else if(strncmp(pInput, "invoke ", 7) == 0)
+   {
+      pArgument = &pInput[7];
+
+      if(invoke(pSession, pArgument))
+         printf_s("|>\n");
+      else
+         writePrompt(pSession);
+   }
    else if(strcmp(pInput, "?") == 0)
    {
       printf_s("dir             - send GetDirectory command\n"
@@ -1143,6 +1297,7 @@ static bool handleInput(Session *pSession, pcstr pInput)
                "set VALUE       - set parameter value to VALUE\n"
                "connect T S     - connect S to T\n"
                "disconnect T S  - disconnect S from T\n"
+               "invoke VALUE... - invoke function with arguments VALUE...\n"
                "quit            - exit application\n"
                "for IDENT you can also write '.' or '..'.\n");
 
@@ -1186,6 +1341,8 @@ static void run(Session *pSession)
    pReader->base.onTarget = onTarget;
    pReader->base.onSource = onSource;
    pReader->base.onConnection = onConnection;
+   pReader->base.onFunction = onFunction;
+   pReader->base.onInvocationResult = onInvocationResult;
    pReader->onPackageReceived = onPackageReceived;
    pReader->base.onUnsupportedTltlv = onUnsupportedTltlv;
 

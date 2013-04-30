@@ -223,7 +223,7 @@ static void createGain(SampleNode *pParent)
    pParam->param.factor = 64;
    fields |= GlowFieldFlag_Factor;
 
-   pParam->param.format = "%Lf db";
+   pParam->param.pFormat = "%Lf db";
    fields |= GlowFieldFlag_Format;
 
    pParam->fields = (GlowFieldFlags)fields;
@@ -249,7 +249,7 @@ static void createVolume(SampleNode *pParent)
    pParam->param.maximum.flag = GlowParameterType_Real;
    fields |= GlowFieldFlag_Maximum;
 
-   pParam->param.format = "%Lf db";
+   pParam->param.pFormat = "%Lf db";
    fields |= GlowFieldFlag_Format;
 
    pParam->fields = (GlowFieldFlags)fields;
@@ -267,7 +267,7 @@ static void createFormat(SampleNode *pParent)
    pParam->param.value.flag = GlowParameterType_Integer;
    fields |= GlowFieldFlag_Value;
 
-   pParam->param.enumeration = "4:3\n16:9\nHD\nFull HD\nCinema";
+   pParam->param.pEnumeration = "4:3\n16:9\nHD\nFull HD\nCinema";
    fields |= GlowFieldFlag_Enumeration;
 
    pParam->fields = (GlowFieldFlags)fields;
@@ -296,7 +296,7 @@ static void createStream1(SampleNode *pParent)
    pParam->param.streamIdentifier = 0;
    fields |= GlowFieldFlag_StreamIdentifier;
 
-   pParam->param.formula = "($/32 + log(2) - 1/5 + e^(1/4))\n($*32)";
+   pParam->param.pFormula = "($/32 + log(2) - 1/5 + e^(1/4))\n($*32)";
    fields |= GlowFieldFlag_Formula;
 
    pParam->fields = (GlowFieldFlags)fields;
@@ -544,7 +544,7 @@ static void onParameter(const GlowParameter *pParameter, GlowFieldFlags fields, 
    && (fields & GlowFieldFlag_Value) == GlowFieldFlag_Value)
    {
       glowValue_free(&pCursor->param.value);
-      glowValue_copyTo(&pParameter->value, &pCursor->param.value);
+      glowValue_copyFrom(&pCursor->param.value, &pParameter->value);
 
       pBuffer = newarr(byte, bufferSize);
       glowOutput_init(&output, pBuffer, bufferSize, 0);

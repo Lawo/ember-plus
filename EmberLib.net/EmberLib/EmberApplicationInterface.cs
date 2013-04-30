@@ -63,7 +63,7 @@ namespace EmberLib
       {
          var set = new EmberSet(tag, parent)
          {
-            Type = type | BerType.ApplicationFlag
+            BerTypeNumber = type | BerType.ApplicationFlag
          };
 
          return set;
@@ -86,7 +86,7 @@ namespace EmberLib
       {
          var sequence = new EmberSequence(tag, parent)
          {
-            Type = type | BerType.ApplicationFlag,
+            BerTypeNumber = type | BerType.ApplicationFlag,
             IsOrdered = isOrdered,
          };
 
@@ -111,7 +111,7 @@ namespace EmberLib
          var tag = reader.Tag;
          var node = new EmberSet(tag, null);
 
-         node.Type = type;
+         node.BerTypeNumber = type;
          return node;
       }
 
@@ -123,7 +123,7 @@ namespace EmberLib
       {
          var node = new EmberSet(tag, null, true)
          {
-            Type = type
+            BerTypeNumber = type
          };
 
          return node;
@@ -138,7 +138,7 @@ namespace EmberLib
          var tag = reader.Tag;
          var node = new EmberSequence(tag, null);
 
-         node.Type = type;
+         node.BerTypeNumber = type;
          return node;
       }
 
@@ -150,7 +150,7 @@ namespace EmberLib
       {
          var node = new EmberSequence(tag, null)
          {
-            Type = type
+            BerTypeNumber = type
          };
 
          return node;

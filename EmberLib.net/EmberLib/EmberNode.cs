@@ -42,9 +42,10 @@ namespace EmberLib
       }
 
       /// <summary>
-      /// Gets the BerType of this node.
+      /// Gets the BerType of this node. Must be one of the constants
+      /// defined in the BerType class.
       /// </summary>
-      public uint Type { get; protected internal set; }
+      public uint BerTypeNumber { get; protected internal set; }
 
       /// <summary>
       /// Gets the tag of this node.
@@ -306,7 +307,7 @@ namespace EmberLib
       /// <returns>A string containing tag and type of this node.</returns>
       public override string ToString()
       {
-         return String.Format("Tag: {0} Type: {1}", Tag.ToString(), BerDefinitions.GetTypeName(Type));
+         return String.Format("Tag: {0} Type: {1}", Tag.ToString(), BerDefinitions.GetTypeName(BerTypeNumber));
       }
       #endregion
 

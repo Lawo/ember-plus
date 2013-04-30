@@ -223,6 +223,14 @@ namespace EmberPlusRegistryProvider
          {
          }
 
+         protected override void OnFunction(GlowFunctionBase glow, int[] path)
+         {
+         }
+
+         protected override void OnInvocationResult(GlowInvocationResult glow)
+         {
+         }
+
          #region Implementation
          RegistryProvider _registry;
          Client _client;

@@ -47,6 +47,11 @@ namespace EmberLib.Glow
       public const uint Connection               = BerType.ApplicationFlag | 16;
       public const uint QualifiedMatrix          = BerType.ApplicationFlag | 17;
       public const uint Label                    = BerType.ApplicationFlag | 18;
+      public const uint Function                 = BerType.ApplicationFlag | 19;
+      public const uint QualifiedFunction        = BerType.ApplicationFlag | 20;
+      public const uint TupleItemDescription     = BerType.ApplicationFlag | 21;
+      public const uint Invocation               = BerType.ApplicationFlag | 22;
+      public const uint InvocationResult         = BerType.ApplicationFlag | 23;
    }
 
 
@@ -58,7 +63,7 @@ namespace EmberLib.Glow
       /// <summary>
       /// The version of the Glow DTD implemented by this library
       /// </summary>
-      public const ushort Version = 0x020A;
+      public const ushort Version = 0x0214;
    }
 
 
@@ -70,6 +75,7 @@ namespace EmberLib.Glow
       public const int Subscribe    = 30;
       public const int Unsubscribe  = 31;
       public const int GetDirectory = 32;
+      public const int Invoke = 33;
    }
 
 
@@ -270,6 +276,7 @@ namespace EmberLib.Glow
       {
          public static readonly BerTag Number = new BerTag(BerClass.ContextSpecific, 0);
          public static readonly BerTag DirFieldMask = new BerTag(BerClass.ContextSpecific, 1);
+         public static readonly BerTag Invocation = new BerTag(BerClass.ContextSpecific, 2);
       }
 
       /// <summary>
@@ -396,5 +403,64 @@ namespace EmberLib.Glow
       /// tag for items contained in a glow collection
       /// </summary>
       public static readonly BerTag CollectionItem = new BerTag(BerClass.ContextSpecific, 0);
+
+      /// <summary>
+      /// context-specific tags used by the "Function" type
+      /// </summary>
+      public static class Function
+      {
+         public static readonly BerTag Number = new BerTag(BerClass.ContextSpecific, 0);
+         public static readonly BerTag Contents = new BerTag(BerClass.ContextSpecific, 1);
+         public static readonly BerTag Children = new BerTag(BerClass.ContextSpecific, 2);
+      }
+
+      /// <summary>
+      /// context-specific tags used by the "QualifiedFunction" type
+      /// </summary>
+      public static class QualifiedFunction
+      {
+         public static readonly BerTag Path = new BerTag(BerClass.ContextSpecific, 0);
+         public static readonly BerTag Contents = new BerTag(BerClass.ContextSpecific, 1);
+         public static readonly BerTag Children = new BerTag(BerClass.ContextSpecific, 2);
+      }
+
+      /// <summary>
+      /// context-specific tags used by the "FunctionContents" type
+      /// </summary>
+      public static class FunctionContents
+      {
+         public static readonly BerTag Identifier = new BerTag(BerClass.ContextSpecific, 0);
+         public static readonly BerTag Description = new BerTag(BerClass.ContextSpecific, 1);
+         public static readonly BerTag Arguments = new BerTag(BerClass.ContextSpecific, 2);
+         public static readonly BerTag Result = new BerTag(BerClass.ContextSpecific, 3);
+      }
+
+      /// <summary>
+      /// context-specific tags used by the "TupleItemDescription" type
+      /// </summary>
+      public static class TupleItemDescription
+      {
+         public static readonly BerTag Type = new BerTag(BerClass.ContextSpecific, 0);
+         public static readonly BerTag Name = new BerTag(BerClass.ContextSpecific, 1);
+      }
+
+      /// <summary>
+      /// context-specific tags used by the "Invocation" type
+      /// </summary>
+      public static class Invocation
+      {
+         public static readonly BerTag InvocationId = new BerTag(BerClass.ContextSpecific, 0);
+         public static readonly BerTag Arguments = new BerTag(BerClass.ContextSpecific, 1);
+      }
+
+      /// <summary>
+      /// context-specific tags used by the "InvocationResult" type
+      /// </summary>
+      public static class InvocationResult
+      {
+         public static readonly BerTag InvocationId = new BerTag(BerClass.ContextSpecific, 0);
+         public static readonly BerTag Success = new BerTag(BerClass.ContextSpecific, 1);
+         public static readonly BerTag Result = new BerTag(BerClass.ContextSpecific, 2);
+      }
    }
 }

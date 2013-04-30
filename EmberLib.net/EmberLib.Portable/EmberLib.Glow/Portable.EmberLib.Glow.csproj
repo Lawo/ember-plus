@@ -86,6 +86,18 @@
     <Compile Include="..\..\EmberLib.Glow\GlowElementCollectionBase.cs">
       <Link>GlowElementCollectionBase.cs</Link>
     </Compile>
+    <Compile Include="..\..\EmberLib.Glow\GlowFunction.cs">
+      <Link>GlowFunction.cs</Link>
+    </Compile>
+    <Compile Include="..\..\EmberLib.Glow\GlowFunctionBase.cs">
+      <Link>GlowFunctionBase.cs</Link>
+    </Compile>
+    <Compile Include="..\..\EmberLib.Glow\GlowInvocation.cs">
+      <Link>GlowInvocation.cs</Link>
+    </Compile>
+    <Compile Include="..\..\EmberLib.Glow\GlowInvocationResult.cs">
+      <Link>GlowInvocationResult.cs</Link>
+    </Compile>
     <Compile Include="..\..\EmberLib.Glow\GlowLabel.cs">
       <Link>GlowLabel.cs</Link>
     </Compile>
@@ -112,6 +124,9 @@
     </Compile>
     <Compile Include="..\..\EmberLib.Glow\GlowParametersLocation.cs">
       <Link>GlowParametersLocation.cs</Link>
+    </Compile>
+    <Compile Include="..\..\EmberLib.Glow\GlowQualifiedFunction.cs">
+      <Link>GlowQualifiedFunction.cs</Link>
     </Compile>
     <Compile Include="..\..\EmberLib.Glow\GlowQualifiedMatrix.cs">
       <Link>GlowQualifiedMatrix.cs</Link>
@@ -151,6 +166,9 @@
     </Compile>
     <Compile Include="..\..\EmberLib.Glow\GlowTarget.cs">
       <Link>GlowTarget.cs</Link>
+    </Compile>
+    <Compile Include="..\..\EmberLib.Glow\GlowTupleItemDescription.cs">
+      <Link>GlowTupleItemDescription.cs</Link>
     </Compile>
     <Compile Include="..\..\EmberLib.Glow\GlowValue.cs">
       <Link>GlowValue.cs</Link>

@@ -29,9 +29,6 @@ namespace EmberLib.Framing
    public enum Dtd : byte
    {
       Glow = 1,
-      Panel,
-      Monitoring,
-      Discovery,
    }
 
    /// <summary>
@@ -66,6 +63,16 @@ namespace EmberLib.Framing
          public const byte Payload = 0;
          public const byte KeepAliveRequest = 1;
          public const byte KeepAliveResponse = 2;
+         public const byte ProviderState = 3;
+      }
+
+      /// <summary>
+      /// Possible values for the "providerState" field in the framing header.
+      /// </summary>
+      public static class ProviderState
+      {
+         public const byte Passive = 0;
+         public const byte Active = 1;
       }
    }
 }

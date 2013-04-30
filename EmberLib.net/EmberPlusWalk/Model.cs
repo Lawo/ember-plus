@@ -437,6 +437,21 @@ namespace EmberPlusWalk
       {
          return false;
       }
+
+      bool IGlowVisitor<object, bool>.Visit(GlowFunction glow, object state)
+      {
+         return false;
+      }
+
+      bool IGlowVisitor<object, bool>.Visit(GlowQualifiedFunction glow, object state)
+      {
+         return false;
+      }
+
+      bool IGlowVisitor<object, bool>.Visit(GlowInvocationResult glow, object state)
+      {
+         return false;
+      }
       #endregion
    }
 

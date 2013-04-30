@@ -404,7 +404,7 @@ namespace EmberLib.Glow
          get
          {
             var tag = GlowTags.MatrixContents.Labels;
-            var contents = EnsureContents();
+            var contents = this[ContentsTag] as EmberSet;
 
             return contents != null
                    ? contents[tag] as EmberSequence

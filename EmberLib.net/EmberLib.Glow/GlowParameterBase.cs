@@ -247,7 +247,7 @@ namespace EmberLib.Glow
       /// <remarks>
       /// Use the property EffectiveParameterType to determine the actual parameter type.
       /// </remarks>
-      public int? ParameterType
+      public int? Type
       {
          get
          {
@@ -338,7 +338,7 @@ namespace EmberLib.Glow
          set
          {
             if(value.Tag != GlowTags.ParameterContents.StreamDescriptor
-            || value.Type != GlowType.StreamDescription)
+            || value.BerTypeNumber != GlowType.StreamDescription)
                throw new ArgumentException("Tag or type mismatch");
 
             EnsureContentsAndRemove(value.Tag).Insert(value);
@@ -393,7 +393,7 @@ namespace EmberLib.Glow
       {
          get
          {
-            var type = ParameterType;
+            var type = Type;
 
             if(type == GlowParameterType.Trigger)
                return GlowParameterType.Trigger;

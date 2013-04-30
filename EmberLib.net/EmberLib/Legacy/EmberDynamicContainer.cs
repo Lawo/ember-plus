@@ -44,7 +44,7 @@ namespace EmberLib.Legacy
                IsMapUsed = false;
                nodesMap.Clear();
 
-               Type = ChangeToSequence();
+               BerTypeNumber = ChangeToSequence();
             }
             else
             {

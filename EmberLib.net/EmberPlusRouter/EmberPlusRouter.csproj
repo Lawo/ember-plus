@@ -90,6 +90,7 @@
     <Compile Include="Int32Extensions.cs" />
     <Compile Include="Model\DynamicMatrix.cs" />
     <Compile Include="Model\Element.cs" />
+    <Compile Include="Model\Function.cs" />
     <Compile Include="Model\IDynamicPathHandler.cs" />
     <Compile Include="Model\IElementVisitor.cs" />
     <Compile Include="Model\IntegerParameter.cs" />

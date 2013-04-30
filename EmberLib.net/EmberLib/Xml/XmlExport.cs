@@ -42,60 +42,44 @@ namespace EmberLib.Xml
          var state = new XmlExportState(writer);
 
          node.Accept(export, state);
+
+         writer.WriteWhitespace(Environment.NewLine);
       }
 
       #region Implementation
       object WriteContainer(EmberContainer node, XmlExportState state)
       {
-         var indentStr = state.Indent;
          var writer = state.Writer;
-
-         if(String.IsNullOrEmpty(indentStr) == false)
-            writer.WriteWhitespace(indentStr);
 
          writer.WriteStartElement(node.Tag.ToString());
 
          writer.WriteStartAttribute("type");
-         writer.WriteString(BerDefinitions.GetTypeName(node.Type));
+         writer.WriteString(BerDefinitions.GetTypeName(node.BerTypeNumber));
          writer.WriteEndAttribute();
 
          if(node.Count > 0)
          {
-            var childState = state.IncreaseIndent();
-
-            writer.WriteWhitespace(Environment.NewLine);
-
             foreach(var child in node)
-               child.Accept(this, childState);
+               child.Accept(this, state);
          }
 
-         if(indentStr.Length > 0)
-            writer.WriteWhitespace(indentStr);
-
          writer.WriteEndElement();
-         writer.WriteWhitespace(Environment.NewLine);
-
          return null;
       }
 
       object WriteLeaf<TValue>(EmberLeaf<TValue> node, XmlExportState state, string valueStr)
       {
-         var indentStr = state.Indent;
          var writer = state.Writer;
-
-         writer.WriteWhitespace(indentStr);
 
          writer.WriteStartElement(node.Tag.ToString());
 
          writer.WriteStartAttribute("type");
-         writer.WriteString(BerDefinitions.GetTypeName(node.Type));
+         writer.WriteString(BerDefinitions.GetTypeName(node.BerTypeNumber));
          writer.WriteEndAttribute();
 
          writer.WriteValue(valueStr);
 
          writer.WriteEndElement();
-         writer.WriteWhitespace(Environment.NewLine);
-
          return null;
       }
       #endregion
@@ -194,24 +178,10 @@ namespace EmberLib.Xml
    internal class XmlExportState
    {
       public XmlExportState(XmlWriter writer)
-      : this(writer, String.Empty)
       {
+         Writer = writer;
       }
 
       public XmlWriter Writer { get; private set; }
-      public string Indent { get; private set; }
-
-      public XmlExportState IncreaseIndent()
-      {
-         return new XmlExportState(Writer, Indent + "  ");
-      }
-
-      #region Implementation
-      XmlExportState(XmlWriter writer, string indent)
-      {
-         Writer = writer;
-         Indent = indent;
-      }
-      #endregion
    }
 }

@@ -13,11 +13,17 @@ only if command is 0 (payload):
 7                    appBytes             appBytesCount
 7 + appBytesCount    payload              packageLength - (7 + appBytesCount)
 
+
+only if command is 3 (provider state):
+
+4                    providerState        1
+
 -----------------------------------------------------------------------------
 
 command: 0 - Ember Payload
          1 - KeepAlive Request
          2 - KeepAlive Response
+         3 - Provider State
 
 dtd: 1 - Glow
      ... more tbd
@@ -29,3 +35,6 @@ flags: 0x80 - first package
 appBytes: additional, application-defined info (usually depending on the dtd)
 
 payload: ember encoded data
+
+providerState: 0 - passive
+               1 - active

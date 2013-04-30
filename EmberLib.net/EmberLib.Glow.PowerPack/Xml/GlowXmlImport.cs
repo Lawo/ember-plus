@@ -80,6 +80,12 @@ namespace EmberLib.Glow.PowerPack.Xml
 
             case "QualifiedMatrix":
                return ConvertQualifiedMatrix(xml);
+
+            case "Function":
+               return ConvertFunction(xml);
+
+            case "QualifiedFunction":
+               return ConvertQualifiedFunction(xml);
          }
 
          return null;
@@ -96,6 +102,9 @@ namespace EmberLib.Glow.PowerPack.Xml
 
             case "StreamCollection":
                return ConvertStreamCollection(xml);
+
+            case "InvocationResult":
+               return ConvertInvocationResult(xml);
          }
 
          return null;
@@ -124,37 +133,28 @@ namespace EmberLib.Glow.PowerPack.Xml
 
       GlowValue ConvertValue(XElement xml)
       {
-         var type = 0;
+         var type = ConvertParameterType(xml.Attribute("type").Value);
 
-         switch(xml.Attribute("type").Value)
-         {
-            case "BOOLEAN":
-               type = GlowParameterType.Boolean;
-               break;
-
-            case "INTEGER":
-               type = GlowParameterType.Integer;
-               break;
-
-            case "OCTET STRING":
-               type = GlowParameterType.Octets;
-               break;
-
-            case "REAL":
-               type = GlowParameterType.Real;
-               break;
-
-            case "UTF8":
-               type = GlowParameterType.String;
-               break;
-         }
-
-         if(type != 0)
+         if(type != null)
          {
             GlowValue value;
 
-            if(GlowValue.TryParse(xml.Value, type, CultureInfo.InvariantCulture, out value))
+            if(GlowValue.TryParse(xml.Value, type.Value, CultureInfo.InvariantCulture, out value))
                return value;
+         }
+
+         return null;
+      }
+
+      int? ConvertParameterType(string typeStr)
+      {
+         switch(typeStr)
+         {
+            case "BOOLEAN":      return GlowParameterType.Boolean;
+            case "INTEGER":      return GlowParameterType.Integer;
+            case "OCTET STRING": return GlowParameterType.Octets;
+            case "REAL":         return GlowParameterType.Real;
+            case "UTF8":         return GlowParameterType.String;
          }
 
          return null;
@@ -162,24 +162,14 @@ namespace EmberLib.Glow.PowerPack.Xml
 
       GlowMinMax ConvertMinMax(XElement xml)
       {
-         var type = 0;
+         var type = ConvertParameterType(xml.Attribute("type").Value);
 
-         switch(xml.Attribute("type").Value)
-         {
-            case "INTEGER":
-               type = GlowParameterType.Integer;
-               break;
-
-            case "REAL":
-               type = GlowParameterType.Real;
-               break;
-         }
-
-         if(type != 0)
+         if(type == GlowParameterType.Integer
+         || type == GlowParameterType.Real)
          {
             GlowMinMax value;
 
-            if(GlowMinMax.TryParse(xml.Value, type, CultureInfo.InvariantCulture, out value))
+            if(GlowMinMax.TryParse(xml.Value, type.Value, CultureInfo.InvariantCulture, out value))
                return value;
          }
 
@@ -207,6 +197,31 @@ namespace EmberLib.Glow.PowerPack.Xml
          return glow;
       }
 
+      EmberSequence ConvertTupleDescription(BerTag tag, XElement xml)
+      {
+         var ember = new EmberSequence(tag);
+
+         foreach(var itemsXml in xml.Elements("TupleItemDescription"))
+         {
+            var glowItem = new GlowTupleItemDescription(GlowTags.CollectionItem);
+
+            var typeXml = itemsXml.Element("type");
+            if(typeXml != null)
+            {
+               var type = ConvertParameterType(typeXml.Value);
+
+               if(type != null)
+                  glowItem.Type = type.Value;
+            }
+
+            itemsXml.Element("name").Do(value => glowItem.Name = value);
+
+            ember.Insert(glowItem);
+         }
+
+         return ember;
+      }
+
       GlowStreamDescription ConvertStreamDescription(BerTag tag, XElement xml)
       {
          return new GlowStreamDescription(
@@ -219,6 +234,25 @@ namespace EmberLib.Glow.PowerPack.Xml
       {
          var glow = new GlowCommand(XmlConvert.ToInt32(xml.Attribute("number").Value));
          xml.Element("dirFieldMask").Do(value => glow.DirFieldMask = XmlConvert.ToInt32(value));
+
+         var invocationXml = xml.Element("invocation");
+         if(invocationXml != null)
+         {
+            var glowInvocation = new GlowInvocation(GlowTags.Command.Invocation);
+            invocationXml.Element("invocationId").Do(value => glowInvocation.InvocationId = XmlConvert.ToInt32(value));
+
+            var argumentsXml = invocationXml.Element("arguments");
+            if(argumentsXml != null)
+            {
+               glowInvocation.ArgumentValues = from valueXml in argumentsXml.Elements("Value")
+                                               let glowValue = ConvertValue(valueXml)
+                                               where glowValue != null
+                                               select glowValue;
+            }
+
+            glow.Invocation = glowInvocation;
+         }
+
          return glow;
       }
 
@@ -261,6 +295,39 @@ namespace EmberLib.Glow.PowerPack.Xml
       {
          var glow = new GlowQualifiedMatrix(ConvertPath(xml.Attribute("path").Value));
          FillMatrix(glow, xml);
+         return glow;
+      }
+
+      GlowContainer ConvertQualifiedFunction(XElement xml)
+      {
+         var glow = new GlowQualifiedFunction(ConvertPath(xml.Attribute("path").Value));
+         FillFunction(glow, xml);
+         return glow;
+      }
+
+      GlowContainer ConvertFunction(XElement xml)
+      {
+         var glow = new GlowFunction(XmlConvert.ToInt32(xml.Attribute("number").Value));
+         FillFunction(glow, xml);
+         return glow;
+      }
+
+      GlowContainer ConvertInvocationResult(XElement xml)
+      {
+         var glow = new GlowInvocationResult(GlowTags.Root);
+
+         glow.InvocationId = XmlConvert.ToInt32(xml.Attribute("invocationId").Value);
+         xml.Element("success").Do(value => glow.Success = XmlConvert.ToBoolean(value));
+
+         var resultXml = xml.Element("result");
+         if(resultXml != null)
+         {
+            glow.ResultValues = from valueXml in resultXml.Elements("Value")
+                                let glowValue = ConvertValue(valueXml)
+                                where glowValue != null
+                                select glowValue;
+         }
+
          return glow;
       }
 
@@ -319,7 +386,7 @@ namespace EmberLib.Glow.PowerPack.Xml
             contentsXml.Element("format").Do(value => glow.Format = value);
             contentsXml.Element("step").Do(value => glow.Step = XmlConvert.ToInt32(value));
             contentsXml.Element("access").Do(value => glow.Access = XmlConvert.ToInt32(value));
-            contentsXml.Element("type").Do(value => glow.ParameterType = XmlConvert.ToInt32(value));
+            contentsXml.Element("type").Do(value => glow.Type = XmlConvert.ToInt32(value));
             contentsXml.Element("isOnline").Do(value => glow.IsOnline = XmlConvert.ToBoolean(value));
             contentsXml.Element("streamIdentifier").Do(value => glow.StreamIdentifier = XmlConvert.ToInt32(value));
 
@@ -429,6 +496,29 @@ namespace EmberLib.Glow.PowerPack.Xml
                collection.Insert(glowConnection);
             }
          }
+      }
+
+      void FillFunction(GlowFunctionBase glow, XElement xml)
+      {
+         var contentsXml = xml.Element("contents");
+
+         if(contentsXml != null)
+         {
+            contentsXml.Element("identifier").Do(value => glow.Identifier = value);
+            contentsXml.Element("description").Do(value => glow.Description = value);
+
+            var argumentsXml = contentsXml.Element("arguments");
+            if(argumentsXml != null)
+               glow.Arguments = ConvertTupleDescription(GlowTags.FunctionContents.Arguments, argumentsXml);
+
+            var resultXml = contentsXml.Element("result");
+            if(resultXml != null)
+               glow.Result = ConvertTupleDescription(GlowTags.FunctionContents.Result, resultXml);
+         }
+
+         var childrenXml = xml.Element("children");
+         if(childrenXml != null)
+            FillElementCollection(glow.EnsureChildren(), childrenXml);
       }
       #endregion
    }

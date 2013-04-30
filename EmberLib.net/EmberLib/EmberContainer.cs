@@ -41,7 +41,7 @@ namespace EmberLib
       public EmberContainer(BerTag tag, EmberContainer parent, uint type)
       : base(tag)
       {
-         Type = type;
+         BerTypeNumber = type;
 
          if(parent != null)
             parent.InsertChildNode(this);
@@ -174,9 +174,9 @@ namespace EmberLib
       internal override int Update()
       {
          var output = new BerMemoryOutput();
-         var implicitTag = BerType.IsApplicationDefined(Type)
-                           ? new BerTag(BerClass.Application, Type & ~BerType.ApplicationFlag, true)
-                           : new BerTag(BerClass.Universal, Type, true);
+         var implicitTag = BerType.IsApplicationDefined(BerTypeNumber)
+                           ? new BerTag(BerClass.Application, BerTypeNumber & ~BerType.ApplicationFlag, true)
+                           : new BerTag(BerClass.Universal, BerTypeNumber, true);
 
          _childrenLength = 0;
 

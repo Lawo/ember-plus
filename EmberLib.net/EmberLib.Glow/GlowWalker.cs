@@ -78,6 +78,14 @@ namespace EmberLib.Glow
       protected abstract void OnMatrix(GlowMatrixBase glow, int[] path);
 
       /// <summary>
+      /// Called for every GlowFunction found in the glow tree.
+      /// </summary>
+      /// <param name="glow">The GlowFunction to process.</param>
+      /// <param name="path">The path of the function. The last number in the path
+      /// is the function's number.</param>
+      protected abstract void OnFunction(GlowFunctionBase glow, int[] path);
+
+      /// <summary>
       /// Called for every GlowStreamEntry found in the glow tree.
       /// Since stream entries can only be contained in a GlowStreamCollection,
       /// which itself is the root of the glow tree, there is no path parameter
@@ -85,6 +93,14 @@ namespace EmberLib.Glow
       /// </summary>
       /// <param name="glow">The GlowStreamEntry to process.</param>
       protected abstract void OnStreamEntry(GlowStreamEntry glow);
+
+      /// <summary>
+      /// Called for every GlowInvocationResult found in the glow tree.
+      /// Since InvocationResult nodes can only be at the root level,
+      /// there is no path parameter passed to this method.
+      /// </summary>
+      /// <param name="glow">The GlowInvocationResult to process.</param>
+      protected abstract void OnInvocationResult(GlowInvocationResult glow);
 
       #region Implementation
       LinkedList<int> _path = new LinkedList<int>();
@@ -138,7 +154,7 @@ namespace EmberLib.Glow
       {
          Push(glow.Number);
 
-         if(glow.HasContents)
+         if(glow.HasContents || glow.Children == null)
             OnNode(glow, PathToArray());
 
          var glowChildren = glow.Children;
@@ -202,7 +218,7 @@ namespace EmberLib.Glow
       {
          var glowPath = glow.Path;
 
-         if(glow.HasContents)
+         if(glow.HasContents || glow.Children == null)
             OnNode(glow, glowPath);
 
          var glowChildren = glow.Children;
@@ -269,6 +285,52 @@ namespace EmberLib.Glow
 
             _path.Clear();
          }
+
+         return null;
+      }
+
+      [SuppressMessage("Microsoft.Design", "CA1033")]
+      object IGlowVisitor<object, object>.Visit(GlowFunction glow, object state)
+      {
+         Push(glow.Number);
+
+         OnFunction(glow, PathToArray());
+
+         var glowChildren = glow.Children;
+
+         if(glowChildren != null)
+            glowChildren.Accept(this, state);
+
+         Pop();
+         return null;
+      }
+
+      [SuppressMessage("Microsoft.Design", "CA1033")]
+      object IGlowVisitor<object, object>.Visit(GlowQualifiedFunction glow, object state)
+      {
+         var glowPath = glow.Path;
+
+         OnFunction(glow, glowPath);
+
+         var glowChildren = glow.Children;
+
+         if(glowChildren != null)
+         {
+            foreach(var number in glowPath)
+               Push(number);
+
+            glowChildren.Accept(this, state);
+
+            _path.Clear();
+         }
+
+         return null;
+      }
+
+      [SuppressMessage("Microsoft.Design", "CA1033")]
+      object IGlowVisitor<object, object>.Visit(GlowInvocationResult glow, object state)
+      {
+         OnInvocationResult(glow);
 
          return null;
       }

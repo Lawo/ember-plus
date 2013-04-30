@@ -5,7 +5,10 @@
 -- This file defines the Glow DTD used with the Ember+ protocol.
 --
 -- Change Log:
--- -2.10:
+-- 2.20:
+--   - NOTE: This version describes the data schema of Ember+ 1.2.
+--   - Added Function Extensions (see type Function)
+-- 2.10:
 --   - NOTE: This version describes the data schema of Ember+ 1.1.
 --   - Added Matrix Extensions (see type Matrix)
 --   - Added "isOnline" field to NodeContents
@@ -214,6 +217,7 @@ Command ::=
             number    [0] CommandType,
             options       CHOICE {
                 dirFieldMask [1] FieldFlags -- only valid if number is getDirectory(32)
+                invocation   [2] Invocation -- only valid if number is invoke(33)
             } OPTIONAL
         }
 
@@ -222,7 +226,8 @@ CommandType ::=
     INTEGER {
         subscribe    (30),
         unsubscribe  (31),
-        getDirectory (32)
+        getDirectory (32),
+        invoke       (33)
     }
 
 
@@ -427,6 +432,72 @@ QualifiedMatrix ::=
 
 -- ======================================================
 --
+-- Function
+--
+-- ======================================================
+
+Function ::=
+    [APPLICATION 19] IMPLICIT
+        SEQUENCE {
+            number      [0] Integer32,
+            contents    [1] FunctionContents    OPTIONAL,
+            children    [2] ElementCollection   OPTIONAL
+        }
+
+
+QualifiedFunction ::=
+    [APPLICATION 20] IMPLICIT
+        SEQUENCE {
+            path        [0] RELATIVE-OID,
+            contents    [1] FunctionContents    OPTIONAL,
+            children    [2] ElementCollection   OPTIONAL
+        }
+
+
+FunctionContents ::=
+    SET {
+        identifier      [0] EmberString         OPTIONAL,
+        description     [1] EmberString         OPTIONAL,
+        arguments       [2] TupleDescription    OPTIONAL,
+        result          [3] TupleDescription    OPTIONAL
+    }
+
+
+TupleDescription ::=
+    SEQUENCE OF [0] TupleItemDescription
+
+
+TupleItemDescription ::=
+    [APPLICATION 21] IMPLICIT
+        SEQUENCE {
+            type     [0] ParameterType,
+            name     [1] EmberString            OPTIONAL
+        }
+
+
+Invocation ::=
+    [APPLICATION 22] IMPLICIT
+        SEQUENCE {
+            invocationId    [0] Integer32       OPTIONAL,
+            arguments       [1] Tuple           OPTIONAL
+        }
+
+
+Tuple ::=
+    SEQUENCE OF [0] Value
+
+
+InvocationResult ::=
+    [APPLICATION 23] IMPLICIT
+        SEQUENCE {
+            invocationId    [0] Integer32,
+            success         [1] BOOLEAN         OPTIONAL,           
+            result          [2] Tuple           OPTIONAL
+        }
+
+
+-- ======================================================
+--
 -- ElementCollection
 --
 -- ======================================================
@@ -441,7 +512,8 @@ Element ::=
         parameter          Parameter,
         node               Node,
         command            Command,
-        matrix             Matrix
+        matrix             Matrix,
+        function           Function,
     }
 
 
@@ -473,8 +545,9 @@ StreamCollection ::=
 Root ::=
    [APPLICATION 0]
        CHOICE {
-           elements RootElementCollection,
-           streams StreamCollection
+           elements         RootElementCollection,
+           streams          StreamCollection,
+           invocationResult InvocationResult
        }
 
 
@@ -488,7 +561,8 @@ RootElement ::=
         element            Element,
         qualifiedParameter QualifiedParameter,
         qualifiedNode      QualifiedNode,
-        qualifiedMatrix    QualifiedMatrix
+        qualifiedMatrix    QualifiedMatrix,
+        qualifiedFunction  QualififedFunction
     }
 
 

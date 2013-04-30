@@ -48,28 +48,28 @@ namespace EmberPlusSimpleProvider
             _glow = (GlowContainer)EmberNode.Decode(reader, app);
          }
 
-         var settings = new XmlWriterSettings
-         {
-            Indent = true,
-            IndentChars = "  ",
-            OmitXmlDeclaration = true,
-         };
-         using(var writer = XmlWriter.Create(Console.Out, settings))
-            XmlExport.Export(_glow, writer);
+         //var settings = new XmlWriterSettings
+         //{
+         //   Indent = true,
+         //   IndentChars = "  ",
+         //   OmitXmlDeclaration = true,
+         //};
+         //using(var writer = XmlWriter.Create(Console.Out, settings))
+         //   XmlExport.Export(_glow, writer);
 
-         var children = _glow[GlowTags.CollectionItem][GlowTags.Node.Children];
-         for(int index = 0; index < 2000; index++)
-         {
-            var node = new GlowNode(5 + index)
-            {
-               Identifier = "abc" + index,
-               Description = "Hallo ich bin Node " + index,
-            };
-            children.Insert(node);
-         }
+         //var children = _glow[GlowTags.CollectionItem][GlowTags.Node.Children];
+         //for(int index = 0; index < 2000; index++)
+         //{
+         //   var node = new GlowNode(5 + index)
+         //   {
+         //      Identifier = "abc" + index,
+         //      Description = "Hallo ich bin Node " + index,
+         //   };
+         //   children.Insert(node);
+         //}
 
-         using(var output = new BerStreamOutput(File.Create("big.ember")))
-            _glow.Encode(output);
+         //using(var output = new BerStreamOutput(File.Create("big.ember")))
+         //   _glow.Encode(output);
 
          var listener = new TcpListener(IPAddress.Any, 9097);
          listener.Start();

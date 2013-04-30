@@ -89,9 +89,14 @@
       <Link>Properties\EmberLib.AssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="GlowConnection.cs" />
+    <Compile Include="GlowFunction.cs" />
+    <Compile Include="GlowFunctionBase.cs" />
+    <Compile Include="GlowInvocation.cs" />
+    <Compile Include="GlowInvocationResult.cs" />
     <Compile Include="GlowLabel.cs" />
     <Compile Include="GlowMatrix.cs" />
     <Compile Include="GlowParametersLocation.cs" />
+    <Compile Include="GlowQualifiedFunction.cs" />
     <Compile Include="GlowQualifiedMatrix.cs" />
     <Compile Include="GlowSignal.cs" />
     <Compile Include="GlowSource.cs" />
@@ -119,6 +124,7 @@
     <Compile Include="Framing\GlowOutput.cs" />
     <Compile Include="GlowParameter.cs" />
     <Compile Include="Framing\GlowReader.cs" />
+    <Compile Include="GlowTupleItemDescription.cs" />
     <Compile Include="GlowValue.cs" />
     <Compile Include="GlowWalker.cs" />
     <Compile Include="IGlowVisitor.cs" />

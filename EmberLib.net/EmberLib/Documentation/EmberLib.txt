@@ -144,12 +144,15 @@ date:    2013-04-30
 ------------------------------- Requirements:
 - .net framework 2.0 / mono 2.6 or higher
 - C# 4.0 Compiler
-- Only for EmberLib.Glow.Formula:
+
+- Only for desktop version of EmberLib.Glow.Formula:
   - F# 2.0 Runtime
     http://www.microsoft.com/en-us/download/details.aspx?id=13450
-  - F# PowerPack
+  - F# PowerPack (installed to N:\FSharpPowerPack-1.9.9.9)
     http://fsharppowerpack.codeplex.com/releases/view/45593
   - F# 2.0 Compiler
+  - Portable version includes redistributable FSharp.Core (portable)
+    and source of F# Powerpack (portable).
 
 
 ------------------------------- Description:

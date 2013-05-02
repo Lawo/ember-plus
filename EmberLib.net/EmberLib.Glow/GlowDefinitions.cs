@@ -75,7 +75,7 @@ namespace EmberLib.Glow
       public const int Subscribe    = 30;
       public const int Unsubscribe  = 31;
       public const int GetDirectory = 32;
-      public const int Invoke = 33;
+      public const int Invoke       = 33;
    }
 
 

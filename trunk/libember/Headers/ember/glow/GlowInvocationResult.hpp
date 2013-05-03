@@ -20,6 +20,8 @@
 #ifndef __LIBEMBER_GLOW_GLOWINVOCATIONRESULT_HPP
 #define __LIBEMBER_GLOW_GLOWINVOCATIONRESULT_HPP
 
+#include "util/TypeFilter.hpp"
+#include "GlowTupleItemDescription.hpp"
 #include "GlowContainer.hpp"
 #include "Value.hpp"
 

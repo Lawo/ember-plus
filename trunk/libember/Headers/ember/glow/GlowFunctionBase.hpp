@@ -27,9 +27,6 @@
 
 namespace libember { namespace glow
 {
-    /** Forward declaration */
-    class GlowTupleItemDescription;
-
     /**
      * Class containing the common properties of a function.
      * The methods to access a property of this object return a default value if a property doesn't exist.

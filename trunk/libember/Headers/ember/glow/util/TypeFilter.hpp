@@ -21,6 +21,7 @@
 #define __LIBEMBER_GLOW_UTIL_TYPEFILTER_HPP
 
 #include <memory>
+#include "../../dom/Node.hpp"
 
 namespace libember { namespace glow { namespace util
 {

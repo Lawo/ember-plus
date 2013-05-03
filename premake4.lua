@@ -1,4 +1,4 @@
-solution "EmBER SDK"
+solution "EmberPlus SDK"
     configurations { "ReleaseShared", "ReleaseStatic", "DebugShared", "DebugStatic" }
    
     -- Common settings for all configurations of all projects of this solution

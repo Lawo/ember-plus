@@ -20,6 +20,7 @@
 #ifndef __LIBEMBER_BER_IMPL_OBJECTIDENTIFIER_IPP
 #define __LIBEMBER_BER_IMPL_OBJECTIDENTIFIER_IPP
 
+#include <algorithm>
 #include "../../util/Inline.hpp"
 
 namespace libember { namespace ber
@@ -41,9 +42,15 @@ namespace libember { namespace ber
     }
 
     LIBEMBER_INLINE
-    size_t ObjectIdentifier::operator[](int index) const
+    ObjectIdentifier::value_type ObjectIdentifier::operator[](int index) const
     {
-       return m_items[index];
+        return m_items[index];
+    }
+
+    LIBEMBER_INLINE
+    bool operator==(ObjectIdentifier const& lhs, ObjectIdentifier const& rhs)
+    {
+        return ((lhs.size() == rhs.size()) && std::equal(lhs.begin(), lhs.end(), rhs.begin()));
     }
 }
 }

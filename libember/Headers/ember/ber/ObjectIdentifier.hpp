@@ -117,10 +117,15 @@ namespace libember { namespace ber
             void swap(ObjectIdentifier& other);
 
             /**
-             * Gets the sub-id at position @p index.
-             * @param index the position of the sub-id to return.
+             * Return the sub-identifier at position @p index.
+             * @param index the position of the sub-identifier to return.
+             * @return The sub-identifier at position @p index.
+             * @note Please note that this method performs no bounds checking
+             *      on the supplied index. The behaviour of this method is
+             *      undefined if the supplied index is not within the valid
+             *      range.
              */
-            std::size_t operator[](int index) const;
+            value_type operator[](int index) const;
 
         private:
 #ifdef _MSC_VER
@@ -133,7 +138,6 @@ namespace libember { namespace ber
 #endif
     };
 
-
     /**
      * Free version of swap to allow it's usage through ADL.
      * @param lhs a reference to the first instance.
@@ -141,6 +145,29 @@ namespace libember { namespace ber
      *      swapped with those of @p lhs.
      */
     void swap(ObjectIdentifier& lhs, ObjectIdentifier& rhs);
+
+    /**
+     * Equality comparison operator for object idtentifiers.
+     * @param lhs a constant reference to the first instance to be compared
+     *      for equality.
+     * @param rhs a constant reference to the second instance to be compared
+     *      for equality.
+     * @return True if @p left and @p right represent the same relative
+     *      reference, otherwise false.
+     */
+    bool operator==(ObjectIdentifier const& lhs, ObjectIdentifier const& rhs);
+
+    /**
+     * Inequality comparison operator for object idtentifiers.
+     * @param lhs a constant reference to the first instance to be compared
+     *      for inequality.
+     * @param rhs a constant reference to the second instance to be compared
+     *      for inequality.
+     * @return True if @p left and @p right represent the different relative
+     *      references, otherwise false.
+     */
+    bool operator!=(ObjectIdentifier const& lhs, ObjectIdentifier const& rhs);
+
 
 
     /**************************************************************************/
@@ -188,31 +215,9 @@ namespace libember { namespace ber
         return m_items.size();
     }
 
-    inline bool operator==(ObjectIdentifier const& left, ObjectIdentifier const& right)
+    inline bool operator!=(ObjectIdentifier const& lhs, ObjectIdentifier const& rhs)
     {
-        if (left.size() == right.size())
-        {
-            ObjectIdentifier::const_iterator leftIt = left.begin();
-            ObjectIdentifier::const_iterator rightIt = right.begin();
-            ObjectIdentifier::const_iterator const leftLast = left.end();
-
-            for (/* Nothing */; leftIt != leftLast; ++leftIt, ++rightIt)
-            {
-                if (*leftIt != *rightIt)
-                    return false;
-            }
-
-            return true;
-        }
-        else
-        {
-            return false;
-        }
-    }
-
-    inline bool operator!=(ObjectIdentifier const& left, ObjectIdentifier const& right)
-    {
-        return !(left == right);
+        return !(lhs == rhs);
     }
 }
 }

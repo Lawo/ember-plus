@@ -75,6 +75,19 @@ namespace libember { namespace glow
              */
             int number() const;
 
+        protected:
+            /** 
+             * @see Container::insertImpl() 
+             * @remarks This override resets the cached number.
+             */
+            virtual iterator insertImpl(iterator where, Node* child);
+
+            /** 
+             * @see Container::eraseImpl() 
+             * @remarks This override resets the cached number.
+             */
+            virtual void eraseImpl(iterator first, iterator last);
+
         private:
             /**
              * This constructor initializes a node without the mandatory number.
@@ -83,6 +96,9 @@ namespace libember { namespace glow
              * @param tag Decoded application tag.
              */
             explicit GlowNode(ber::Tag const& tag);
+
+        private:
+            mutable int m_cachedNumber;
     };
 }
 }

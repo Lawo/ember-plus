@@ -31,6 +31,7 @@ namespace libember { namespace glow
     LIBEMBER_INLINE
     GlowParameter::GlowParameter(int number)
         : GlowParameterBase(GlowType::Parameter, GlowTags::ElementDefault(), GlowTags::Parameter::Contents(), GlowTags::Parameter::Children())
+        , m_cachedNumber(-1)
     {
         insert(begin(), new dom::VariantLeaf(GlowTags::Parameter::Number(), number));
     }
@@ -38,6 +39,7 @@ namespace libember { namespace glow
     LIBEMBER_INLINE
     GlowParameter::GlowParameter(GlowNodeBase* parent, int number)
         : GlowParameterBase(GlowType::Parameter, GlowTags::ElementDefault(), GlowTags::Parameter::Contents(), GlowTags::Parameter::Children())
+        , m_cachedNumber(-1)
     {
         insert(begin(), new dom::VariantLeaf(GlowTags::Parameter::Number(), number));
         if (parent)
@@ -51,6 +53,7 @@ namespace libember { namespace glow
     LIBEMBER_INLINE
     GlowParameter::GlowParameter(int number, ber::Tag const& tag)
         : GlowParameterBase(GlowType::Parameter, tag, GlowTags::Parameter::Contents(), GlowTags::Parameter::Children())
+        , m_cachedNumber(-1)
     {
         insert(begin(), new dom::VariantLeaf(GlowTags::Parameter::Number(), number));
     }
@@ -58,24 +61,43 @@ namespace libember { namespace glow
     LIBEMBER_INLINE
     GlowParameter::GlowParameter(ber::Tag const& tag)
         : GlowParameterBase(GlowType::Parameter, tag, GlowTags::Parameter::Contents(), GlowTags::Parameter::Children())
+        , m_cachedNumber(-1)
     {}
 
     LIBEMBER_INLINE
     int GlowParameter::number() const
     {
-        ber::Tag const tag = GlowTags::Parameter::Number();
-        const_iterator const first = begin();
-        const_iterator const last = end();
-        const_iterator const result = util::find_tag(first, last, tag);
-        if (result != last)
+        if (m_cachedNumber == -1)
         {
-            int const value = util::ValueConverter::valueOf(&*result, -1);
-            return value;
+            ber::Tag const tag = GlowTags::Parameter::Number();
+            const_iterator const first = begin();
+            const_iterator const last = end();
+            const_iterator const result = util::find_tag(first, last, tag);
+            if (result != last)
+            {
+                m_cachedNumber = util::ValueConverter::valueOf(&*result, -1);
+            }
+            else
+            {
+                m_cachedNumber = -1;
+            }
         }
-        else
-        {
-            return -1;
-        }
+
+        return m_cachedNumber;
+    }
+
+    LIBEMBER_INLINE
+    GlowParameter::iterator GlowParameter::insertImpl(iterator where, Node* child)
+    {
+        m_cachedNumber = -1;
+        return GlowContainer::insertImpl(where, child);
+    }
+
+    LIBEMBER_INLINE
+    void GlowParameter::eraseImpl(iterator first, iterator last)
+    {
+        m_cachedNumber = -1;
+        GlowContainer::eraseImpl(first, last);
     }
 }
 }

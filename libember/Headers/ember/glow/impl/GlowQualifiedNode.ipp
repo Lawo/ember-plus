@@ -58,20 +58,39 @@ namespace libember { namespace glow
     {}
 
     LIBEMBER_INLINE
-    ber::ObjectIdentifier GlowQualifiedNode::path() const
+    ber::ObjectIdentifier const& GlowQualifiedNode::path() const
     {
-        ber::Tag const tag = GlowTags::QualifiedNode::Path();
-        const_iterator const first = begin();
-        const_iterator const last = end();
-        const_iterator const result = util::find_tag(first, last, tag);
-        if (result != last)
+        if (m_cachedPath.empty())
         {
-            return util::ValueConverter::valueOf(&*result, ber::ObjectIdentifier());
+            ber::Tag const tag = GlowTags::QualifiedNode::Path();
+            const_iterator const first = begin();
+            const_iterator const last = end();
+            const_iterator const result = util::find_tag(first, last, tag);
+            if (result != last)
+            {
+                m_cachedPath = util::ValueConverter::valueOf(&*result, ber::ObjectIdentifier());
+            }
+            else
+            {
+                m_cachedPath = ber::ObjectIdentifier();
+            }
         }
-        else
-        {
-            return ber::ObjectIdentifier();
-        }
+
+        return m_cachedPath;
+    }
+
+    LIBEMBER_INLINE
+    GlowQualifiedNode::iterator GlowQualifiedNode::insertImpl(iterator where, Node* child)
+    {
+        m_cachedPath = ber::ObjectIdentifier();
+        return GlowContainer::insertImpl(where, child);
+    }
+
+    LIBEMBER_INLINE
+    void GlowQualifiedNode::eraseImpl(iterator first, iterator last)
+    {
+        m_cachedPath = ber::ObjectIdentifier();
+        GlowContainer::eraseImpl(first, last);
     }
 }
 }

@@ -61,9 +61,22 @@ namespace libember { namespace glow
 
             /**
              * Returns the path of this parameter.
-             * @return The path of this parameter or -1 if not set.
+             * @return The path of this parameter or an empty path, if not set.
              */
-            ber::ObjectIdentifier path() const;
+            ber::ObjectIdentifier const& path() const;
+
+        protected:
+            /** 
+             * @see Container::insertImpl() 
+             * @remarks This override resets the cached path.
+             */
+            virtual iterator insertImpl(iterator where, Node* child);
+
+            /** 
+             * @see Container::eraseImpl() 
+             * @remarks This override resets the cached path.
+             */
+            virtual void eraseImpl(iterator first, iterator last);
 
         private:
             /**
@@ -73,6 +86,9 @@ namespace libember { namespace glow
              * @param tag Decoded application tag.
              */
             explicit GlowQualifiedParameter(ber::Tag const& tag);
+
+        private:
+            mutable ber::ObjectIdentifier m_cachedPath;
     };
 }
 }

@@ -33,7 +33,7 @@ namespace libember { namespace glow
     {}
 
     LIBEMBER_INLINE
-    GlowTupleItemDescription::GlowTupleItemDescription(ber::Type const& type, std::string const& name)
+    GlowTupleItemDescription::GlowTupleItemDescription(ParameterType const& type, std::string const& name)
         : GlowContainer(GlowType::TupleItemDescription)
     {
         insert(end(), new dom::VariantLeaf(GlowTags::TupleItemDescription::Type(), type.value()));
@@ -41,7 +41,7 @@ namespace libember { namespace glow
     }
 
     LIBEMBER_INLINE
-    ber::Type GlowTupleItemDescription::type() const
+    ParameterType GlowTupleItemDescription::type() const
     {
         ber::Tag const tag = GlowTags::TupleItemDescription::Name(); 
         const_iterator first = begin();
@@ -50,11 +50,11 @@ namespace libember { namespace glow
         if (result != last)
         {
             int const value = util::ValueConverter::valueOf(&*result, int(0));
-            return static_cast<ber::Type::_Domain>(value);
+            return static_cast<ParameterType::_Domain>(value);
         }
         else
         {
-            return ber::Type::None;
+            return ParameterType::None;
         }
     }
 

@@ -59,6 +59,15 @@ namespace libember { namespace glow
             dom::Sequence* result();
 
             /**
+             * Fills the result sequence with dom::Nodes representing the passed
+             * glow::Values.
+             * @param firstValue Iterator pointing to the first glow::Value.
+             * @param lastValue Iterator pointing behind the last glow::Value.
+             */
+            template<typename InputIterator>
+            void setTypedResult(InputIterator firstValue, InputIterator lastValue);
+
+            /**
              * Returns the invocation identifier of this request. If no identifier is set,
              * this method returns -1.
              */
@@ -78,24 +87,60 @@ namespace libember { namespace glow
             dom::Sequence const* result() const;
 
             /**
-             * Copies all result types that are of type GlowTupleItemDescription into the
-             * passed output iterator.
-             * @param dest The iterator to copy the valid result types to.
+             * Copies the values of all leaves in the result sequence to the passed vector
+             * @param dest The glow::Value iterator to copy the result values to.
              */
             template<typename OutputIterator>
             size_type typedResult(OutputIterator dest) const;
     };
 
+    template<typename InputIterator>
+    inline void GlowInvocationResult::setTypedResult(InputIterator firstValue, InputIterator lastValue)
+    {
+        dom::Sequence* container = result();
+
+        container->clear();
+
+        for( ; firstValue != lastValue; firstValue++)
+        {
+            ber::Value berValue = (*firstValue).toBerValue();
+            dom::Node* node = new dom::VariantLeaf(GlowTags::ElementDefault(), berValue);
+
+            container->insert(container->end(), node);
+        }
+    }
+
     template<typename OutputIterator>
     inline GlowInvocationResult::size_type GlowInvocationResult::typedResult(OutputIterator dest) const
     {
-        dom::Sequence const* container = result();
+        dom::Sequence const* const container = result();
+        size_type size = 0;
 
-        return container != 0
-            ? util::TypeFilter<GlowTupleItemDescription>::collect(container->begin(), container->end(), dest)
-            : 0;
+        if(container != 0)
+        {
+            dom::Container::const_iterator first = container->begin();
+            dom::Container::const_iterator last = container->end();
+
+            for( ; first != last; first++)
+            {
+                ber::Tag const typeTag = first->typeTag();
+                dom::VariantLeaf const* const node = dynamic_cast<libember::dom::VariantLeaf const*>(&*first);
+
+                if(node != nullptr)
+                {
+                    *dest++ = Value(node->value());
+                    size++;
+                }
+            }
+        }
+
+        return size;
     }
 }
 }
+
+#ifdef LIBEMBER_HEADER_ONLY
+#  include "impl/GlowInvocationResult.ipp"
+#endif
 
 #endif  // __LIBEMBER_GLOW_GLOWINVOCATIONRESULT_HPP

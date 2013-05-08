@@ -605,7 +605,7 @@ namespace libember { namespace glow
     LIBEMBER_INLINE
     ber::Tag GlowTags::FunctionContents::Result()
     {
-        return ber::make_tag(ber::Class::ContextSpecific, 2);
+        return ber::make_tag(ber::Class::ContextSpecific, 3);
     }
 
     /**

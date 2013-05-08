@@ -70,7 +70,7 @@ namespace libember { namespace glow
         else
         {
             container = new dom::Sequence(GlowTags::FunctionContents::Arguments());
-            insert(last, container);
+            contents().set(container);
         }
 
         return container;
@@ -92,7 +92,7 @@ namespace libember { namespace glow
         else
         {
             container = new dom::Sequence(GlowTags::FunctionContents::Result());
-            insert(last, container);
+            contents().set(container);
         }
 
         return container;

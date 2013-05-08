@@ -21,6 +21,7 @@
 #define __LIBEMBER_GLOW_GLOWTUPLEITEMDESCRIPTION_HPP
 
 #include "GlowContainer.hpp"
+#include "ParameterType.hpp"
 
 namespace libember { namespace glow
 {
@@ -41,14 +42,14 @@ namespace libember { namespace glow
              * @param type The type to initialize this instance with.
              * @param name The name to initialize this instance with.
              */
-            GlowTupleItemDescription(ber::Type const& type, std::string const& name);
+            GlowTupleItemDescription(ParameterType const& type, std::string const& name);
 
             /**
              * Returns the type stored in this instance. If the property is not available,
              * ber::Type::None will be returned.
              * @return The type stored in this instance.
              */
-            ber::Type type() const;
+            ParameterType type() const;
 
             /**
              * Returns the name of this item description. If no name is set, an empty
@@ -59,5 +60,9 @@ namespace libember { namespace glow
     };
 }
 }
+
+#ifdef LIBEMBER_HEADER_ONLY
+#  include "impl/GlowTupleItemDescription.ipp"
+#endif
 
 #endif  // __LIBEMBER_GLOW_GLOWTUPLEITEMDESCRIPTION_HPP

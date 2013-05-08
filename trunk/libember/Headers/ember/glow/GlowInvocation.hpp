@@ -53,6 +53,15 @@ namespace libember { namespace glow
             dom::Sequence* arguments();
 
             /**
+             * Fills the arguments sequence with dom::Nodes representing the passed
+             * glow::Values.
+             * @param firstValue Iterator pointing to the first glow::Value.
+             * @param lastValue Iterator pointing behind the last glow::Value.
+             */
+            template<typename InputIterator>
+            void setTypedArguments(InputIterator firstValue, InputIterator lastValue);
+
+            /**
              * Returns the invocation identifier of this request. If no identifier is set,
              * this method returns -1.
              */
@@ -66,24 +75,60 @@ namespace libember { namespace glow
             dom::Sequence const* arguments() const;
 
             /**
-             * Copies all arguments that are of type GlowTupleItemDescription into the
-             * passed output iterator.
-             * @param dest The iterator to copy the valid arguments to.
+             * Copies the values of all leaves in the arguments sequence to the passed vector
+             * @param dest The glow::Value iterator to copy the argument values to.
              */
             template<typename OutputIterator>
             size_type typedArguments(OutputIterator dest) const;
     };
 
+    template<typename InputIterator>
+    inline void GlowInvocation::setTypedArguments(InputIterator firstValue, InputIterator lastValue)
+    {
+        dom::Sequence* container = arguments();
+
+        container->clear();
+
+        for( ; firstValue != lastValue; firstValue++)
+        {
+            ber::Value berValue = (*firstValue).toBerValue();
+            dom::Node* node = new dom::VariantLeaf(GlowTags::ElementDefault(), berValue);
+
+            container->insert(container->end(), node);
+        }
+    }
+
     template<typename OutputIterator>
     inline GlowInvocation::size_type GlowInvocation::typedArguments(OutputIterator dest) const
     {
-        dom::Sequence const* container = arguments();
+        dom::Sequence const* const container = arguments();
+        size_type size = 0;
 
-        return container != 0
-            ? util::TypeFilter<GlowTupleItemDescription>::collect(container->begin(), container->end(), dest)
-            : 0;
+        if(container != 0)
+        {
+            dom::Container::const_iterator first = container->begin();
+            dom::Container::const_iterator last = container->end();
+
+            for( ; first != last; first++)
+            {
+                ber::Tag const typeTag = first->typeTag();
+                dom::VariantLeaf const* const node = dynamic_cast<libember::dom::VariantLeaf const*>(&*first);
+
+                if(node != nullptr)
+                {
+                    *dest++ = Value(node->value());
+                    size++;
+                }
+            }
+        }
+
+        return size;
     }
 }
 }
+
+#ifdef LIBEMBER_HEADER_ONLY
+#  include "impl/GlowInvocation.ipp"
+#endif
 
 #endif  // __LIBEMBER_GLOW_GLOWINVOCATION_HPP

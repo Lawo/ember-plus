@@ -139,6 +139,12 @@ namespace libember { namespace glow
             bool toBoolean() const;
 
             /**
+             * Returns the current value as a variant libember::ber::Value.
+             * @return The current value as a variant libember::ber::Value.
+             */
+            ber::Value toBerValue() const;
+
+            /**
              * Swaps the value of this instance with the one passed.
              * @param other Instance to exchange the data with.
              */
@@ -192,6 +198,29 @@ namespace libember { namespace glow
 
         if (m_value == 0)
             m_value = Variant::create(0L);
+    }
+
+    inline ber::Value Value::toBerValue() const
+    {
+        switch(type().value())
+        {
+            case ParameterType::Integer:
+                return ber::Value(toInteger());
+
+            case ParameterType::Real:
+                return ber::Value(toReal());
+
+            case ParameterType::String:
+                return ber::Value(toString());
+
+            case ParameterType::Octets:
+                return ber::Value(toOctets());
+
+            case ParameterType::Boolean:
+                return ber::Value(toBoolean());
+        }
+
+        return ber::Value();
     }
 
     inline Value::Value(double value)

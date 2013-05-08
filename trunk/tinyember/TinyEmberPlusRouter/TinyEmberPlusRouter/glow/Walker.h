@@ -58,11 +58,27 @@ namespace glow
       virtual void handleNode(libember::glow::GlowNodeBase const* glow, libember::ber::ObjectIdentifier const& path);
 
       /**
+        * Override this method to process GlowFunction objects.
+        * @param glow Pointer to the GlowFunction object encountered.
+        * @param path The path to the function as defined by e.g.
+        *     EmberPlus-Glow.QualifiedFunction.path.
+        * @note Only significant for consumer applications.
+        */
+      virtual void handleFunction(libember::glow::GlowFunctionBase const* glow, libember::ber::ObjectIdentifier const& path);
+
+      /**
         * Override this method to process GlowStreamEntry objects.
         * @param glow Pointer to the GlowStreamEntry object encountered.
         * @note Only significant for consumer applications.
         */
       virtual void handleStreamEntry(libember::glow::GlowStreamEntry const* glow);
+
+      /**
+        * Override this method to process GlowInvocationResult objects.
+        * @param glow Pointer to the GlowInvocationResult object encountered.
+        * @note Only significant for consumer applications.
+        */
+      virtual void handleInvocationResult(libember::glow::GlowInvocationResult const* glow);
 
    private:
       inline libember::ber::ObjectIdentifier pathToOid() const { return libember::ber::ObjectIdentifier(m_path.begin(), m_path.end()); }
@@ -70,9 +86,11 @@ namespace glow
       void walkNode(libember::glow::GlowNode const* glow);
       void walkParameter(libember::glow::GlowParameter const* glow);
       void walkMatrix(libember::glow::GlowMatrix const* glow);
+      void walkFunction(libember::glow::GlowFunction const* glow);
       void walkQualifiedNode(libember::glow::GlowQualifiedNode const* glow);
       void walkQualifiedParameter(libember::glow::GlowQualifiedParameter const* glow);
       void walkQualifiedMatrix(libember::glow::GlowQualifiedMatrix const* glow);
+      void walkQualifiedFunction(libember::glow::GlowQualifiedFunction const* glow);
       void walkStreamCollection(libember::glow::GlowStreamCollection const* glow);
 
       template<typename InputIterator>

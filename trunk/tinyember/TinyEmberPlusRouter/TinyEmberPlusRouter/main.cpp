@@ -6,8 +6,8 @@
 #include "glow/Dispatcher.h"
 
 
-#define VERSION_STRING "0.0.2"
-
+#define VERSION_STRING "0.0.3"
+#define TCP_PORT 9092
 
 // =====================================================
 //
@@ -148,15 +148,15 @@ void createDynamic(model::Node* router, int nodeNumber, glow::Dispatcher* dispat
    }
 }
 
-void createProductInfo(model::Node* router, int nodeNumber)
+void createIdentity(model::Node* router, int nodeNumber)
 {
-   auto productInfo = new model::Node(nodeNumber, router, "productInfo");
+   auto productInfo = new model::Node(nodeNumber, router, "identity");
 
-   auto moniker = new model::StringParameter(1, productInfo, "moniker", nullptr);
+   auto moniker = new model::StringParameter(1, productInfo, "product", nullptr);
    moniker->setReadOnly(true);
    moniker->setValue("Tiny Ember+ Router");
 
-   auto author = new model::StringParameter(2, productInfo, "author", nullptr);
+   auto author = new model::StringParameter(2, productInfo, "company", nullptr);
    author->setReadOnly(true);
    author->setValue("L-S-B Broadcast Technologies GmbH");
 
@@ -165,14 +165,94 @@ void createProductInfo(model::Node* router, int nodeNumber)
    version->setValue(VERSION_STRING);
 }
 
+// int add(int arg1, int arg2)
+class AddDelegate : public model::Function::Delegate
+{
+public:
+   virtual void invoke(util::VariantValueVector const& arguments,
+                       util::VariantValueVector& result)
+   {
+      auto arg1 = arguments[0].toInteger();
+      auto arg2 = arguments[1].toInteger();
+      auto sum = arg1 + arg2;
+      result.insert(result.end(), libember::glow::Value(sum));
+   };
+};
+
+// void doNothing()
+class DoNothingDelegate : public model::Function::Delegate
+{
+public:
+   virtual void invoke(util::VariantValueVector const& arguments,
+                       util::VariantValueVector& result)
+   {
+      std::cout << "Doing Nothing" << std::endl;
+   };
+};
+
+// bool enterLicenseKey(string key)
+class EnterLicenseKeyDelegate : public model::Function::Delegate
+{
+public:
+   EnterLicenseKeyDelegate(model::IntegerParameter* licenseLevelParam)
+      : m_licenseLevelParam(licenseLevelParam)
+   {}
+
+   virtual void invoke(util::VariantValueVector const& arguments,
+                       util::VariantValueVector& result)
+   {
+      auto key = arguments[0].toString();
+      auto isValid = key == "123456";
+
+      if(isValid)
+         m_licenseLevelParam->setValue(1);
+
+      result.insert(result.end(), libember::glow::Value(isValid));
+   };
+
+private:
+   model::IntegerParameter* m_licenseLevelParam;
+};
+
+void createFunctions(model::Node* router, int nodeNumber, glow::Dispatcher* dispatcher)
+{
+   auto functions = new model::Node(nodeNumber, router, "functions");
+
+   util::TupleItem addArgs[2] =
+   {
+      util::TupleItem(util::VariantType::Integer, "arg1"),
+      util::TupleItem(util::VariantType::Integer, "arg2")
+   };
+   auto addResult = util::TupleItem(util::VariantType::Integer, "sum");
+   auto add = new model::Function(1, functions, "add", new AddDelegate(), &addArgs[0], &addArgs[2], &addResult, &addResult + 1);
+
+   auto doNothing = new model::Function(2, functions, "doNothing", new DoNothingDelegate(), &addArgs[2], &addArgs[2]);
+
+   // licensing function and parameter
+   //
+   auto licensing = new model::Node(3, functions, "licensing");
+
+   auto licenseLevel = new model::IntegerParameter(1, licensing, "licenseLevel", dispatcher, 0, 1);
+   licenseLevel->setReadOnly(true);
+   licenseLevel->setValue(0);
+
+   auto enterLicenseKeyArg = util::TupleItem(util::VariantType::String, "key");
+   auto enterLicenseKeyResult = util::TupleItem(util::VariantType::Boolean, "isValid");
+   auto enterLicenseKey = new model::Function(2, licensing, "enterLicenseKey",
+                                              new EnterLicenseKeyDelegate(licenseLevel),
+                                              &enterLicenseKeyArg, &enterLicenseKeyArg + 1,
+                                              &enterLicenseKeyResult, &enterLicenseKeyResult + 1);
+}
+
 model::Element* createTree(glow::Dispatcher* dispatcher)
 {
    auto root = model::Element::createRoot();
    auto router = new model::Node(1, root, "router");
-   createProductInfo(router, 0);
+   createIdentity(router, 0);
    createOneToN(router, 1, dispatcher);
    createNToN(router, 2, dispatcher);
    createDynamic(router, 3, dispatcher);
+   createFunctions(router, 4, dispatcher);
 
    return root;
 }
@@ -191,7 +271,12 @@ class ConsoleReaderThread : public QThread
 protected:
    void run()
    {
-      std::cout << "Tiny Ember+ Router v" << VERSION_STRING << " started. Press enter to quit..." << std::endl;
+      std::cout << "Tiny Ember+ Router v"
+                << VERSION_STRING
+                << " listening on port "
+                << TCP_PORT
+                << ". Press enter to quit..."
+                << std::endl;
 
       fgetc(stdin);
    }
@@ -225,7 +310,7 @@ int main(int argc, char *argv[])
 {
     QCoreApplication a(argc, argv);
 
-    auto dispatcher = glow::Dispatcher(&a, 9092);
+    auto dispatcher = glow::Dispatcher(&a, TCP_PORT);
     auto root = createTree(&dispatcher);
     dispatcher.setRoot(root);
 

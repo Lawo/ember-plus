@@ -28,6 +28,10 @@ namespace glow
             walkParameter(static_cast<libember::glow::GlowParameter const*>(glow));
             break;
 
+         case GlowType::Function:
+            walkFunction(static_cast<libember::glow::GlowFunction const*>(glow));
+            break;
+
          case GlowType::QualifiedMatrix:
             walkQualifiedMatrix(static_cast<libember::glow::GlowQualifiedMatrix const*>(glow));
             break;
@@ -40,8 +44,16 @@ namespace glow
             walkQualifiedParameter(static_cast<libember::glow::GlowQualifiedParameter const*>(glow));
             break;
 
+         case GlowType::QualifiedFunction:
+            walkQualifiedFunction(static_cast<libember::glow::GlowQualifiedFunction const*>(glow));
+            break;
+
          case GlowType::StreamCollection:
             walkStreamCollection(static_cast<libember::glow::GlowStreamCollection const*>(glow));
+            break;
+
+         case GlowType::InvocationResult:
+            handleInvocationResult(static_cast<libember::glow::GlowInvocationResult const*>(glow));
             break;
       }
    }
@@ -49,7 +61,13 @@ namespace glow
    void Walker::handleNode(libember::glow::GlowNodeBase const* glow, libember::ber::ObjectIdentifier const& path)
    {}
 
+   void Walker::handleFunction(libember::glow::GlowFunctionBase const* glow, libember::ber::ObjectIdentifier const& path)
+   {}
+
    void Walker::handleStreamEntry(libember::glow::GlowStreamEntry const* glow)
+   {}
+
+   void Walker::handleInvocationResult(libember::glow::GlowInvocationResult const* glow)
    {}
 
    void Walker::walkNode(libember::glow::GlowNode const* glow)
@@ -85,6 +103,20 @@ namespace glow
       m_path.push_back(glow->number());
 
       handleMatrix(glow, pathToOid());
+
+      auto children = glow->children();
+
+      if(children != nullptr)
+         walkElements(children->begin(), children->end());
+
+      m_path.pop_back();
+   }
+
+   void Walker::walkFunction(libember::glow::GlowFunction const* glow)
+   {
+      m_path.push_back(glow->number());
+
+      handleFunction(glow, pathToOid());
 
       auto children = glow->children();
 
@@ -133,6 +165,22 @@ namespace glow
       m_path.insert(m_path.end(), glowPath.begin(), glowPath.end());
 
       handleMatrix(glow, glowPath);
+
+      auto children = glow->children();
+
+      if(children != nullptr)
+         walkElements(children->begin(), children->end());
+
+      m_path.clear();
+   }
+
+   void Walker::walkQualifiedFunction(libember::glow::GlowQualifiedFunction const* glow)
+   {
+      auto glowPath = glow->path();
+      m_path.clear();
+      m_path.insert(m_path.end(), glowPath.begin(), glowPath.end());
+
+      handleFunction(glow, glowPath);
 
       auto children = glow->children();
 

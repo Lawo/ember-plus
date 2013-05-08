@@ -6,6 +6,7 @@
 #include "Node.h"
 #include "IntegerParameter.h"
 #include "StringParameter.h"
+#include "Function.h"
 #include "matrix/DynamicNToNLinearMatrix.h"
 #include "matrix/NToNLinearMatrix.h"
 #include "matrix/NToNNonlinearMatrix.h"

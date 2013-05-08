@@ -6,6 +6,7 @@ namespace model
    class Node;
    class IntegerParameter;
    class StringParameter;
+   class Function;
 
    namespace matrix
    {
@@ -24,6 +25,7 @@ namespace model
       virtual void visit(Node* element) = 0;
       virtual void visit(IntegerParameter* element) = 0;
       virtual void visit(StringParameter* element) = 0;
+      virtual void visit(Function* element) = 0;
       virtual void visit(matrix::OneToNLinearMatrix* element) = 0;
       virtual void visit(matrix::NToNLinearMatrix* element) = 0;
       virtual void visit(matrix::NToNNonlinearMatrix* element) = 0;

@@ -57,7 +57,7 @@
     <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(SolutionDir)$(Platform)\$(Configuration)\</OutDir>
     <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(SolutionDir)$(Platform)\$(Configuration)\</OutDir>
     <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(SolutionDir)$(Platform)\$(Configuration)\</OutDir>
-    <IncludePath Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">N:\MyProjects.svn\ember-sdk\Library\trunk\libs101\Headers;N:\MyProjects.svn\ember-sdk\Library\trunk\libember\Headers;$(IncludePath)</IncludePath>
+    <IncludePath Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">N:\MyProjects.svn\ember-sdk\trunk\libs101\Headers;N:\MyProjects.svn\ember-sdk\trunk\libember\Headers;$(IncludePath)</IncludePath>
     <IncludePath Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">N:\MyProjects.svn\ember-sdk\Library\trunk\libs101\Headers;N:\MyProjects.svn\ember-sdk\Library\trunk\libember\Headers;$(VCInstallDir)include;$(VCInstallDir)atlmfc\include;$(WindowsSdkDir)include;$(FrameworkSDKDir)\include;</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -161,6 +161,7 @@
     <ClCompile Include="glow\Encoder.cpp" />
     <ClCompile Include="glow\Walker.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="model\Function.cpp" />
     <ClCompile Include="model\matrix\detail\Connect.cpp" />
     <ClCompile Include="model\matrix\DynamicNToNLinearMatrix.cpp" />
     <ClCompile Include="model\Element.cpp" />
@@ -219,6 +220,7 @@
     <ClInclude Include=".\net\TcpClientFactory.h" />
     <ClInclude Include="glow\Encoder.h" />
     <ClInclude Include="glow\Walker.h" />
+    <ClInclude Include="model\Function.h" />
     <ClInclude Include="model\matrix\detail\Connect.h" />
     <ClInclude Include="model\matrix\DynamicNToNLinearMatrix.h" />
     <ClInclude Include="model\DynamicElementEmitter.h" />

@@ -21,7 +21,7 @@ namespace model
    // Iterator Typedefs
    // ========================================================
    public:
-      typedef std::vector<Element*> Vector;
+      typedef std::vector<Element*>  Vector;
       typedef Vector::iterator       iterator;
       typedef Vector::const_iterator const_iterator;
       typedef std::size_t            size_type;

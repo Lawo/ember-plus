@@ -123,6 +123,11 @@ namespace glow
          virtual void visit(model::StringParameter* element);
 
          /**
+           * Overriden to create GlowQualifiedFunction objects from model::Function objects.
+           */
+         virtual void visit(model::Function* element);
+
+         /**
            * Overriden to create GlowQualifiedMatrix objects from model::Matrix objects.
            */
          virtual void visit(model::matrix::OneToNLinearMatrix* element);

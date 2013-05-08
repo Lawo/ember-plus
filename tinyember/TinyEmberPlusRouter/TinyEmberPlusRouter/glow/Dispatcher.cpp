@@ -27,7 +27,8 @@ namespace glow
          {
             auto glowRoot = libember::glow::GlowRootElementCollection::create();
 
-            if(dynamic_cast<model::ParameterBase*>(parent) != nullptr)
+            if(dynamic_cast<model::ParameterBase*>(parent) != nullptr
+            || dynamic_cast<model::Function*>(parent) != nullptr)
             {
                auto glowElement = m_dispatcher->elementToGlow(parent, glow->dirFieldMask().value(), false);
                glowRoot->insert(glowRoot->end(), glowElement);
@@ -55,6 +56,35 @@ namespace glow
 
             m_source->writeGlow(glowRoot);
             delete glowRoot;
+         }
+         else if(glow->number().value() == libember::glow::CommandType::Invoke)
+         {
+            auto const function = dynamic_cast<model::Function*>(parent);
+            auto const invocation = glow->invocation();
+
+            if(function != nullptr
+            && invocation != nullptr)
+            {
+               auto invocationId = invocation->invocationId();
+               auto argumentValues = util::VariantValueVector();
+               invocation->typedArguments(std::back_inserter(argumentValues));
+
+               auto result = util::VariantValueVector();
+               auto success = function->invoke(argumentValues.begin(), argumentValues.end(), result);
+
+               if(invocationId >= 0)
+               {
+                  auto invocationResult = libember::glow::GlowInvocationResult();
+                  invocationResult.setInvocationId(invocationId);
+
+                  if(success)
+                     invocationResult.setTypedResult(result.begin(), result.end());
+                  else
+                     invocationResult.setSuccess(false);
+
+                  m_source->writeGlow(&invocationResult);
+               }
+            }
          }
       }
    }
@@ -218,6 +248,35 @@ namespace glow
       {
          if(element->isReadOnly() == false)
             glow->setAccess(libember::glow::Access::ReadWrite);
+      }
+   }
+
+   void Dispatcher::ElementToGlowConverter::visit(model::Function* element)
+   {
+      auto glow = store(new libember::glow::GlowQualifiedFunction(element->path()));
+
+      if(hasDirField(libember::glow::DirFieldMask::Identifier))
+         glow->setIdentifier(element->identifier());
+
+      if(hasDirField(libember::glow::DirFieldMask::Description)
+      && element->description().empty() == false)
+         glow->setDescription(element->description());
+
+      if(hasDirField(libember::glow::DirFieldMask::All))
+      {
+         for each(auto item in element->arguments())
+         {
+            auto arguments = glow->arguments();
+            auto glowTupleItem = new libember::glow::GlowTupleItemDescription(item.type(), item.name());
+            arguments->insert(arguments->end(), glowTupleItem);
+         }
+
+         for each(auto item in element->result())
+         {
+            auto result = glow->result();
+            auto glowTupleItem = new libember::glow::GlowTupleItemDescription(item.type(), item.name());
+            result->insert(result->end(), glowTupleItem);
+         }
       }
    }
 

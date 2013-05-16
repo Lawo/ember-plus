@@ -33,7 +33,7 @@ namespace libember { namespace glow
             {
                 None = 0,
                 BasePath = 1,
-                Inline = 2,
+                Inline = 2
             };
 
             typedef int value_type;

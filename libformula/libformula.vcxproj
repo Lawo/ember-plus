@@ -64,6 +64,7 @@
     <ClInclude Include="Headers\formula\Error.hpp" />
     <ClInclude Include="Headers\formula\ErrorStack.hpp" />
     <ClInclude Include="Headers\formula\ErrorType.hpp" />
+    <ClInclude Include="Headers\formula\Formula.hpp" />
     <ClInclude Include="Headers\formula\FunctionType.hpp" />
     <ClInclude Include="Headers\formula\Parser.hpp" />
     <ClInclude Include="Headers\formula\Scanner.hpp" />

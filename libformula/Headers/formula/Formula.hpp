@@ -17,20 +17,13 @@
     Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
-#ifndef __LIBS101_S101_HPP
-#define __LIBS101_S101_HPP
-
-/*
- * Convenience header that includes all relevant files of the entire library.
- */
+#ifndef __LIBFORMULA_FORMULA_HPP
+#define __LIBFORMULA_FORMULA_HPP
 
 #include "Version.hpp"
-#include "Byte.hpp"
-#include "CommandType.hpp"
-#include "Dtd.hpp"
-#include "MessageType.hpp"
-#include "StreamDecoder.hpp"
-#include "StreamEncoder.hpp"
-#include "PackageFlag.hpp"
+#include "util/CodeDump.hpp"
+#include "util/CodeInterpreter.hpp"
+#include "CodeEmitter.hpp"
+#include "TermCompiler.hpp"
 
-#endif  // __LIBS101_S101_HPP
+#endif  // __LIBFORMULA_FORMULA_HPP

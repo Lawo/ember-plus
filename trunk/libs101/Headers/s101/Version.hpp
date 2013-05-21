@@ -1,5 +1,5 @@
 /*
-    libs101 -- C++ 03 implementation of the S101 encoding and decoding
+    libember -- C++ 03 implementation of the Ember+ Protocol
     Copyright (C) 2012  L-S-B Broadcast Technologies GmbH
 
     This library is free software; you can redistribute it and/or
@@ -17,20 +17,12 @@
     Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
-#ifndef __LIBS101_S101_HPP
-#define __LIBS101_S101_HPP
+#ifndef __LIBS101_VERSION_HPP
+#define __LIBS101_VERSION_HPP
 
-/*
- * Convenience header that includes all relevant files of the entire library.
- */
+#define LIBS101_VERSION_MAJOR      1
+#define LIBS101_VERSION_MINOR      3
+#define LIBS101_VERSION_REVISION   0
 
-#include "Version.hpp"
-#include "Byte.hpp"
-#include "CommandType.hpp"
-#include "Dtd.hpp"
-#include "MessageType.hpp"
-#include "StreamDecoder.hpp"
-#include "StreamEncoder.hpp"
-#include "PackageFlag.hpp"
+#endif  // __LIBS101_VERSION_HPP
 
-#endif  // __LIBS101_S101_HPP

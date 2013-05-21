@@ -2,8 +2,7 @@
 //
 
 #include "stdafx.h"
-#include <formula\util\CodeDump.hpp>
-#include <formula\TermCompiler.hpp>
+#include <formula\libformula.hpp>
 #include <cstdio>
 #include <iostream>
 

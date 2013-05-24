@@ -171,6 +171,7 @@ typedef struct
       BerTag maximumTotalConnects;
       BerTag maximumConnectsPerTarget;
       BerTag parametersLocation;
+      BerTag gainParameterNumber;
       BerTag labels;
    } matrixContents;
 

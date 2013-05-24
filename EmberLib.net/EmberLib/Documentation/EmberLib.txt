@@ -6,10 +6,15 @@ L-S-B Broadcast Technologies GmbH
 =============================================
 
 author:  pbo@l-s-b.de
-date:    2013-04-30
+date:    2013-05-24
 
 
 ------------------------------- Change Log:
+- 1.4.0:
+  - Adjusted version number to match scheme proposed by kimohoff
+  - EmberLib.Glow: GlowWalker now updates current path before
+    calling overridable method.
+
 - 1.2.0:
   - Implements Glow DTD 2.20 (function extensions)
 

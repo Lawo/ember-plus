@@ -195,21 +195,17 @@ namespace EmberLib.Glow
       object IGlowVisitor<object, object>.Visit(GlowQualifiedParameter glow, object state)
       {
          var glowPath = glow.Path;
+         foreach(var number in glowPath)
+            Push(number);
 
          OnParameter(glow, glowPath);
 
          var glowChildren = glow.Children;
 
          if(glowChildren != null)
-         {
-            foreach(var number in glowPath)
-               Push(number);
-
             glowChildren.Accept(this, state);
 
-            _path.Clear();
-         }
-
+         _path.Clear();
          return null;
       }
 
@@ -217,6 +213,8 @@ namespace EmberLib.Glow
       object IGlowVisitor<object, object>.Visit(GlowQualifiedNode glow, object state)
       {
          var glowPath = glow.Path;
+         foreach(var number in glowPath)
+            Push(number);
 
          if(glow.HasContents || glow.Children == null)
             OnNode(glow, glowPath);
@@ -224,15 +222,9 @@ namespace EmberLib.Glow
          var glowChildren = glow.Children;
 
          if(glowChildren != null)
-         {
-            foreach(var number in glowPath)
-               Push(number);
-
             glowChildren.Accept(this, state);
 
-            _path.Clear();
-         }
-
+         _path.Clear();
          return null;
       }
 
@@ -271,21 +263,17 @@ namespace EmberLib.Glow
       object IGlowVisitor<object, object>.Visit(GlowQualifiedMatrix glow, object state)
       {
          var glowPath = glow.Path;
+         foreach(var number in glowPath)
+            Push(number);
 
          OnMatrix(glow, glowPath);
 
          var glowChildren = glow.Children;
 
          if(glowChildren != null)
-         {
-            foreach(var number in glowPath)
-               Push(number);
-
             glowChildren.Accept(this, state);
 
-            _path.Clear();
-         }
-
+         _path.Clear();
          return null;
       }
 
@@ -309,21 +297,17 @@ namespace EmberLib.Glow
       object IGlowVisitor<object, object>.Visit(GlowQualifiedFunction glow, object state)
       {
          var glowPath = glow.Path;
+         foreach(var number in glowPath)
+            Push(number);
 
          OnFunction(glow, glowPath);
 
          var glowChildren = glow.Children;
 
          if(glowChildren != null)
-         {
-            foreach(var number in glowPath)
-               Push(number);
-
             glowChildren.Accept(this, state);
 
-            _path.Clear();
-         }
-
+         _path.Clear();
          return null;
       }
 

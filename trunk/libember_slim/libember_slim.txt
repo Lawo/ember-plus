@@ -8,10 +8,14 @@ L-S-B Broadcast Technologies GmbH
 =============================================
 
 authors: pbo@l-s-b.de, rni@l-s-b.de
-date:    2013-04-30
+date:    2013-05-24
 
 
 ------------------------------- Change Log:
+- 1.40:
+  - FIXED: glow tag for EmberPlus-Glow.MatrixContents.labels was wrong
+  - adjusted version number to match scheme proposed by kimohoff
+
 - 1.20:
   - Implements Glow DTD 2.20 (function extensions)
   - split files "emberglow.h" and "emberglow.c"

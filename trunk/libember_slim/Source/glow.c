@@ -151,7 +151,8 @@ const __GlowTags glowTags =
       {BerClass_ContextSpecific, 6},   // maximumTotalConnects
       {BerClass_ContextSpecific, 7},   // maximumConnectsPerTarget
       {BerClass_ContextSpecific, 8},   // parametersBasePath
-      {BerClass_ContextSpecific, 9},   // labels
+      {BerClass_ContextSpecific, 9},   // gainParameterNumber
+      {BerClass_ContextSpecific, 10},  // labels
    },
 
    // label

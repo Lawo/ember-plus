@@ -29,7 +29,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("L-S-B Broadcast Technologies GmbH")]
 [assembly: AssemblyProduct("BerLib")]
-[assembly: AssemblyCopyright("Copyright © L-S-B GmbH 2011-2012")]
+[assembly: AssemblyCopyright("Copyright © L-S-B Broadcast Technologies GmbH 2011-2012")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

@@ -27,9 +27,9 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTitle("EmberLib.Glow.PowerPack")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("Microsoft")]
+[assembly: AssemblyCompany("L-S-B Broadcast Technologies GmbH")]
 [assembly: AssemblyProduct("EmberLib.Glow.PowerPack")]
-[assembly: AssemblyCopyright("Copyright © Microsoft 2012")]
+[assembly: AssemblyCopyright("Copyright © L-S-B Broadcast Technologies GmbH 2012")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

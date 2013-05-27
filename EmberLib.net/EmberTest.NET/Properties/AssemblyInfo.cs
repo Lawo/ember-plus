@@ -8,9 +8,9 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTitle("EmberTest.NET")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("L-S-B GmbH")]
+[assembly: AssemblyCompany("L-S-B Broadcast Technologies GmbH")]
 [assembly: AssemblyProduct("EmberTest.NET")]
-[assembly: AssemblyCopyright("Copyright © L-S-B GmbH 2007")]
+[assembly: AssemblyCopyright("Copyright © L-S-B Broadcast Technologies GmbH 2007-2012")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -29,5 +29,5 @@ using System.Runtime.InteropServices;
 //      Build Number
 //      Revision
 //
-[assembly: AssemblyVersion("1.0.0.0")]
-[assembly: AssemblyFileVersion("1.0.0.0")]
+[assembly: AssemblyVersion("1.3.0.0")]
+[assembly: AssemblyFileVersion("1.3.0.0")]

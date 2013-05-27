@@ -19,9 +19,9 @@ module internal EmberLib.Glow.Formula.AssemblyInfo
 
 open System.Reflection
 
-[<AssemblyVersion("1.4.0.0")>]
+[<AssemblyVersion("1.3.0.0")>]
 [<AssemblyTitle("EmberLib.Glow.Formula")>]
 [<AssemblyCompany("L-S-B Broadcast Technologies GmbH")>]
-[<AssemblyCopyright("(c) L-S-B Broadcast Technologies GmbH 2012")>]
+[<AssemblyCopyright("Copyright © L-S-B Broadcast Technologies GmbH 2012")]
 do()
 

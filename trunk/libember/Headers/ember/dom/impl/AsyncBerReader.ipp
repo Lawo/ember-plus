@@ -32,6 +32,7 @@ namespace libember { namespace dom
     LIBEMBER_INLINE
     AsyncBerReader::~AsyncBerReader()
     {
+        reset();
     }
 
     LIBEMBER_INLINE
@@ -351,8 +352,21 @@ namespace libember { namespace dom
     LIBEMBER_INLINE
     void AsyncBerReader::pushContainer()
     {
-        m_container = new AsyncContainer(m_appTag, m_typeTag, m_length);
-        m_stack.push(m_container);
+        AsyncContainer* container = 0;
+
+        try
+        {
+            container = new AsyncContainer(m_appTag, m_typeTag, m_length);
+            m_stack.push(container);
+            m_container = container;
+        }
+        catch( ... )
+        {
+            if (container != 0)
+                delete container;
+
+            throw std::runtime_error("AsyncBerReader::pushContainer failed");
+        }
     }
 
     LIBEMBER_INLINE

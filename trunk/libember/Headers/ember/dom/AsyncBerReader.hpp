@@ -56,7 +56,8 @@ namespace libember { namespace dom
              * Reads a single byte.
              * @param value The byte to decode.
              * @throw std::runtime_error if the end of a stream is reached while still decoding
-             *      a container or when there is a mismatch with the decoded tag or length.
+             *      a container; when there is a mismatch with the decoded tag or length or
+             *      when a memory exception occurs.
              */
             void read(value_type value);
 
@@ -67,7 +68,8 @@ namespace libember { namespace dom
              * @param last an iterator referring to the element one past the last
              *        element of the sequence of elements to decode.
              * @throw std::runtime_error if the end of a stream is reached while still decoding
-             *      a container or when there is a mismatch with the decoded tag or length.
+             *      a container; when there is a mismatch with the decoded tag or length or
+             *      when a memory exception occurs.
              */
             template<typename InputIterator>
             void read(InputIterator first, InputIterator last);
@@ -89,7 +91,7 @@ namespace libember { namespace dom
             virtual void itemReady() = 0;
 
             /**
-             * This method is called by reset and may be overriden by the implementation.
+             * This method is called by reset and may be overridden by the implementation.
              */
             virtual void resetImpl();
 
@@ -162,6 +164,7 @@ namespace libember { namespace dom
             /**
              * Pushes a new AsyncContainer on the stack with the current application tag,
              * type tag and encoded length property.
+             * @throw std::runtime_error when the push operation fails for any reason.
              */
             void pushContainer();
 

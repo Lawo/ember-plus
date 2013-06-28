@@ -20,6 +20,7 @@
 #ifndef __LIBEMBER_DOM_ASYNCBERREADER_HPP
 #define __LIBEMBER_DOM_ASYNCBERREADER_HPP
 
+#include <memory>
 #include <stack>
 #include "../util/Api.hpp"
 #include "../util/OctetStream.hpp"
@@ -38,6 +39,7 @@ namespace libember { namespace dom
     class LIBEMBER_API AsyncBerReader
     {
         class LIBEMBER_API DecodeState;
+        class LIBEMBER_API AsyncContainer;
 
         public:
             typedef util::OctetStream::size_type size_type;
@@ -181,6 +183,12 @@ namespace libember { namespace dom
              */
             void disposeCurrentTLV();
 
+            /**
+             * Returns the current container or null, if there is no container on the stack.
+             * @return The current container or null, if there is no container on the stack.
+             */
+            AsyncContainer* currentContainer() const;
+
         private:
             /**
              * A scoped enumeration type containing the symbolic names
@@ -319,13 +327,12 @@ namespace libember { namespace dom
 #  pragma warning(push)
 #  pragma warning(disable : 4251)
 #endif
-            std::stack<AsyncContainer*> m_stack;
+            std::stack<std::auto_ptr<AsyncContainer> > m_stack;
             util::OctetStream m_buffer;
             util::OctetStream m_valueBuffer;
 #ifdef _MSC_VER
 #  pragma warning(pop)
 #endif
-            AsyncContainer* m_container;
             DecodeState m_decodeState;
             size_type m_bytesRead;
             size_type m_bytesExpected;
@@ -355,6 +362,14 @@ namespace libember { namespace dom
     {
         ValueType const value = ber::decode<ValueType>(m_valueBuffer, m_valueLength);
         return value;
+    }
+
+    inline AsyncBerReader::AsyncContainer* AsyncBerReader::currentContainer() const
+    {
+        AsyncContainer *const container = m_stack.empty()
+            ? static_cast<AsyncContainer*>(0)
+            : m_stack.top().get();
+        return container;
     }
 }
 }

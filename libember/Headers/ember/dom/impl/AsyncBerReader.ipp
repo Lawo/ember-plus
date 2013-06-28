@@ -30,6 +30,19 @@
 namespace libember { namespace dom 
 {
     LIBEMBER_INLINE
+    AsyncBerReader::AsyncBerReader()
+        : m_buffer(0)
+        , m_valueBuffer(0)
+        , m_decodeState(DecodeState::Tag)
+        , m_bytesRead(0)
+        , m_bytesExpected(0)
+        , m_valueLength(0)
+        , m_isContainer(false)
+        , m_length(0)
+        , m_outerLength(0)
+    {}
+
+    LIBEMBER_INLINE
     AsyncBerReader::~AsyncBerReader()
     {
         reset();
@@ -38,15 +51,7 @@ namespace libember { namespace dom
     LIBEMBER_INLINE
     void AsyncBerReader::reset()
     {
-        while(m_stack.empty() == false)
-        {
-            AsyncContainer* container = m_stack.top();
-
-            m_stack.pop();
-            delete container;
-        }
-
-        m_container = 0;
+        m_stack.swap(std::stack<std::auto_ptr<AsyncContainer> >());
 
         disposeCurrentTLV();
         reset(DecodeState::Tag);
@@ -58,8 +63,12 @@ namespace libember { namespace dom
     {
         m_buffer.append(value);
 
-        if (m_container != 0)
-            m_container->incrementBytesRead();
+        {
+            AsyncContainer *const container = currentContainer();
+
+            if (container != 0)
+                container->incrementBytesRead();
+        }
 
         bool isEofOk = false;
 
@@ -82,28 +91,17 @@ namespace libember { namespace dom
                 break;
         }
 
-        while(m_container != 0 && m_container->eof())
+        AsyncContainer *container = currentContainer();
+
+        while(container != 0 && container->eof())
         {
             if (isEofOk == false)
                 throw std::runtime_error("Unexpected end of container");
 
             popContainer();
+            container = currentContainer();
         }
     }
-
-    LIBEMBER_INLINE
-    AsyncBerReader::AsyncBerReader()
-        : m_buffer(0)
-        , m_valueBuffer(0)
-        , m_container(0)
-        , m_decodeState(DecodeState::Tag)
-        , m_bytesRead(0)
-        , m_bytesExpected(0)
-        , m_valueLength(0)
-        , m_isContainer(false)
-        , m_length(0)
-        , m_outerLength(0)
-    {}
 
     LIBEMBER_INLINE
     void AsyncBerReader::resetImpl()
@@ -301,8 +299,10 @@ namespace libember { namespace dom
     LIBEMBER_INLINE
     bool AsyncBerReader::readTerminatorByte(value_type value)
     {
-        if (m_container == 0
-        ||  m_container->length() != length_type::INDEFINITE)
+        AsyncContainer *const container = currentContainer();
+
+        if (container == 0
+        ||  container->length() != length_type::INDEFINITE)
             throw std::runtime_error("Unexpected terminator");
 
         if (value == 0)
@@ -312,8 +312,8 @@ namespace libember { namespace dom
             if (m_bytesRead == 3)
             {
                 // end of indefinite length container
-                if (m_container != 0)
-                    m_container->setLength(m_container->bytesRead());
+                if (container != 0)
+                    container->setLength(container->bytesRead());
 
                 return true;
             }
@@ -352,21 +352,7 @@ namespace libember { namespace dom
     LIBEMBER_INLINE
     void AsyncBerReader::pushContainer()
     {
-        AsyncContainer* container = 0;
-
-        try
-        {
-            container = new AsyncContainer(m_appTag, m_typeTag, m_length);
-            m_stack.push(container);
-            m_container = container;
-        }
-        catch( ... )
-        {
-            if (container != 0)
-                delete container;
-
-            throw std::runtime_error("AsyncBerReader::pushContainer failed");
-        }
+        m_stack.push(std::auto_ptr<AsyncContainer>(new AsyncContainer(m_appTag, m_typeTag, m_length)));
     }
 
     LIBEMBER_INLINE
@@ -376,26 +362,20 @@ namespace libember { namespace dom
 
         if (m_stack.size() > 0)
         {
-            AsyncContainer* container = m_stack.top();
-            m_stack.pop();
-            m_appTag = container->tag();
-            m_typeTag = container->type();
-            m_length = container->length();
-            m_isContainer = true;
+            {
+                AsyncContainer const * const container = currentContainer();
+                m_appTag = container->tag();
+                m_typeTag = container->type();
+                m_length = container->length();
+                m_isContainer = true;
+                m_stack.pop();
+            }
 
             itemReady();
 
-            if (m_stack.empty())
-            {
-                m_container = 0;
-            }
-            else
-            {
-                m_container = m_stack.top();
-                m_container->incrementBytesRead(m_length);
-            }
+            if (m_stack.empty() == false)
+                m_stack.top()->incrementBytesRead(m_length);
 
-            delete container;
             disposeCurrentTLV();
             return true;
         }

@@ -17,6 +17,8 @@
 --   - NOTE: This version introduces breaking changes!
 --   - Changed Parameter.isCommand (BOOLEAN) to an enumeration named "type".
 --     To determine the effective type of a parameter, follow this rule:
+--     - If the parameter has the "type" field that equals "trigger", its 
+--       type is "trigger".
 --     - If the parameter has either the "enumeration" or the "enumMap" field,
 --       its type is "enum".
 --     - If the parameter has the "value" field, its type corresponds to the

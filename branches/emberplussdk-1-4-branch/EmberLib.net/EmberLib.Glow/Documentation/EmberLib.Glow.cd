@@ -1,0 +1,249 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="EmberLib.Glow.GlowApplicationInterface" Collapsed="true">
+    <Position X="2.5" Y="7.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAIAAAAAAAAAAAAAAAAAAAAIAAAAAAAAAAA=</HashCode>
+      <FileName>GlowApplicationInterface.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="EmberLib.Glow.GlowCommand" Collapsed="true">
+    <Position X="4.25" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AIAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAABA=</HashCode>
+      <FileName>GlowCommand.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="EmberLib.Glow.GlowContainer" Collapsed="true">
+    <Position X="5.75" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AIAAAAAAABAAAIAAAAAAAAAAAAAAAAgAAAAAAAAAAAA=</HashCode>
+      <FileName>GlowContainer.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="EmberLib.Glow.GlowContentElement" Collapsed="true">
+    <Position X="6" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAEAAAAACAAABAEAEAEAAAAAAQAAAgABAAAAAAAA=</HashCode>
+      <FileName>GlowContentElement.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="EmberLib.Glow.GlowType" Collapsed="true">
+    <Position X="9.5" Y="7.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAABAAAAEgAAAAEAgAQADDAABCAwAAAAgBAAAgEAAAA=</HashCode>
+      <FileName>GlowDefinitions.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="EmberLib.Glow.GlowTags" Collapsed="true">
+    <Position X="7.75" Y="7.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAACAAAAAAAAAAAABAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>GlowDefinitions.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="EmberLib.Glow.GlowElement" Collapsed="true">
+    <Position X="4" Y="2" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>GlowElement.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="EmberLib.Glow.GlowElementCollection" Collapsed="true">
+    <Position X="2.25" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAAAA=</HashCode>
+      <FileName>GlowElementCollection.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="EmberLib.Glow.GlowMinMax" Collapsed="true">
+    <Position X="0.5" Y="7.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AIAAgAAAAAAAAAAEAAAAACAAAAAAAgQABQAAAAAAAAA=</HashCode>
+      <FileName>GlowMinMax.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="EmberLib.Glow.GlowNode" Collapsed="true">
+    <Position X="0.5" Y="6" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AIAAAAAAAAAAAAAAAEAAAAAAAAAAQAAAAAAAAAAAAAA=</HashCode>
+      <FileName>GlowNode.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="EmberLib.Glow.GlowParameter" Collapsed="true">
+    <Position X="6.25" Y="6" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AIAAAAAAAAAAAAAAAEAAAAAAAAAAQAAAAAAAAAAAAAA=</HashCode>
+      <FileName>GlowParameter.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="EmberLib.Glow.GlowStreamCollection" Collapsed="true">
+    <Position X="8.5" Y="2" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AIAAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAAAIAQAAAA=</HashCode>
+      <FileName>GlowStreamCollection.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="EmberLib.Glow.GlowStreamEntry" Collapsed="true">
+    <Position X="6.5" Y="2" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AIAAAAAAAAAAAAAAACAAAAAAAAAAAAAAABAAAAAAAAA=</HashCode>
+      <FileName>GlowStreamEntry.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="EmberLib.Glow.GlowValue" Collapsed="true">
+    <Position X="0.5" Y="8.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AIAAAAAAiQAAAQAEQAAAAAAAAAAAAAAAAAQAAAAAAAA=</HashCode>
+      <FileName>GlowValue.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="EmberLib.Glow.GlowStringIntegerCollection" Collapsed="true">
+    <Position X="8.25" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAgQAAAA=</HashCode>
+      <FileName>GlowStringIntegerCollection.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="EmberLib.Glow.GlowStringIntegerPair" Collapsed="true">
+    <Position X="10" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAABAAEAAAAAAAAAAAAAAQAAAAAAAAAAAA=</HashCode>
+      <FileName>GlowStringIntegerPair.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="EmberLib.Glow.GlowSubContainer" Collapsed="true">
+    <Position X="10.5" Y="2" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>GlowSubContainer.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="EmberLib.Glow.GlowQualifiedNode" Collapsed="true">
+    <Position X="2.5" Y="6" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AIAAAAAAAAAAAAIAAEAAAAAAAAAAQAAAAAAAAAAAAAA=</HashCode>
+      <FileName>GlowQualifiedNode.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="EmberLib.Glow.GlowQualifiedParameter" Collapsed="true">
+    <Position X="4.25" Y="6" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AIAAAAAAAAAAAAIAAEAAAAAAAAAAQAAAAAAAAAAAAAA=</HashCode>
+      <FileName>GlowQualifiedParameter.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="EmberLib.Glow.GlowParameterBase" Collapsed="true">
+    <Position X="5.25" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>hAAAQADAIQBgAEAAACAAKAAAUAiABEACpAAgQAIAAAA=</HashCode>
+      <FileName>GlowParameterBase.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="EmberLib.Glow.GlowFormulaSource" Collapsed="true">
+    <Position X="6" Y="7.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAIAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>GlowParameterBase.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="EmberLib.Glow.GlowNodeBase" Collapsed="true">
+    <Position X="1.5" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAgAAAAAAAAAAAAAACAAAAAAQAAQAIAAAA=</HashCode>
+      <FileName>GlowNodeBase.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="EmberLib.Glow.GlowElementCollectionBase" Collapsed="true">
+    <Position X="1.25" Y="2" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAQAAAA=</HashCode>
+      <FileName>GlowElementCollectionBase.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="EmberLib.Glow.GlowRootElementCollection" Collapsed="true">
+    <Position X="0.5" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAAIAAAAAA=</HashCode>
+      <FileName>GlowRootElementCollection.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="EmberLib.Glow.Experimental.GlowMatrixBase" Collapsed="true">
+    <Position X="8.5" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AIAAgAAAECBhAACACAAABEACAIAQAEgAAAgCRCIAAQA=</HashCode>
+      <FileName>Experimental\GlowMatrixBase.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="EmberLib.Glow.Experimental.GlowMatrix" Collapsed="true">
+    <Position X="8" Y="6" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AIAAAAAAAAAAAACAAEAAAAAAAAAAQAgAAAgAAAAAAAA=</HashCode>
+      <FileName>Experimental\GlowMatrix.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="EmberLib.Glow.Experimental.GlowQualifiedMatrix" Collapsed="true">
+    <Position X="9.75" Y="6" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AIAAAAAAAAAAAAKAAEAAAAAAAAAAQAgAAAgAAAAAAAA=</HashCode>
+      <FileName>Experimental\GlowQualifiedMatrix.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="EmberLib.Glow.Experimental.GlowSignal" Collapsed="true">
+    <Position X="11.75" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Experimental\GlowSignal.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="EmberLib.Glow.Experimental.GlowConnection" Collapsed="true">
+    <Position X="13.5" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAIAAAAACAAAAAQAAAAAAEAAAAAAAA=</HashCode>
+      <FileName>Experimental\GlowConnection.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="EmberLib.Glow.Experimental.GlowSource" Collapsed="true">
+    <Position X="10.75" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Experimental\GlowSource.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="EmberLib.Glow.Experimental.GlowTarget" Collapsed="true">
+    <Position X="12.5" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Experimental\GlowTarget.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="EmberLib.Glow.Experimental.GlowLabel" Collapsed="true">
+    <Position X="15.25" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>BAAAAAAAAAAgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Experimental\GlowLabel.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="EmberLib.Glow.Experimental.GlowParametersLocation" Collapsed="true">
+    <Position X="11.25" Y="7.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>BBAAAAAAAEBAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Experimental\GlowParametersLocation.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Interface Name="EmberLib.Glow.IGlowVisitor&lt;TState, TResult&gt;" Collapsed="true">
+    <Position X="4.25" Y="7.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>IGlowVisitor.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Enum Name="EmberLib.Glow.Experimental.GlowParametersLocationKind" Collapsed="true">
+    <Position X="13" Y="7.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>BAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Experimental\GlowParametersLocation.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

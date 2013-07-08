@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>c1620d4b-a538-4efd-8c04-5c4eb5b2050b</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <RootNamespace>EmberLib.Glow.Formula</RootNamespace>
+    <AssemblyName>EmberLib.Glow.Formula</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkProfile>Profile47</TargetFrameworkProfile>
+    <Name>EmberLib.Glow.Formula</Name>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <Tailcalls>false</Tailcalls>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>TRACE;DEBUG;NO_EMIT</DefineConstants>
+    <WarningLevel>3</WarningLevel>
+    <DocumentationFile>bin\Debug\EmberLib.Glow.Formula.XML</DocumentationFile>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <Tailcalls>true</Tailcalls>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE;NO_EMIT</DefineConstants>
+    <WarningLevel>3</WarningLevel>
+    <DocumentationFile>bin\Release\EmberLib.Glow.Formula.XML</DocumentationFile>
+    <NoWarn>1591</NoWarn>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\BerLib\Portable.BerLib.csproj">
+      <Name>Portable.BerLib</Name>
+      <Project>{9521a12e-517d-4f8e-9bc3-74dc4666d69c}</Project>
+      <Private>True</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\EmberLib.Glow\Portable.EmberLib.Glow.csproj">
+      <Name>Portable.EmberLib.Glow</Name>
+      <Project>{b3acaca4-6929-45af-ba73-975487f81bce}</Project>
+      <Private>True</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\FSharp.PowerPack.PCL\FSharp.PowerPack.PCL.fsproj">
+      <Name>FSharp.PowerPack.PCL</Name>
+      <Project>{3beb9ccd-64f0-4932-a1b3-8ee89a0df785}</Project>
+      <Private>True</Private>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\..\EmberLib.Glow.Formula\AssemblyInfo.fs">
+      <Link>AssemblyInfo.fs</Link>
+    </Compile>
+    <Compile Include="..\..\EmberLib.Glow.Formula\Ast.fs">
+      <Link>Ast.fs</Link>
+    </Compile>
+    <Compile Include="..\..\EmberLib.Glow.Formula\Parser.fs">
+      <Link>Parser.fs</Link>
+    </Compile>
+    <Compile Include="..\..\EmberLib.Glow.Formula\Lexer.fs">
+      <Link>Lexer.fs</Link>
+    </Compile>
+    <Compile Include="..\..\EmberLib.Glow.Formula\Interpreter.fs">
+      <Link>Interpreter.fs</Link>
+    </Compile>
+    <Compile Include="..\..\EmberLib.Glow.Formula\Emitter.fs">
+      <Link>Emitter.fs</Link>
+    </Compile>
+    <Compile Include="..\..\EmberLib.Glow.Formula\Compiler.fs">
+      <Link>Compiler.fs</Link>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="FSharp.Core">
+      <HintPath>..\FSharp.Core.PCL\FSharp.Core.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <PropertyGroup>
+    <MinimumVisualStudioVersion Condition="'$(MinimumVisualStudioVersion)' == ''">11</MinimumVisualStudioVersion>
+  </PropertyGroup>
+  <Import Project="$(MSBuildExtensionsPath32)\..\Microsoft SDKs\F#\3.0\Framework\v4.0\Microsoft.Portable.FSharp.Targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

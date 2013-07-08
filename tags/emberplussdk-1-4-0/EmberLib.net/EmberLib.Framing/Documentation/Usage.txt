@@ -1,0 +1,41 @@
+﻿
+// ------------------------------- reading
+var asyncReader = new AsyncDomReader(false, new GlowApplicationInterface());
+asyncReader.RootReady += (_, e) => handleEmber(e.Root);
+
+using(var framingReader = new FramingReader(asyncReader))
+{
+   socket.Receive(buffer, 0, buffer.Length);
+
+   framingReader.ReadBytes(buffer);
+}
+
+
+// ------------------------------- writing
+class GlowOutput : FramingBerOutput
+{
+   public GlowOutput(EventHandler<PackageReadyArgs> packageReadyHandler)
+   : base(15*1024, 100, Dtd.Glow, packageReadyHandler)
+   {
+   }
+
+   protected override byte[] GetApplicationBytes(out ushort length)
+   {
+      var bytes = new byte[] { 71, 72, 73, 74, 75 };
+      length = (ushort)bytes.Length;
+      return bytes;
+   }
+}
+
+var framingOut = new GlowOutput(
+   (_, e) =>
+   {
+      socket.Send(e.FramedPackage, 0, e.FramedPackageLength);
+   });
+
+using(framingOut)
+{
+   root.Write(framingOut);
+
+   framingOut.Finish();
+}

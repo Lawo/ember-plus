@@ -6,7 +6,7 @@
 --
 -- Change Log:
 -- 2.20:
---   - NOTE: This version describes the data schema of Ember+ 1.2.
+--   - NOTE: This version describes the data schema of Ember+ 1.4.
 --   - Added Function Extensions (see type Function)
 -- 2.10:
 --   - NOTE: This version describes the data schema of Ember+ 1.1.

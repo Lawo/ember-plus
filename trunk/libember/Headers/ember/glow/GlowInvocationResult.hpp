@@ -126,7 +126,7 @@ namespace libember { namespace glow
                 ber::Tag const typeTag = first->typeTag();
                 dom::VariantLeaf const* const node = dynamic_cast<libember::dom::VariantLeaf const*>(&*first);
 
-                if(node != nullptr)
+                if (node != 0)
                 {
                     *dest++ = Value(node->value());
                     size++;

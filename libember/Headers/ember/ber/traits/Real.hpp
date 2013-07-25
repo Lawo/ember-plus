@@ -25,6 +25,7 @@
 #include "RegisterDecoder.hpp"
 #include "Integral.hpp"
 #include "../../meta/FunctionTraits.hpp"
+#include "../../util/TypePun.hpp"
 
 namespace libember { namespace ber
 {
@@ -66,7 +67,7 @@ namespace libember { namespace ber
                 else
                 {
                     double const real = value;
-                    unsigned long long const bits = *reinterpret_cast<unsigned long long const*>(&real);
+                    unsigned long long const bits = util::type_pun<unsigned long long>(real);
 
                     if (bits != 0)
                     {
@@ -104,7 +105,7 @@ namespace libember { namespace ber
                 {
                     std::size_t encodedLength = 0;
                     double const real = value;
-                    unsigned long long const bits = *reinterpret_cast<unsigned long long const*>(&real);
+                    unsigned long long const bits = util::type_pun<unsigned long long>(real);
 
                     if (bits != 0)
                     {
@@ -186,7 +187,7 @@ namespace libember { namespace ber
                     if (sign != 0)
                         bits |= (0x8000000000000000ULL);
 
-                    double const real = *reinterpret_cast<double const*>(&bits);
+                    double const real = util::type_pun<double>(bits);
                     return static_cast<value_type>(real);
                 }
             }

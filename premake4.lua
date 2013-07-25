@@ -69,7 +69,7 @@ solution "EmberPlus SDK"
         includedirs { "libember/Headers" }
             
         configuration { "gmake or not windows" }
-            buildoptions { "-std=c++11" }
+            buildoptions { "-std=c++03" }
 
         configuration { "macosx" }
             buildoptions { "-stdlib=libc++" }

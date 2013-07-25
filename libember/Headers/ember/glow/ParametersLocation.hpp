@@ -20,6 +20,7 @@
 #ifndef __LIBEMBER_GLOW_PARAMETERSLOCATION_HPP
 #define __LIBEMBER_GLOW_PARAMETERSLOCATION_HPP
 
+#include <stdexcept>
 #include <sstream>
 #include "../ber/ObjectIdentifier.hpp"
 #include "util/ValueConverter.hpp"

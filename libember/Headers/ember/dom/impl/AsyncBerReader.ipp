@@ -51,8 +51,10 @@ namespace libember { namespace dom
     LIBEMBER_INLINE
     void AsyncBerReader::reset()
     {
-        m_stack.swap(std::stack<std::auto_ptr<AsyncContainer> >());
-
+        {
+            AsyncContainerStack emptyContainerStack;
+            emptyContainerStack.swap(m_stack);
+        }
         disposeCurrentTLV();
         reset(DecodeState::Tag);
         resetImpl();
@@ -63,11 +65,10 @@ namespace libember { namespace dom
     {
         m_buffer.append(value);
 
+        if (!m_stack.empty())
         {
-            AsyncContainer *const container = currentContainer();
-
-            if (container != 0)
-                container->incrementBytesRead();
+            AsyncContainer& currentContainer = m_stack.back();
+            currentContainer.incrementBytesRead();
         }
 
         bool isEofOk = false;
@@ -91,22 +92,19 @@ namespace libember { namespace dom
                 break;
         }
 
-        AsyncContainer *container = currentContainer();
-
-        while(container != 0 && container->eof())
+        while (!m_stack.empty() && m_stack.back().eof())
         {
-            if (isEofOk == false)
+            if (!isEofOk)
+            {
                 throw std::runtime_error("Unexpected end of container");
-
+            }
             popContainer();
-            container = currentContainer();
         }
     }
 
     LIBEMBER_INLINE
     void AsyncBerReader::resetImpl()
-    {
-    }
+    {}
 
     LIBEMBER_INLINE
     AsyncBerReader::size_type AsyncBerReader::length() const
@@ -299,30 +297,29 @@ namespace libember { namespace dom
     LIBEMBER_INLINE
     bool AsyncBerReader::readTerminatorByte(value_type value)
     {
-        AsyncContainer *const container = currentContainer();
-
-        if (container == 0
-        ||  container->length() != length_type::INDEFINITE)
-            throw std::runtime_error("Unexpected terminator");
-
-        if (value == 0)
-        {
-            m_bytesRead++;
-
-            if (m_bytesRead == 3)
-            {
-                // end of indefinite length container
-                if (container != 0)
-                    container->setLength(container->bytesRead());
-
-                return true;
-            }
-        }
-        else
+        if (value != 0)
         {
             throw std::runtime_error("Non-zero byte in terminator");
         }
 
+        if (m_stack.empty()) 
+        {
+            throw std::runtime_error("Unexpected terminator");
+        }
+
+        AsyncContainer& currentContainer = m_stack.back();
+        if  (currentContainer.length() != length_type::INDEFINITE)
+        {
+            throw std::runtime_error("Unexpected terminator");
+        }
+
+        m_bytesRead += 1;
+        if (m_bytesRead == 3)
+        {
+            // end of indefinite length container
+            currentContainer.setLength(currentContainer.bytesRead());
+            return true;
+        }
         return false;
     }
 
@@ -352,7 +349,8 @@ namespace libember { namespace dom
     LIBEMBER_INLINE
     void AsyncBerReader::pushContainer()
     {
-        m_stack.push(std::auto_ptr<AsyncContainer>(new AsyncContainer(m_appTag, m_typeTag, m_length)));
+        AsyncContainer newContainer(m_appTag, m_typeTag, m_length);
+        m_stack.push_back(newContainer);
     }
 
     LIBEMBER_INLINE
@@ -360,22 +358,24 @@ namespace libember { namespace dom
     {
         reset(DecodeState::Tag);
 
-        if (m_stack.size() > 0)
+        if (!m_stack.empty())
         {
             {
-                AsyncContainer const * const container = currentContainer();
-                m_appTag = container->tag();
-                m_typeTag = container->type();
-                m_length = container->length();
+                AsyncContainer const& currentContainer = m_stack.back();
+                m_appTag  = currentContainer.tag();
+                m_typeTag = currentContainer.type();
+                m_length  = currentContainer.length();
                 m_isContainer = true;
-                m_stack.pop();
+
+                m_stack.pop_back();
             }
 
             itemReady();
 
-            if (m_stack.empty() == false)
-                m_stack.top()->incrementBytesRead(m_length);
-
+            if (!m_stack.empty())
+            {
+                m_stack.back().incrementBytesRead(m_length);
+            }
             disposeCurrentTLV();
             return true;
         }

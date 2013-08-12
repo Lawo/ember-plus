@@ -20,6 +20,9 @@
 #ifndef __LIBEMBER_GLOW_ACCESS_HPP
 #define __LIBEMBER_GLOW_ACCESS_HPP
 
+
+
+
 namespace libember { namespace glow
 {
     /**

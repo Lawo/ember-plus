@@ -42,8 +42,8 @@ solution "EmberPlus SDK"
         objdir    "build/release/static/obj"
 
     configuration { "ReleaseShared" }
-        targetdir "build/release/sshared/bin"
-        objdir    "build/release/sshared/obj"
+        targetdir "build/release/shared/bin"
+        objdir    "build/release/shared/obj"
                
     if _ACTION == "clean" then
         os.rmdir("build")

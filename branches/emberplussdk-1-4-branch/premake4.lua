@@ -42,8 +42,8 @@ solution "EmberPlus SDK"
         objdir    "build/release/static/obj"
 
     configuration { "ReleaseShared" }
-        targetdir "build/release/sshared/bin"
-        objdir    "build/release/sshared/obj"
+        targetdir "build/release/shared/bin"
+        objdir    "build/release/shared/obj"
                
     if _ACTION == "clean" then
         os.rmdir("build")
@@ -100,7 +100,7 @@ solution "EmberPlus SDK"
         targetname  "sample-libember-staticbercodec"
         files       { "libember/Tests/ber/StaticEncodeDecode.cpp" }
         includedirs { "libember/Headers" }
-        links       { "ember" } 
+        links       { "EmberPlus C++ Library" } 
 
     project "EmberPlus Library Sample - Dynamic BER Codec"
         -- Common settings for all configurations of this project
@@ -109,18 +109,15 @@ solution "EmberPlus SDK"
         targetname  "sample-libember-dynamicbercodec"
         files       { "libember/Tests/ber/DynamicEncodeDecode.cpp" }
         includedirs { "libember/Headers" }
-        links       { "ember" } 
+        links       { "EmberPlus C++ Library" } 
 
 
     project "EmberPlus C Library"
         -- Common settings for all configurations of this project
         language    "C"
         targetname  "libember_slim"
-        files       {
-            "libember_slim/Source/**.h",
-            "libember_slim/Source/ber.c", "libember_slim/Source/berio.c", "libember_slim/Source/berreader.c", "libember_slim/Source/bertag.c",
-            "libember_slim/Source/bytebuffer.c", "libember_slim/Source/ember.c", "libember_slim/Source/emberasyncreader.c", "libember_slim/Source/emberframing.c",
-            "libember_slim/Source/emberglow.c", "libember_slim/Source/emberinternal.c" }
+        files       { "libember_slim/Source/**.h", "libember_slim/Source/**.c" }
+        excludes    { "**__sample*" }
         includedirs { "libember_slim/Source" }
             
         -- Common settings for all static library configurations of this project

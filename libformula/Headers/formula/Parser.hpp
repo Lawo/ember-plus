@@ -147,7 +147,7 @@ namespace libformula
         }
         else
         {
-            m_current++;
+            ++m_current;
         }
     }
 
@@ -350,7 +350,7 @@ namespace libformula
                 {
                     move();
                     term(code, error);
-                    args++;
+                    ++args;
 
                     if (peek())
                     {

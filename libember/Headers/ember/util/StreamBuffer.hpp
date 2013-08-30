@@ -336,7 +336,7 @@ namespace libember { namespace util
             grow()->append(value);
         }
 
-        m_size++;
+        ++m_size;
     }
 
     template<typename ValueType, unsigned short ChunkSize>

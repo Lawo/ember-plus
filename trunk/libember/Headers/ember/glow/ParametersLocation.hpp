@@ -102,17 +102,15 @@ namespace libember { namespace glow
      ******************************************************/
 
     inline ParametersLocation::ParametersLocation(ber::ObjectIdentifier const& basePath)
-        : m_kind(ParametersLocationKind::BasePath)
+        : m_basePath(new ber::ObjectIdentifier(basePath))
+        , m_kind(ParametersLocationKind::BasePath)
     {
-        m_basePath = new ber::ObjectIdentifier(basePath);
-        m_kind = ParametersLocationKind::BasePath;
     }
 
     inline ParametersLocation::ParametersLocation(int inlineSubid)
-        : m_kind(ParametersLocationKind::BasePath)
+        : m_inlineSubid(inlineSubid)
+        , m_kind(ParametersLocationKind::Inline)
     {
-        m_inlineSubid = inlineSubid;
-        m_kind = ParametersLocationKind::Inline;
     }
 
     inline ParametersLocation::ParametersLocation(ber::Value const& value)

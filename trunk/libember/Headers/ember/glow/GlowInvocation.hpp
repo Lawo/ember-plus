@@ -109,7 +109,7 @@ namespace libember { namespace glow
             dom::Container::const_iterator first = container->begin();
             dom::Container::const_iterator last = container->end();
 
-            for( ; first != last; first++)
+            for( ; first != last; ++first)
             {
                 ber::Tag const typeTag = first->typeTag();
                 dom::VariantLeaf const* const node = dynamic_cast<libember::dom::VariantLeaf const*>(&*first);

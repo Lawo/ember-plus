@@ -89,7 +89,7 @@ namespace libember { namespace glow
 
         container->clear();
 
-        for( ; firstValue != lastValue; firstValue++)
+        for( ; firstValue != lastValue; ++firstValue)
         {
             ber::Value berValue = (*firstValue).toBerValue();
             dom::Node* node = new dom::VariantLeaf(GlowTags::ElementDefault(), berValue);
@@ -117,7 +117,7 @@ namespace libember { namespace glow
                 if (node != 0)
                 {
                     *dest++ = Value(node->value());
-                    size++;
+                    ++size;
                 }
             }
         }

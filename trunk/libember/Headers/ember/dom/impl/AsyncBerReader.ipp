@@ -212,7 +212,7 @@ namespace libember { namespace dom
             return false;
         }
 
-        m_bytesRead++;
+        ++m_bytesRead;
         return false;
     }
 
@@ -234,7 +234,7 @@ namespace libember { namespace dom
                 throw std::runtime_error("Number of length octets out of bounds");
         }
 
-        m_bytesRead++;
+        ++m_bytesRead;
 
         if (m_bytesRead == m_bytesExpected)
         {
@@ -283,7 +283,7 @@ namespace libember { namespace dom
         if (m_bytesRead == 0)
             m_bytesExpected = m_length;
 
-        m_bytesRead++;
+        ++m_bytesRead;
 
         if (m_bytesRead == m_bytesExpected)
         {

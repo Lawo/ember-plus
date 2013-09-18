@@ -56,6 +56,16 @@ namespace libs101
         private:
             value_type m_value;
     };
+
+    inline bool operator==(PackageFlag const& left, PackageFlag const& right)
+    {
+        return (left.value() == right.value());
+    }
+
+    inline bool operator!=(PackageFlag const& left, PackageFlag const& right)
+    {
+        return !(left == right);
+    }
 }
 
 #endif  // __LIBS101_PACKAGEFLAG_HPP

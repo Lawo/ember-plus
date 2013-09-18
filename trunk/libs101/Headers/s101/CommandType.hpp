@@ -74,6 +74,16 @@ namespace libs101
         private:
             value_type m_value;
     };
+
+    inline bool operator==(CommandType const& left, CommandType const& right)
+    {
+        return (left.value() == right.value());
+    }
+
+    inline bool operator!=(CommandType const& left, CommandType const& right)
+    {
+        return !(left == right);
+    }
 }
 
 #endif  // __LIBS101_COMMANDTYPE_HPP

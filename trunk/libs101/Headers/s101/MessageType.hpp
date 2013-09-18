@@ -57,6 +57,16 @@ namespace libs101
         private:
             value_type m_value;
     };
+
+    inline bool operator==(MessageType const& left, MessageType const& right)
+    {
+        return (left.value() == right.value());
+    }
+
+    inline bool operator!=(MessageType const& left, MessageType const& right)
+    {
+        return !(left == right);
+    }
 }
 
 #endif  // __LIBS101_MESSAGETYPE_HPP

@@ -1,0 +1,21 @@
+#summary List of companies that use Ember+
+
+=== The following companies are using Ember+: ===
+
+  * [http://www.lawo.de Lawo]
+  * [http://www.dsa-volgmann.de DSA Volgmann]
+  * [http://www.lsb.de L-S-B Broadcast Technologies]
+  * [http://www.alcnetworx.de ALC NetworX]
+  * [http://www.lawo.ch LES Switzerland]
+  * [http://www.junger-audio.com Jünger]
+  * [http://www.orban.com Orban]
+  * [http://www.riedel.net Riedel]
+  * [http://www.mosart.no Mosart]
+  * [http://www.bfe-systemhaus.de BFE]
+  * [http://www.stagetec.com Stagetec]
+  * [http://www.ihse.de Ihse]
+
+=== The following companies are said to use Ember+: ===
+  * [http://www.studer.ch Studer]
+  * [http://www.evertz.com/ Evertz]
+  * [http://www.skyline.be Skyline (DataMiner)]

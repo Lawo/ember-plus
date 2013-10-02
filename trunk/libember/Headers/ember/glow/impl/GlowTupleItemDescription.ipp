@@ -43,7 +43,7 @@ namespace libember { namespace glow
     LIBEMBER_INLINE
     ParameterType GlowTupleItemDescription::type() const
     {
-        ber::Tag const tag = GlowTags::TupleItemDescription::Name(); 
+        ber::Tag const tag = GlowTags::TupleItemDescription::Type(); 
         const_iterator first = begin();
         const_iterator const last = end();
         const_iterator const result = util::find_tag(first, last, tag);

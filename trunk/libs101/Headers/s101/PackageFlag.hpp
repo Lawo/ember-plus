@@ -41,7 +41,7 @@ namespace libs101
              * @param value Package flags.
              */
             PackageFlag(value_type value)
-                : m_value(static_cast<value_type>(value))
+                : m_value(value)
             {}
 
             /**

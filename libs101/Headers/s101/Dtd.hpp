@@ -44,6 +44,14 @@ namespace libs101
             {}
 
             /**
+             * Explicit constructor to disable implicit conversion.
+             * @param value A value from value_type to initialize this instance with.
+             */
+            explicit Dtd(value_type value)
+                : m_value(value)
+            {}
+
+            /**
              * Return the raw value currently represented by this instance.
              * @return The raw value currently represented by this instance.
              */

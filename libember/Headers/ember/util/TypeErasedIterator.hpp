@@ -176,7 +176,7 @@ namespace libember { namespace util
                 virtual pointer getPointer() const = 0;
                 virtual std::type_info const& typeId() const = 0;
                 virtual bool equals(Payload const* other) const = 0;
-                virtual ~Payload() {};
+                virtual ~Payload() {}
             };
 
             /**

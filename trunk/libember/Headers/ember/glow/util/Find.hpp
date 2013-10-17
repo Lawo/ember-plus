@@ -84,7 +84,7 @@ namespace libember { namespace glow { namespace util
                     }
                 }
                 return first;
-            };
+            }
         };
 
         /**
@@ -108,7 +108,7 @@ namespace libember { namespace glow { namespace util
             {
                 iterator const result = std::find_if(first, last, detail::NodeApplicationTagEquals(tag));
                 return result;
-            };
+            }
         };
 
         /**
@@ -132,7 +132,7 @@ namespace libember { namespace glow { namespace util
             {
                 iterator const result = std::find_if(first, last, detail::NodeApplicationTagEquals(tag));
                 return result;
-            };
+            }
         };
     }
 

@@ -37,6 +37,8 @@ namespace libember { namespace ber
         public:
             typedef Vector::value_type value_type;
             typedef Vector::size_type size_type;
+            typedef Vector::reference reference;
+            typedef Vector::const_reference const_reference;
             typedef Vector::iterator iterator;
             typedef Vector::const_iterator const_iterator;
 
@@ -71,6 +73,18 @@ namespace libember { namespace ber
              * @return The number of elements this oid contains.
              */
             size_type size() const;
+
+            /**
+             * Returns reference to the last element of this oid.
+             * @return Reference to the last element of this oid.
+             */
+            reference back();
+
+            /**
+             * Returns reference to the last element of this oid.
+             * @return Reference to the last element of this oid.
+             */
+            const_reference back() const;
 
             /**
              * Return a const iterator referring to the first identifier contained 
@@ -213,6 +227,16 @@ namespace libember { namespace ber
     inline ObjectIdentifier::size_type ObjectIdentifier::size() const
     {
         return m_items.size();
+    }
+
+    inline ObjectIdentifier::reference ObjectIdentifier::back()
+    {
+        return m_items.back();
+    }
+
+    inline ObjectIdentifier::const_reference ObjectIdentifier::back() const
+    {
+        return m_items.back();
     }
 
     inline bool operator!=(ObjectIdentifier const& lhs, ObjectIdentifier const& rhs)

@@ -48,6 +48,18 @@ namespace libember { namespace ber
     }
 
     LIBEMBER_INLINE
+    void ObjectIdentifier::push_back(value_type value)
+    {
+        m_items.push_back(value);
+    }
+
+    LIBEMBER_INLINE
+    void ObjectIdentifier::push_front(value_type value)
+    {
+        m_items.push_front(value);
+    }
+
+    LIBEMBER_INLINE
     bool operator==(ObjectIdentifier const& lhs, ObjectIdentifier const& rhs)
     {
         return ((lhs.size() == rhs.size()) && std::equal(lhs.begin(), lhs.end(), rhs.begin()));

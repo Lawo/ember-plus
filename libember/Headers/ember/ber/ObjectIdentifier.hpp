@@ -21,7 +21,7 @@
 #define __LIBEMBER_BER_OBJECTIDENTIFIER_HPP
 
 #include <algorithm>
-#include <vector>
+#include <deque>
 #include "../util/Api.hpp"
 
 namespace libember { namespace ber
@@ -32,15 +32,15 @@ namespace libember { namespace ber
      */
     class LIBEMBER_API ObjectIdentifier
     {
-        typedef std::vector<std::size_t> Vector;
+        typedef std::deque<std::size_t> Container;
 
         public:
-            typedef Vector::value_type value_type;
-            typedef Vector::size_type size_type;
-            typedef Vector::reference reference;
-            typedef Vector::const_reference const_reference;
-            typedef Vector::iterator iterator;
-            typedef Vector::const_iterator const_iterator;
+            typedef Container::value_type value_type;
+            typedef Container::size_type size_type;
+            typedef Container::reference reference;
+            typedef Container::const_reference const_reference;
+            typedef Container::iterator iterator;
+            typedef Container::const_iterator const_iterator;
 
         public:
             /**
@@ -141,12 +141,24 @@ namespace libember { namespace ber
              */
             value_type operator[](int index) const;
 
+            /**
+             * Appends the given element value to the end of the oid. 
+             * @param value The value to append to the oid.
+             */
+            void push_back(value_type value);
+
+            /**
+             * Prepends the given element value to the beginning of the oid. 
+             * @param value The value to prepend to the oid.
+             */
+            void push_front(value_type value);
+
         private:
 #ifdef _MSC_VER
 #  pragma warning(push)
 #  pragma warning(disable : 4251)
 #endif
-            Vector m_items;
+            Container m_items;
 #ifdef _MSC_VER
 #  pragma warning(pop)
 #endif

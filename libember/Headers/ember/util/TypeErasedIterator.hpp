@@ -38,7 +38,7 @@ namespace libember { namespace util
      *      otherwise false.
      */
     template<typename ValueType>
-    bool operator==(TypeErasedIterator<ValueType> const&, TypeErasedIterator<ValueType> const&);
+    bool operator==(TypeErasedIterator<ValueType> const& lhs, TypeErasedIterator<ValueType> const& rhs);
 
     /**
      * Inequality comparison operator for TypeErasedIterator specializations.
@@ -48,7 +48,7 @@ namespace libember { namespace util
      *      otherwise true.
      */
     template<typename ValueType>
-    bool operator!=(TypeErasedIterator<ValueType> const&, TypeErasedIterator<ValueType> const&);
+    bool operator!=(TypeErasedIterator<ValueType> const& lhs, TypeErasedIterator<ValueType> const& rhs);
 
     /**
      * An erasure type for iterators reducing the static polymorphism to their

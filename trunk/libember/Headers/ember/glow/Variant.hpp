@@ -470,8 +470,8 @@ namespace libember { namespace glow
 
             private:
                 /**
-                 * Constructor initializing the variant with the provided octet string.
-                 * @param value Value to initialize the variant with.
+                 * Constructor initializing the variant with the provided value.
+                 * This void overload swallows all values without storing anything.
                  */
                 template<typename T>
                 VariantImpl(T const&)

@@ -87,7 +87,7 @@ namespace libember { namespace glow
 
             /**
              * Initializes a new Value instance from a type erased ber::Value.
-             * @param The type erased ber value to read the value from.
+             * @param value the type erased ber value to read the value from.
              */
             Value(ber::Value const& value);
 

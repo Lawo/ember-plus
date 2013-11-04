@@ -51,7 +51,6 @@ namespace libember { namespace ber
 
             /**
              * Constructor that copies the passed buffer containing a relative object identifier.
-             * @param value the value to wrap.
              */
             template<typename InputIterator>
             ObjectIdentifier(InputIterator first, InputIterator last);

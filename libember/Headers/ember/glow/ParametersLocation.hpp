@@ -51,7 +51,7 @@ namespace libember { namespace glow
 
         /**
          * Initializes a new instance of ParametersLocation from a type erased ber::Value.
-         * @param The type erased ber value to read the value from.
+         * @param value The type erased ber value to read the value from.
          */
         ParametersLocation(ber::Value const& value);
 

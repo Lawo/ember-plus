@@ -24,9 +24,11 @@ solution "EmberPlus SDK"
     configuration { "vs*" }
         defines   { "_CRT_SECURE_NO_DEPRECATE" }
 
-    -- Change GCC behaviour to mimic the symbol export behavior
+    -- Change GCC behaviour to only export explicitly marked symbols and set LDs rpath to the
+    -- same directory as the one a binary is in
     configuration { "gmake or not windows" }
         buildoptions { "-fvisibility=hidden", "-fvisibility-inlines-hidden" }
+        linkoptions { "-Wl,-rpath=." }
 
 
     configuration { "DebugStatic" }
@@ -96,6 +98,15 @@ solution "EmberPlus SDK"
         targetname   "test-libemeber-streambuffer"
         files       { "libember/Tests/util/StreamBuffer.cpp" }
         includedirs { "libember/Headers" }
+
+    project "EmberPlus Library Test - GlowValue"
+        -- Common settings for all configurations of this project
+        language    "C++"
+        kind        "ConsoleApp"
+        targetname   "test-libemeber-glowvalue"
+        files       { "libember/Tests/glow/GlowValue.cpp" }
+        includedirs { "libember/Headers" }
+        links       { "ember" } 
 
     project "EmberPlus Library Sample - Static BER Codec"
         -- Common settings for all configurations of this project

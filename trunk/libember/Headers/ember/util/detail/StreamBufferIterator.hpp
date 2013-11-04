@@ -47,7 +47,7 @@ namespace libember { namespace util { namespace detail
      *      otherwise false.
      */
     template<typename ValueType, unsigned short ChunkSize>
-    bool operator==(StreamBufferIterator<ValueType, ChunkSize> const&, StreamBufferIterator<ValueType, ChunkSize> const&);
+    bool operator==(StreamBufferIterator<ValueType, ChunkSize> const& lhs, StreamBufferIterator<ValueType, ChunkSize> const& rhs);
 
     /**
      * Inequality comparison operator for StreamBufferIterator specializations.
@@ -57,7 +57,7 @@ namespace libember { namespace util { namespace detail
      *      otherwise true.
      */
     template<typename ValueType, unsigned short ChunkSize>
-    bool operator!=(StreamBufferIterator<ValueType, ChunkSize> const&, StreamBufferIterator<ValueType, ChunkSize> const&);
+    bool operator!=(StreamBufferIterator<ValueType, ChunkSize> const& lhs, StreamBufferIterator<ValueType, ChunkSize> const& rhs);
 
     /** 
      * Const iterator class, used to iterate through the current elements of the output stream

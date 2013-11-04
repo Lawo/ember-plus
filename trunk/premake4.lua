@@ -26,7 +26,7 @@ solution "EmberPlus SDK"
 
     -- Change GCC behaviour to only export explicitly marked symbols and set LDs rpath to the
     -- same directory as the one a binary is in
-    configuration { "gmake or not windows" }
+    configuration { "gmake and not macosx" }
         buildoptions { "-fvisibility=hidden", "-fvisibility-inlines-hidden" }
         linkoptions { "-Wl,-rpath=." }
 
@@ -70,10 +70,14 @@ solution "EmberPlus SDK"
     project "EmberPlus C++ Library"
         -- Common settings for all configurations of this project
         language    "C++"
-        targetname  "libember"
-        targetprefix ""
         files       { "libember/Headers/**.hpp", "libember/Source/**.cpp", "libember/Headers/**.ipp" }
         includedirs { "libember/Headers" }
+
+        configuration { "windows" }
+            targetname  "libember"
+
+        configuration { "not windows" }
+            targetname  "ember"
             
         configuration { "gmake or not windows" }
             buildoptions { "-std=c++03" }
@@ -106,7 +110,7 @@ solution "EmberPlus SDK"
         targetname   "test-libemeber-glowvalue"
         files       { "libember/Tests/glow/GlowValue.cpp" }
         includedirs { "libember/Headers" }
-        links       { "ember" } 
+        links       { "EmberPlus C++ Library" } 
 
     project "EmberPlus Library Sample - Static BER Codec"
         -- Common settings for all configurations of this project
@@ -130,11 +134,15 @@ solution "EmberPlus SDK"
     project "EmberPlus C Library"
         -- Common settings for all configurations of this project
         language    "C"
-        targetname  "libember_slim"
-        targetprefix ""
         files       { "libember_slim/Source/**.h", "libember_slim/Source/**.c" }
         excludes    { "**__sample*" }
         includedirs { "libember_slim/Source" }
+            
+        configuration { "windows" }
+            targetname  "libember_slim"
+
+        configuration { "not windows" }
+            targetname  "ember_slim"
             
         -- Common settings for all static library configurations of this project
         configuration { "*Static" }

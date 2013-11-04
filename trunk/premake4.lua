@@ -32,18 +32,22 @@ solution "EmberPlus SDK"
     configuration { "DebugStatic" }
         targetdir "build/debug/static/bin"
         objdir    "build/debug/static/obj"
+        libdirs   { "build/debug/static/bin" }
          
     configuration { "DebugShared" }
         targetdir "build/debug/shared/bin"
         objdir    "build/debug/shared/obj"
+        libdirs   { "build/debug/shared/bin" }
 
     configuration { "ReleaseStatic" }
         targetdir "build/release/static/bin"
         objdir    "build/release/static/obj"
+        libdirs   { "build/release/static/bin" }
 
     configuration { "ReleaseShared" }
         targetdir "build/release/shared/bin"
         objdir    "build/release/shared/obj"
+        libdirs   { "build/release/shared/bin" }
                
     if _ACTION == "clean" then
         os.rmdir("build")
@@ -65,6 +69,7 @@ solution "EmberPlus SDK"
         -- Common settings for all configurations of this project
         language    "C++"
         targetname  "libember"
+        targetprefix ""
         files       { "libember/Headers/**.hpp", "libember/Source/**.cpp", "libember/Headers/**.ipp" }
         includedirs { "libember/Headers" }
             
@@ -92,7 +97,6 @@ solution "EmberPlus SDK"
         files       { "libember/Tests/util/StreamBuffer.cpp" }
         includedirs { "libember/Headers" }
 
-
     project "EmberPlus Library Sample - Static BER Codec"
         -- Common settings for all configurations of this project
         language    "C++"
@@ -116,6 +120,7 @@ solution "EmberPlus SDK"
         -- Common settings for all configurations of this project
         language    "C"
         targetname  "libember_slim"
+        targetprefix ""
         files       { "libember_slim/Source/**.h", "libember_slim/Source/**.c" }
         excludes    { "**__sample*" }
         includedirs { "libember_slim/Source" }

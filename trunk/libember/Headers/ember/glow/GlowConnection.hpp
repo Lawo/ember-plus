@@ -64,7 +64,7 @@ namespace libember { namespace glow
 
             /**
              * Sets the connection disposition.
-             * @param operation the disposition to set.
+             * @param disposition the disposition to set.
              */
             void setDisposition(ConnectionDisposition const& disposition);
 

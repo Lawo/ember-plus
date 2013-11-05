@@ -41,17 +41,18 @@ namespace libember { namespace glow
              * Creates a root element collection where the tag is set to GlowTags::Root() (Application - 30).
              * This collection is the root element of all glow messages. The returned instance must be deleted manually when it
              * is no longer needed.
+             * @deprecated Use the default constructor instead.
              * @return Returns a new element collection which is tagged as root.
              */
             static GlowRootElementCollection* create();
 
-        private:
             /**
-             * Constructor, initializes a new element collection with the application tag set to C-0.
-             * @note The application tag will be set to ContextSpecific-0.
+             * Constructor, initializes a new element collection with the application tag set to GlowTags::Root() (Application - 30).
+             * @note This collection is the root element of all glow messages.
              */
             GlowRootElementCollection();
 
+        private:
             /**
              * Constructor, initializes a new element collection with an application tag.
              * @param tag Application tag to set.

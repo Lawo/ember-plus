@@ -33,7 +33,7 @@ namespace libember { namespace glow
 
     LIBEMBER_INLINE
     GlowRootElementCollection::GlowRootElementCollection()
-        : GlowContainer(GlowType::RootElementCollection)
+        : GlowContainer(GlowType::RootElementCollection, GlowTags::Root())
     {}
 
     LIBEMBER_INLINE

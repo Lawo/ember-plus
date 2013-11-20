@@ -52,37 +52,37 @@ namespace libember { namespace glow { namespace traits
     template <>                                                         \
     struct GlowTypeToPropertyType<glow::Glow##TYPE##Base>               \
     {                                                                   \
-        typedef glow::##TYPE##Property Property;                        \
+        typedef glow::TYPE##Property Property;                          \
     };                                                                  \
                                                                         \
     template <>                                                         \
-    struct GlowTypeToPropertyType<glow::Glow##TYPE##>                   \
+    struct GlowTypeToPropertyType<glow::Glow##TYPE>                     \
     {                                                                   \
-        typedef glow::##TYPE##Property Property;                        \
+        typedef glow::TYPE##Property Property;                          \
     };                                                                  \
                                                                         \
     template <>                                                         \
-    struct GlowTypeToPropertyType<glow::GlowQualified##TYPE##>          \
+    struct GlowTypeToPropertyType<glow::GlowQualified##TYPE>            \
     {                                                                   \
-        typedef glow::##TYPE##Property Property;                        \
+        typedef glow::TYPE##Property Property;                          \
     };                                                                  \
                                                                         \
     template <>                                                         \
     struct GlowTypeToPropertyType<const glow::Glow##TYPE##Base>         \
     {                                                                   \
-        typedef glow::##TYPE##Property Property;                        \
+        typedef glow::TYPE##Property Property;                          \
     };                                                                  \
                                                                         \
     template <>                                                         \
-    struct GlowTypeToPropertyType<const glow::Glow##TYPE##>             \
+    struct GlowTypeToPropertyType<const glow::Glow##TYPE>               \
     {                                                                   \
-        typedef glow::##TYPE##Property Property;                        \
+        typedef glow::TYPE##Property Property;                          \
     };                                                                  \
                                                                         \
     template <>                                                         \
-    struct GlowTypeToPropertyType<const glow::GlowQualified##TYPE##>    \
+    struct GlowTypeToPropertyType<const glow::GlowQualified##TYPE>      \
     {                                                                   \
-        typedef glow::##TYPE##Property Property;                        \
+        typedef glow::TYPE##Property Property;                          \
     };                                                                  \
 
 

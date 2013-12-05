@@ -5,11 +5,14 @@
 -- This file defines the Glow DTD used with the Ember+ protocol.
 --
 -- Change Log:
+-- 2.30:
+--   - NOTE: This version describes the data schema of Ember+ 1.6.
+--   - Added Schema Extensions
 -- 2.20:
 --   - NOTE: This version describes the data schema of Ember+ 1.4.
 --   - Added Function Extensions (see type Function)
 -- 2.10:
---   - NOTE: This version describes the data schema of Ember+ 1.1.
+--   - NOTE: This version describes the data schema of Ember+ 1.2.
 --   - Added Matrix Extensions (see type Matrix)
 --   - Added "isOnline" field to NodeContents
 -- 2.5:
@@ -118,7 +121,8 @@ ParameterContents ::=
         type             [13] ParameterType           OPTIONAL,
         streamIdentifier [14] Integer32               OPTIONAL,
         enumMap          [15] StringIntegerCollection OPTIONAL,
-        streamDescriptor [16] StreamDescription       OPTIONAL
+        streamDescriptor [16] StreamDescription       OPTIONAL,
+        schemaIdentifier [17] EmberString             OPTIONAL
     }
 
 
@@ -271,10 +275,11 @@ QualifiedNode ::=
 
 NodeContents ::=
     SET {
-        identifier  [0] EmberString OPTIONAL,
-        description [1] EmberString OPTIONAL,
-        isRoot      [2] BOOLEAN     OPTIONAL,
-        isOnline    [3] BOOLEAN     OPTIONAL   -- default is true
+        identifier       [0] EmberString OPTIONAL,
+        description      [1] EmberString OPTIONAL,
+        isRoot           [2] BOOLEAN     OPTIONAL,
+        isOnline         [3] BOOLEAN     OPTIONAL,   -- default is true
+        schemaIdentifier [4] EmberString OPTIONAL
     }
 
 
@@ -308,7 +313,8 @@ MatrixContents ::=
         maximumConnectsPerTarget [ 7] Integer32            OPTIONAL, -- nToN: max number of sources connected to one target
         parametersLocation       [ 8] ParametersLocation   OPTIONAL,
         gainParameterNumber      [ 9] Integer32            OPTIONAL, -- nToN: number of connection gain parameter
-        labels                   [10] LabelCollection      OPTIONAL
+        labels                   [10] LabelCollection      OPTIONAL,
+        schemaIdentifier         [11] EmberString          OPTIONAL
     }
 
 -- Addressing scheme for node at MatrixContents.parametersLocation:
@@ -458,10 +464,11 @@ QualifiedFunction ::=
 
 FunctionContents ::=
     SET {
-        identifier      [0] EmberString         OPTIONAL,
-        description     [1] EmberString         OPTIONAL,
-        arguments       [2] TupleDescription    OPTIONAL,
-        result          [3] TupleDescription    OPTIONAL
+        identifier       [0] EmberString         OPTIONAL,
+        description      [1] EmberString         OPTIONAL,
+        arguments        [2] TupleDescription    OPTIONAL,
+        result           [3] TupleDescription    OPTIONAL,
+        schemaIdentifier [4] EmberString         OPTIONAL
     }
 
 

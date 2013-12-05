@@ -100,6 +100,21 @@ namespace EmberLib.Glow
       }
 
       /// <summary>
+      /// Gets or sets the "schemaIdentifier" field of the "contents" SET.
+      /// Getter returns null if field not present.
+      /// </summary>
+      public string SchemaIdentifier
+      {
+         get { return GetContentRef<string>(GlowTags.NodeContents.SchemaIdentifier); }
+         set
+         {
+            var tag = GlowTags.NodeContents.SchemaIdentifier;
+
+            EnsureContentsAndRemove(tag).Insert(new StringEmberLeaf(tag, value));
+         }
+      }
+
+      /// <summary>
       /// Override this in application-defined node types to provide validation.
       /// Called when a node has been decoded.
       /// Overriden to validate Identifier.

@@ -188,5 +188,20 @@ namespace EmberLib.Glow
 
          return result;
       }
+
+      /// <summary>
+      /// Gets or sets the "schemaIdentifier" field of the "contents" SET.
+      /// Getter returns null if field not present.
+      /// </summary>
+      public string SchemaIdentifier
+      {
+         get { return GetContentRef<string>(GlowTags.FunctionContents.SchemaIdentifier); }
+         set
+         {
+            var tag = GlowTags.FunctionContents.SchemaIdentifier;
+
+            EnsureContentsAndRemove(tag).Insert(new StringEmberLeaf(tag, value));
+         }
+      }
    }
 }

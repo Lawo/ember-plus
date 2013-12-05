@@ -244,7 +244,7 @@ typedef struct SNonFramingGlowReader
         * Private field.
         */
       GlowInvocationResult invocationResult;
-   };
+   } glow;
 
    /**
      * Private field.
@@ -254,7 +254,7 @@ typedef struct SNonFramingGlowReader
    /**
      * Private field.
      */
-   void (*onItemReadyState)(struct SNonFramingGlowReader *pThis, const EmberAsyncReader *pAsync, const BerReader *pBase);
+   void (*onItemReadyState)(struct SNonFramingGlowReader *pThis);
 
    /**
      * May be set to a callback function called when

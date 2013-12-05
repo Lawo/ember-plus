@@ -27,11 +27,6 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTitle("EmberLib.Glow")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("L-S-B Broadcast Technologies GmbH")]
-[assembly: AssemblyProduct("EmberLib.Glow")]
-[assembly: AssemblyCopyright("Copyright © L-S-B Broadcast Technologies GmbH 2012")]
-[assembly: AssemblyTrademark("")]
-[assembly: AssemblyCulture("")]
 
 // Setting ComVisible to false makes the types in this assembly not visible 
 // to COM components.  If you need to access a type in this assembly from 
@@ -41,4 +36,4 @@ using System.Runtime.InteropServices;
 // The following GUID is for the ID of the typelib if this project is exposed to COM
 [assembly: Guid("75ae271f-b007-4482-b02a-9c68c8367f39")]
 
-[assembly: InternalsVisibleTo("EmberLib.Glow.PowerPack")]
+//[assembly: InternalsVisibleTo("EmberLib.Glow.PowerPack")]

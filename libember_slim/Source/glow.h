@@ -35,7 +35,7 @@
   * The upper byte is the major version number, the
   * lower byte is the minor version number.
   */
-#define GLOW_SCHEMA_VERSION (0x0214)
+#define GLOW_SCHEMA_VERSION (0x021E)
 
 
 /**
@@ -76,6 +76,7 @@ typedef struct
       BerTag streamIdentifier;
       BerTag enumMap;
       BerTag streamDescriptor;
+      BerTag schemaIdentifier;
    } parameterContents;
 
    struct
@@ -98,6 +99,7 @@ typedef struct
       BerTag description;
       BerTag isRoot;
       BerTag isOnline;
+      BerTag schemaIdentifier;
    } nodeContents;
 
    struct
@@ -173,6 +175,7 @@ typedef struct
       BerTag parametersLocation;
       BerTag gainParameterNumber;
       BerTag labels;
+      BerTag schemaIdentifier;
    } matrixContents;
 
    struct
@@ -219,6 +222,7 @@ typedef struct
       BerTag description;
       BerTag arguments;
       BerTag result;
+      BerTag schemaIdentifier;
    } functionContents;
 
    struct 
@@ -347,6 +351,7 @@ typedef enum EGlowFieldFlags
  //GlowFieldFlag_EnumMap            = 0x00008000,
    GlowFieldFlag_StreamDescriptor   = 0x00010000,
    GlowFieldFlag_IsRoot             = 0x00020000,
+   GlowFieldFlag_SchemaIdentifier   = 0x00040000,
    GlowFieldFlag_Connections        = 0x00000005,
 
    GlowFieldFlag_All                = 0xFFFFFFFF,
@@ -475,6 +480,11 @@ typedef struct SGlowNode
      * The "isOnline" field.
      */
    bool isOnline;
+
+   /**
+     * the "schemaIdentifier" field.
+     */
+   pstr pSchemaIdentifier;
 } GlowNode;
 
 
@@ -501,7 +511,7 @@ typedef struct SGlowMinMax
    {
       berlong integer;
       double real;
-   };
+   } choice;
 } GlowMinMax;
 
 
@@ -538,7 +548,7 @@ typedef struct SGlowValue
       bool boolean;
       pstr pString;
       GlowOctetsValue octets;
-   };
+   } choice;
 } GlowValue;
 
 
@@ -662,6 +672,11 @@ typedef struct SGlowParameter
      *     This field is ignored by glowParameter_free().
      */
    pcstr pEnumeration;
+
+   /**
+     * the "schemaIdentifier" field.
+     */
+   pstr pSchemaIdentifier;
 } GlowParameter;
 
 
@@ -727,7 +742,7 @@ typedef struct SGlowCommand
         * @note only valid if number is GlowCommandType_Invoke!
         */
       GlowInvocation invocation;
-   };
+   } options;
 } GlowCommand;
 
 
@@ -807,7 +822,7 @@ typedef struct SGlowParametersLocation
       } basePath;
 
       berint inlineId;
-   };
+   } choice;
 } GlowParametersLocation;
 
 
@@ -885,6 +900,11 @@ typedef struct SGlowMatrix
      * @note TX only, this field will never be set by a GlowReader!
      */
    int labelsLength;
+
+   /**
+     * the "schemaIdentifier" field.
+     */
+   pstr pSchemaIdentifier;
 } GlowMatrix;
 
 
@@ -1008,6 +1028,11 @@ typedef struct SGlowFunction
      * at pResult)
      */
    int resultLength;
+
+   /**
+     * the "schemaIdentifier" field.
+     */
+   pstr pSchemaIdentifier;
 } GlowFunction;
 
 

@@ -9,11 +9,6 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTitle("EmberLib.Glow")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("L-S-B Broadcast Technologies GmbH")]
-[assembly: AssemblyProduct("EmberLib.Glow")]
-[assembly: AssemblyCopyright("Copyright © L-S-B Broadcast Technologies GmbH 2012")]
-[assembly: AssemblyTrademark("")]
-[assembly: AssemblyCulture("")]
 [assembly: NeutralResourcesLanguage("en")]
 
 [assembly:InternalsVisibleTo("SilverlightEmber")]

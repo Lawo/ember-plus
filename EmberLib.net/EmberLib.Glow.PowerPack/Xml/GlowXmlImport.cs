@@ -203,7 +203,7 @@ namespace EmberLib.Glow.PowerPack.Xml
 
          foreach(var itemsXml in xml.Elements("TupleItemDescription"))
          {
-            var glowItem = new GlowTupleItemDescription(GlowTags.CollectionItem);
+            var glowItem = new GlowTupleItemDescription(0, GlowTags.CollectionItem);
 
             var typeXml = itemsXml.Element("type");
             if(typeXml != null)
@@ -314,7 +314,7 @@ namespace EmberLib.Glow.PowerPack.Xml
 
       GlowContainer ConvertInvocationResult(XElement xml)
       {
-         var glow = new GlowInvocationResult(GlowTags.Root);
+         var glow = GlowInvocationResult.CreateRoot(0);
 
          glow.InvocationId = XmlConvert.ToInt32(xml.Attribute("invocationId").Value);
          xml.Element("success").Do(value => glow.Success = XmlConvert.ToBoolean(value));

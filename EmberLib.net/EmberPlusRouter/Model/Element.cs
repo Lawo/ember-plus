@@ -20,6 +20,7 @@ namespace EmberPlusRouter.Model
       public Element Parent { get; private set; }
       public int Number { get; private set; }
       public string Identifier { get; private set; }
+      public string SchemaIdentifier { get; set; }
 
       public virtual int ChildrenCount
       {

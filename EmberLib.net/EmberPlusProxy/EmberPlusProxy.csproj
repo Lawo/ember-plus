@@ -86,6 +86,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\BerLib\Properties\EmberLib.AssemblyInfo.cs">
+      <Link>Properties\EmberLib.AssemblyInfo.cs</Link>
+    </Compile>
     <Compile Include="Consumer\GlowEndPoint.cs" />
     <Compile Include="Proxy.cs" />
     <Compile Include="Provider\Client.cs" />

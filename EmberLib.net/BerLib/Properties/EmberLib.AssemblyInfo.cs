@@ -19,6 +19,12 @@
 
 using System.Reflection;
 
+[assembly: AssemblyCompany("L-S-B Broadcast Technologies GmbH")]
+[assembly: AssemblyProduct("EmberLib.net")]
+[assembly: AssemblyCopyright("Copyright © L-S-B Broadcast Technologies GmbH 2007-2013")]
+[assembly: AssemblyTrademark("")]
+[assembly: AssemblyCulture("")]
+
 // Version information for an assembly consists of the following four values:
 //
 //      Major Version

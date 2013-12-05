@@ -56,6 +56,7 @@ const __GlowTags glowTags =
       {BerClass_ContextSpecific, 14},  // contents.streamIdentifier
       {BerClass_ContextSpecific, 15},  // contents.enumMap
       {BerClass_ContextSpecific, 16},  // contents.streamDescriptor
+      {BerClass_ContextSpecific, 17},  // contents.schemaIdentifier
    },
 
    // node
@@ -78,6 +79,7 @@ const __GlowTags glowTags =
       {BerClass_ContextSpecific, 1},   // contents.description
       {BerClass_ContextSpecific, 2},   // contents.isRoot
       {BerClass_ContextSpecific, 3},   // contents.isOnline
+      {BerClass_ContextSpecific, 4},   // contents.schemaIdentifier
    },
 
    // command
@@ -153,6 +155,7 @@ const __GlowTags glowTags =
       {BerClass_ContextSpecific, 8},   // parametersBasePath
       {BerClass_ContextSpecific, 9},   // gainParameterNumber
       {BerClass_ContextSpecific, 10},  // labels
+      {BerClass_ContextSpecific, 11},  // schemaIdentifier
    },
 
    // label
@@ -200,6 +203,7 @@ const __GlowTags glowTags =
       {BerClass_ContextSpecific, 1},   // description
       {BerClass_ContextSpecific, 2},   // arguments
       {BerClass_ContextSpecific, 3},   // result
+      {BerClass_ContextSpecific, 4},   // schemaIdentifier
    },
 
    // tupleItemDescription
@@ -276,7 +280,7 @@ bool glow_assertIdentifierValid(pcstr pIdentifier, bool isRx)
 bool glowParametersLocation_isValid(const GlowParametersLocation *pThis)
 {
    return pThis->kind == GlowParametersLocationKind_Inline
-       || pThis->basePath.length > 0;
+       || pThis->choice.basePath.length > 0;
 }
 
 void glowNode_free(GlowNode *pThis)
@@ -288,6 +292,9 @@ void glowNode_free(GlowNode *pThis)
 
    if(pThis->pDescription != NULL)
       freeMemory(pThis->pDescription);
+
+   if(pThis->pSchemaIdentifier != NULL)
+      freeMemory(pThis->pSchemaIdentifier);
 
    bzero(*pThis);
 }
@@ -304,29 +311,29 @@ void glowValue_copyFrom(GlowValue *pThis, const GlowValue *pSource)
    switch(pSource->flag)
    {
       case GlowParameterType_String:
-         if(pSource->pString != NULL)
+         if(pSource->choice.pString != NULL)
          {
-            length = strlen(pSource->pString) + 1;
-            pThis->pString = newarr(char, length);
-            memcpy(pThis->pString, pSource->pString, length);
+            length = strlen(pSource->choice.pString) + 1;
+            pThis->choice.pString = newarr(char, length);
+            memcpy(pThis->choice.pString, pSource->choice.pString, length);
          }
          else
          {
-            pThis->pString = NULL;
+            pThis->choice.pString = NULL;
          }
          break;
 
       case GlowParameterType_Octets:
-         if(pSource->octets.pOctets != NULL)
+         if(pSource->choice.octets.pOctets != NULL)
          {
-            pThis->octets.pOctets = newarr(byte, pSource->octets.length);
-            pThis->octets.length = pSource->octets.length;
-            memcpy(pThis->octets.pOctets, pSource->octets.pOctets, pSource->octets.length);
+            pThis->choice.octets.pOctets = newarr(byte, pSource->choice.octets.length);
+            pThis->choice.octets.length = pSource->choice.octets.length;
+            memcpy(pThis->choice.octets.pOctets, pSource->choice.octets.pOctets, pSource->choice.octets.length);
          }
          else
          {
-            pThis->octets.length = 0;
-            pThis->octets.pOctets = NULL;
+            pThis->choice.octets.length = 0;
+            pThis->choice.octets.pOctets = NULL;
          }
          break;
 
@@ -342,13 +349,13 @@ void glowValue_free(GlowValue *pThis)
 
    if(pThis->flag == GlowParameterType_String)
    {
-      if(pThis->pString != NULL)
-         freeMemory(pThis->pString);
+      if(pThis->choice.pString != NULL)
+         freeMemory(pThis->choice.pString);
    }
    else if(pThis->flag == GlowParameterType_Octets)
    {
-      if(pThis->octets.pOctets != NULL)
-         freeMemory(pThis->octets.pOctets);
+      if(pThis->choice.octets.pOctets != NULL)
+         freeMemory(pThis->choice.octets.pOctets);
    }
 
    bzero(*pThis);
@@ -367,6 +374,9 @@ void glowParameter_free(GlowParameter *pThis)
    if(pThis->value.flag != 0)
       glowValue_free(&pThis->value);
 
+   if(pThis->pSchemaIdentifier != NULL)
+      freeMemory(pThis->pSchemaIdentifier);
+
    bzero(*pThis);
 }
 
@@ -379,6 +389,9 @@ void glowMatrix_free(GlowMatrix *pThis)
 
    if(pThis->pDescription != NULL)
       freeMemory(pThis->pDescription);
+
+   if(pThis->pSchemaIdentifier != NULL)
+      freeMemory(pThis->pSchemaIdentifier);
 
    bzero(*pThis);
 }
@@ -421,6 +434,9 @@ void glowFunction_free(GlowFunction *pThis)
       freeMemory(pThis->pResult);
    }
 
+   if(pThis->pSchemaIdentifier != NULL)
+      freeMemory(pThis->pSchemaIdentifier);
+
    bzero(*pThis);
 }
 
@@ -446,7 +462,7 @@ void glowCommand_free(GlowCommand *pThis)
    ASSERT(pThis != NULL);
 
    if(pThis->number == GlowCommandType_Invoke)
-      glowInvocation_free(&pThis->invocation);
+      glowInvocation_free(&pThis->options.invocation);
 
    bzero(*pThis);
 }

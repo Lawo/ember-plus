@@ -99,7 +99,10 @@ namespace EmberPlusRouter
                                  licensedParam.Value = 1;
 
                                return new[] { new GlowValue(isLicensed) };
-                            });
+                            })
+         {
+            SchemaIdentifier = "de.l-s-b.emberplus.samples.licensingParameter",
+         };
 
          new Model.Function(3,
                             identity,
@@ -156,7 +159,11 @@ namespace EmberPlusRouter
             Description = "Linear 1:N",
          };
 
-         var labels = new Model.Node(1, oneToN, "labels");
+         var labels = new Model.Node(1, oneToN, "labels")
+         {
+            SchemaIdentifier = "de.l-s-b.emberplus.matrix.labels"
+         };
+
          var targetLabels = new Model.Node(1, labels, "targets");
          var sourceLabels = new Model.Node(2, labels, "sources");
 
@@ -187,7 +194,10 @@ namespace EmberPlusRouter
             dispatcher,
             targets,
             sources,
-            labels);
+            labels)
+         {
+            SchemaIdentifier = "de.l-s-b.emberplus.samples.oneToN"
+         };
 
          foreach(var target in matrix.Targets)
             matrix.Connect(target, new[] { matrix.GetSource(target.Number) }, null);

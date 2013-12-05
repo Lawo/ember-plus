@@ -73,33 +73,33 @@ static void initializePpmStreams()
 
    _streams[1].streamIdentifier = 1;
    _streams[1].streamValue.flag = GlowParameterType_Octets;
-   _streams[1].streamValue.octets.pOctets = newarr(byte, 8);
-   _streams[1].streamValue.octets.length = 8;
+   _streams[1].streamValue.choice.octets.pOctets = newarr(byte, 8);
+   _streams[1].streamValue.choice.octets.length = 8;
 
    _streams[2].streamIdentifier = 2;
    _streams[2].streamValue.flag = GlowParameterType_String;
-   _streams[2].streamValue.pString = newarr(char, STREAMS_MAX_STRING_LENGTH);
+   _streams[2].streamValue.choice.pString = newarr(char, STREAMS_MAX_STRING_LENGTH);
 }
 
 static void freePpmStreams()
 {
-   freeMemory(_streams[1].streamValue.octets.pOctets);
-   freeMemory(_streams[2].streamValue.pString);
+   freeMemory(_streams[1].streamValue.choice.octets.pOctets);
+   freeMemory(_streams[2].streamValue.choice.pString);
 }
 
 static void collectPpmData()
 {
    // ber integer
-   _streams[0].streamValue.integer = ((rand() % 80) - 64) * 32; // from -64 to +15 in db/32
+   _streams[0].streamValue.choice.integer = ((rand() % 80) - 64) * 32; // from -64 to +15 in db/32
 
    // octets containing big endian int16
-   *(short *)&_streams[1].streamValue.octets.pOctets[0] = htons(((rand() % 256) - 128) * 32); // from -128 to +127 in db/32
+   *(short *)&_streams[1].streamValue.choice.octets.pOctets[0] = htons(((rand() % 256) - 128) * 32); // from -128 to +127 in db/32
 
    // octets containing little endian int32
-   *(berint *)&_streams[1].streamValue.octets.pOctets[4] = ((rand() % 256) - 255) * 32; // from -255 to 0 in db/32
+   *(berint *)&_streams[1].streamValue.choice.octets.pOctets[4] = ((rand() % 256) - 255) * 32; // from -255 to 0 in db/32
 
-   stringCopy(_streams[2].streamValue.pString, STREAMS_MAX_STRING_LENGTH, "abc");
-   _itoa_s(rand() % 100, &_streams[2].streamValue.pString[3], STREAMS_MAX_STRING_LENGTH - 3, 10);
+   stringCopy(_streams[2].streamValue.choice.pString, STREAMS_MAX_STRING_LENGTH, "abc");
+   _itoa_s(rand() % 100, &_streams[2].streamValue.choice.pString[3], STREAMS_MAX_STRING_LENGTH - 3, 10);
 }
 
 
@@ -208,15 +208,15 @@ static void createGain(SampleNode *pParent)
    pParam->param.access = GlowAccess_ReadWrite;
    fields |= GlowFieldFlag_Access;
 
-   pParam->param.value.integer = 0;
+   pParam->param.value.choice.integer = 0;
    pParam->param.value.flag = GlowParameterType_Integer;
    fields |= GlowFieldFlag_Value;
 
-   pParam->param.minimum.integer = 0;
+   pParam->param.minimum.choice.integer = 0;
    pParam->param.minimum.flag = GlowParameterType_Integer;
    fields |= GlowFieldFlag_Minimum;
 
-   pParam->param.maximum.integer = 65535;
+   pParam->param.maximum.choice.integer = 65535;
    pParam->param.maximum.flag = GlowParameterType_Integer;
    fields |= GlowFieldFlag_Maximum;
 
@@ -225,6 +225,9 @@ static void createGain(SampleNode *pParent)
 
    pParam->param.pFormat = "%Lf db";
    fields |= GlowFieldFlag_Format;
+
+   pParam->param.pSchemaIdentifier = stringDup("de.l-s-b.emberplus.samples.gain");
+   fields |= GlowFieldFlag_SchemaIdentifier;
 
    pParam->fields = (GlowFieldFlags)fields;
 }
@@ -237,15 +240,15 @@ static void createVolume(SampleNode *pParent)
    pParam->param.access = GlowAccess_ReadWrite;
    fields |= GlowFieldFlag_Access;
 
-   pParam->param.value.real = 0.0;
+   pParam->param.value.choice.real = 0.0;
    pParam->param.value.flag = GlowParameterType_Real;
    fields |= GlowFieldFlag_Value;
 
-   pParam->param.minimum.real = -1000.0;
+   pParam->param.minimum.choice.real = -1000.0;
    pParam->param.minimum.flag = GlowParameterType_Real;
    fields |= GlowFieldFlag_Minimum;
 
-   pParam->param.maximum.real = 1000.0;
+   pParam->param.maximum.choice.real = 1000.0;
    pParam->param.maximum.flag = GlowParameterType_Real;
    fields |= GlowFieldFlag_Maximum;
 
@@ -263,7 +266,7 @@ static void createFormat(SampleNode *pParent)
    pParam->param.access = GlowAccess_ReadWrite;
    fields |= GlowFieldFlag_Access;
 
-   pParam->param.value.integer = 0;
+   pParam->param.value.choice.integer = 0;
    pParam->param.value.flag = GlowParameterType_Integer;
    fields |= GlowFieldFlag_Value;
 
@@ -282,14 +285,14 @@ static void createStream1(SampleNode *pParent)
    fields |= GlowFieldFlag_Access;
 
    pParam->param.value.flag = GlowParameterType_Integer;
-   pParam->param.value.integer = 0;
+   pParam->param.value.choice.integer = 0;
    fields |= GlowFieldFlag_Value;
 
-   pParam->param.minimum.integer = -64 * 32;
+   pParam->param.minimum.choice.integer = -64 * 32;
    pParam->param.minimum.flag = GlowParameterType_Integer;
    fields |= GlowFieldFlag_Minimum;
 
-   pParam->param.maximum.integer = 15 * 32;
+   pParam->param.maximum.choice.integer = 15 * 32;
    pParam->param.maximum.flag = GlowParameterType_Integer;
    fields |= GlowFieldFlag_Maximum;
 
@@ -316,11 +319,11 @@ static void createStream2(SampleNode *pParent)
    pParam->param.factor = 32;
    fields |= GlowFieldFlag_Factor;
 
-   pParam->param.minimum.integer = -128 * 32;
+   pParam->param.minimum.choice.integer = -128 * 32;
    pParam->param.minimum.flag = GlowParameterType_Integer;
    fields |= GlowFieldFlag_Minimum;
 
-   pParam->param.maximum.integer = 127 * 32;
+   pParam->param.maximum.choice.integer = 127 * 32;
    pParam->param.maximum.flag = GlowParameterType_Integer;
    fields |= GlowFieldFlag_Maximum;
 
@@ -348,11 +351,11 @@ static void createStream3(SampleNode *pParent)
    pParam->param.factor = 32;
    fields |= GlowFieldFlag_Factor;
 
-   pParam->param.minimum.integer = -255 * 32;
+   pParam->param.minimum.choice.integer = -255 * 32;
    pParam->param.minimum.flag = GlowParameterType_Integer;
    fields |= GlowFieldFlag_Minimum;
 
-   pParam->param.maximum.integer = 0 * 32;
+   pParam->param.maximum.choice.integer = 0 * 32;
    pParam->param.maximum.flag = GlowParameterType_Integer;
    fields |= GlowFieldFlag_Maximum;
 
@@ -377,7 +380,7 @@ static void createStream4(SampleNode *pParent)
    pParam->param.type = GlowParameterType_String;
    fields |= GlowFieldFlag_Type;
 
-   pParam->param.maximum.integer = STREAMS_MAX_STRING_LENGTH - 1;
+   pParam->param.maximum.choice.integer = STREAMS_MAX_STRING_LENGTH - 1;
    pParam->param.maximum.flag = GlowParameterType_Integer;
    fields |= GlowFieldFlag_Maximum;
 
@@ -406,6 +409,8 @@ static void buildTree(SampleNode *pRoot)
    createNode(pAudio, "dangling", NULL);
 
    pStreams = createNode(pNonFood, "streams", "see 'em move");
+   pStreams->node.pSchemaIdentifier = stringDup("de.l-s-b.emberplus.samples.streams");
+   pStreams->fields |= GlowFieldFlag_SchemaIdentifier;
    createStream1(pStreams);
    createStream2(pStreams);
    createStream3(pStreams);
@@ -478,7 +483,7 @@ static void onCommand(const GlowCommand *pCommand, const berint *pPath, int path
       if(pCursor->isParameter)
       {
          // parameter - send single complete parameter
-         fields = pCursor->fields & pCommand->dirFieldMask;
+         fields = pCursor->fields & pCommand->options.dirFieldMask;
          glowOutput_beginPackage(&output, true);
          glow_writeQualifiedParameter(&output, &pCursor->param, (GlowFieldFlags)fields, pOutPath, pathLength);
          send(sock, (char *)pBuffer, glowOutput_finishPackage(&output), 0);
@@ -502,7 +507,7 @@ static void onCommand(const GlowCommand *pCommand, const berint *pPath, int path
             {
                glowOutput_beginPackage(&output, nodeIndex == pCursor->childrenCount - 1);
                pOutPath[pathLength] = nodeIndex;
-               fields = pCurrent->fields & pCommand->dirFieldMask;
+               fields = pCurrent->fields & pCommand->options.dirFieldMask;
 
                if(pCurrent->isParameter)
                   glow_writeQualifiedParameter(&output, &pCurrent->param, (GlowFieldFlags)fields, pOutPath, pathLength + 1);

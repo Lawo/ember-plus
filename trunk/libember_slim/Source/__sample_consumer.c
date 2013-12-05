@@ -160,10 +160,10 @@ typedef struct SElement
          GlowMatrix matrix;
          PtrList targets;
          PtrList sources;
-      };
+      } matrix;
 
       GlowFunction function;
-   };
+   } glow;
 
    PtrList children;
    struct SElement *pParent;
@@ -183,7 +183,7 @@ static void element_init(Element *pThis, Element *pParent, GlowElementType type,
       ptrList_addLast(&pParent->children, pThis);
 
    if(pThis->type == GlowElementType_Node)
-      pThis->node.isOnline = true;
+      pThis->glow.node.isOnline = true;
 }
 
 static void element_free(Element *pThis)
@@ -203,18 +203,18 @@ static void element_free(Element *pThis)
 
    if(pThis->type == GlowElementType_Parameter)
    {
-      glowValue_free(&pThis->param.value);
+      glowValue_free(&pThis->glow.param.value);
 
-      if(pThis->param.pEnumeration != NULL)
-         freeMemory((void *)pThis->param.pEnumeration);
-      if(pThis->param.pFormula != NULL)
-         freeMemory((void *)pThis->param.pFormula);
-      if(pThis->param.pFormat != NULL)
-         freeMemory((void *)pThis->param.pFormat);
+      if(pThis->glow.param.pEnumeration != NULL)
+         freeMemory((void *)pThis->glow.param.pEnumeration);
+      if(pThis->glow.param.pFormula != NULL)
+         freeMemory((void *)pThis->glow.param.pFormula);
+      if(pThis->glow.param.pFormat != NULL)
+         freeMemory((void *)pThis->glow.param.pFormat);
    }
    else if(pThis->type == GlowElementType_Matrix)
    {
-      for(pNode = pThis->targets.pHead; pNode != NULL; pNode = pNode->pNext)
+      for(pNode = pThis->glow.matrix.targets.pHead; pNode != NULL; pNode = pNode->pNext)
       {
          pTarget = (Target *)pNode->value;
 
@@ -224,22 +224,22 @@ static void element_free(Element *pThis)
          freeMemory(pTarget);
       }
 
-      for(pNode = pThis->sources.pHead; pNode != NULL; pNode = pNode->pNext)
+      for(pNode = pThis->glow.matrix.sources.pHead; pNode != NULL; pNode = pNode->pNext)
       {
          if(pNode->value != NULL)
             freeMemory(pNode->value);
       }
 
-      ptrList_free(&pThis->targets);
-      ptrList_free(&pThis->sources);
+      ptrList_free(&pThis->glow.matrix.targets);
+      ptrList_free(&pThis->glow.matrix.sources);
    }
    else if(pThis->type == GlowElementType_Function)
    {
-      glowFunction_free(&pThis->function);
+      glowFunction_free(&pThis->glow.function);
    }
    else if(pThis->type == GlowElementType_Node)
    {
-      glowNode_free(&pThis->node);
+      glowNode_free(&pThis->glow.node);
    }
 
    bzero(*pThis);
@@ -249,10 +249,10 @@ static pcstr element_getIdentifier(const Element *pThis)
 {
    switch(pThis->type)
    {
-      case GlowElementType_Node: return pThis->node.pIdentifier;
-      case GlowElementType_Parameter: return pThis->param.pIdentifier;
-      case GlowElementType_Matrix: return pThis->matrix.pIdentifier;
-      case GlowElementType_Function: return pThis->function.pIdentifier;
+      case GlowElementType_Node: return pThis->glow.node.pIdentifier;
+      case GlowElementType_Parameter: return pThis->glow.param.pIdentifier;
+      case GlowElementType_Matrix: return pThis->glow.matrix.matrix.pIdentifier;
+      case GlowElementType_Function: return pThis->glow.function.pIdentifier;
    }
 
    return NULL;
@@ -377,10 +377,10 @@ static GlowParameterType element_getParameterType(const Element *pThis)
          return GlowParameterType_Enum;
 
       if(pThis->paramFields & GlowFieldFlag_Value)
-         return pThis->param.value.flag;
+         return pThis->glow.param.value.flag;
 
       if(pThis->paramFields & GlowFieldFlag_Type)
-         return pThis->param.type;
+         return pThis->glow.param.type;
    }
 
    return (GlowParameterType)0;
@@ -393,7 +393,7 @@ static Target *element_findOrCreateTarget(Element *pThis, berint number)
 
    if(pThis->type == GlowElementType_Matrix)
    {
-      for(pNode = pThis->targets.pHead; pNode != NULL; pNode = pNode->pNext)
+      for(pNode = pThis->glow.matrix.targets.pHead; pNode != NULL; pNode = pNode->pNext)
       {
          pTarget = (Target *)pNode->value;
 
@@ -405,7 +405,7 @@ static Target *element_findOrCreateTarget(Element *pThis, berint number)
       bzero(*pTarget);
       pTarget->number = number;
 
-      ptrList_addLast(&pThis->targets, pTarget);
+      ptrList_addLast(&pThis->glow.matrix.targets, pTarget);
       return pTarget;
    }
 
@@ -419,7 +419,7 @@ static Source *element_findSource(const Element *pThis, berint number)
 
    if(pThis->type == GlowElementType_Matrix)
    {
-      for(pNode = pThis->sources.pHead; pNode != NULL; pNode = pNode->pNext)
+      for(pNode = pThis->glow.matrix.sources.pHead; pNode != NULL; pNode = pNode->pNext)
       {
          pSource = (Source *)pNode->value;
 
@@ -436,23 +436,23 @@ static void printValue(const GlowValue *pValue)
    switch(pValue->flag)
    {
       case GlowParameterType_Integer:
-         printf_s("integer '%lld'", pValue->integer);
+         printf_s("integer '%lld'", pValue->choice.integer);
          break;
 
       case GlowParameterType_Real:
-         printf_s("real '%lf'", pValue->real);
+         printf_s("real '%lf'", pValue->choice.real);
          break;
 
       case GlowParameterType_String:
-         printf_s("string '%s'", pValue->pString);
+         printf_s("string '%s'", pValue->choice.pString);
          break;
 
       case GlowParameterType_Boolean:
-         printf_s("boolean '%d'", pValue->boolean);
+         printf_s("boolean '%d'", pValue->choice.boolean);
          break;
 
       case GlowParameterType_Octets:
-         printf_s("octets length %d", pValue->octets.length);
+         printf_s("octets length %d", pValue->choice.octets.length);
          break;
 
       default:
@@ -465,11 +465,11 @@ static void printMinMax(const GlowMinMax *pMinMax)
    switch(pMinMax->flag)
    {
       case GlowParameterType_Integer:
-         printf_s("%lld", pMinMax->integer);
+         printf_s("%lld", pMinMax->choice.integer);
          break;
 
       case GlowParameterType_Real:
-         printf_s("%lf", pMinMax->real);
+         printf_s("%lf", pMinMax->choice.real);
          break;
 
       default:
@@ -487,7 +487,7 @@ static void element_print(const Element *pThis, bool isVerbose)
 
    if(pThis->type == GlowElementType_Parameter)
    {
-      pParameter = &pThis->param;
+      pParameter = &pThis->glow.param;
       printf_s("P %04ld %s\n", pThis->number, pParameter->pIdentifier);
 
       if(isVerbose)
@@ -544,22 +544,27 @@ static void element_print(const Element *pThis, bool isVerbose)
             printf_s("  format:           %s\n", pParameter->pFormat);
          if(pParameter->pFormula != NULL)
             printf_s("  formula:\n%s\n", pParameter->pFormula);
+         if(pParameter->pSchemaIdentifier != NULL)
+            printf_s("  schemaIdentifier: %s\n", pParameter->pSchemaIdentifier);
       }
    }
    else if(pThis->type == GlowElementType_Node)
    {
-      printf_s("N %04ld %s\n", pThis->number, pThis->node.pIdentifier);
+      printf_s("N %04ld %s\n", pThis->number, pThis->glow.node.pIdentifier);
 
       if(isVerbose)
       {
-         printf_s("  description: %s\n", pThis->node.pDescription);
-         printf_s("  isRoot:      %s\n", pThis->node.isRoot ? "true" : "false");
-         printf_s("  isOnline:    %s\n", pThis->node.isOnline ? "true" : "false");
+         printf_s("  description:      %s\n", pThis->glow.node.pDescription);
+         printf_s("  isRoot:           %s\n", pThis->glow.node.isRoot ? "true" : "false");
+         printf_s("  isOnline:         %s\n", pThis->glow.node.isOnline ? "true" : "false");
+
+         if(pThis->glow.node.pSchemaIdentifier != NULL)
+            printf_s("  schemaIdentifier: %s\n", pThis->glow.node.pSchemaIdentifier);
       }
    }
    else if(pThis->type == GlowElementType_Matrix)
    {
-      pMatrix = &pThis->matrix;
+      pMatrix = &pThis->glow.matrix.matrix;
       printf_s("M %04ld %s\n", pThis->number, pMatrix->pIdentifier);
 
       if(isVerbose)
@@ -582,11 +587,11 @@ static void element_print(const Element *pThis, bool isVerbose)
 
             if(pMatrix->parametersLocation.kind == GlowParametersLocationKind_BasePath)
             {
-               for(index = 0; index < pMatrix->parametersLocation.basePath.length; index++)
+               for(index = 0; index < pMatrix->parametersLocation.choice.basePath.length; index++)
                {
-                  printf_s("%d", pMatrix->parametersLocation.basePath.ids[index]);
+                  printf_s("%d", pMatrix->parametersLocation.choice.basePath.ids[index]);
 
-                  if(index < pMatrix->parametersLocation.basePath.length - 1)
+                  if(index < pMatrix->parametersLocation.choice.basePath.length - 1)
                      printf_s(".");
                }
 
@@ -594,14 +599,16 @@ static void element_print(const Element *pThis, bool isVerbose)
             }
             else if(pMatrix->parametersLocation.kind == GlowParametersLocationKind_Inline)
             {
-               printf_s("%d\n", pMatrix->parametersLocation.inlineId);
+               printf_s("%d\n", pMatrix->parametersLocation.choice.inlineId);
             }
          }
+         if(pMatrix->pSchemaIdentifier != NULL)
+            printf_s("  schemaIdentifier:            %s\n", pMatrix->pSchemaIdentifier);
       }
    }
    else if(pThis->type == GlowElementType_Function)
    {
-      pFunction = &pThis->function;
+      pFunction = &pThis->glow.function;
       printf_s("F %04ld %s\n", pThis->number, pFunction->pIdentifier);
 
       if(isVerbose)
@@ -620,6 +627,8 @@ static void element_print(const Element *pThis, bool isVerbose)
             for(index = 0; index < pFunction->resultLength; index++)
                printf_s("    %s:%d\n", pFunction->pResult[index].pName, pFunction->pResult[index].type);
          }
+         if(pFunction->pSchemaIdentifier != NULL)
+            printf_s("  schemaIdentifier:            %s\n", pFunction->pSchemaIdentifier);
       }
    }
 }
@@ -669,17 +678,20 @@ static void onNode(const GlowNode *pNode, GlowFieldFlags fields, const berint *p
          element_init(pElement, pParent, GlowElementType_Node, pPath[pathLength - 1]);
 
          if(fields & GlowFieldFlag_Identifier)
-            pElement->node.pIdentifier = stringDup(pNode->pIdentifier);
+            pElement->glow.node.pIdentifier = stringDup(pNode->pIdentifier);
       }
 
       if(fields & GlowFieldFlag_Description)
-         pElement->node.pDescription = stringDup(pNode->pDescription);
+         pElement->glow.node.pDescription = stringDup(pNode->pDescription);
 
       if(fields & GlowFieldFlag_IsOnline)
-         pElement->node.isOnline = pNode->isOnline;
+         pElement->glow.node.isOnline = pNode->isOnline;
 
       if(fields & GlowFieldFlag_IsRoot)
-         pElement->node.isRoot = pNode->isRoot;
+         pElement->glow.node.isRoot = pNode->isRoot;
+
+      if(fields & GlowFieldFlag_SchemaIdentifier)
+         pElement->glow.node.pSchemaIdentifier = stringDup(pNode->pSchemaIdentifier);
    }
 }
 
@@ -688,6 +700,7 @@ static void onParameter(const GlowParameter *pParameter, GlowFieldFlags fields, 
    Session *pSession = (Session *)state;
    Element *pElement;
    Element *pParent;
+   GlowParameter *pLocalParam;
 
    // if received element is a child of current cursor, print it
    if(memcmp(pPath, pSession->pCursorPath, pSession->cursorPathLength * sizeof(berint)) == 0
@@ -704,47 +717,51 @@ static void onParameter(const GlowParameter *pParameter, GlowFieldFlags fields, 
          element_init(pElement, pParent, GlowElementType_Parameter, pPath[pathLength - 1]);
       }
 
+      pLocalParam = &pElement->glow.param;
+
       if((fields & GlowFieldFlag_Identifier) == GlowFieldFlag_Identifier)
-         pElement->param.pIdentifier = stringDup(pParameter->pIdentifier);
+         pLocalParam->pIdentifier = stringDup(pParameter->pIdentifier);
       if(fields & GlowFieldFlag_Description)
-         pElement->param.pDescription = stringDup(pParameter->pDescription);
+         pLocalParam->pDescription = stringDup(pParameter->pDescription);
       if(fields & GlowFieldFlag_Value)
       {
-         glowValue_free(&pElement->param.value);
-         glowValue_copyTo(&pParameter->value, &pElement->param.value);
+         glowValue_free(&pLocalParam->value);
+         glowValue_copyTo(&pParameter->value, &pLocalParam->value);
       }
       if(fields & GlowFieldFlag_Minimum)
-         memcpy(&pElement->param.minimum, &pParameter->minimum, sizeof(GlowMinMax));
+         memcpy(&pLocalParam->minimum, &pParameter->minimum, sizeof(GlowMinMax));
       if(fields & GlowFieldFlag_Maximum)
-         memcpy(&pElement->param.maximum, &pParameter->maximum, sizeof(GlowMinMax));
+         memcpy(&pLocalParam->maximum, &pParameter->maximum, sizeof(GlowMinMax));
       if(fields & GlowFieldFlag_Access)
-         pElement->param.access = pParameter->access;
+         pLocalParam->access = pParameter->access;
       if(fields & GlowFieldFlag_Factor)
-         pElement->param.factor = pParameter->factor;
+         pLocalParam->factor = pParameter->factor;
       if(fields & GlowFieldFlag_IsOnline)
-         pElement->param.isOnline = pParameter->isOnline;
+         pLocalParam->isOnline = pParameter->isOnline;
       if(fields & GlowFieldFlag_Step)
-         pElement->param.step = pParameter->step;
+         pLocalParam->step = pParameter->step;
       if(fields & GlowFieldFlag_Type)
-         pElement->param.type = pParameter->type;
+         pLocalParam->type = pParameter->type;
       if(fields & GlowFieldFlag_StreamIdentifier)
-         pElement->param.streamIdentifier = pParameter->streamIdentifier;
+         pLocalParam->streamIdentifier = pParameter->streamIdentifier;
       if(fields & GlowFieldFlag_StreamDescriptor)
-         memcpy(&pElement->param.streamDescriptor, &pParameter->streamDescriptor, sizeof(GlowStreamDescription));
+         memcpy(&pLocalParam->streamDescriptor, &pParameter->streamDescriptor, sizeof(GlowStreamDescription));
+      if(fields & GlowFieldFlag_SchemaIdentifier)
+         pLocalParam->pSchemaIdentifier = stringDup(pParameter->pSchemaIdentifier);
 
       if(pSession->pEnumeration != NULL)
       {
-         pElement->param.pEnumeration = pSession->pEnumeration;
+         pLocalParam->pEnumeration = pSession->pEnumeration;
          pSession->pEnumeration = NULL;
       }
       if(pSession->pFormat != NULL)
       {
-         pElement->param.pFormat = pSession->pFormat;
+         pLocalParam->pFormat = pSession->pFormat;
          pSession->pFormat = NULL;
       }
       if(pSession->pFormula != NULL)
       {
-         pElement->param.pFormula = pSession->pFormula;
+         pLocalParam->pFormula = pSession->pFormula;
          pSession->pFormula = NULL;
       }
 
@@ -781,9 +798,10 @@ static void onMatrix(const GlowMatrix *pMatrix, const berint *pPath, int pathLen
          element_init(pElement, pParent, GlowElementType_Matrix, pPath[pathLength - 1]);
       }
 
-      memcpy(&pElement->matrix, pMatrix, sizeof(*pMatrix));
-      pElement->matrix.pIdentifier = stringDup(pMatrix->pIdentifier);
-      pElement->matrix.pDescription = stringDup(pMatrix->pDescription);
+      memcpy(&pElement->glow.matrix.matrix, pMatrix, sizeof(*pMatrix));
+      pElement->glow.matrix.matrix.pIdentifier = stringDup(pMatrix->pIdentifier);
+      pElement->glow.matrix.matrix.pDescription = stringDup(pMatrix->pDescription);
+      pElement->glow.matrix.matrix.pSchemaIdentifier = stringDup(pMatrix->pSchemaIdentifier);
    }
 }
 
@@ -824,7 +842,7 @@ static void onSource(const GlowSignal *pSignal, const berint *pPath, int pathLen
       bzero(*pSource);
       pSource->number = pSignal->number;
 
-      ptrList_addLast(&pElement->sources, pSource);
+      ptrList_addLast(&pElement->glow.matrix.sources, pSource);
    }
 }
 
@@ -899,27 +917,29 @@ static void onFunction(const GlowFunction *pFunction, const berint *pPath, int p
          element_init(pElement, pParent, GlowElementType_Function, pPath[pathLength - 1]);
       }
 
-      memcpy(&pElement->function, pFunction, sizeof(*pFunction));
-      pElement->function.pIdentifier = stringDup(pFunction->pIdentifier);
-      pElement->function.pDescription = stringDup(pFunction->pDescription);
+      memcpy(&pElement->glow.function, pFunction, sizeof(*pFunction));
+      pElement->glow.function.pIdentifier = stringDup(pFunction->pIdentifier);
+      pElement->glow.function.pDescription = stringDup(pFunction->pDescription);
 
       // clone arguments
       if(pFunction->pArguments != NULL)
       {
-         pElement->function.pArguments = newarr(GlowTupleItemDescription, pFunction->argumentsLength);
+         pElement->glow.function.pArguments = newarr(GlowTupleItemDescription, pFunction->argumentsLength);
 
          for(index = 0; index < pFunction->argumentsLength; index++)
-            cloneTupleItemDescription(&pElement->function.pArguments[index], &pFunction->pArguments[index]);
+            cloneTupleItemDescription(&pElement->glow.function.pArguments[index], &pFunction->pArguments[index]);
       }
 
       // clone result
       if(pFunction->pResult != NULL)
       {
-         pElement->function.pResult = newarr(GlowTupleItemDescription, pFunction->resultLength);
+         pElement->glow.function.pResult = newarr(GlowTupleItemDescription, pFunction->resultLength);
 
          for(index = 0; index < pFunction->resultLength; index++)
-            cloneTupleItemDescription(&pElement->function.pResult[index], &pFunction->pResult[index]);
+            cloneTupleItemDescription(&pElement->glow.function.pResult[index], &pFunction->pResult[index]);
       }
+
+      pElement->glow.function.pSchemaIdentifier = stringDup(pFunction->pSchemaIdentifier);
    }
 }
 
@@ -962,7 +982,6 @@ static void onPackageReceived(const byte *pPackage, int length, voidptr state)
 void onUnsupportedTltlv(const BerReader *pReader, const berint *pPath, int pathLength, GlowReaderPosition position, voidptr state)
 {
    Session *pSession = (Session *)state;
-   NonFramingGlowReader *pGlowReader = (NonFramingGlowReader *)pReader;
 
    if(position == GlowReaderPosition_ParameterContents)
    {
@@ -1039,22 +1058,22 @@ static bool setParameterValue(const Session *pSession, pcstr pValueString)
    {
       case GlowParameterType_Integer:
       case GlowParameterType_Enum:
-         sscanf_s(pValueString, "%lld", &parameter.value.integer);
+         sscanf_s(pValueString, "%lld", &parameter.value.choice.integer);
          parameter.value.flag = GlowParameterType_Integer;
          break;
 
       case GlowParameterType_Boolean:
-         parameter.value.boolean = atoi(pValueString) != 0;
+         parameter.value.choice.boolean = atoi(pValueString) != 0;
          parameter.value.flag = GlowParameterType_Boolean;
          break;
 
       case GlowParameterType_Real:
-         sscanf_s(pValueString, "%lf", &parameter.value.real);
+         sscanf_s(pValueString, "%lf", &parameter.value.choice.real);
          parameter.value.flag = GlowParameterType_Real;
          break;
 
       case GlowParameterType_String:
-         parameter.value.pString = (pstr)pValueString;
+         parameter.value.choice.pString = (pstr)pValueString;
          parameter.value.flag = GlowParameterType_String;
          break;
 

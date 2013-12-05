@@ -103,6 +103,13 @@ typedef int bool;
 
 #endif
 
+#ifndef DOUBLE_LENGTH
+/**
+  * The length of the type double in bytes
+  */
+#define DOUBLE_LENGTH (8)
+#endif
+
 #ifndef TAGNUMBER_DEFINED
 /**
   * Integer type to hold the number of a BerTag.

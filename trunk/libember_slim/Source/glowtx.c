@@ -125,11 +125,11 @@ static void writeMinMax(BerOutput *pOut, const BerTag *pTag, const GlowMinMax *p
    switch(pMinMax->flag)
    {
       case GlowParameterType_Integer:
-         ember_writeLong(pOut, pTag, pMinMax->integer);
+         ember_writeLong(pOut, pTag, pMinMax->choice.integer);
          break;
 
       case GlowParameterType_Real:
-         ember_writeReal(pOut, pTag, pMinMax->real);
+         ember_writeReal(pOut, pTag, pMinMax->choice.real);
          break;
 
       default:
@@ -143,23 +143,23 @@ static void writeValue(BerOutput *pOut, const BerTag *pTag, const GlowValue *pVa
    switch(pValue->flag)
    {
       case GlowParameterType_Integer:
-         ember_writeLong(pOut, pTag, pValue->integer);
+         ember_writeLong(pOut, pTag, pValue->choice.integer);
          break;
 
       case GlowParameterType_Real:
-         ember_writeReal(pOut, pTag, pValue->real);
+         ember_writeReal(pOut, pTag, pValue->choice.real);
          break;
 
       case GlowParameterType_String:
-         ember_writeString(pOut, pTag, pValue->pString);
+         ember_writeString(pOut, pTag, pValue->choice.pString);
          break;
 
       case GlowParameterType_Boolean:
-         ember_writeBoolean(pOut, pTag, pValue->boolean);
+         ember_writeBoolean(pOut, pTag, pValue->choice.boolean);
          break;
 
       case GlowParameterType_Octets:
-         ember_writeOctetString(pOut, pTag, pValue->octets.pOctets, pValue->octets.length);
+         ember_writeOctetString(pOut, pTag, pValue->choice.octets.pOctets, pValue->choice.octets.length);
          break;
 
       default:
@@ -226,11 +226,11 @@ void glow_writeCommandImpl(BerOutput *pOut, const BerTag *pTag, const GlowComman
    ember_writeInteger(pOut, &glowTags.command.number, pCommand->number);
 
    if(pCommand->number == GlowCommandType_GetDirectory
-   && pCommand->dirFieldMask != 0)
-      ember_writeInteger(pOut, &glowTags.command.dirFieldMask, pCommand->dirFieldMask);
+   && pCommand->options.dirFieldMask != 0)
+      ember_writeInteger(pOut, &glowTags.command.dirFieldMask, pCommand->options.dirFieldMask);
 
    if(pCommand->number == GlowCommandType_Invoke)
-      writeInvocation(pOut, &glowTags.command.invocation, &pCommand->invocation);
+      writeInvocation(pOut, &glowTags.command.invocation, &pCommand->options.invocation);
 
    ember_writeContainerEnd(pOut); // end node
 }
@@ -267,6 +267,10 @@ void glow_writeQualifiedNodeImpl(BerOutput *pOut,
 
       if(fields & GlowFieldFlag_IsOnline)
          ember_writeBoolean(pOut, &glowTags.nodeContents.isOnline, pNode->isOnline);
+
+      if((fields & GlowFieldFlag_SchemaIdentifier)
+      && pNode->pSchemaIdentifier != NULL)
+         ember_writeString(pOut, &glowTags.nodeContents.schemaIdentifier, pNode->pSchemaIdentifier);
 
       ember_writeContainerEnd(pOut); // end node.contents
    }
@@ -341,6 +345,10 @@ void glow_writeQualifiedParameterImpl(BerOutput *pOut,
       ember_writeInteger(pOut, &glowTags.streamDescription.offset, pParameter->streamDescriptor.offset);
       ember_writeContainerEnd(pOut);
    }
+
+   if((fields & GlowFieldFlag_SchemaIdentifier) && pParameter->pSchemaIdentifier != NULL)
+      ember_writeString(pOut, &glowTags.parameterContents.schemaIdentifier, pParameter->pSchemaIdentifier);
+
    ember_writeContainerEnd(pOut); // end parameter.contents
 
    ember_writeContainerEnd(pOut); // end parameter
@@ -381,7 +389,7 @@ void glow_writeQualifiedCommandImpl(BerOutput *pOut,
             break;
 
          default:
-            ASSERT(false);
+            FAIL();
             break;
       }
    }
@@ -454,11 +462,11 @@ void glow_writeQualifiedMatrixImpl(BerOutput *pOut,
       {
          if(pParams->kind == GlowParametersLocationKind_BasePath)
          {
-            ember_writeRelativeOid(pOut, &glowTags.matrixContents.parametersLocation, pParams->basePath.ids, pParams->basePath.length);
+            ember_writeRelativeOid(pOut, &glowTags.matrixContents.parametersLocation, pParams->choice.basePath.ids, pParams->choice.basePath.length);
          }
          else if(pParams->kind == GlowParametersLocationKind_Inline)
          {
-            ember_writeInteger(pOut, &glowTags.matrixContents.parametersLocation, pParams->inlineId);
+            ember_writeInteger(pOut, &glowTags.matrixContents.parametersLocation, pParams->choice.inlineId);
          }
       }
 
@@ -482,6 +490,10 @@ void glow_writeQualifiedMatrixImpl(BerOutput *pOut,
 
          ember_writeContainerEnd(pOut); // end matrix.contents
       }
+
+      if((fields & GlowFieldFlag_SchemaIdentifier) == GlowFieldFlag_SchemaIdentifier
+      && pMatrix->pSchemaIdentifier != NULL)
+         ember_writeString(pOut, &glowTags.matrixContents.schemaIdentifier, pMatrix->pSchemaIdentifier);
    }
 
    ember_writeContainerEnd(pOut); // end matrix.contents
@@ -567,12 +579,12 @@ void glow_writeQualifiedFunctionImpl(BerOutput *pOut,
    && pFunction->pIdentifier != NULL)
    {
       if(glow_assertIdentifierValid(pFunction->pIdentifier, false))
-         ember_writeString(pOut, &glowTags.parameterContents.identifier, pFunction->pIdentifier);
+         ember_writeString(pOut, &glowTags.functionContents.identifier, pFunction->pIdentifier);
    }
 
    if((fields & GlowFieldFlag_Description) == GlowFieldFlag_Description
    && pFunction->pDescription != NULL)
-      ember_writeString(pOut, &glowTags.parameterContents.description, pFunction->pDescription);
+      ember_writeString(pOut, &glowTags.functionContents.description, pFunction->pDescription);
 
    if(fields == GlowFieldFlag_All)
    {
@@ -596,6 +608,10 @@ void glow_writeQualifiedFunctionImpl(BerOutput *pOut,
          ember_writeContainerEnd(pOut);
       }
    }
+
+   if((fields & GlowFieldFlag_SchemaIdentifier) == GlowFieldFlag_SchemaIdentifier
+   && pFunction->pSchemaIdentifier != NULL)
+      ember_writeString(pOut, &glowTags.functionContents.schemaIdentifier, pFunction->pSchemaIdentifier);
 
    ember_writeContainerEnd(pOut); // end function.contents
    ember_writeContainerEnd(pOut); // end function
@@ -744,7 +760,7 @@ void glow_writeSourcesPrefix(GlowOutput *pOut,
    pOut->positionHint = __GLOWOUTPUT_POSITION_SOURCES;
 #endif
 
-   glow_writeTargetsPrefixImpl(&pOut->base.base.base, pMatrixPath, pathLength);
+   glow_writeSourcesPrefixImpl(&pOut->base.base.base, pMatrixPath, pathLength);
 }
 
 void glow_writeSource(GlowOutput *pOut, const GlowSignal *pSource)
@@ -753,7 +769,7 @@ void glow_writeSource(GlowOutput *pOut, const GlowSignal *pSource)
    ASSERT(pSource != NULL);
    ASSERT(pOut->positionHint == __GLOWOUTPUT_POSITION_SOURCES);
 
-   glow_writeTargetImpl(&pOut->base.base.base, pSource);
+   glow_writeSourceImpl(&pOut->base.base.base, pSource);
 }
 
 void glow_writeSourcesSuffix(GlowOutput *pOut)

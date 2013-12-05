@@ -22,6 +22,6 @@ open System.Reflection
 [<AssemblyVersion("1.5.0.0")>]
 [<AssemblyTitle("EmberLib.Glow.Formula")>]
 [<AssemblyCompany("L-S-B Broadcast Technologies GmbH")>]
-[<AssemblyCopyright("Copyright © L-S-B Broadcast Technologies GmbH 2012")]
+[<AssemblyCopyright("(c) L-S-B Broadcast Technologies GmbH 2012-2013")>]
 do()
 

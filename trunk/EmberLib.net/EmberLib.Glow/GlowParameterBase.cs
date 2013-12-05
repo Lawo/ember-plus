@@ -346,6 +346,21 @@ namespace EmberLib.Glow
       }
 
       /// <summary>
+      /// Gets or sets the "schemaIdentifier" field of the "contents" SET.
+      /// Getter returns null if field not present.
+      /// </summary>
+      public string SchemaIdentifier
+      {
+         get { return GetContentRef<string>(GlowTags.ParameterContents.SchemaIdentifier); }
+         set
+         {
+            var tag = GlowTags.ParameterContents.SchemaIdentifier;
+
+            EnsureContentsAndRemove(tag).Insert(new StringEmberLeaf(tag, value));
+         }
+      }
+
+      /// <summary>
       /// Gets a value indicating wether the parameter defines an enumeration.
       /// It returns true if either the enumMap or the enumeration property
       /// is present.

@@ -87,6 +87,7 @@ bertype berTag_numberAsType(const BerTag *pThis)
           : pThis->number;
 }
 
+#ifdef SECURE_CRT
 void berTag_toString(const BerTag *pThis, pstr pBuffer, int bufferSize)
 {
    BerClass tagClass;
@@ -97,12 +98,22 @@ void berTag_toString(const BerTag *pThis, pstr pBuffer, int bufferSize)
    tagClass = berTag_getClass(pThis);
    pContainerSuffix = berTag_isContainer(pThis) ? "!C" : "";
 
-#ifdef SECURE_CRT
    sprintf_s(pBuffer, bufferSize, "%s-%u%s", ber_getShortClassName(tagClass), (unsigned int)pThis->number, pContainerSuffix);
-#else
-   sprintf(pBuffer, "%s-%u%s", ber_getShortClassName(tagClass), (unsigned int)pThis->number, pContainerSuffix);
-#endif
 }
+#else
+void berTag_toString(const BerTag *pThis, pstr pBuffer)
+{
+   BerClass tagClass;
+   pcstr pContainerSuffix;
+
+   ASSERT(pThis != NULL);
+
+   tagClass = berTag_getClass(pThis);
+   pContainerSuffix = berTag_isContainer(pThis) ? "!C" : "";
+
+   sprintf(pBuffer, "%s-%u%s", ber_getShortClassName(tagClass), (unsigned int)pThis->number, pContainerSuffix);
+}
+#endif
 
 bool berTag_equals(const BerTag *pThis, const BerTag *pThat)
 {

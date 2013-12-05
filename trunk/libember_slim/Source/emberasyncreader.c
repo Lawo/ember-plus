@@ -264,7 +264,7 @@ bool readByte_Length(EmberAsyncReader *pThis, byte b)
    return false;
 }
 
-static bool readByte_Value(EmberAsyncReader *pThis, byte b)
+static bool readByte_Value(EmberAsyncReader *pThis)
 {
    BerReader *pBase = &pThis->base;
 
@@ -279,7 +279,7 @@ static bool readByte_Value(EmberAsyncReader *pThis, byte b)
    if(pThis->bytesRead == pThis->bytesExpected)
    {
       ASSERT(pThis->bytesRead == pBase->length);
-      ASSERT(pBase->buffer.position == pThis->bytesRead);
+      ASSERT(pBase->buffer.position == (unsigned int)pThis->bytesRead);
 
       onValueReady(pThis);
       return true;
@@ -422,7 +422,7 @@ void emberAsyncReader_readByte(EmberAsyncReader *pThis, byte b)
          break;
 
       case DecodeState_Value:
-         isEofOk = readByte_Value(pThis, b);
+         isEofOk = readByte_Value(pThis);
          break;
 
       case DecodeState_Terminator:
@@ -430,7 +430,7 @@ void emberAsyncReader_readByte(EmberAsyncReader *pThis, byte b)
          break;
 
       default:
-         ASSERT(false); // we should never get here
+         FAIL(); // we should never get here
          break;
    }
 

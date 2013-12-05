@@ -43,36 +43,36 @@ static void readValue(const BerReader *pBase, GlowValue *pValue)
    {
       case BerType_Integer:
          pValue->flag = GlowParameterType_Integer;
-         pValue->integer = berReader_getLong(pBase);
+         pValue->choice.integer = berReader_getLong(pBase);
          break;
 
       case BerType_Real:
          pValue->flag = GlowParameterType_Real;
-         pValue->real = berReader_getReal(pBase);
+         pValue->choice.real = berReader_getReal(pBase);
          break;
 
       case BerType_UTF8String:
          pValue->flag = GlowParameterType_String;
-         pValue->pString = newarr(char, pBase->length + 1);
-         berReader_getString(pBase, pValue->pString, pBase->length);
+         pValue->choice.pString = newarr(char, pBase->length + 1);
+         berReader_getString(pBase, pValue->choice.pString, pBase->length);
          break;
 
       case BerType_Boolean:
          pValue->flag = GlowParameterType_Boolean;
-         pValue->boolean = berReader_getBoolean(pBase);
+         pValue->choice.boolean = berReader_getBoolean(pBase);
          break;
 
       case BerType_OctetString:
          pValue->flag = GlowParameterType_Octets;
          if(pBase->length > 0)
          {
-            pValue->octets.pOctets = newarr(byte, pBase->length);
-            pValue->octets.length = berReader_getOctetString(pBase, pValue->octets.pOctets, pBase->length);
+            pValue->choice.octets.pOctets = newarr(byte, pBase->length);
+            pValue->choice.octets.length = berReader_getOctetString(pBase, pValue->choice.octets.pOctets, pBase->length);
          }
          else
          {
-            pValue->octets.pOctets = NULL;
-            pValue->octets.length = 0;
+            pValue->choice.octets.pOctets = NULL;
+            pValue->choice.octets.length = 0;
          }
          break;
 
@@ -88,12 +88,12 @@ static void readMinMax(const BerReader *pBase, GlowMinMax *pMinMax)
    {
       case BerType_Integer:
          pMinMax->flag = GlowParameterType_Integer;
-         pMinMax->integer = berReader_getLong(pBase);
+         pMinMax->choice.integer = berReader_getLong(pBase);
          break;
 
       case BerType_Real:
          pMinMax->flag = GlowParameterType_Real;
-         pMinMax->real = berReader_getReal(pBase);
+         pMinMax->choice.real = berReader_getReal(pBase);
          break;
 
       default:
@@ -102,11 +102,12 @@ static void readMinMax(const BerReader *pBase, GlowMinMax *pMinMax)
    }
 }
 
-typedef void (*onItemReady_t)(NonFramingGlowReader *pThis, const EmberAsyncReader *pAsync, const BerReader *pBase);
+typedef void (*onItemReady_t)(NonFramingGlowReader *pThis);
 
-static void onItemReady_Node(NonFramingGlowReader *pThis, const EmberAsyncReader *pAsync, const BerReader *pBase)
+static void onItemReady_Node(NonFramingGlowReader *pThis)
 {
    berint number;
+   const BerReader *pBase = &pThis->base.base;
 
    if(pBase->isContainer == false)
    {
@@ -120,8 +121,10 @@ static void onItemReady_Node(NonFramingGlowReader *pThis, const EmberAsyncReader
    }
 }
 
-static void onItemReady_QualifiedNode(NonFramingGlowReader *pThis, const EmberAsyncReader *pAsync, const BerReader *pBase)
+static void onItemReady_QualifiedNode(NonFramingGlowReader *pThis)
 {
+   const BerReader *pBase = &pThis->base.base;
+
    if(pBase->isContainer)
    {
       pThis->pathLength = 0;
@@ -141,43 +144,50 @@ static void onItemReady_QualifiedNode(NonFramingGlowReader *pThis, const EmberAs
    }
 }
 
-static void onItemReady_NodeContents(NonFramingGlowReader *pThis, const EmberAsyncReader *pAsync, const BerReader *pBase)
+static void onItemReady_NodeContents(NonFramingGlowReader *pThis)
 {
+   const BerReader *pBase = &pThis->base.base;
    int fields = pThis->fields;
    const BerTag *pTag = &pBase->tag;
 
    if(pBase->isContainer)
    {
       if(pThis->onNode != NULL)
-         pThis->onNode(&pThis->node, pThis->fields, pThis->path, pThis->pathLength, pThis->state);
+         pThis->onNode(&pThis->glow.node, pThis->fields, pThis->path, pThis->pathLength, pThis->state);
 
-      glowNode_free(&pThis->node);
+      glowNode_free(&pThis->glow.node);
       pThis->fields = GlowFieldFlag_None;
    }
    else
    {
       if(berTag_equals(pTag, &glowTags.nodeContents.identifier))
       {
-         pThis->node.pIdentifier = newarr(char, pBase->length + 1);
-         berReader_getString(pBase, pThis->node.pIdentifier, pBase->length + 1);
-         glow_assertIdentifierValid(pThis->node.pIdentifier, true);
+         pThis->glow.node.pIdentifier = newarr(char, pBase->length + 1);
+         berReader_getString(pBase, pThis->glow.node.pIdentifier, pBase->length + 1);
+         glow_assertIdentifierValid(pThis->glow.node.pIdentifier, true);
          fields |= GlowFieldFlag_Identifier;
       }
       else if(berTag_equals(pTag, &glowTags.nodeContents.description))
       {
-         pThis->node.pDescription = newarr(char, pBase->length + 1);
-         berReader_getString(pBase, pThis->node.pDescription, pBase->length + 1);
+         pThis->glow.node.pDescription = newarr(char, pBase->length + 1);
+         berReader_getString(pBase, pThis->glow.node.pDescription, pBase->length + 1);
          fields |= GlowFieldFlag_Description;
       }
       else if(berTag_equals(pTag, &glowTags.nodeContents.isRoot))
       {
-         pThis->node.isRoot = berReader_getBoolean(pBase);
+         pThis->glow.node.isRoot = berReader_getBoolean(pBase);
          fields |= GlowFieldFlag_IsRoot;
       }
       else if(berTag_equals(pTag, &glowTags.nodeContents.isOnline))
       {
-         pThis->node.isOnline = berReader_getBoolean(pBase);
+         pThis->glow.node.isOnline = berReader_getBoolean(pBase);
          fields |= GlowFieldFlag_IsOnline;
+      }
+      else if(berTag_equals(pTag, &glowTags.nodeContents.schemaIdentifier))
+      {
+         pThis->glow.node.pSchemaIdentifier = newarr(char, pBase->length + 1);
+         berReader_getString(pBase, pThis->glow.node.pSchemaIdentifier, pBase->length + 1);
+         fields |= GlowFieldFlag_SchemaIdentifier;
       }
       else
       {
@@ -189,8 +199,9 @@ static void onItemReady_NodeContents(NonFramingGlowReader *pThis, const EmberAsy
    }
 }
 
-static void onItemReady_Parameter(NonFramingGlowReader *pThis, const EmberAsyncReader *pAsync, const BerReader *pBase)
+static void onItemReady_Parameter(NonFramingGlowReader *pThis)
 {
+   const BerReader *pBase = &pThis->base.base;
    berint number;
 
    if(pBase->isContainer == false)
@@ -205,8 +216,10 @@ static void onItemReady_Parameter(NonFramingGlowReader *pThis, const EmberAsyncR
    }
 }
 
-static void onItemReady_QualifiedParameter(NonFramingGlowReader *pThis, const EmberAsyncReader *pAsync, const BerReader *pBase)
+static void onItemReady_QualifiedParameter(NonFramingGlowReader *pThis)
 {
+   const BerReader *pBase = &pThis->base.base;
+
    if(pBase->isContainer)
    {
       pThis->pathLength = 0;
@@ -226,79 +239,86 @@ static void onItemReady_QualifiedParameter(NonFramingGlowReader *pThis, const Em
    }
 }
 
-static void onItemReady_ParameterContents(NonFramingGlowReader *pThis, const EmberAsyncReader *pAsync, const BerReader *pBase)
+static void onItemReady_ParameterContents(NonFramingGlowReader *pThis)
 {
+   const BerReader *pBase = &pThis->base.base;
    int fields = pThis->fields;
    const BerTag *pTag = &pBase->tag;
 
    if(pBase->isContainer)
    {
       if(pThis->onParameter != NULL)
-         pThis->onParameter(&pThis->parameter, pThis->fields, pThis->path, pThis->pathLength, pThis->state);
+         pThis->onParameter(&pThis->glow.parameter, pThis->fields, pThis->path, pThis->pathLength, pThis->state);
 
       // reset read parameter
-      glowParameter_free(&pThis->parameter);
+      glowParameter_free(&pThis->glow.parameter);
       pThis->fields = GlowFieldFlag_None;
    }
    else
    {
       if(berTag_equals(pTag, &glowTags.parameterContents.identifier))
       {
-         pThis->parameter.pIdentifier = newarr(char, pBase->length + 1);
-         berReader_getString(pBase, pThis->parameter.pIdentifier, pBase->length + 1);
-         glow_assertIdentifierValid(pThis->parameter.pIdentifier, true);
+         pThis->glow.parameter.pIdentifier = newarr(char, pBase->length + 1);
+         berReader_getString(pBase, pThis->glow.parameter.pIdentifier, pBase->length + 1);
+         glow_assertIdentifierValid(pThis->glow.parameter.pIdentifier, true);
          fields |= GlowFieldFlag_Identifier;
       }
       else if(berTag_equals(pTag, &glowTags.parameterContents.description))
       {
-         pThis->parameter.pDescription = newarr(char, pBase->length + 1);
-         berReader_getString(pBase, pThis->parameter.pDescription, pBase->length + 1);
+         pThis->glow.parameter.pDescription = newarr(char, pBase->length + 1);
+         berReader_getString(pBase, pThis->glow.parameter.pDescription, pBase->length + 1);
          fields |= GlowFieldFlag_Description;
       }
       else if(berTag_equals(pTag, &glowTags.parameterContents.value))
       {
-         readValue(pBase, &pThis->parameter.value);
+         readValue(pBase, &pThis->glow.parameter.value);
          fields |= GlowFieldFlag_Value;
       }
       else if(berTag_equals(pTag, &glowTags.parameterContents.minimum))
       {
-         readMinMax(pBase, &pThis->parameter.minimum);
+         readMinMax(pBase, &pThis->glow.parameter.minimum);
          fields |= GlowFieldFlag_Minimum;
       }
       else if(berTag_equals(pTag, &glowTags.parameterContents.maximum))
       {
-         readMinMax(pBase, &pThis->parameter.maximum);
+         readMinMax(pBase, &pThis->glow.parameter.maximum);
          fields |= GlowFieldFlag_Maximum;
       }
       else if(berTag_equals(pTag, &glowTags.parameterContents.access))
       {
-         pThis->parameter.access = (GlowAccess)berReader_getInteger(pBase);
+         pThis->glow.parameter.access = (GlowAccess)berReader_getInteger(pBase);
          fields |= GlowFieldFlag_Access;
       }
       else if(berTag_equals(pTag, &glowTags.parameterContents.factor))
       {
-         pThis->parameter.factor = berReader_getInteger(pBase);
+         pThis->glow.parameter.factor = berReader_getInteger(pBase);
          fields |= GlowFieldFlag_Factor;
       }
       else if(berTag_equals(pTag, &glowTags.parameterContents.isOnline))
       {
-         pThis->parameter.isOnline = berReader_getBoolean(pBase);
+         pThis->glow.parameter.isOnline = berReader_getBoolean(pBase);
          fields |= GlowFieldFlag_IsOnline;
       }
       else if(berTag_equals(pTag, &glowTags.parameterContents.step))
       {
-         pThis->parameter.step = berReader_getInteger(pBase);
+         pThis->glow.parameter.step = berReader_getInteger(pBase);
          fields |= GlowFieldFlag_Step;
       }
       else if(berTag_equals(pTag, &glowTags.parameterContents.type))
       {
-         pThis->parameter.type = (GlowParameterType)berReader_getInteger(pBase);
+         pThis->glow.parameter.type = (GlowParameterType)berReader_getInteger(pBase);
          fields |= GlowFieldFlag_Type;
       }
       else if(berTag_equals(pTag, &glowTags.parameterContents.streamIdentifier))
       {
-         pThis->parameter.streamIdentifier = berReader_getInteger(pBase);
+         pThis->glow.parameter.streamIdentifier = berReader_getInteger(pBase);
          fields |= GlowFieldFlag_StreamIdentifier;
+      }
+      else if(berTag_equals(pTag, &glowTags.parameterContents.schemaIdentifier))
+      {
+         pThis->glow.parameter.pSchemaIdentifier = newarr(char, pBase->length + 1);
+         berReader_getString(pBase, pThis->glow.parameter.pSchemaIdentifier, pBase->length + 1);
+         fields |= GlowFieldFlag_SchemaIdentifier;
       }
       else
       {
@@ -310,8 +330,9 @@ static void onItemReady_ParameterContents(NonFramingGlowReader *pThis, const Emb
    }
 }
 
-static void onItemReady_StreamDescription(NonFramingGlowReader *pThis, const EmberAsyncReader *pAsync, const BerReader *pBase)
+static void onItemReady_StreamDescription(NonFramingGlowReader *pThis)
 {
+   const BerReader *pBase = &pThis->base.base;
    const BerTag *pTag = &pBase->tag;
 
    if(pBase->isContainer)
@@ -322,37 +343,39 @@ static void onItemReady_StreamDescription(NonFramingGlowReader *pThis, const Emb
    {
       if(berTag_equals(pTag, &glowTags.streamDescription.format))
       {
-         pThis->parameter.streamDescriptor.format = (GlowStreamFormat)berReader_getInteger(pBase);
+         pThis->glow.parameter.streamDescriptor.format = (GlowStreamFormat)berReader_getInteger(pBase);
       }
       else if(berTag_equals(pTag, &glowTags.streamDescription.offset))
       {
-         pThis->parameter.streamDescriptor.offset = berReader_getInteger(pBase);
+         pThis->glow.parameter.streamDescriptor.offset = berReader_getInteger(pBase);
       }
    }
 }
 
-static void onItemReady_Command(NonFramingGlowReader *pThis, const EmberAsyncReader *pAsync, const BerReader *pBase)
+static void onItemReady_Command(NonFramingGlowReader *pThis)
 {
+   const BerReader *pBase = &pThis->base.base;
+
    if(pBase->isContainer)
    {
-      if(pThis->command.number == GlowCommandType_GetDirectory
-      && pThis->command.dirFieldMask == 0)
-         pThis->command.dirFieldMask = GlowFieldFlag_All;
+      if(pThis->glow.command.number == GlowCommandType_GetDirectory
+      && pThis->glow.command.options.dirFieldMask == 0)
+         pThis->glow.command.options.dirFieldMask = GlowFieldFlag_All;
 
       if(pThis->onCommand != NULL)
-         pThis->onCommand(&pThis->command, pThis->path, pThis->pathLength, pThis->state);
+         pThis->onCommand(&pThis->glow.command, pThis->path, pThis->pathLength, pThis->state);
 
-      glowCommand_free(&pThis->command);
+      glowCommand_free(&pThis->glow.command);
    }
    else
    {
       if(berTag_equals(&pBase->tag, &glowTags.command.number))
       {
-         pThis->command.number = berReader_getInteger(pBase);
+         pThis->glow.command.number = berReader_getInteger(pBase);
       }
       else if(berTag_equals(&pBase->tag, &glowTags.command.dirFieldMask))
       {
-         pThis->command.dirFieldMask = (GlowFieldFlags)berReader_getInteger(pBase);
+         pThis->glow.command.options.dirFieldMask = (GlowFieldFlags)berReader_getInteger(pBase);
       }
       else
       {
@@ -362,24 +385,26 @@ static void onItemReady_Command(NonFramingGlowReader *pThis, const EmberAsyncRea
    }
 }
 
-static void onItemReady_StreamEntry(NonFramingGlowReader *pThis, const EmberAsyncReader *pAsync, const BerReader *pBase)
+static void onItemReady_StreamEntry(NonFramingGlowReader *pThis)
 {
+   const BerReader *pBase = &pThis->base.base;
+
    if(pBase->isContainer)
    {
       if(pThis->onStreamEntry != NULL)
-         pThis->onStreamEntry(&pThis->streamEntry, pThis->state);
+         pThis->onStreamEntry(&pThis->glow.streamEntry, pThis->state);
 
-      glowValue_free(&pThis->streamEntry.streamValue);
+      glowValue_free(&pThis->glow.streamEntry.streamValue);
    }
    else
    {
       if(berTag_equals(&pBase->tag, &glowTags.streamEntry.streamIdentifier))
       {
-         pThis->streamEntry.streamIdentifier = berReader_getInteger(pBase);
+         pThis->glow.streamEntry.streamIdentifier = berReader_getInteger(pBase);
       }
       else if(berTag_equals(&pBase->tag, &glowTags.streamEntry.streamValue))
       {
-         readValue(pBase, &pThis->streamEntry.streamValue);
+         readValue(pBase, &pThis->glow.streamEntry.streamValue);
       }
       else
       {
@@ -389,8 +414,9 @@ static void onItemReady_StreamEntry(NonFramingGlowReader *pThis, const EmberAsyn
    }
 }
 
-static void onItemReady_Matrix(NonFramingGlowReader *pThis, const EmberAsyncReader *pAsync, const BerReader *pBase)
+static void onItemReady_Matrix(NonFramingGlowReader *pThis)
 {
+   const BerReader *pBase = &pThis->base.base;
    berint number;
 
    if(pBase->isContainer == false)
@@ -405,8 +431,10 @@ static void onItemReady_Matrix(NonFramingGlowReader *pThis, const EmberAsyncRead
    }
 }
 
-static void onItemReady_QualifiedMatrix(NonFramingGlowReader *pThis, const EmberAsyncReader *pAsync, const BerReader *pBase)
+static void onItemReady_QualifiedMatrix(NonFramingGlowReader *pThis)
 {
+   const BerReader *pBase = &pThis->base.base;
+
    if(pBase->isContainer)
    {
       pThis->pathLength = 0;
@@ -426,70 +454,76 @@ static void onItemReady_QualifiedMatrix(NonFramingGlowReader *pThis, const Ember
    }
 }
 
-static void onItemReady_MatrixContents(NonFramingGlowReader *pThis, const EmberAsyncReader *pAsync, const BerReader *pBase)
+static void onItemReady_MatrixContents(NonFramingGlowReader *pThis)
 {
+   const BerReader *pBase = &pThis->base.base;
    const BerTag *pTag = &pBase->tag;
    GlowParametersLocation *pParams;
 
    if(pBase->isContainer)
    {
       if(pThis->onMatrix != NULL)
-         pThis->onMatrix(&pThis->matrix, pThis->path, pThis->pathLength, pThis->state);
+         pThis->onMatrix(&pThis->glow.matrix, pThis->path, pThis->pathLength, pThis->state);
 
       // reset read matrix
-      glowMatrix_free(&pThis->matrix);
+      glowMatrix_free(&pThis->glow.matrix);
    }
    else
    {
       if(berTag_equals(pTag, &glowTags.matrixContents.identifier))
       {
-         pThis->matrix.pIdentifier = newarr(char, pBase->length + 1);
-         berReader_getString(pBase, pThis->matrix.pIdentifier, pBase->length + 1);
-         glow_assertIdentifierValid(pThis->matrix.pIdentifier, true);
+         pThis->glow.matrix.pIdentifier = newarr(char, pBase->length + 1);
+         berReader_getString(pBase, pThis->glow.matrix.pIdentifier, pBase->length + 1);
+         glow_assertIdentifierValid(pThis->glow.matrix.pIdentifier, true);
       }
       else if(berTag_equals(pTag, &glowTags.matrixContents.description))
       {
-         pThis->matrix.pDescription = newarr(char, pBase->length + 1);
-         berReader_getString(pBase, pThis->matrix.pDescription, pBase->length + 1);
+         pThis->glow.matrix.pDescription = newarr(char, pBase->length + 1);
+         berReader_getString(pBase, pThis->glow.matrix.pDescription, pBase->length + 1);
       }
       else if(berTag_equals(pTag, &glowTags.matrixContents.type))
       {
-         pThis->matrix.type = (GlowMatrixType)berReader_getInteger(pBase);
+         pThis->glow.matrix.type = (GlowMatrixType)berReader_getInteger(pBase);
       }
       else if(berTag_equals(pTag, &glowTags.matrixContents.addressingMode))
       {
-         pThis->matrix.addressingMode = (GlowMatrixAddressingMode)berReader_getInteger(pBase);
+         pThis->glow.matrix.addressingMode = (GlowMatrixAddressingMode)berReader_getInteger(pBase);
       }
       else if(berTag_equals(pTag, &glowTags.matrixContents.targetCount))
       {
-         pThis->matrix.targetCount = berReader_getInteger(pBase);
+         pThis->glow.matrix.targetCount = berReader_getInteger(pBase);
       }
       else if(berTag_equals(pTag, &glowTags.matrixContents.sourceCount))
       {
-         pThis->matrix.sourceCount = berReader_getInteger(pBase);
+         pThis->glow.matrix.sourceCount = berReader_getInteger(pBase);
       }
       else if(berTag_equals(pTag, &glowTags.matrixContents.maximumTotalConnects))
       {
-         pThis->matrix.maximumTotalConnects = berReader_getInteger(pBase);
+         pThis->glow.matrix.maximumTotalConnects = berReader_getInteger(pBase);
       }
       else if(berTag_equals(pTag, &glowTags.matrixContents.maximumConnectsPerTarget))
       {
-         pThis->matrix.maximumConnectsPerTarget = berReader_getInteger(pBase);
+         pThis->glow.matrix.maximumConnectsPerTarget = berReader_getInteger(pBase);
       }
       else if(berTag_equals(pTag, &glowTags.matrixContents.parametersLocation))
       {
-         pParams = &pThis->matrix.parametersLocation;
+         pParams = &pThis->glow.matrix.parametersLocation;
 
          if(pBase->type == BerType_RelativeOid)
          {
-            pParams->basePath.length = berReader_getRelativeOid(pBase, pParams->basePath.ids, GLOW_MAX_TREE_DEPTH);
+            pParams->choice.basePath.length = berReader_getRelativeOid(pBase, pParams->choice.basePath.ids, GLOW_MAX_TREE_DEPTH);
             pParams->kind = GlowParametersLocationKind_BasePath;
          }
          else if(pBase->type == BerType_Integer)
          {
-            pParams->inlineId = berReader_getInteger(pBase);
+            pParams->choice.inlineId = berReader_getInteger(pBase);
             pParams->kind = GlowParametersLocationKind_Inline;
          }
+      }
+      else if(berTag_equals(pTag, &glowTags.matrixContents.schemaIdentifier))
+      {
+         pThis->glow.matrix.pSchemaIdentifier = newarr(char, pBase->length + 1);
+         berReader_getString(pBase, pThis->glow.matrix.pSchemaIdentifier, pBase->length + 1);
       }
       else
       {
@@ -506,22 +540,22 @@ static void onItemReady_Signal(NonFramingGlowReader *pThis, const BerReader *pBa
       if(isTarget)
       {
          if(pThis->onTarget != NULL)
-            pThis->onTarget(&pThis->signal, pThis->path, pThis->pathLength, pThis->state);
+            pThis->onTarget(&pThis->glow.signal, pThis->path, pThis->pathLength, pThis->state);
       }
       else
       {
          if(pThis->onSource != NULL)
-            pThis->onSource(&pThis->signal, pThis->path, pThis->pathLength, pThis->state);
+            pThis->onSource(&pThis->glow.signal, pThis->path, pThis->pathLength, pThis->state);
       }
 
       // reset read signal
-      bzero(pThis->signal);
+      bzero(pThis->glow.signal);
    }
    else
    {
       if(berTag_equals(&pBase->tag, &glowTags.signal.number))
       {
-         pThis->signal.number = berReader_getInteger(pBase);
+         pThis->glow.signal.number = berReader_getInteger(pBase);
       }
       else
       {
@@ -531,52 +565,54 @@ static void onItemReady_Signal(NonFramingGlowReader *pThis, const BerReader *pBa
    }
 }
 
-static void onItemReady_Target(NonFramingGlowReader *pThis, const EmberAsyncReader *pAsync, const BerReader *pBase)
+static void onItemReady_Target(NonFramingGlowReader *pThis)
 {
-   onItemReady_Signal(pThis, pBase, true);
+   onItemReady_Signal(pThis, &pThis->base.base, true);
 }
 
-static void onItemReady_Source(NonFramingGlowReader *pThis, const EmberAsyncReader *pAsync, const BerReader *pBase)
+static void onItemReady_Source(NonFramingGlowReader *pThis)
 {
-   onItemReady_Signal(pThis, pBase, false);
+   onItemReady_Signal(pThis, &pThis->base.base, false);
 }
 
-static void onItemReady_Connection(NonFramingGlowReader *pThis, const EmberAsyncReader *pAsync, const BerReader *pBase)
+static void onItemReady_Connection(NonFramingGlowReader *pThis)
 {
+   const BerReader *pBase = &pThis->base.base;
+
    if(pBase->isContainer)
    {
       if(pThis->onConnection != NULL)
-         pThis->onConnection(&pThis->connection, pThis->path, pThis->pathLength, pThis->state);
+         pThis->onConnection(&pThis->glow.connection, pThis->path, pThis->pathLength, pThis->state);
 
       // reset read connection
-      glowConnection_free(&pThis->connection);
+      glowConnection_free(&pThis->glow.connection);
    }
    else
    {
       if(berTag_equals(&pBase->tag, &glowTags.connection.target))
       {
-         pThis->connection.target = berReader_getInteger(pBase);
+         pThis->glow.connection.target = berReader_getInteger(pBase);
       }
       else if(berTag_equals(&pBase->tag, &glowTags.connection.sources))
       {
          if(pBase->length > 0)
          {
-            pThis->connection.pSources = newarr(berint, pBase->length);
-            pThis->connection.sourcesLength = berReader_getRelativeOid(pBase, pThis->connection.pSources, pBase->length);
+            pThis->glow.connection.pSources = newarr(berint, pBase->length);
+            pThis->glow.connection.sourcesLength = berReader_getRelativeOid(pBase, pThis->glow.connection.pSources, pBase->length);
          }
          else
          {
-            pThis->connection.pSources = NULL;
-            pThis->connection.sourcesLength = 0;
+            pThis->glow.connection.pSources = NULL;
+            pThis->glow.connection.sourcesLength = 0;
          }
       }
       else if(berTag_equals(&pBase->tag, &glowTags.connection.operation))
       {
-         pThis->connection.operation = (GlowConnectionOperation)berReader_getInteger(pBase);
+         pThis->glow.connection.operation = (GlowConnectionOperation)berReader_getInteger(pBase);
       }
       else if(berTag_equals(&pBase->tag, &glowTags.connection.disposition))
       {
-         pThis->connection.disposition = (GlowConnectionDisposition)berReader_getInteger(pBase);
+         pThis->glow.connection.disposition = (GlowConnectionDisposition)berReader_getInteger(pBase);
       }
       else
       {
@@ -586,8 +622,9 @@ static void onItemReady_Connection(NonFramingGlowReader *pThis, const EmberAsync
    }
 }
 
-static void onItemReady_Function(NonFramingGlowReader *pThis, const EmberAsyncReader *pAsync, const BerReader *pBase)
+static void onItemReady_Function(NonFramingGlowReader *pThis)
 {
+   const BerReader *pBase = &pThis->base.base;
    berint number;
 
    if(pBase->isContainer == false)
@@ -602,8 +639,10 @@ static void onItemReady_Function(NonFramingGlowReader *pThis, const EmberAsyncRe
    }
 }
 
-static void onItemReady_QualifiedFunction(NonFramingGlowReader *pThis, const EmberAsyncReader *pAsync, const BerReader *pBase)
+static void onItemReady_QualifiedFunction(NonFramingGlowReader *pThis)
 {
+   const BerReader *pBase = &pThis->base.base;
+
    if(pBase->isContainer)
    {
       pThis->pathLength = 0;
@@ -623,37 +662,44 @@ static void onItemReady_QualifiedFunction(NonFramingGlowReader *pThis, const Emb
    }
 }
 
-static void onItemReady_FunctionContents(NonFramingGlowReader *pThis, const EmberAsyncReader *pAsync, const BerReader *pBase)
+static void onItemReady_FunctionContents(NonFramingGlowReader *pThis)
 {
+   const BerReader *pBase = &pThis->base.base;
    const BerTag *pTag = &pBase->tag;
 
    if(pBase->isContainer)
    {
       if(pThis->onFunction != NULL)
-         pThis->onFunction(&pThis->function, pThis->path, pThis->pathLength, pThis->state);
+         pThis->onFunction(&pThis->glow.function, pThis->path, pThis->pathLength, pThis->state);
 
       // reset read function
-      glowFunction_free(&pThis->function);
+      glowFunction_free(&pThis->glow.function);
    }
    else
    {
       if(berTag_equals(pTag, &glowTags.functionContents.identifier))
       {
-         pThis->function.pIdentifier = newarr(char, pBase->length + 1);
-         berReader_getString(pBase, pThis->function.pIdentifier, pBase->length + 1);
-         glow_assertIdentifierValid(pThis->function.pIdentifier, true);
+         pThis->glow.function.pIdentifier = newarr(char, pBase->length + 1);
+         berReader_getString(pBase, pThis->glow.function.pIdentifier, pBase->length + 1);
+         glow_assertIdentifierValid(pThis->glow.function.pIdentifier, true);
       }
       else if(berTag_equals(pTag, &glowTags.functionContents.description))
       {
-         pThis->function.pDescription = newarr(char, pBase->length + 1);
-         berReader_getString(pBase, pThis->function.pDescription, pBase->length + 1);
+         pThis->glow.function.pDescription = newarr(char, pBase->length + 1);
+         berReader_getString(pBase, pThis->glow.function.pDescription, pBase->length + 1);
+      }
+      else if(berTag_equals(pTag, &glowTags.functionContents.schemaIdentifier))
+      {
+         pThis->glow.function.pSchemaIdentifier = newarr(char, pBase->length + 1);
+         berReader_getString(pBase, pThis->glow.function.pSchemaIdentifier, pBase->length + 1);
       }
    }
 }
 
-static void onItemReady_FunctionArgument(NonFramingGlowReader *pThis, const EmberAsyncReader *pAsync, const BerReader *pBase)
+static void onItemReady_FunctionArgument(NonFramingGlowReader *pThis)
 {
-   GlowFunction *pFunction = &pThis->function;
+   const BerReader *pBase = &pThis->base.base;
+   GlowFunction *pFunction = &pThis->glow.function;
    GlowTupleItemDescription *pTupleItem = &pFunction->pArguments[pFunction->argumentsLength];
 
    if(pBase->isContainer)
@@ -674,9 +720,10 @@ static void onItemReady_FunctionArgument(NonFramingGlowReader *pThis, const Embe
    }
 }
 
-static void onItemReady_FunctionResult(NonFramingGlowReader *pThis, const EmberAsyncReader *pAsync, const BerReader *pBase)
+static void onItemReady_FunctionResult(NonFramingGlowReader *pThis)
 {
-   GlowFunction *pFunction = &pThis->function;
+   const BerReader *pBase = &pThis->base.base;
+   GlowFunction *pFunction = &pThis->glow.function;
    GlowTupleItemDescription *pTupleItem = &pFunction->pResult[pFunction->resultLength];
 
    if(pBase->isContainer)
@@ -697,34 +744,38 @@ static void onItemReady_FunctionResult(NonFramingGlowReader *pThis, const EmberA
    }
 }
 
-static void onItemReady_Invocation(NonFramingGlowReader *pThis, const EmberAsyncReader *pAsync, const BerReader *pBase)
+static void onItemReady_Invocation(NonFramingGlowReader *pThis)
 {
+   const BerReader *pBase = &pThis->base.base;
+
    if(pBase->isContainer == false)
    {
       if(berTag_equals(&pBase->tag, &glowTags.invocation.invocationId))
-         pThis->command.invocation.invocationId = berReader_getInteger(pBase);
+         pThis->glow.command.options.invocation.invocationId = berReader_getInteger(pBase);
    }
 }
 
-static void onItemReady_InvocationResult(NonFramingGlowReader *pThis, const EmberAsyncReader *pAsync, const BerReader *pBase)
+static void onItemReady_InvocationResult(NonFramingGlowReader *pThis)
 {
+   const BerReader *pBase = &pThis->base.base;
+
    if(pBase->isContainer)
    {
       if(pThis->onInvocationResult)
-         pThis->onInvocationResult(&pThis->invocationResult, pThis->state);
+         pThis->onInvocationResult(&pThis->glow.invocationResult, pThis->state);
 
       // reset read invocation result
-      glowInvocationResult_free(&pThis->invocationResult);
+      glowInvocationResult_free(&pThis->glow.invocationResult);
    }
    else
    {
       if(berTag_equals(&pBase->tag, &glowTags.invocationResult.invocationId))
       {
-         pThis->invocationResult.invocationId = berReader_getInteger(pBase);
+         pThis->glow.invocationResult.invocationId = berReader_getInteger(pBase);
       }
       else if(berTag_equals(&pBase->tag, &glowTags.invocationResult.success))
       {
-         pThis->invocationResult.hasError = berReader_getBoolean(pBase) == false;
+         pThis->glow.invocationResult.hasError = berReader_getBoolean(pBase) == false;
       }
    }
 }
@@ -754,9 +805,10 @@ static void allocValues(GlowValue **ppValues, int length)
    }
 }
 
-static void onItemReady_InvocationArguments(NonFramingGlowReader *pThis, const EmberAsyncReader *pAsync, const BerReader *pBase)
+static void onItemReady_InvocationArguments(NonFramingGlowReader *pThis)
 {
-   GlowInvocation *pInvocation = &pThis->command.invocation;
+   const BerReader *pBase = &pThis->base.base;
+   GlowInvocation *pInvocation = &pThis->glow.command.options.invocation;
 
    if(pBase->isContainer == false)
    {
@@ -766,9 +818,10 @@ static void onItemReady_InvocationArguments(NonFramingGlowReader *pThis, const E
    }
 }
 
-static void onItemReady_InvocationResultResult(NonFramingGlowReader *pThis, const EmberAsyncReader *pAsync, const BerReader *pBase)
+static void onItemReady_InvocationResultResult(NonFramingGlowReader *pThis)
 {
-   GlowInvocationResult *pInvocationResult = &pThis->invocationResult;
+   const BerReader *pBase = &pThis->base.base;
+   GlowInvocationResult *pInvocationResult = &pThis->glow.invocationResult;
 
    if(pBase->isContainer == false)
    {
@@ -813,54 +866,54 @@ static onItemReady_t getOnItemReady_EnterContainer(const BerReader *pBase)
    switch(pBase->type)
    {
       case GlowType_Node:
-         bzero(pThis->node);
-         pThis->node.isOnline = true;
+         bzero(pThis->glow.node);
+         pThis->glow.node.isOnline = true;
          return onItemReady_Node;
       case GlowType_QualifiedNode:
-         bzero(pThis->node);
-         pThis->node.isOnline = true;
+         bzero(pThis->glow.node);
+         pThis->glow.node.isOnline = true;
          return onItemReady_QualifiedNode;
       case GlowType_Parameter:
-         bzero(pThis->parameter);
+         bzero(pThis->glow.parameter);
          return onItemReady_Parameter;
       case GlowType_QualifiedParameter:
-         bzero(pThis->node);
+         bzero(pThis->glow.parameter);
          return onItemReady_QualifiedParameter;
       case GlowType_Command:
-         bzero(pThis->command);
+         bzero(pThis->glow.command);
          return onItemReady_Command;
       case GlowType_StreamEntry:
-         bzero(pThis->streamEntry);
+         bzero(pThis->glow.streamEntry);
          return onItemReady_StreamEntry;
       case GlowType_StreamDescription:
-         bzero(pThis->parameter.streamDescriptor);
+         bzero(pThis->glow.parameter.streamDescriptor);
          return onItemReady_StreamDescription;
       case GlowType_Matrix:
-         bzero(pThis->matrix);
+         bzero(pThis->glow.matrix);
          return onItemReady_Matrix;
       case GlowType_QualifiedMatrix:
-         bzero(pThis->matrix);
+         bzero(pThis->glow.matrix);
          return onItemReady_QualifiedMatrix;
       case GlowType_Target:
-         bzero(pThis->signal);
+         bzero(pThis->glow.signal);
          return onItemReady_Target;
       case GlowType_Source:
-         bzero(pThis->signal);
+         bzero(pThis->glow.signal);
          return onItemReady_Source;
       case GlowType_Connection:
-         bzero(pThis->connection);
+         bzero(pThis->glow.connection);
          return onItemReady_Connection;
       case GlowType_Function:
-         bzero(pThis->function);
+         bzero(pThis->glow.function);
          return onItemReady_Function;
       case GlowType_QualifiedFunction:
-         bzero(pThis->function);
+         bzero(pThis->glow.function);
          return onItemReady_QualifiedFunction;
       case GlowType_Invocation:
-         bzero(pThis->command.invocation);
+         bzero(pThis->glow.command.options.invocation);
          return onItemReady_Invocation;
       case GlowType_InvocationResult:
-         bzero(pThis->invocationResult);
+         bzero(pThis->glow.invocationResult);
          return onItemReady_InvocationResult;
       default:
          pStack = pAsync->pContainerStack;
@@ -904,14 +957,14 @@ static onItemReady_t getOnItemReady_EnterContainer(const BerReader *pBase)
                if(berTag_equals(&pParent->tag, &glowTags.functionContents.arguments)
                && pParent->type == BerType_Sequence)
                {
-                  allocTupleDescriptions(&pThis->function.pArguments, pThis->function.argumentsLength);
+                  allocTupleDescriptions(&pThis->glow.function.pArguments, pThis->glow.function.argumentsLength);
                   return onItemReady_FunctionArgument;
                }
 
                if(berTag_equals(&pParent->tag, &glowTags.functionContents.result)
                && pParent->type == BerType_Sequence)
                {
-                  allocTupleDescriptions(&pThis->function.pResult, pThis->function.resultLength);
+                  allocTupleDescriptions(&pThis->glow.function.pResult, pThis->glow.function.resultLength);
                   return onItemReady_FunctionResult;
                }
             }
@@ -1009,7 +1062,7 @@ static void onItemReady(const BerReader *pBase)
    NonFramingGlowReader *pThis = (NonFramingGlowReader *)pBase;
 
    if(pThis->onItemReadyState != NULL)
-      pThis->onItemReadyState(pThis, (EmberAsyncReader *)pBase, pBase);
+      pThis->onItemReadyState(pThis);
 
    if(pBase->isContainer)
    {

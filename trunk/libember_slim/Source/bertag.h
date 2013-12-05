@@ -190,6 +190,16 @@ BerTag berTag_toContainer(const BerTag *pThis);
   */
 bertype berTag_numberAsType(const BerTag *pThis);
 
+#ifdef SECURE_CRT
+/**
+  * Writes a human-readable string representation of
+  * this tag to the passed buffer.
+  * @param pThis pointer to the object to process.
+  * @param pBuffer pointer to the buffer to store
+  *      the zero-terminated string to.
+  */
+void berTag_toString(const BerTag *pThis, pstr pBuffer, int bufferSize);
+#else
 /**
   * Writes a human-readable string representation of
   * this tag to the passed buffer.
@@ -199,8 +209,8 @@ bertype berTag_numberAsType(const BerTag *pThis);
   * @param bufferSize size of the buffer pointed to
   *      by @p pBuffer.
   */
-void berTag_toString(const BerTag *pThis, pstr pBuffer, int bufferSize);
-
+void berTag_toString(const BerTag *pThis, pstr pBuffer);
+#endif
 
 /**
   * Gets a value indicating whether two BerTag instances

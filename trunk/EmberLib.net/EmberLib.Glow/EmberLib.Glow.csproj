@@ -80,6 +80,12 @@
     <CodeAnalysisIgnoreBuiltInRules>false</CodeAnalysisIgnoreBuiltInRules>
     <CodeAnalysisFailOnMissingRules>false</CodeAnalysisFailOnMissingRules>
   </PropertyGroup>
+  <PropertyGroup>
+    <SignAssembly>true</SignAssembly>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AssemblyOriginatorKeyFile>..\BerLib\Properties\EmberLib.snk</AssemblyOriginatorKeyFile>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.XML" />
@@ -148,6 +154,9 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <None Include="..\BerLib\Properties\EmberLib.snk">
+      <Link>Properties\EmberLib.snk</Link>
+    </None>
     <None Include="Documentation\Ember+ Functions.docx" />
     <None Include="Documentation\Ember+ Matrix.docx" />
     <None Include="Documentation\Ember+ Standard Parameters.docx" />

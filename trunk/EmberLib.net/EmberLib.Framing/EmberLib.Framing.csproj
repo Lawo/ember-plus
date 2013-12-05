@@ -77,6 +77,12 @@
     <CodeAnalysisIgnoreBuiltInRuleSets>false</CodeAnalysisIgnoreBuiltInRuleSets>
     <CodeAnalysisIgnoreBuiltInRules>false</CodeAnalysisIgnoreBuiltInRules>
   </PropertyGroup>
+  <PropertyGroup>
+    <SignAssembly>true</SignAssembly>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AssemblyOriginatorKeyFile>..\BerLib\Properties\EmberLib.snk</AssemblyOriginatorKeyFile>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
   </ItemGroup>
@@ -105,6 +111,11 @@
   <ItemGroup>
     <Content Include="Documentation\Protocol Frame.txt" />
     <Content Include="Documentation\Usage.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\BerLib\Properties\EmberLib.snk">
+      <Link>Properties\EmberLib.snk</Link>
+    </None>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

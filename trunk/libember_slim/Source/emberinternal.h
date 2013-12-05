@@ -40,8 +40,10 @@ void freeMemory(void *pMemory);
 
 #ifdef _DEBUG
 #define ASSERT(x) if((x) == false) failAssertion(__FILE__, __LINE__)
+#define FAIL()    failAssertion(__FILE__, __LINE__)
 #else
 #define ASSERT(x) ((void)0)
+#define FAIL()    ((void)0)
 #endif
 
 #endif

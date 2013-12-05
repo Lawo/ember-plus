@@ -79,6 +79,12 @@
     <CodeAnalysisIgnoreBuiltInRuleSets>true</CodeAnalysisIgnoreBuiltInRuleSets>
     <CodeAnalysisIgnoreBuiltInRules>true</CodeAnalysisIgnoreBuiltInRules>
   </PropertyGroup>
+  <PropertyGroup>
+    <SignAssembly>true</SignAssembly>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AssemblyOriginatorKeyFile>..\BerLib\Properties\EmberLib.snk</AssemblyOriginatorKeyFile>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Xml" />
@@ -109,6 +115,9 @@
     <Compile Include="Xml\XmlExport.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="..\BerLib\Properties\EmberLib.snk">
+      <Link>Properties\EmberLib.snk</Link>
+    </None>
     <None Include="Documentation\EmberLib.cd" />
     <None Include="Documentation\Ember.doc" />
   </ItemGroup>

@@ -152,8 +152,8 @@ static int getLongLength(berlong value, bool isSigned)
 {
    qword qwValue = (qword)value;
    qword mask = isSigned
-                ? 0xFF80000000000000LL
-                : 0xFF00000000000000LL;
+                ? 0xFF80000000000000ULL
+                : 0xFF00000000000000ULL;
    int length = 8;
    qword topBitMask;
 
@@ -164,7 +164,7 @@ static int getLongLength(berlong value, bool isSigned)
    }
    else
    {
-      topBitMask = 0x8000000000000000LL;
+      topBitMask = 0x8000000000000000ULL;
 
       for( ; (qwValue & mask) == 0 && length > 1; mask >>= 8)
       {
@@ -366,103 +366,100 @@ int ber_encodeLong(BerOutput *pOut, berlong value, int length)
 int ber_encodeReal(BerOutput *pOut, double value)
 {
    int size = 0;
-   qword qwValue;
-   dword dwValue;
    berlong exponent;
    berlong mantissa;
    int exponentLength;
    byte preamble;
 
-   if(sizeof(double) == 8)
+#if DOUBLE_LENGTH == 8
+   qword qwValue = *(qword *)&value;
+
+   if(qwValue != 0)
    {
-      qwValue = *(qword *)&value;
-
-      if(qwValue != 0)
+      if(qwValue == 0x7FF0000000000000LL) // positive infinity
       {
-         if(qwValue == 0x7FF0000000000000LL) // positive infinity
-         {
-            pOut->writeByte(pOut, 0x40); // 01000000 Value is PLUS-INFINITY
-            size = 1;
-         }
-         else if(qwValue == 0x8FF0000000000000LL) // negative infinity
-         {
-            pOut->writeByte(pOut, 0x41); // 01000001 Value is MINUS-INFINITY
-            size = 1;
-         }
-         else
-         {
-            exponent = ((0x7FF0000000000000LL & qwValue) >> 52) - 1023;
-            mantissa = 0x000FFFFFFFFFFFFFLL & qwValue;
-            exponentLength = ber_getLongLength(exponent);
+         pOut->writeByte(pOut, 0x40); // 01000000 Value is PLUS-INFINITY
+         size = 1;
+      }
+      else if(qwValue == 0x8FF0000000000000LL) // negative infinity
+      {
+         pOut->writeByte(pOut, 0x41); // 01000001 Value is MINUS-INFINITY
+         size = 1;
+      }
+      else
+      {
+         exponent = ((0x7FF0000000000000LL & qwValue) >> 52) - 1023;
+         mantissa = 0x000FFFFFFFFFFFFFLL & qwValue;
+         exponentLength = ber_getLongLength(exponent);
 
-            mantissa |= 0x10000000000000LL; // set virtual delimeter
+         mantissa |= 0x10000000000000LL; // set virtual delimeter
 
-            // normalize mantissa (required by CER and DER)
-            while((mantissa & 0xFF) == 0)
-               mantissa >>= 8;
+         // normalize mantissa (required by CER and DER)
+         while((mantissa & 0xFF) == 0)
+            mantissa >>= 8;
 
-            while((mantissa & 0x01) == 0)
-               mantissa >>= 1;
+         while((mantissa & 0x01) == 0)
+            mantissa >>= 1;
 
-            preamble = 0x80;
-            preamble |= (byte)(exponentLength - 1);
+         preamble = 0x80;
+         preamble |= (byte)(exponentLength - 1);
 
-            if((qwValue & 0x8000000000000000LL) != 0)
-               preamble |= 0x40; // Sign
+         if((qwValue & 0x8000000000000000LL) != 0)
+            preamble |= 0x40; // Sign
 
-            pOut->writeByte(pOut, preamble);
+         pOut->writeByte(pOut, preamble);
 
-            size++;
-            size += ber_encodeLong(pOut, exponent, exponentLength);
-            size += ber_encodeLong(pOut, mantissa, getLongLength(mantissa, false));
-         }
+         size++;
+         size += ber_encodeLong(pOut, exponent, exponentLength);
+         size += ber_encodeLong(pOut, mantissa, getLongLength(mantissa, false));
       }
    }
-   else if(sizeof(double) == 4)
+#elif DOUBLE_LENGTH == 4
+   dword dwValue = *(dword *)&value;
+
+   if(dwValue != 0)
    {
-      dwValue = *(dword *)&value;
-
-      if(dwValue != 0)
+      if(dwValue == 0x7FF00000L) // positive infinity
       {
-         if(dwValue == 0x7FF00000L) // positive infinity
-         {
-            pOut->writeByte(pOut, 0x40); // 01000000 Value is PLUS-INFINITY
-            size = 1;
-         }
-         else if(dwValue == 0x8FF00000L) // negative infinity
-         {
-            pOut->writeByte(pOut, 0x41); // 01000001 Value is MINUS-INFINITY
-            size = 1;
-         }
-         else
-         {
-            exponent = ((0x7F800000L & dwValue) >> 23) - 127;
-            mantissa = 0x007FFFFFL & dwValue;
-            exponentLength = ber_getLongLength(exponent);
+         pOut->writeByte(pOut, 0x40); // 01000000 Value is PLUS-INFINITY
+         size = 1;
+      }
+      else if(dwValue == 0x8FF00000L) // negative infinity
+      {
+         pOut->writeByte(pOut, 0x41); // 01000001 Value is MINUS-INFINITY
+         size = 1;
+      }
+      else
+      {
+         exponent = ((0x7F800000L & dwValue) >> 23) - 127;
+         mantissa = 0x007FFFFFL & dwValue;
+         exponentLength = ber_getLongLength(exponent);
 
-            mantissa |= 0x00800000L; // set virtual delimeter
+         mantissa |= 0x00800000L; // set virtual delimeter
 
-            // normalize mantissa (required by CER and DER)
-            while((mantissa & 0xFF) == 0)
-               mantissa >>= 8;
+         // normalize mantissa (required by CER and DER)
+         while((mantissa & 0xFF) == 0)
+            mantissa >>= 8;
 
-            while((mantissa & 0x01) == 0)
-               mantissa >>= 1;
+         while((mantissa & 0x01) == 0)
+            mantissa >>= 1;
 
-            preamble = 0x80;
-            preamble |= (byte)(exponentLength - 1);
+         preamble = 0x80;
+         preamble |= (byte)(exponentLength - 1);
 
-            if((dwValue & 0x80000000L) != 0)
-               preamble |= 0x40; // Sign
+         if((dwValue & 0x80000000L) != 0)
+            preamble |= 0x40; // Sign
 
-            pOut->writeByte(pOut, preamble);
+         pOut->writeByte(pOut, preamble);
 
-            size++;
-            size += ber_encodeLong(pOut, exponent, exponentLength);
-            size += ber_encodeLong(pOut, mantissa, getLongLength(mantissa, false));
-         }
+         size++;
+         size += ber_encodeLong(pOut, exponent, exponentLength);
+         size += ber_encodeLong(pOut, mantissa, getLongLength(mantissa, false));
       }
    }
+#else
+#error DOUBLE_LENGTH must be either 8 or 4!
+#endif
 
    return size;
 }
@@ -635,101 +632,105 @@ double ber_decodeReal(BerInput *pIn, int length)
 {
    double value = 0;
    byte preamble;
-   qword qwValue;
-   dword dwValue;
    int exponentLength;
    int sign;
    int ff;
    berlong exponent;
    berlong mantissa;
 
+#if DOUBLE_LENGTH == 8
+   qword qwValue;
+
    if(length != 0)
    {
-      if(sizeof(double) == 8)
+      preamble = pIn->readByte(pIn);
+
+      qwValue = 0;
+
+      if(length == 1 && preamble == 0x40) // positive infinity
       {
-         preamble = pIn->readByte(pIn);
-
-         qwValue = 0;
-
-         if(length == 1 && preamble == 0x40) // positive infinity
-         {
-            qwValue = 0x7FF0000000000000LL;
-         }
-         else if(length == 1 && preamble == 0x41) // negative infinity
-         {
-            qwValue = 0x8FF0000000000000LL;
-         }
-         else
-         {
-            exponentLength = 1 + (preamble & 3);
-            sign = preamble & 0x40;
-            ff = (preamble >> 2) & 3;
-
-            // Unpack mantissa & decrement exponent for base 2
-            exponent = decodeLong(pIn, exponentLength, true);
-            mantissa = decodeLong(pIn, length - exponentLength - 1, false) << ff;
-
-            // de-normalize mantissa (required by CER and DER)
-            while((mantissa & 0x7FFFF00000000000LL) == 0x0)
-               mantissa <<= 8;
-
-            while((mantissa & 0x7FF0000000000000LL) == 0x0)
-               mantissa <<= 1;
-
-            mantissa &= 0x0FFFFFFFFFFFFFLL;
-
-            qwValue = (exponent + 1023) << 52;
-            qwValue |= mantissa;
-
-            if(sign != 0)
-               qwValue |= 0x8000000000000000LL;
-         }
-
-         value = *(double *)&qwValue;
+         qwValue = 0x7FF0000000000000ULL;
       }
-      else if(sizeof(double) == 4)
+      else if(length == 1 && preamble == 0x41) // negative infinity
       {
-         preamble = pIn->readByte(pIn);
-
-         dwValue = 0;
-
-         if(length == 1 && preamble == 0x40) // positive infinity
-         {
-            dwValue = 0x7FF00000L;
-         }
-         else if(length == 1 && preamble == 0x41) // negative infinity
-         {
-            dwValue = 0x8FF00000L;
-         }
-         else
-         {
-            exponentLength = 1 + (preamble & 3);
-            sign = preamble & 0x40;
-            ff = (preamble >> 2) & 3;
-
-            // Unpack mantissa & decrement exponent for base 2
-            exponent = decodeLong(pIn, exponentLength, true);
-            mantissa = decodeLong(pIn, length - exponentLength - 1, false) << ff;
-
-            // de-normalize mantissa (required by CER and DER)
-            while((mantissa & 0x0FFF0000L) == 0)
-               mantissa <<= 8;
-
-            while((mantissa & 0x00800000L) == 0)
-               mantissa <<= 1;
-
-            mantissa &= 0x7FFFFFL;
-
-            dwValue = (dword)(((exponent + 127) << 23) & 0xFFFFFFFFL);
-            dwValue |= mantissa;
-
-            if(sign != 0)
-               dwValue |= 0x80000000L;
-         }
-
-         value = *(double *)&dwValue;
+         qwValue = 0x8FF0000000000000ULL;
       }
+      else
+      {
+         exponentLength = 1 + (preamble & 3);
+         sign = preamble & 0x40;
+         ff = (preamble >> 2) & 3;
+
+         // Unpack mantissa & decrement exponent for base 2
+         exponent = decodeLong(pIn, exponentLength, true);
+         mantissa = decodeLong(pIn, length - exponentLength - 1, false) << ff;
+
+         // de-normalize mantissa (required by CER and DER)
+         while((mantissa & 0x7FFFF00000000000LL) == 0x0)
+            mantissa <<= 8;
+
+         while((mantissa & 0x7FF0000000000000LL) == 0x0)
+            mantissa <<= 1;
+
+         mantissa &= 0x0FFFFFFFFFFFFFLL;
+
+         qwValue = (exponent + 1023) << 52;
+         qwValue |= mantissa;
+
+         if(sign != 0)
+            qwValue |= 0x8000000000000000LL;
+      }
+
+      value = *(double *)&qwValue;
    }
+#elif DOUBLE_LENGTH == 4
+   dword dwValue;
+
+   if(length != 0)
+   {
+      preamble = pIn->readByte(pIn);
+
+      dwValue = 0;
+
+      if(length == 1 && preamble == 0x40) // positive infinity
+      {
+         dwValue = 0x7FF00000L;
+      }
+      else if(length == 1 && preamble == 0x41) // negative infinity
+      {
+         dwValue = 0x8FF00000L;
+      }
+      else
+      {
+         exponentLength = 1 + (preamble & 3);
+         sign = preamble & 0x40;
+         ff = (preamble >> 2) & 3;
+
+         // Unpack mantissa & decrement exponent for base 2
+         exponent = decodeLong(pIn, exponentLength, true);
+         mantissa = decodeLong(pIn, length - exponentLength - 1, false) << ff;
+
+         // de-normalize mantissa (required by CER and DER)
+         while((mantissa & 0x0FFF0000L) == 0)
+            mantissa <<= 8;
+
+         while((mantissa & 0x00800000L) == 0)
+            mantissa <<= 1;
+
+         mantissa &= 0x7FFFFFL;
+
+         dwValue = (dword)(((exponent + 127) << 23) & 0xFFFFFFFFL);
+         dwValue |= mantissa;
+
+         if(sign != 0)
+            dwValue |= 0x80000000L;
+      }
+
+      value = *(double *)&dwValue;
+   }
+#else
+#error DOUBLE_LENGTH must be either 8 or 4!
+#endif
 
    return value;
 }

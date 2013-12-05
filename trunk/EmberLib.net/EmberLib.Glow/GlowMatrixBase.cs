@@ -456,6 +456,21 @@ namespace EmberLib.Glow
       }
 
       /// <summary>
+      /// Gets or sets the "schemaIdentifier" field of the "contents" SET.
+      /// Getter returns null if field not present.
+      /// </summary>
+      public string SchemaIdentifier
+      {
+         get { return GetContentRef<string>(GlowTags.MatrixContents.SchemaIdentifier); }
+         set
+         {
+            var tag = GlowTags.MatrixContents.SchemaIdentifier;
+
+            EnsureContentsAndRemove(tag).Insert(new StringEmberLeaf(tag, value));
+         }
+      }
+
+      /// <summary>
       /// Override to return the tag for the "targets" field.
       /// </summary>
       internal abstract BerTag TargetsTag

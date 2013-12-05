@@ -372,7 +372,18 @@ int ber_encodeReal(BerOutput *pOut, double value)
    byte preamble;
 
 #if DOUBLE_LENGTH == 8
-   qword qwValue = *(qword *)&value;
+   // this is a replacement for
+   // qword qwValue = *(qword *)&value;
+   // to avoid strict-aliasing warning
+   union
+   {
+      double d;
+      qword qw;
+   } conversion;
+   qword qwValue;
+
+   conversion.d = value;
+   qwValue = conversion.qw;
 
    if(qwValue != 0)
    {
@@ -415,7 +426,18 @@ int ber_encodeReal(BerOutput *pOut, double value)
       }
    }
 #elif DOUBLE_LENGTH == 4
-   dword dwValue = *(dword *)&value;
+   // this is a replacement for
+   // dword dwValue = *(dword *)&value;
+   // to avoid strict-aliasing warning
+   union
+   {
+      double d;
+      dword dw;
+   } conversion;
+   dword dwValue;
+
+   conversion.d = value;
+   dwValue = conversion.dw;
 
    if(dwValue != 0)
    {
@@ -640,6 +662,11 @@ double ber_decodeReal(BerInput *pIn, int length)
 
 #if DOUBLE_LENGTH == 8
    qword qwValue;
+   union
+   {
+      double d;
+      qword qw;
+   } conversion;
 
    if(length != 0)
    {
@@ -681,10 +708,19 @@ double ber_decodeReal(BerInput *pIn, int length)
             qwValue |= 0x8000000000000000LL;
       }
 
-      value = *(double *)&qwValue;
+      // this is a replacement for
+      // value = *(double *)&qwValue;
+      // to avoid strict-aliasing warning
+      conversion.qw = qwValue;
+      value = conversion.d;
    }
 #elif DOUBLE_LENGTH == 4
    dword dwValue;
+   union
+   {
+      double d;
+      dword dw;
+   } conversion;
 
    if(length != 0)
    {
@@ -726,7 +762,11 @@ double ber_decodeReal(BerInput *pIn, int length)
             dwValue |= 0x80000000L;
       }
 
-      value = *(double *)&dwValue;
+      // this is a replacement for
+      // value = *(double *)&dwValue;
+      // to avoid strict-aliasing warning
+      conversion.dw = dwValue;
+      value = conversion.d;
    }
 #else
 #error DOUBLE_LENGTH must be either 8 or 4!

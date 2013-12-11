@@ -467,8 +467,7 @@ FunctionContents ::=
         identifier       [0] EmberString         OPTIONAL,
         description      [1] EmberString         OPTIONAL,
         arguments        [2] TupleDescription    OPTIONAL,
-        result           [3] TupleDescription    OPTIONAL,
-        schemaIdentifier [4] EmberString         OPTIONAL
+        result           [3] TupleDescription    OPTIONAL
     }
 
 

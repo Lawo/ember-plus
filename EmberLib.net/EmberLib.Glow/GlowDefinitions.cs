@@ -436,7 +436,6 @@ namespace EmberLib.Glow
          public static readonly BerTag Description = new BerTag(BerClass.ContextSpecific, 1);
          public static readonly BerTag Arguments = new BerTag(BerClass.ContextSpecific, 2);
          public static readonly BerTag Result = new BerTag(BerClass.ContextSpecific, 3);
-         public static readonly BerTag SchemaIdentifier = new BerTag(BerClass.ContextSpecific, 4);
       }
 
       /// <summary>

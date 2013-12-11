@@ -203,7 +203,6 @@ const __GlowTags glowTags =
       {BerClass_ContextSpecific, 1},   // description
       {BerClass_ContextSpecific, 2},   // arguments
       {BerClass_ContextSpecific, 3},   // result
-      {BerClass_ContextSpecific, 4},   // schemaIdentifier
    },
 
    // tupleItemDescription
@@ -433,9 +432,6 @@ void glowFunction_free(GlowFunction *pThis)
 
       freeMemory(pThis->pResult);
    }
-
-   if(pThis->pSchemaIdentifier != NULL)
-      freeMemory(pThis->pSchemaIdentifier);
 
    bzero(*pThis);
 }

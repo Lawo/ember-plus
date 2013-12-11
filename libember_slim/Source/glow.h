@@ -222,7 +222,6 @@ typedef struct
       BerTag description;
       BerTag arguments;
       BerTag result;
-      BerTag schemaIdentifier;
    } functionContents;
 
    struct 
@@ -1028,11 +1027,6 @@ typedef struct SGlowFunction
      * at pResult)
      */
    int resultLength;
-
-   /**
-     * the "schemaIdentifier" field.
-     */
-   pstr pSchemaIdentifier;
 } GlowFunction;
 
 

@@ -688,11 +688,6 @@ static void onItemReady_FunctionContents(NonFramingGlowReader *pThis)
          pThis->glow.function.pDescription = newarr(char, pBase->length + 1);
          berReader_getString(pBase, pThis->glow.function.pDescription, pBase->length + 1);
       }
-      else if(berTag_equals(pTag, &glowTags.functionContents.schemaIdentifier))
-      {
-         pThis->glow.function.pSchemaIdentifier = newarr(char, pBase->length + 1);
-         berReader_getString(pBase, pThis->glow.function.pSchemaIdentifier, pBase->length + 1);
-      }
    }
 }
 

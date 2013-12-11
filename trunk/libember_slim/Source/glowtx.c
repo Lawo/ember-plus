@@ -609,10 +609,6 @@ void glow_writeQualifiedFunctionImpl(BerOutput *pOut,
       }
    }
 
-   if((fields & GlowFieldFlag_SchemaIdentifier) == GlowFieldFlag_SchemaIdentifier
-   && pFunction->pSchemaIdentifier != NULL)
-      ember_writeString(pOut, &glowTags.functionContents.schemaIdentifier, pFunction->pSchemaIdentifier);
-
    ember_writeContainerEnd(pOut); // end function.contents
    ember_writeContainerEnd(pOut); // end function
 }

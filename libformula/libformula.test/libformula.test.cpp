@@ -2,7 +2,7 @@
 //
 
 #include "stdafx.h"
-#include <formula\libformula.hpp>
+#include "formula\formula.hpp"
 #include <cstdio>
 #include <iostream>
 

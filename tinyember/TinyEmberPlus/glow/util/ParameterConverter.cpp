@@ -1,6 +1,7 @@
 #include <ember\Ember.hpp>
 #include "NodeConverter.h"
 #include "ParameterConverter.h"
+#include "../ConsumerProxy.h"
 #include "../../gadget/BooleanParameter.h"
 #include "../../gadget/EnumParameter.h"
 #include "../../gadget/StringParameter.h"
@@ -152,7 +153,18 @@ namespace glow { namespace util
     void ParameterConverter::visit(gadget::EnumParameter const* parameter) const
     {
         if (m_fields.isSet(ParameterField::ValueEnumeration))
-            m_parameter->setEnumeration(parameter->begin(), parameter->end());
+        {
+            if (ConsumerProxy::settings().useEnumMap())
+            {
+                auto enumeration = libember::glow::Enumeration(parameter->begin(), parameter->end());
+
+                m_parameter->setEnumerationMap(enumeration.begin(), enumeration.end());
+            }
+            else
+            {
+                m_parameter->setEnumeration(parameter->begin(), parameter->end());
+            }
+        }
 
         if (m_fields.isSet(ParameterField::Value))
             m_parameter->setValue(static_cast<int>(parameter->index()));

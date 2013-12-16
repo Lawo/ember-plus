@@ -44,7 +44,8 @@ namespace libember { namespace glow
             MaximumConnectsPerTarget = 7,
             ParametersLocation = 8,
             GainParameterNumber = 9,
-            Labels = 10
+            Labels = 10,
+            SchemaIdentifier = 11
         };
 
         typedef unsigned int value_type;

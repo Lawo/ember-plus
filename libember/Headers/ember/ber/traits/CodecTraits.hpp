@@ -27,6 +27,8 @@
 #include "../../meta/IntToType.hpp"
 #include "../../meta/IsSame.hpp"
 
+//SimianIgnore
+
 namespace libember { namespace ber
 {
     /**
@@ -160,6 +162,8 @@ namespace libember { namespace ber
     }
 }
 }
+
+//EndSimianIgnore
 
 #endif  // __LIBEMBER_BER_TRAITS_CODECTRAITS_HPP
 

@@ -44,6 +44,12 @@ namespace libember { namespace glow
     }
 
     LIBEMBER_INLINE
+    void GlowParameterBase::setSchemaIdentifier(std::string const& identifier)
+    {
+        contents().set(GlowTags::ParameterContents::SchemaIdentifier(), identifier);
+    }
+
+    LIBEMBER_INLINE
     void GlowParameterBase::setDescription(std::string const& description)
     {
         contents().set(GlowTags::ParameterContents::Description(), description);
@@ -236,6 +242,13 @@ namespace libember { namespace glow
     std::string GlowParameterBase::identifier() const
     {
         ber::Value const value = contents().get(GlowTags::ParameterContents::Identifier());
+        return util::ValueConverter::valueOf(value, std::string());
+    }
+
+    LIBEMBER_INLINE
+    std::string GlowParameterBase::schemaIdentifier() const
+    {
+        ber::Value const value = contents().get(GlowTags::ParameterContents::SchemaIdentifier());
         return util::ValueConverter::valueOf(value, std::string());
     }
 

@@ -37,7 +37,8 @@ namespace libember { namespace glow
             Identifier = 0, 
             Description = 1,
             IsRoot = 2,
-            IsOnline = 3
+            IsOnline = 3,
+            SchemaIdentifier = 4
         };
 
         typedef unsigned int value_type;

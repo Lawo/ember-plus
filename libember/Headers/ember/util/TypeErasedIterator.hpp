@@ -24,6 +24,8 @@
 #include <iterator>
 #include "../meta/RemoveCV.hpp"
 
+//SimianIgnore
+
 namespace libember { namespace util
 {
     /** Forward declaration. */
@@ -387,6 +389,8 @@ namespace libember { namespace util
     }
 }
 }
+
+//EndSimianIgnore
 
 #endif  // __LIBEMBER_UTIL_TYPEERASEDITERATOR_HPP
 

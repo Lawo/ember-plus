@@ -67,6 +67,12 @@ namespace libember { namespace glow
             void setDescription(std::string const& description);
 
             /**
+             * Sets the schema identifier string.
+             * @param identifier The name of the schema this parameter belongs to.
+             */
+            void setSchemaIdentifier(std::string const& identifier);
+
+            /**
              * Sets the formula.
              * @param providerToConsumer The term to compute the device value from a display value.
              * @param consumerToProvider The term to compute the display value from a device value.
@@ -157,7 +163,7 @@ namespace libember { namespace glow
             void setFactor(int factor);
 
             /**
-             * Sets the step value which is the dividen the parameter value has to be divided
+             * Sets the step value which is the dividend the parameter value has to be divided
              * by when being displayed.
              * @param step The step of this parameter
              */
@@ -241,7 +247,7 @@ namespace libember { namespace glow
 
             /**
              * Sets the way the parameter can be accessed.
-             * @param access Determines wether this parameter can be modified or not.
+             * @param access Determines whether this parameter can be modified or not.
              * @note When a data provider reports a parameter without this flag being set, a consumer
              *      shall consider the parameter as read-only by default.
              */
@@ -292,6 +298,12 @@ namespace libember { namespace glow
              * @return The description of this parameter or an empty string if not set.
              */
             std::string description() const;
+
+            /**
+             * Returns the schema identifier string.
+             * @return The schema identifier string.
+             */
+            std::string schemaIdentifier() const;
 
             /**
              * Returns the formula.

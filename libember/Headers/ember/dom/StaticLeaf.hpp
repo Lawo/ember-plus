@@ -23,6 +23,8 @@
 #include "../ber/Value.hpp"
 #include "Node.hpp"
 
+//SimianIgnore
+
 namespace libember { namespace dom
 {
     /**
@@ -183,6 +185,8 @@ namespace libember { namespace dom
     }
 }
 }
+
+//EndSimianIgnore
 
 #endif  // __LIBEMBER_DOM_STATICLEAF_HPP
 

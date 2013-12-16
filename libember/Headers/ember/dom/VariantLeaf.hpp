@@ -23,6 +23,8 @@
 #include "../ber/Value.hpp"
 #include "Node.hpp"
 
+//SimianIgnore
+
 namespace libember { namespace dom
 {
     /**
@@ -104,6 +106,8 @@ namespace libember { namespace dom
 
 }
 }
+
+//EndSimianIgnore
 
 #ifdef LIBEMBER_HEADER_ONLY
 #  include "impl/VariantLeaf.ipp"

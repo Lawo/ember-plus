@@ -24,6 +24,8 @@
 #include "Byte.hpp"
 #include "util/Crc16.hpp"
 
+//SimianIgnore
+
 namespace libs101
 {
     /**
@@ -205,6 +207,8 @@ namespace libs101
         }
     }
 }
+
+//EndSimianIgnore
 
 #endif  // __LIBS101_STREAMENCODER_HPP
 

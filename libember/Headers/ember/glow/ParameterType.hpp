@@ -20,6 +20,8 @@
 #ifndef __LIBEMBER_GLOW_PARAMETERTYPE_HPP
 #define __LIBEMBER_GLOW_PARAMETERTYPE_HPP
 
+//SimianIgnore
+
 namespace libember { namespace glow
 {
     /**
@@ -66,5 +68,7 @@ namespace libember { namespace glow
     };
 }
 }
+
+//EndSimianIgnore
 
 #endif  // __LIBEMBER_GLOW_PARAMETERTYPE_HPP

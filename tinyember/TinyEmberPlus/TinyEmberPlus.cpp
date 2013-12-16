@@ -28,6 +28,7 @@ const QString TinyEmberPlus::ConfigurationName = "ConfigurationName";
 const QString TinyEmberPlus::GenerateRandomValues = "GenerateRandomValues";
 const QString TinyEmberPlus::StreamTimerInterval = "StreamTimerInterval";
 const QString TinyEmberPlus::SendKeepAliveRequest = "SendKeepAliveRequest";
+const QString TinyEmberPlus::UseEnumMap = "UseEnumMap";
 
 TinyEmberPlus::TinyEmberPlus(::glow::ConsumerProxy* proxy, QWidget *parent, Qt::WFlags flags)
     : QMainWindow(parent, flags)
@@ -84,6 +85,10 @@ TinyEmberPlus::TinyEmberPlus(::glow::ConsumerProxy* proxy, QWidget *parent, Qt::
             loadFile(configuration);
         }
     }
+
+    auto const useEnumMap = m_settingsSerializer.getOption(UseEnumMap).toLower() == "true";
+
+    m_dialog.useEnumMapCheckBox->setChecked(useEnumMap);
 
     auto const generateRandomValues = m_settingsSerializer.getOption(GenerateRandomValues).toLower() == "true";
     if (generateRandomValues)
@@ -388,6 +393,13 @@ void TinyEmberPlus::updateAlwaysReportOnlineState(bool state)
 {
     m_proxy->settings().setAlwaysReportOnlineState(state);
     m_settingsSerializer.setOption(AlwaysReportOnlineState, state ? "true" : "false");
+    m_settingsSerializer.save();
+}
+
+void TinyEmberPlus::updateUseEnumMap(bool state)
+{
+    m_proxy->settings().setUseEnumMap(state);
+    m_settingsSerializer.setOption(UseEnumMap, state ? "true" : "false");
     m_settingsSerializer.save();
 }
 

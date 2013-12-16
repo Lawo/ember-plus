@@ -24,6 +24,8 @@
 #include "Byte.hpp"
 #include "util/Crc16.hpp"
 
+//SimianIgnore
+
 namespace libs101
 {
     /**
@@ -112,6 +114,12 @@ namespace libs101
         void reset();
 
     private:
+        /** Resets the current decoding buffer.
+         * @param frame Specifies whether a start byte has been received and
+         *      The decoder is currently receiving a valid packet.
+         */
+        void reset(bool frame);
+
         /**
          * This static method is used to invoke a callback which doesn't have a state parameter.
          * @param first Start of the buffer containing a decoded S101 message.
@@ -123,6 +131,7 @@ namespace libs101
 
         ByteVector m_bytes;
         bool m_escape;
+        bool m_frame;
         util::Crc16::value_type m_crc;
     };
 
@@ -133,6 +142,7 @@ namespace libs101
     template<typename ValueType>
     inline StreamDecoder<ValueType>::StreamDecoder()
         : m_escape(false)
+        , m_frame(false)
         , m_crc(0xFFFF)
     {}
 
@@ -150,8 +160,15 @@ namespace libs101
     template<typename ValueType>
     inline void StreamDecoder<ValueType>::reset()
     {
+        reset(false);
+    }
+
+    template<typename ValueType>
+    inline void StreamDecoder<ValueType>::reset(bool frame)
+    {
         m_bytes.clear();
         m_escape = false;
+        m_frame = frame;
         m_crc = 0xFFFF;
     }
 
@@ -184,40 +201,47 @@ namespace libs101
     template<typename InputType, typename CallbackType, typename StateType>
     inline void StreamDecoder<ValueType>::readByte(InputType input, CallbackType callback, StateType state)
     {
-        value_type const byte = static_cast<value_type>(input);
+        value_type byte = static_cast<value_type>(input);
 
-        if (m_escape)
-        {
-            m_escape = false;
-            m_bytes.push_back(byte ^ Byte::XOR);
-            m_crc = util::Crc16::add(m_crc, byte ^ Byte::XOR);
-        }
-        else
+        if (m_frame)
         {
             switch(byte)
             {
-                case Byte::BoF:
-                    reset();
-                    break;
+            case Byte::BoF:
+                reset(true);
+                break;
 
-                case Byte::EoF:
-                    if (m_crc == 0xF0B8 && m_bytes.size() > 1)
-                        callback(m_bytes.begin(), m_bytes.end() - 2, state);
+            case Byte::EoF:
+                if (m_crc == 0xF0B8 && m_bytes.size() > 1)
+                    callback(m_bytes.begin(), m_bytes.end() - 2, state);
 
-                    reset();
-                    break;
+                reset();
+                break;
 
-                case Byte::CE:
-                    m_escape = true;
-                    break;
+            case Byte::CE:
+                m_escape = true;
+                break;
 
-                default:
-                    m_bytes.push_back(byte);
-                    m_crc = util::Crc16::add(m_crc, byte);
-                    break;
+            default:
+                if (m_escape)
+                {
+                    m_escape = false;
+
+                    byte = byte ^ Byte::XOR;
+                }
+
+                m_bytes.push_back(byte);
+                m_crc = util::Crc16::add(m_crc, byte);
+                break;
             }
+        }
+        else if (byte == Byte::BoF)
+        {
+            reset(true);
         }
     }
 }
+
+//EndSimianIgnore
 
 #endif  // __LIBS101_STREAMDECODER_HPP

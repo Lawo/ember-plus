@@ -20,6 +20,8 @@
 #ifndef __LIBEMBER_GLOW_ACCESS_HPP
 #define __LIBEMBER_GLOW_ACCESS_HPP
 
+//SimianIgnore
+
 namespace libember { namespace glow
 {
     /**
@@ -69,5 +71,7 @@ namespace libember { namespace glow
     };
 }
 }
+
+//EndSimianIgnore
 
 #endif  // __LIBEMBER_GLOW_ACCESS_HPP

@@ -62,6 +62,12 @@ namespace libember { namespace glow
             void setDescription(std::string const& description);
 
             /**
+             * Sets the schema identifier string.
+             * @param identifier The name of the schema this matrix belongs to.
+             */
+            void setSchemaIdentifier(std::string const& identifier);
+
+            /**
              * Sets the matrix type.
              * @param type The matrix type to set.
              */
@@ -161,6 +167,12 @@ namespace libember { namespace glow
              * @return The description string.
              */
             std::string description() const;
+
+            /**
+             * Returns the schema identifier string.
+             * @return The schema identifier string.
+             */
+            std::string schemaIdentifier() const;
 
             /**
              * Returns the matrix type.

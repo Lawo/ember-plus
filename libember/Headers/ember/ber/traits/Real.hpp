@@ -27,6 +27,8 @@
 #include "../../meta/FunctionTraits.hpp"
 #include "../../util/TypePun.hpp"
 
+//SimianIgnore
+
 namespace libember { namespace ber
 {
     namespace detail
@@ -238,6 +240,8 @@ namespace libember { namespace ber
     RegisterDecoder<double> const _doubleDecoderRegistrar;
 }
 }
+
+//EndSimianIgnore
 
 #endif  // __LIBEMBER_BER_TRAITS_REAL_HPP
 

@@ -134,6 +134,12 @@ namespace libember { namespace glow
         return ber::make_tag(ber::Class::ContextSpecific, NodeProperty::IsOnline);
     }
 
+    LIBEMBER_INLINE
+    ber::Tag GlowTags::NodeContents::SchemaIdentifier()
+    {
+        return ber::make_tag(ber::Class::ContextSpecific, NodeProperty::SchemaIdentifier);
+    }
+
     /**
      * QualifiedParameter Tags
      */
@@ -284,6 +290,12 @@ namespace libember { namespace glow
         return ber::make_tag(ber::Class::ContextSpecific, ParameterProperty::StreamDescriptor);
     }
 
+    LIBEMBER_INLINE
+    ber::Tag GlowTags::ParameterContents::SchemaIdentifier()
+    {
+        return ber::make_tag(ber::Class::ContextSpecific, ParameterProperty::SchemaIdentifier);
+    }
+
     /**
      * StreamEntry Tags
      */
@@ -419,67 +431,73 @@ namespace libember { namespace glow
     LIBEMBER_INLINE
     ber::Tag GlowTags::MatrixContents::Identifier()
     {
-        return ber::make_tag(ber::Class::ContextSpecific, 0);
+        return ber::make_tag(ber::Class::ContextSpecific, MatrixProperty::Identifier);
     }
 
     LIBEMBER_INLINE
     ber::Tag GlowTags::MatrixContents::Description()
     {
-        return ber::make_tag(ber::Class::ContextSpecific, 1);
+        return ber::make_tag(ber::Class::ContextSpecific, MatrixProperty::Description);
     }
 
     LIBEMBER_INLINE
     ber::Tag GlowTags::MatrixContents::Type()
     {
-        return ber::make_tag(ber::Class::ContextSpecific, 2);
+        return ber::make_tag(ber::Class::ContextSpecific, MatrixProperty::Type);
     }
 
     LIBEMBER_INLINE
     ber::Tag GlowTags::MatrixContents::AddressingMode()
     {
-        return ber::make_tag(ber::Class::ContextSpecific, 3);
+        return ber::make_tag(ber::Class::ContextSpecific, MatrixProperty::AddressingMode);
     }
 
     LIBEMBER_INLINE
     ber::Tag GlowTags::MatrixContents::TargetCount()
     {
-        return ber::make_tag(ber::Class::ContextSpecific, 4);
+        return ber::make_tag(ber::Class::ContextSpecific, MatrixProperty::TargetCount);
     }
 
     LIBEMBER_INLINE
     ber::Tag GlowTags::MatrixContents::SourceCount()
     {
-        return ber::make_tag(ber::Class::ContextSpecific, 5);
+        return ber::make_tag(ber::Class::ContextSpecific, MatrixProperty::SourceCount);
     }
 
     LIBEMBER_INLINE
     ber::Tag GlowTags::MatrixContents::MaximumTotalConnects()
     {
-        return ber::make_tag(ber::Class::ContextSpecific, 6);
+        return ber::make_tag(ber::Class::ContextSpecific, MatrixProperty::MaximumTotalConnects);
     }
 
     LIBEMBER_INLINE
     ber::Tag GlowTags::MatrixContents::MaximumConnectsPerTarget()
     {
-        return ber::make_tag(ber::Class::ContextSpecific, 7);
+        return ber::make_tag(ber::Class::ContextSpecific, MatrixProperty::MaximumConnectsPerTarget);
     }
 
     LIBEMBER_INLINE
     ber::Tag GlowTags::MatrixContents::ParametersLocation()
     {
-        return ber::make_tag(ber::Class::ContextSpecific, 8);
+        return ber::make_tag(ber::Class::ContextSpecific, MatrixProperty::ParametersLocation);
     }
 
     LIBEMBER_INLINE
     ber::Tag GlowTags::MatrixContents::GainParameterNumber()
     {
-        return ber::make_tag(ber::Class::ContextSpecific, 9);
+        return ber::make_tag(ber::Class::ContextSpecific, MatrixProperty::GainParameterNumber);
     }
 
     LIBEMBER_INLINE
     ber::Tag GlowTags::MatrixContents::Labels()
     {
-        return ber::make_tag(ber::Class::ContextSpecific, 10);
+        return ber::make_tag(ber::Class::ContextSpecific, MatrixProperty::Labels);
+    }
+
+    LIBEMBER_INLINE
+    ber::Tag GlowTags::MatrixContents::SchemaIdentifier()
+    {
+        return ber::make_tag(ber::Class::ContextSpecific, MatrixProperty::SchemaIdentifier);
     }
 
     /**

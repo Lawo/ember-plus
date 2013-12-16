@@ -22,6 +22,8 @@
 #include <stdexcept>
 #include "ember/ber/Ber.hpp"
 
+//SimianIgnore
+
 namespace
 {
     /**
@@ -215,9 +217,11 @@ int main(int, char const* const*)
     }
     catch (...)
     {
-        std::cerr << "ERROR: " << "An unknown error occured." << std::endl;
+        std::cerr << "ERROR: " << "An unknown error occurred." << std::endl;
         return 1;
     }
     return 0;
 }
+
+//EndSimianIgnore
 

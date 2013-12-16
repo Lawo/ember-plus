@@ -87,6 +87,7 @@ namespace libember { namespace glow
     {
         dom::Sequence* container = arguments();
 
+        //SimianIgnore
         container->clear();
 
         for( ; firstValue != lastValue; ++firstValue)
@@ -96,11 +97,15 @@ namespace libember { namespace glow
 
             container->insert(container->end(), node);
         }
+        //EndSimianIgnore
     }
 
     template<typename OutputIterator>
     inline GlowInvocation::size_type GlowInvocation::typedArguments(OutputIterator dest) const
     {
+
+        //SimianIgnore
+
         dom::Sequence const* const container = arguments();
         size_type size = 0;
 
@@ -121,6 +126,8 @@ namespace libember { namespace glow
         }
 
         return size;
+
+        //EndSimianIgnore
     }
 }
 }

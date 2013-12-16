@@ -3,11 +3,13 @@
 
 #include "../../../ber/Value.hpp"
 
+//SimianIgnore
+
 namespace libember { namespace glow { namespace util
 {   
     /**
-        * Default implementation for a value converter.
-        */
+     * Default implementation for a value converter.
+     */
     template<typename DestType>
     struct ValueConverterTraits
     {
@@ -148,5 +150,7 @@ namespace libember { namespace glow { namespace util
 }
 }
 }
+
+//EndSimianIgnore
 
 #endif //  __LIBEMBER_GLOW_UTIL_TRAITS_VALUECONVERTERTRAITS_HPP

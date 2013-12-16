@@ -25,6 +25,8 @@
 #include "../../meta/TransferCV.hpp"
 #include "StreamBufferNode.hpp"
 
+//SimianIgnore
+
 namespace libember { namespace util
 {
     /** Forward declaration. */
@@ -222,6 +224,8 @@ namespace libember { namespace util { namespace detail
 }
 }
 }
+
+//EndSimianIgnore
 
 #endif  // __LIBEMBER_UTIL_DETAIL_STREAMBUFFERITERATOR_HPP
 

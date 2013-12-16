@@ -1,6 +1,9 @@
 TinyEmber+ Changelog
 ---------------------------------------
 
+Version 2.10.7
+- Added the possibility to transmit enumerations as enum map.
+
 Version 2.10.6
 - Fixed length encoding bug in libember.
 

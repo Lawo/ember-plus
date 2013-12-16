@@ -151,6 +151,12 @@ class TinyEmberPlus : public QMainWindow, public glow::ProviderInterface
          * Updates the "Always Report Online State" option
          */
         void updateAlwaysReportOnlineState(bool state);
+
+        /**
+         * Updates the "Use Enum Map" option.
+         */
+        void updateUseEnumMap(bool state);
+
     private:
         /**
          * Gets the stored root node from the tree view.
@@ -200,6 +206,7 @@ class TinyEmberPlus : public QMainWindow, public glow::ProviderInterface
         static const QString StreamTimerInterval;
         static const QString SendKeepAliveRequest;
         static const QString AlwaysReportOnlineState;
+        static const QString UseEnumMap;
 };
 
 #endif // TINYEMBERPLUS_H

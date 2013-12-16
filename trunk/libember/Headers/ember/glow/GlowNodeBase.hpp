@@ -54,6 +54,12 @@ namespace libember { namespace glow
             void setDescription(std::string const& description);
 
             /**
+             * Sets the schema identifier string.
+             * @param identifier The name of the schema this node belongs to.
+             */
+            void setSchemaIdentifier(std::string const& identifier);
+
+            /**
              * Sets the root property. This property may be used if a provider acts as proxy
              * who collects the data of several sub-devices. It may be required to mark these
              * sub-devices' nodes as root-node.
@@ -85,6 +91,12 @@ namespace libember { namespace glow
              * @return The description string.
              */
             std::string description() const;
+
+            /**
+             * Returns the schema identifier string.
+             * @return The schema identifier string.
+             */
+            std::string schemaIdentifier() const;
 
             /**
              * Returns the root node flag

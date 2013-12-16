@@ -22,6 +22,8 @@
 
 #include "IntToType.hpp"
 
+//SimianIgnore
+
 namespace libember { namespace meta
 {
     template<typename T>
@@ -128,6 +130,8 @@ namespace libember { namespace meta
 
 }
 }
+
+//EndSimianIgnore
 
 #endif  // __LIBEMBER_META_FUNCTIONTRAITS_HPP
 

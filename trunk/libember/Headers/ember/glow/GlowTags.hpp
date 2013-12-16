@@ -21,6 +21,7 @@
 #define __LIBEMBER_GLOW_GLOWTAGS_HPP
 
 #include "../util/Api.hpp"
+#include "MatrixProperty.hpp"
 #include "NodeProperty.hpp"
 #include "ParameterProperty.hpp"
 
@@ -78,6 +79,12 @@ namespace libember { namespace glow
              * @return Returns the context-specific tag identifying the node's online state.
              */
             static ber::Tag IsOnline();
+
+            /**
+             * Returns the context-specific tag identifying the node's schema identifier.
+             * @return The context-specific tag identifying the node's schema identifier.
+             */
+            static ber::Tag SchemaIdentifier();
         };
 
         struct LIBEMBER_API Node 
@@ -269,6 +276,12 @@ namespace libember { namespace glow
              * @return Returns the context-specific tag identifying a StreamDescriptor.
              */
             static ber::Tag StreamDescriptor();
+
+            /**
+             * Returns the context-specific tag identifying the parameter's schema identifier.
+             * @return The context-specific tag identifying the parameter's schema identifier.
+             */
+            static ber::Tag SchemaIdentifier();
         };
         
         struct LIBEMBER_API StreamEntry
@@ -475,6 +488,12 @@ namespace libember { namespace glow
              * @return Returns the context-specific tag identifying the matrix labels.
              */
             static ber::Tag Labels();
+
+            /**
+             * Returns the context-specific tag identifying the matrix' schema identifier.
+             * @return The context-specific tag identifying the matrix' schema identifier.
+             */
+            static ber::Tag SchemaIdentifier();
         };
 
         struct LIBEMBER_API Signal

@@ -105,6 +105,14 @@ namespace glow
             bool alwaysReportOnlineState() const;
 
             /**
+             * Returns true if the parameter enumerations shall be
+             * transmitted as enum map.
+             * @return true if the parameter enumerations are transmitted
+             *      as enum map.
+             */
+            bool useEnumMap() const;
+
+            /**
              * Updates the response behavior.
              * @param value The new response behavior.
              */
@@ -124,10 +132,19 @@ namespace glow
              */
             void setAlwaysReportOnlineState(bool value);
 
+            /**
+             * Updates the "Use Enum Map" property. If set, the parameter
+             * enumerations are transmitted as map instead of a single
+             * string.
+             * @param value The value for this option.
+             */
+            void setUseEnumMap(bool value);
+
         private:
             /** Constructor */
             Settings();
 
+            bool m_useEnumMap;
             bool m_alwaysReportOnlineState;
             ResponseBehavior m_responseBehavior;
             NotificationBehavior m_notificationBehavior;
@@ -152,6 +169,11 @@ namespace glow
         return m_notificationBehavior;
     }
 
+    inline bool Settings::useEnumMap() const
+    {
+        return m_useEnumMap;
+    }
+
     inline void Settings::setResponseBehavior(ResponseBehavior const& value)
     {
         m_responseBehavior = value;
@@ -166,10 +188,16 @@ namespace glow
     {
         m_alwaysReportOnlineState = value;
     }
-            
+
+    inline void Settings::setUseEnumMap(bool value)
+    {
+        m_useEnumMap = value;
+    }
+
     inline Settings::Settings()
         : m_responseBehavior(ResponseBehavior::Default)
         , m_notificationBehavior(NotificationBehavior::UseExpandedContainer)
+        , m_useEnumMap(false)
     {}
 }
 

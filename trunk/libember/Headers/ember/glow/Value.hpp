@@ -173,6 +173,9 @@ namespace libember { namespace glow
     inline Value::Value(ber::Value const& value)
         : m_value(0)
     {
+
+        //SimianIgnore
+
         ber::Tag const type = value.universalTag();
         if (type.getClass() == ber::Class::Universal)
         {
@@ -198,6 +201,8 @@ namespace libember { namespace glow
 
         if (m_value == 0)
             m_value = Variant::create(0L);
+
+        //EndSimianIgnore
     }
 
     inline ber::Value Value::toBerValue() const

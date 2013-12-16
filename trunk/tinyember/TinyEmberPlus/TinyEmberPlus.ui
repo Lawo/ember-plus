@@ -42,7 +42,7 @@
       <x>370</x>
       <y>40</y>
       <width>275</width>
-      <height>390</height>
+      <height>381</height>
      </rect>
     </property>
     <property name="frameShape">
@@ -112,9 +112,9 @@
     <property name="geometry">
      <rect>
       <x>370</x>
-      <y>440</y>
+      <y>420</y>
       <width>271</width>
-      <height>201</height>
+      <height>221</height>
      </rect>
     </property>
     <property name="title">
@@ -320,6 +320,19 @@
      </property>
      <property name="text">
       <string>Always report online state</string>
+     </property>
+    </widget>
+    <widget class="QCheckBox" name="useEnumMapCheckBox">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>190</y>
+       <width>221</width>
+       <height>17</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Use enum map</string>
      </property>
     </widget>
    </widget>
@@ -610,6 +623,22 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>useEnumMapCheckBox</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>TinyEmberPlusClass</receiver>
+   <slot>updateUseEnumMap(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>490</x>
+     <y>639</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>334</x>
+     <y>344</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>loadFile()</slot>
@@ -626,5 +655,6 @@
   <slot>updateStreamTimer()</slot>
   <slot>updateSendKeepAliveState(bool)</slot>
   <slot>updateAlwaysReportOnlineState(bool)</slot>
+  <slot>updateUseEnumMap(bool)</slot>
  </slots>
 </ui>

@@ -74,7 +74,7 @@ namespace libember { namespace glow { namespace util
              *      Otherwise, this method returns an iterator that points to the node with the 
              *      requested tag.
              */
-            static Iterator execute(Iterator first, Iterator last, ber::Tag const& tag)
+            static Iterator execute(Iterator const& first, Iterator const& last, ber::Tag const& tag)
             {
                 for ( ; first != last; ++first)
                 {
@@ -84,7 +84,7 @@ namespace libember { namespace glow { namespace util
                     }
                 }
                 return first;
-            }
+            };
         };
 
         /**
@@ -104,11 +104,11 @@ namespace libember { namespace glow { namespace util
              *      Otherwise, this method returns an iterator that points to the node with the 
              *      requested tag.
              */
-            static iterator execute(iterator first, iterator last, ber::Tag const& tag)
+            static iterator execute(iterator const& first, iterator const& last, ber::Tag const& tag)
             {
                 iterator const result = std::find_if(first, last, detail::NodeApplicationTagEquals(tag));
                 return result;
-            }
+            };
         };
 
         /**
@@ -128,11 +128,11 @@ namespace libember { namespace glow { namespace util
              *      Otherwise, this method returns an iterator that points to the node with the 
              *      requested tag.
              */
-            static iterator execute(iterator first, iterator last, ber::Tag const& tag)
+            static iterator execute(iterator const& first, iterator const& last, ber::Tag const& tag)
             {
                 iterator const result = std::find_if(first, last, detail::NodeApplicationTagEquals(tag));
                 return result;
-            }
+            };
         };
     }
 
@@ -146,7 +146,7 @@ namespace libember { namespace glow { namespace util
      *      requested tag.
      */
     template<typename InputIterator>
-    inline InputIterator find_tag(InputIterator first, InputIterator last, ber::Tag const& tag)
+    inline InputIterator find_tag(InputIterator const& first, InputIterator const& last, ber::Tag const& tag)
     {
         return traits::Find<InputIterator>::execute(first, last, tag);
     }

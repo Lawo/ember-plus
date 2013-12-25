@@ -109,7 +109,7 @@ namespace libember { namespace dom
              *      may not be considered a binding requirement.
              * 
              */
-            iterator insert(iterator where, Node* child);
+            iterator insert(iterator const& where, Node* child);
 
             /**
              * Clear this container node by removing all child nodes contained
@@ -128,7 +128,7 @@ namespace libember { namespace dom
              *      container policy does not allow the element to be erased, or
              *      erasing the node failed for some reason.
              */
-            void erase(iterator i);
+            void erase(iterator const& i);
 
             /**
              * Erase the range of child nodes referred to by @p first and
@@ -142,7 +142,7 @@ namespace libember { namespace dom
              *      container policy does not allow the elements to be erased,
              *      or erasing a node failed for some reason.
              */
-            void erase(iterator first, iterator last);
+            void erase(iterator const& first, iterator const& last);
 
         protected:
             /**
@@ -195,7 +195,7 @@ namespace libember { namespace dom
              *      node is not already owned by another container and marks this
              *      container dirty if the node was successfully added.
              */
-            virtual iterator insertImpl(iterator where, Node* child) = 0;
+            virtual iterator insertImpl(iterator const& where, Node* child) = 0;
 
             /**
              * Erase the range of child nodes referred to by @p first and
@@ -213,7 +213,7 @@ namespace libember { namespace dom
              *      marking the container dirty after the child nodes have been
              *      successfully deleted. 
              */
-            virtual void eraseImpl(iterator first, iterator last) = 0;
+            virtual void eraseImpl(iterator const& first, iterator const& last) = 0;
 
          private:
             /**

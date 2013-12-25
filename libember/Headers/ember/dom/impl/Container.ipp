@@ -31,7 +31,7 @@ namespace libember { namespace dom
     {}
 
     LIBEMBER_INLINE
-    Container::iterator Container::insert(iterator where, Node* child)
+    Container::iterator Container::insert(iterator const& where, Node* child)
     {
         if (child->parent() != 0)
         {
@@ -60,15 +60,14 @@ namespace libember { namespace dom
     }
 
     LIBEMBER_INLINE
-    void Container::erase(iterator i)
+    void Container::erase(iterator const& i)
     {
-        iterator const first = i++;
-        iterator const last  = i;
-        erase(first, last);
+        iterator j = i;
+        erase(i, ++j);
     }
 
     LIBEMBER_INLINE
-    void Container::erase(iterator first, iterator last)
+    void Container::erase(iterator const& first, iterator const& last)
     {
         size_type const oldSize = size();
         try

@@ -80,13 +80,13 @@ namespace libember { namespace glow
              * @see Container::insertImpl() 
              * @remarks This override resets the cached number.
              */
-            virtual iterator insertImpl(iterator where, Node* child);
+            virtual iterator insertImpl(iterator const& where, Node* child);
 
             /** 
              * @see Container::eraseImpl() 
              * @remarks This override resets the cached number.
              */
-            virtual void eraseImpl(iterator first, iterator last);
+            virtual void eraseImpl(iterator const& first, iterator const& last);
 
         private:
             /**

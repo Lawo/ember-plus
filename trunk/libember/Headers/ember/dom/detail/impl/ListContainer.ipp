@@ -110,7 +110,7 @@ namespace libember { namespace dom { namespace detail
     }
 
     LIBEMBER_INLINE    
-    ListContainer::iterator ListContainer::insertImpl(iterator where, Node* child)
+    ListContainer::iterator ListContainer::insertImpl(iterator const& where, Node* child)
     {
         typedef util::DerefIterator<NodeList::iterator> DerefIteratorType;
         NodeList::iterator const i = where.as<DerefIteratorType>().wrappedIterator();
@@ -118,7 +118,7 @@ namespace libember { namespace dom { namespace detail
     }
 
     LIBEMBER_INLINE    
-    void ListContainer::eraseImpl(iterator first, iterator last)
+    void ListContainer::eraseImpl(iterator const& first, iterator const& last)
     {
         typedef util::DerefIterator<NodeList::iterator> DerefIteratorType;
         NodeList::iterator const f = first.as<DerefIteratorType>().wrappedIterator();

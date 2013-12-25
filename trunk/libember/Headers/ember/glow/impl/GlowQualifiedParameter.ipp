@@ -83,14 +83,14 @@ namespace libember { namespace glow
     }
 
     LIBEMBER_INLINE
-    GlowQualifiedParameter::iterator GlowQualifiedParameter::insertImpl(iterator where, Node* child)
+    GlowQualifiedParameter::iterator GlowQualifiedParameter::insertImpl(iterator const& where, Node* child)
     {
         m_cachedPath = ber::ObjectIdentifier();
         return GlowContainer::insertImpl(where, child);
     }
 
     LIBEMBER_INLINE
-    void GlowQualifiedParameter::eraseImpl(iterator first, iterator last)
+    void GlowQualifiedParameter::eraseImpl(iterator const& first, iterator const& last)
     {
         m_cachedPath = ber::ObjectIdentifier();
         GlowContainer::eraseImpl(first, last);

@@ -62,7 +62,7 @@ namespace libember { namespace glow
              * the insert location of the node.
              * @param child The node to insert.
              */
-            virtual iterator insertImpl(iterator, Node* child);
+            virtual iterator insertImpl(iterator const&, Node* child);
 
         private:
             /** Prohibit assignment */

@@ -98,10 +98,10 @@ namespace libember { namespace dom { namespace detail
             virtual std::size_t encodedLengthImpl() const;
 
             /** @see Container::insertImpl() */
-            virtual iterator insertImpl(iterator where, Node* child);
+            virtual iterator insertImpl(iterator const& where, Node* child);
 
             /** @see Container::eraseImpl() */
-            virtual void eraseImpl(iterator first, iterator last);
+            virtual void eraseImpl(iterator const& first, iterator const& last);
 
         private:
             typedef std::list<Node*> NodeList;

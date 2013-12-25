@@ -87,14 +87,14 @@ namespace libember { namespace glow
     }
 
     LIBEMBER_INLINE
-    GlowParameter::iterator GlowParameter::insertImpl(iterator where, Node* child)
+    GlowParameter::iterator GlowParameter::insertImpl(iterator const& where, Node* child)
     {
         m_cachedNumber = -1;
         return GlowContainer::insertImpl(where, child);
     }
 
     LIBEMBER_INLINE
-    void GlowParameter::eraseImpl(iterator first, iterator last)
+    void GlowParameter::eraseImpl(iterator const& first, iterator const& last)
     {
         m_cachedNumber = -1;
         GlowContainer::eraseImpl(first, last);

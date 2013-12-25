@@ -38,7 +38,7 @@ namespace libember { namespace glow
     {}
 
     LIBEMBER_INLINE
-    GlowContainer::iterator GlowContainer::insertImpl(iterator, Node* child)
+    GlowContainer::iterator GlowContainer::insertImpl(iterator const&, Node* child)
     {
         iterator const last = end();
         if (child != 0)

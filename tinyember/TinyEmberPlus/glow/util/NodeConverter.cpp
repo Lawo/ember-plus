@@ -74,6 +74,16 @@ namespace glow { namespace util
         if (fields.isSet(NodeField::Description))
             m_node->setDescription(node->description());
 
+        if (fields.isSet(NodeField::Schema))
+        {
+            String const& schema = node->schema();
+
+            if (schema.empty() == false)
+            {
+                m_node->setSchemaIdentifier(schema);
+            }
+        }
+
         if(ConsumerProxy::settings().alwaysReportOnlineState())
         {
             m_node->setIsOnline(node->isOnline());

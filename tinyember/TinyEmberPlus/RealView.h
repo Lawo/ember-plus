@@ -37,6 +37,9 @@ class RealView : public QFrame, gadget::Parameter::DirtyStateListener
         /** Updates the parameter's description. */
         void updateDescription();
 
+        /** Updates the parameter's schema */
+        void updateSchema();
+
         /** Updates the paramter's value. */
         void updateValue();
 

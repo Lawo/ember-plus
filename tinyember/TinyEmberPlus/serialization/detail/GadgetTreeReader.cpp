@@ -84,6 +84,7 @@ namespace serialization { namespace detail
                         auto& glownode = *dynamic_cast<GlowNode*>(&child);
                         auto node = gadget::NodeFactory::createNode(parent, glownode.identifier());
                         node->setDescription(glownode.description());
+                        node->setSchema(glownode.schemaIdentifier());
 
                         iterate(node, glownode.children());
                     }
@@ -133,6 +134,7 @@ namespace serialization { namespace detail
     void GadgetTreeReader::transformBase(gadget::Parameter* param, libember::glow::GlowParameter* source) const
     {
         param->setDescription(source->description());
+        param->setSchema(source->schemaIdentifier());
         param->setAccess(static_cast<gadget::Access::_Domain>(source->access().value()));
         
         if (source->contains(libember::glow::ParameterProperty::Formula))

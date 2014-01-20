@@ -53,6 +53,11 @@ namespace gadget
         return m_description;
     }
 
+    String const& Node::schema() const
+    {
+        return m_schema;
+    }
+
     Node::NodeCollection const& Node::nodes() const
     {
         return m_children;
@@ -116,6 +121,18 @@ namespace gadget
         {
             m_description = value;
             m_state.set(NodeField::Description);
+
+            notify();
+            markDirty();
+        }
+    }
+    
+    void Node::setSchema(String const& value)
+    {
+        if (m_schema != value)
+        {
+            m_schema = value;
+            m_state.set(NodeField::Schema);
 
             notify();
             markDirty();

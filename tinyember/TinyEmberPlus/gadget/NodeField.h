@@ -17,11 +17,12 @@ namespace gadget
             Description = (1U << 1U),
             IsRoot = (1U << 2U),
             IsOnline = (1U << 3U),
+            Schema = (1U << 4U),
 
             DirtyChildEntity = (1U << 31U),
 
             All = (
-                     Identifier | Description | IsRoot | IsOnline
+                     Identifier | Description | IsRoot | IsOnline | Schema
                   )
         };
 

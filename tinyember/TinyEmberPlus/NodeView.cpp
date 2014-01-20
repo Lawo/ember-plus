@@ -20,6 +20,7 @@ void NodeView::updateUi()
 {
     auto const identifier = util::StringConverter::toUtf8QString(m_node->identifier());
     auto const description = util::StringConverter::toUtf8QString(m_node->description());
+    auto const schema = util::StringConverter::toUtf8QString(m_node->schema());
     auto const number = QVariant(m_node->number()).toString();
     auto const isOnline = m_node->isOnline();
     auto const isUnmounted = !m_node->isMounted();
@@ -29,6 +30,9 @@ void NodeView::updateUi()
 
     if (m_view->descriptionText->text() != description)
         m_view->descriptionText->setText(description);
+
+    if (m_view->schemaText->text() != schema)
+        m_view->schemaText->setText(schema);
 
     if (m_view->numberText->text() != number)
         m_view->numberText->setText(number);
@@ -44,6 +48,12 @@ void NodeView::updateDescription()
 {
     auto const description = util::StringConverter::toUtf8StdString(m_view->descriptionText->text());
     m_node->setDescription(description);
+}
+
+void NodeView::updateSchema()
+{
+    auto const schema = util::StringConverter::toUtf8StdString(m_view->schemaText->text());
+    m_node->setSchema(schema);
 }
 
 void NodeView::updateOnlineState(bool state)

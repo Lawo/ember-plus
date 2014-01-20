@@ -50,6 +50,11 @@ namespace gadget
         return m_description;
     }
 
+    String const& Parameter::schema() const
+    {
+        return m_schema;
+    }
+
     Formula const& Parameter::formula() const
     {
         return m_formula;
@@ -94,6 +99,14 @@ namespace gadget
         }
     }
 
+    void Parameter::setSchema(String const& value)
+    {
+        if (m_schema != value)
+        {
+            m_schema = value;
+            markDirty(ParameterField::Schema, true);
+        }
+    }
     void Parameter::setAccess(Access const& value)
     {
         if (m_access != value.value())

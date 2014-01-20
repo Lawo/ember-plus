@@ -29,7 +29,7 @@
    <property name="geometry">
     <rect>
      <x>35</x>
-     <y>60</y>
+     <y>93</y>
      <width>60</width>
      <height>20</height>
     </rect>
@@ -94,7 +94,7 @@
    <property name="geometry">
     <rect>
      <x>100</x>
-     <y>60</y>
+     <y>93</y>
      <width>130</width>
      <height>20</height>
     </rect>
@@ -123,7 +123,7 @@
    <property name="geometry">
     <rect>
      <x>35</x>
-     <y>110</y>
+     <y>143</y>
      <width>60</width>
      <height>20</height>
     </rect>
@@ -136,7 +136,7 @@
    <property name="geometry">
     <rect>
      <x>100</x>
-     <y>85</y>
+     <y>118</y>
      <width>70</width>
      <height>20</height>
     </rect>
@@ -152,7 +152,7 @@
    <property name="geometry">
     <rect>
      <x>100</x>
-     <y>110</y>
+     <y>143</y>
      <width>70</width>
      <height>20</height>
     </rect>
@@ -165,7 +165,7 @@
    <property name="geometry">
     <rect>
      <x>35</x>
-     <y>85</y>
+     <y>118</y>
      <width>60</width>
      <height>20</height>
     </rect>
@@ -178,7 +178,7 @@
    <property name="geometry">
     <rect>
      <x>205</x>
-     <y>85</y>
+     <y>118</y>
      <width>70</width>
      <height>20</height>
     </rect>
@@ -197,7 +197,7 @@
    <property name="geometry">
     <rect>
      <x>180</x>
-     <y>85</y>
+     <y>118</y>
      <width>20</width>
      <height>20</height>
     </rect>
@@ -242,7 +242,7 @@
    <property name="geometry">
     <rect>
      <x>10</x>
-     <y>60</y>
+     <y>93</y>
      <width>16</width>
      <height>16</height>
     </rect>
@@ -258,7 +258,7 @@
    <property name="geometry">
     <rect>
      <x>10</x>
-     <y>85</y>
+     <y>118</y>
      <width>16</width>
      <height>20</height>
     </rect>
@@ -274,7 +274,7 @@
    <property name="geometry">
     <rect>
      <x>10</x>
-     <y>110</y>
+     <y>143</y>
      <width>16</width>
      <height>20</height>
     </rect>
@@ -290,7 +290,7 @@
    <property name="geometry">
     <rect>
      <x>10</x>
-     <y>135</y>
+     <y>168</y>
      <width>16</width>
      <height>20</height>
     </rect>
@@ -306,7 +306,7 @@
    <property name="geometry">
     <rect>
      <x>35</x>
-     <y>135</y>
+     <y>168</y>
      <width>60</width>
      <height>22</height>
     </rect>
@@ -319,7 +319,7 @@
    <property name="geometry">
     <rect>
      <x>100</x>
-     <y>135</y>
+     <y>168</y>
      <width>130</width>
      <height>22</height>
     </rect>
@@ -365,9 +365,9 @@
    <property name="geometry">
     <rect>
      <x>10</x>
-     <y>260</y>
+     <y>275</y>
      <width>251</width>
-     <height>121</height>
+     <height>111</height>
     </rect>
    </property>
    <property name="title">
@@ -447,7 +447,7 @@
    <property name="geometry">
     <rect>
      <x>100</x>
-     <y>170</y>
+     <y>195</y>
      <width>130</width>
      <height>20</height>
     </rect>
@@ -460,7 +460,7 @@
    <property name="geometry">
     <rect>
      <x>10</x>
-     <y>200</y>
+     <y>215</y>
      <width>251</width>
      <height>60</height>
     </rect>
@@ -526,6 +526,32 @@
      <bool>false</bool>
     </property>
    </widget>
+  </widget>
+  <widget class="QLineEdit" name="schemaText">
+   <property name="geometry">
+    <rect>
+     <x>100</x>
+     <y>60</y>
+     <width>130</width>
+     <height>20</height>
+    </rect>
+   </property>
+   <property name="readOnly">
+    <bool>false</bool>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_17">
+   <property name="geometry">
+    <rect>
+     <x>35</x>
+     <y>60</y>
+     <width>60</width>
+     <height>20</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Schema</string>
+   </property>
   </widget>
  </widget>
  <resources>
@@ -740,6 +766,22 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>schemaText</sender>
+   <signal>editingFinished()</signal>
+   <receiver>RealView</receiver>
+   <slot>updateSchema()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>164</x>
+     <y>69</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>137</x>
+     <y>194</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>updateDescription()</slot>
@@ -756,5 +798,6 @@
   <slot>updateStreamOffset()</slot>
   <slot>updateTxTerm()</slot>
   <slot>updateRxTerm()</slot>
+  <slot>updateSchema()</slot>
  </slots>
 </ui>

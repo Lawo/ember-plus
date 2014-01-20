@@ -1,6 +1,9 @@
 TinyEmber+ Changelog
 ---------------------------------------
 
+Version 2.10.8
+- Added support for the schema identifier.
+
 Version 2.10.7
 - Added the possibility to transmit enumerations as enum map.
 

@@ -81,6 +81,13 @@ namespace gadget
             String const& description() const;
 
             /**
+             * Returns the current schema identifier. If no schema is specified, an empty
+             *      string is being returned.
+             * @return The current schema identifier.
+             */
+            String const& schema() const;
+
+            /**
              * Returns the parameter's type.
              * @return The parameter's type.
              */
@@ -154,6 +161,13 @@ namespace gadget
              *      has no stream identifier.
              */
             void setStreamIdentifier(int value);
+
+            /**
+             * Sets a new schema identifier. To remove the identifier,
+             * simply pass an empty string.
+             * @param value The new schema identifier.
+             */
+            void setSchema(String const& value);
 
             /**
              * Updates the parameter's stream descriptor or removes it.
@@ -241,6 +255,7 @@ namespace gadget
             int m_streamIdentifier;
             String const m_identifier;
             String m_description;
+            String m_schema;
             Node* m_parent;
             Formula m_formula;
             ParameterFieldState m_state;

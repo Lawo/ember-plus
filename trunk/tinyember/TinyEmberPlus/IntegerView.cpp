@@ -35,12 +35,16 @@ void IntegerView::updateUi()
     auto const number = QVariant(m_parameter->number()).toString();
     auto const format = QString::fromStdString(m_parameter->format());
     auto const access = m_parameter->access().value();
+    auto const schema = util::StringConverter::toUtf8QString(m_parameter->schema());
 
     if (m_view->identifierText->text() != identifier)
         m_view->identifierText->setText(identifier);
 
     if (m_view->descriptionText->text() != description)
         m_view->descriptionText->setText(description);
+
+    if (m_view->schemaText->text() != schema)
+        m_view->schemaText->setText(schema);
 
     if (m_view->numberText->text() != number)
         m_view->numberText->setText(number);
@@ -125,6 +129,12 @@ void IntegerView::updateDescription()
 {
     auto const description = util::StringConverter::toUtf8StdString(m_view->descriptionText->text());
     m_parameter->setDescription(description);
+}
+
+void IntegerView::updateSchema()
+{
+    auto const schema = util::StringConverter::toUtf8StdString(m_view->schemaText->text());
+    m_parameter->setSchema(schema);
 }
 
 void IntegerView::updateValue()

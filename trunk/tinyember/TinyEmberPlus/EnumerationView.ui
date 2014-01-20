@@ -67,7 +67,7 @@
    <property name="geometry">
     <rect>
      <x>100</x>
-     <y>60</y>
+     <y>90</y>
      <width>100</width>
      <height>22</height>
     </rect>
@@ -77,7 +77,7 @@
    <property name="geometry">
     <rect>
      <x>206</x>
-     <y>60</y>
+     <y>90</y>
      <width>24</width>
      <height>22</height>
     </rect>
@@ -115,7 +115,7 @@
    <property name="geometry">
     <rect>
      <x>35</x>
-     <y>60</y>
+     <y>90</y>
      <width>60</width>
      <height>22</height>
     </rect>
@@ -199,7 +199,7 @@
    <property name="geometry">
     <rect>
      <x>10</x>
-     <y>60</y>
+     <y>90</y>
      <width>16</width>
      <height>22</height>
     </rect>
@@ -368,6 +368,32 @@
     </property>
    </widget>
   </widget>
+  <widget class="QLineEdit" name="schemaText">
+   <property name="geometry">
+    <rect>
+     <x>100</x>
+     <y>60</y>
+     <width>130</width>
+     <height>20</height>
+    </rect>
+   </property>
+   <property name="readOnly">
+    <bool>false</bool>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_9">
+   <property name="geometry">
+    <rect>
+     <x>35</x>
+     <y>60</y>
+     <width>60</width>
+     <height>20</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Schema</string>
+   </property>
+  </widget>
  </widget>
  <resources>
   <include location="TinyEmberPlus.qrc"/>
@@ -517,6 +543,22 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>schemaText</sender>
+   <signal>editingFinished()</signal>
+   <receiver>EnumerationView</receiver>
+   <slot>updateSchema()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>164</x>
+     <y>69</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>137</x>
+     <y>194</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>updateUi()</slot>
@@ -529,5 +571,6 @@
   <slot>updateStreamIdentifier()</slot>
   <slot>updateStreamFormat(int)</slot>
   <slot>updateStreamOffset()</slot>
+  <slot>updateSchema()</slot>
  </slots>
 </ui>

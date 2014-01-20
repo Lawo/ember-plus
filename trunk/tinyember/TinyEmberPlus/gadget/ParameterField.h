@@ -20,6 +20,7 @@ namespace gadget
             IsStream = (1U << 3U),
             Access = (1U << 4U),
             Type = (1U << 5U),
+            Schema = (1U << 6U),
 
             ValueMin = (1U << 10U),
             ValueMax = (1U << 11U),
@@ -38,7 +39,7 @@ namespace gadget
             All = (
                      Identifier | Description | IsOnline | Access | IsStream | ValueMin |
                      ValueMax | ValueEnumeration | Value | ValueFactor | ValueFormat | ValueStep | ValueFormula | 
-                     StreamIdentifier | StreamDescriptor
+                     StreamIdentifier | StreamDescriptor | Schema
                   )
         };
 

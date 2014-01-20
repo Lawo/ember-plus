@@ -34,6 +34,9 @@ class NodeView : public QFrame
         /** Updates the node's description string. */
         void updateDescription();
 
+        /** Updates the node's schema string. */
+        void updateSchema();
+
         /** Updates the online state of this node. */
         void updateOnlineState(bool state);
 

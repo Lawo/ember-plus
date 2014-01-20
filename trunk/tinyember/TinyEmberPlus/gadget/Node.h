@@ -54,6 +54,13 @@ namespace gadget
             String const& description() const;
 
             /**
+             * Returns the current schema identifier. If no schema is specified, an empty
+             *      string is being returned.
+             * @return The current schema identifier.
+             */
+            String const& schema() const;
+
+            /**
              * When a description is set, it is being returned. Otherwise, the identifier string
              * will be returned.
              * @return The description if visible, otherwise the identifier string.
@@ -96,6 +103,13 @@ namespace gadget
              * @param value The new description string to take.
              */
             void setDescription(String const& value);
+
+            /**
+             * Sets a new schema identifier. To remove the identifier,
+             * simply pass an empty string.
+             * @param value The new schema identifier.
+             */
+            void setSchema(String const& value);
 
             /**
              * Changes the online state of this node.
@@ -181,6 +195,7 @@ namespace gadget
             int const m_number;
             String m_description;
             String const m_identifier;
+            String m_schema;
             Node* m_parent;
             NodeCollection m_children;
             ParameterCollection m_parameters;

@@ -65,6 +65,16 @@ namespace glow { namespace util
         if (m_fields.isSet(ParameterField::Description) && parameter->description().size() > 0)
             m_parameter->setDescription(parameter->description());
 
+        if (m_fields.isSet(ParameterField::Schema))
+        {
+            String const& schema = parameter->schema();
+
+            if (schema.empty() == false)
+            {
+                m_parameter->setSchemaIdentifier(schema);
+            }
+        }
+
         if (m_fields.isSet(ParameterField::Type) || parameter->type().value() == gadget::ParameterType::Trigger)
         {
             switch(parameter->type().value())

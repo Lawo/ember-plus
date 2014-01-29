@@ -157,7 +157,7 @@ namespace libember { namespace glow
             void setMaximum(long maximum);
 
             /**
-             * Sets the factor the value has to be divded by when being displayed.
+             * Sets the factor the value has to be divided by when being displayed.
              * @param factor The parameter's factor, must not be 0.
              */
             void setFactor(int factor);
@@ -166,6 +166,9 @@ namespace libember { namespace glow
              * Sets the step value which is the dividend the parameter value has to be divided
              * by when being displayed.
              * @param step The step of this parameter
+             * @deprecated This property is deprecated and should no longer be used. Prefer
+             *      using the factor with a value of type integer instead.
+             *      This property may be removed in future versions.
              */
             void setStep(int step);
 
@@ -366,12 +369,15 @@ namespace libember { namespace glow
             /**
              * Returns the parameter's step or 1.0 if the property is not set.
              * @return The parameter's step.
+             * @deprecated This property is deprecated and should no longer be used. Prefer
+             *      using the factor with a value of type integer instead.
+             *      This property may be removed in future versions.
              */
             int step() const;
 
             /**
-             * Returns whether the parameter is writeable or not.
-             * @return True if the parameter is writeable.
+             * Returns whether the parameter is writable or not.
+             * @return True if the parameter is writable.
              */
             bool isWriteable() const;
 

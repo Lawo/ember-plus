@@ -1,0 +1,83 @@
+﻿%{
+// EmberLib.net -- .NET implementation of the Ember+ Protocol
+// Copyright (C) 2012  L-S-B Broadcast Technologies GmbH
+//
+// This library is free software; you can redistribute it and/or
+// modify it under the terms of the GNU Lesser General Public
+// License as published by the Free Software Foundation; either
+// version 2.1 of the License, or (at your option) any later version.
+//
+// This library is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+// Lesser General Public License for more details.
+//
+// You should have received a copy of the GNU Lesser General Public
+// License along with this library; if not, write to the Free Software
+// Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+
+open Ast
+%}
+
+%start start
+%type <Ast.expr> start
+%token <System.Double> DOUBLE
+%token <int64> INTEGER
+%token LPAREN RPAREN ASTERISK SLASH BACKSLASH PERCENT PLUS MINUS POW
+%token ROUND CEIL INT FLOAT COMMA
+%token IT SIN COS TAN SINH COSH TANH ASIN ACOS ATAN SQRT PI E LOG EXP EOF ABS SGN
+%left PLUS MINUS
+%left ASTERISK SLASH BACKSLASH PERCENT
+%left POW
+%%
+
+
+start: Expression EOF                                   { $1 }
+
+Expression:
+    | Expression PLUS Product                           { Plus($1, $3) }
+    | Expression MINUS Product                          { Minus($1, $3) }
+    | Product                                           { $1 }
+
+Product:
+    | Product ASTERISK Molecule                         { Times($1, $3) }
+    | Product SLASH Molecule                            { Divide($1, $3) }
+    | Product BACKSLASH Molecule                        { IntegerDivide($1, $3) }
+    | Product PERCENT Molecule                          { Modulo($1, $3) }
+    | Molecule                                          { $1 }
+
+Molecule:
+    | MINUS Power                                       { Negate $2 }
+    | Power                                             { $1 }
+
+Power:
+    | Power POW Atom                                    { Pow($1, $3) }
+    | Atom                                              { $1 }
+
+Atom:
+    | IT                                                { It }
+    | DOUBLE                                            { Double($1) }
+    | INTEGER                                           { Integer($1) }
+    | SIN LPAREN Expression RPAREN                      { Sin $3 }
+    | COS LPAREN Expression RPAREN                      { Cos $3 }
+    | TAN LPAREN Expression RPAREN                      { Tan $3 }
+    | SINH LPAREN Expression RPAREN                     { Sinh $3 }
+    | COSH LPAREN Expression RPAREN                     { Cosh $3 }
+    | TANH LPAREN Expression RPAREN                     { Tanh $3 }
+    | ASIN LPAREN Expression RPAREN                     { Asin $3 }
+    | ACOS LPAREN Expression RPAREN                     { Acos $3 }
+    | ATAN LPAREN Expression RPAREN                     { Atan $3 }
+    | ATAN LPAREN Expression COMMA Expression RPAREN    { Atan2($3, $5) }
+    | SQRT LPAREN Expression RPAREN                     { Sqrt $3 }
+    | PI                                                { Pi }
+    | E                                                 { expr.E }
+    | LOG LPAREN Expression RPAREN                      { Log $3 }
+    | LOG LPAREN Expression COMMA Expression RPAREN     { LogTo($3, $5) }
+    | EXP LPAREN Expression RPAREN                      { Exp $3 }
+    | ROUND LPAREN Expression RPAREN                    { Round $3 }
+    | CEIL LPAREN Expression RPAREN                     { Ceiling $3 }
+    | INT LPAREN Expression RPAREN                      { AsInteger $3 }
+    | FLOAT LPAREN Expression RPAREN                    { AsFloat $3 }
+    | ABS LPAREN Expression RPAREN                      { Abs $3 }
+    | SGN LPAREN Expression RPAREN                      { Sgn $3 }
+    | LPAREN Expression RPAREN                          { $2 }

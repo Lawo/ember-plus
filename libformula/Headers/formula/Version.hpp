@@ -1,6 +1,6 @@
 /*
     libember -- C++ 03 implementation of the Ember+ Protocol
-    Copyright (C) 2012  L-S-B Broadcast Technologies GmbH
+    Copyright (C) 2012-2014  L-S-B Broadcast Technologies GmbH
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Lesser General Public
@@ -21,7 +21,7 @@
 #define __LIBFORMULA_VERSION_HPP
 
 #define LIBFORMULA_VERSION_MAJOR      1
-#define LIBFORMULA_VERSION_MINOR      5
+#define LIBFORMULA_VERSION_MINOR      7
 #define LIBFORMULA_VERSION_REVISION   0
 
 #endif  // __LIBFORMULA_VERSION_HPP

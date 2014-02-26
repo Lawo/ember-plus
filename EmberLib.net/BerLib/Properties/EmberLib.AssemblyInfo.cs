@@ -1,6 +1,6 @@
 ﻿/*
    EmberLib.net -- .NET implementation of the Ember+ Protocol
-   Copyright (C) 2012  L-S-B Broadcast Technologies GmbH
+   Copyright (C) 2012-2014  L-S-B Broadcast Technologies GmbH
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Lesser General Public
@@ -21,7 +21,7 @@ using System.Reflection;
 
 [assembly: AssemblyCompany("L-S-B Broadcast Technologies GmbH")]
 [assembly: AssemblyProduct("EmberLib.net")]
-[assembly: AssemblyCopyright("Copyright © L-S-B Broadcast Technologies GmbH 2007-2013")]
+[assembly: AssemblyCopyright("Copyright © L-S-B Broadcast Technologies GmbH 2007-2014")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -35,4 +35,4 @@ using System.Reflection;
 // You can specify all the values or you can default the Build and Revision Numbers 
 // by using the '*' as shown below:
 // [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion("1.5.0.0")]
+[assembly: AssemblyVersion("1.6.0.0")]

@@ -1,6 +1,6 @@
 /*
     libs101 -- C++ 03 implementation of the S101 encoding and decoding
-    Copyright (C) 2012  L-S-B Broadcast Technologies GmbH
+    Copyright (C) 2012-2014  L-S-B Broadcast Technologies GmbH
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Lesser General Public

@@ -10,7 +10,7 @@ date:    2013-11-28
 
 
 ------------------------------- Change Log:
-- 1.5.0:
+- 1.6.0:
   - Implements Glow DTD 2.30 (schema extensions)
 
 - 1.4.0:

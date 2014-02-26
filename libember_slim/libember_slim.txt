@@ -2,7 +2,7 @@
 ============================================
 
 libember_slim
-Copyright (C) 2012-2013
+Copyright (C) 2012-2014
 L-S-B Broadcast Technologies GmbH
 
 =============================================
@@ -12,7 +12,7 @@ date:    2013-11-28
 
 
 ------------------------------- Change Log:
-- 1.50:
+- 1.60:
   - changed code so that it compiles without warnings on warning level 4
     (introduced breaking changes in structs like GlowValue, GlowMinMax etc.)
   - Implements Glow DTD 2.30 (schema extensions)

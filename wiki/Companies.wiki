@@ -15,6 +15,9 @@
   * [http://www.stagetec.com Stagetec]
   * [http://www.ihse.de Ihse]
   * BY-Systems
+  * [http://www.trilogycomms.com Trilogy]
+  * [http://www.evs.com EVS]
+  * [http://solid-state-logic.com Solid State Logic]
 
 === The following companies are said to use Ember+: ===
   * [http://www.studer.ch Studer]

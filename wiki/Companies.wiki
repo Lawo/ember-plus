@@ -18,6 +18,7 @@
   * [http://www.trilogycomms.com Trilogy]
   * [http://www.evs.com EVS]
   * [http://solid-state-logic.com Solid State Logic]
+  * [http://www.slgbroadcast.com SLG Broadcast]
 
 === The following companies are said to use Ember+: ===
   * [http://www.studer.ch Studer]

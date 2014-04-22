@@ -10,6 +10,7 @@ namespace net
         : QTcpServer(app)
         , m_factory(factory)
         , m_mutex(QMutex::Recursive)
+        , m_port(port)
     {
         connect(this, SIGNAL(newConnection()), this, SLOT(clientAccepted()));
         listen(QHostAddress::Any, port);

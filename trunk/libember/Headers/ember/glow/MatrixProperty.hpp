@@ -45,7 +45,7 @@ namespace libember { namespace glow
             ParametersLocation = 8,
             GainParameterNumber = 9,
             Labels = 10,
-            SchemaIdentifier = 11
+            SchemaIdentifiers = 11
         };
 
         typedef unsigned int value_type;

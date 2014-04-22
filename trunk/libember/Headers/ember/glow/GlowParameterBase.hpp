@@ -34,6 +34,7 @@
 #include "ParameterProperty.hpp"
 #include "ParameterType.hpp"
 #include "Value.hpp"
+#include "util/CompliesWithSchema.hpp"
 #include "util/ValueConverter.hpp"
 
 namespace libember { namespace glow
@@ -67,10 +68,11 @@ namespace libember { namespace glow
             void setDescription(std::string const& description);
 
             /**
-             * Sets the schema identifier string.
-             * @param identifier The name of the schema this parameter belongs to.
+             * Sets the string containing the schema identifiers. The identifiers
+             * are separated by the linefeed character (0x0A, '\n')
+             * @param identifier The names of the schema identifiers this parameter uses.
              */
-            void setSchemaIdentifier(std::string const& identifier);
+            void setSchemaIdentifiers(std::string const& identifiers);
 
             /**
              * Sets the formula.
@@ -303,10 +305,19 @@ namespace libember { namespace glow
             std::string description() const;
 
             /**
-             * Returns the schema identifier string.
-             * @return The schema identifier string.
+             * Returns the string containing the schema identifiers. The identifiers
+             * are separated with the line feed character (0x0A, '\n').
+             * @return The string containing the schema identifiers.
              */
-            std::string schemaIdentifier() const;
+            std::string schemaIdentifiers() const;
+
+            /**
+             * Tests if the parameter complies with the specified schema.
+             * @param schemaIdentifier The identifier of the schema to test.
+             * @return true, if the schema is supported. Otherwise, this method
+             *      return false.
+             */
+            bool compliesWithSchema(std::string const& schemaIdentifier) const;
 
             /**
              * Returns the formula.
@@ -494,6 +505,11 @@ namespace libember { namespace glow
     inline void GlowParameterBase::setDefault(int value)
     {
         setDefault(long(value));
+    }
+
+    inline bool GlowParameterBase::compliesWithSchema(std::string const& schemaIdentifier) const
+    {
+        return util::complies_with_schema(schemaIdentifiers(), schemaIdentifier);
     }
 }
 }

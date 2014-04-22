@@ -1,6 +1,6 @@
 ﻿/*
    EmberLib.net -- .NET implementation of the Ember+ Protocol
-   Copyright (C) 2012-2014  L-S-B Broadcast Technologies GmbH
+   Copyright (C) 2012  L-S-B Broadcast Technologies GmbH
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Lesser General Public
@@ -63,7 +63,7 @@ namespace EmberLib.Glow
       /// <summary>
       /// The version of the Glow DTD implemented by this library
       /// </summary>
-      public const ushort Version = 0x021E;
+      public const ushort Version = 0x021F;
    }
 
 
@@ -236,7 +236,7 @@ namespace EmberLib.Glow
          public static readonly BerTag StreamIdentifier = new BerTag(BerClass.ContextSpecific, 14);
          public static readonly BerTag EnumMap = new BerTag(BerClass.ContextSpecific, 15);
          public static readonly BerTag StreamDescriptor = new BerTag(BerClass.ContextSpecific, 16);
-         public static readonly BerTag SchemaIdentifier = new BerTag(BerClass.ContextSpecific, 17);
+         public static readonly BerTag SchemaIdentifiers = new BerTag(BerClass.ContextSpecific, 17);
       }
 
       /// <summary>
@@ -268,7 +268,7 @@ namespace EmberLib.Glow
          public static readonly BerTag Description = new BerTag(BerClass.ContextSpecific, 1);
          public static readonly BerTag IsRoot = new BerTag(BerClass.ContextSpecific, 2);
          public static readonly BerTag IsOnline = new BerTag(BerClass.ContextSpecific, 3);
-         public static readonly BerTag SchemaIdentifier = new BerTag(BerClass.ContextSpecific, 4);
+         public static readonly BerTag SchemaIdentifiers = new BerTag(BerClass.ContextSpecific, 4);
       }
 
       /// <summary>
@@ -371,7 +371,7 @@ namespace EmberLib.Glow
          public static readonly BerTag ParametersLocation = new BerTag(BerClass.ContextSpecific, 8);
          public static readonly BerTag GainParameterNumber = new BerTag(BerClass.ContextSpecific, 9);
          public static readonly BerTag Labels = new BerTag(BerClass.ContextSpecific, 10);
-         public static readonly BerTag SchemaIdentifier = new BerTag(BerClass.ContextSpecific, 11);
+         public static readonly BerTag SchemaIdentifiers = new BerTag(BerClass.ContextSpecific, 11);
       }
 
       /// <summary>

@@ -1,5 +1,5 @@
 ﻿// EmberLib.net -- .NET implementation of the Ember+ Protocol
-// Copyright (C) 2012-2014  L-S-B Broadcast Technologies GmbH
+// Copyright (C) 2012  L-S-B Broadcast Technologies GmbH
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Lesser General Public
@@ -19,9 +19,9 @@ module internal EmberLib.Glow.Formula.AssemblyInfo
 
 open System.Reflection
 
-[<AssemblyVersion("1.7.0.0")>]
+[<AssemblyVersion("1.6.2.0")>]
 [<AssemblyTitle("EmberLib.Glow.Formula")>]
 [<AssemblyCompany("L-S-B Broadcast Technologies GmbH")>]
-[<AssemblyCopyright("(c) L-S-B Broadcast Technologies GmbH 2012-2014")>]
+[<AssemblyCopyright("(c) L-S-B Broadcast Technologies GmbH 2012-2013")>]
 do()
 

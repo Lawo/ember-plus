@@ -1,6 +1,6 @@
 /*
    libember_slim -- ANSI C implementation of the Ember+ Protocol
-   Copyright (C) 2012-2014  L-S-B Broadcast Technologies GmbH
+   Copyright (C) 2012  L-S-B Broadcast Technologies GmbH
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Lesser General Public
@@ -56,7 +56,7 @@ const __GlowTags glowTags =
       {BerClass_ContextSpecific, 14},  // contents.streamIdentifier
       {BerClass_ContextSpecific, 15},  // contents.enumMap
       {BerClass_ContextSpecific, 16},  // contents.streamDescriptor
-      {BerClass_ContextSpecific, 17},  // contents.schemaIdentifier
+      {BerClass_ContextSpecific, 17},  // contents.schemaIdentifiers
    },
 
    // node
@@ -79,7 +79,7 @@ const __GlowTags glowTags =
       {BerClass_ContextSpecific, 1},   // contents.description
       {BerClass_ContextSpecific, 2},   // contents.isRoot
       {BerClass_ContextSpecific, 3},   // contents.isOnline
-      {BerClass_ContextSpecific, 4},   // contents.schemaIdentifier
+      {BerClass_ContextSpecific, 4},   // contents.schemaIdentifiers
    },
 
    // command
@@ -155,7 +155,7 @@ const __GlowTags glowTags =
       {BerClass_ContextSpecific, 8},   // parametersBasePath
       {BerClass_ContextSpecific, 9},   // gainParameterNumber
       {BerClass_ContextSpecific, 10},  // labels
-      {BerClass_ContextSpecific, 11},  // schemaIdentifier
+      {BerClass_ContextSpecific, 11},  // schemaIdentifiers
    },
 
    // label
@@ -292,8 +292,8 @@ void glowNode_free(GlowNode *pThis)
    if(pThis->pDescription != NULL)
       freeMemory(pThis->pDescription);
 
-   if(pThis->pSchemaIdentifier != NULL)
-      freeMemory(pThis->pSchemaIdentifier);
+   if(pThis->pSchemaIdentifiers != NULL)
+      freeMemory(pThis->pSchemaIdentifiers);
 
    bzero(*pThis);
 }
@@ -373,8 +373,8 @@ void glowParameter_free(GlowParameter *pThis)
    if(pThis->value.flag != 0)
       glowValue_free(&pThis->value);
 
-   if(pThis->pSchemaIdentifier != NULL)
-      freeMemory(pThis->pSchemaIdentifier);
+   if(pThis->pSchemaIdentifiers != NULL)
+      freeMemory(pThis->pSchemaIdentifiers);
 
    bzero(*pThis);
 }
@@ -389,8 +389,8 @@ void glowMatrix_free(GlowMatrix *pThis)
    if(pThis->pDescription != NULL)
       freeMemory(pThis->pDescription);
 
-   if(pThis->pSchemaIdentifier != NULL)
-      freeMemory(pThis->pSchemaIdentifier);
+   if(pThis->pSchemaIdentifiers != NULL)
+      freeMemory(pThis->pSchemaIdentifiers);
 
    bzero(*pThis);
 }

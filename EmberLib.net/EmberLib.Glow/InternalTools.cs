@@ -1,6 +1,6 @@
 ﻿/*
    EmberLib.net -- .NET implementation of the Ember+ Protocol
-   Copyright (C) 2012-2014  L-S-B Broadcast Technologies GmbH
+   Copyright (C) 2012  L-S-B Broadcast Technologies GmbH
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Lesser General Public
@@ -174,6 +174,17 @@ namespace EmberLib.Glow
             if(value != null)
                yield return value;
          }
+      }
+
+      public static bool CompliesWithSchema(string schemaIdentifiers, string schemaIdentifier)
+      {
+         if(schemaIdentifier == null)
+            throw new ArgumentNullException("schemaIdentifier");
+
+         if(schemaIdentifiers == null)
+            throw new ArgumentNullException("schemaIdentifiers");
+
+         return schemaIdentifiers.Contains(schemaIdentifier);
       }
 
       #region Implementation

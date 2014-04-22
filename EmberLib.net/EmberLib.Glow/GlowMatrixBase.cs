@@ -1,6 +1,6 @@
 ﻿/*
    EmberLib.net -- .NET implementation of the Ember+ Protocol
-   Copyright (C) 2012-2014  L-S-B Broadcast Technologies GmbH
+   Copyright (C) 2012  L-S-B Broadcast Technologies GmbH
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Lesser General Public
@@ -456,18 +456,32 @@ namespace EmberLib.Glow
       }
 
       /// <summary>
-      /// Gets or sets the "schemaIdentifier" field of the "contents" SET.
+      /// Gets or sets the "schemaIdentifiers" field of the "contents" SET.
       /// Getter returns null if field not present.
       /// </summary>
-      public string SchemaIdentifier
+      public string SchemaIdentifiers
       {
-         get { return GetContentRef<string>(GlowTags.MatrixContents.SchemaIdentifier); }
+         get { return GetContentRef<string>(GlowTags.MatrixContents.SchemaIdentifiers); }
          set
          {
-            var tag = GlowTags.MatrixContents.SchemaIdentifier;
+            var tag = GlowTags.MatrixContents.SchemaIdentifiers;
 
             EnsureContentsAndRemove(tag).Insert(new StringEmberLeaf(tag, value));
          }
+      }
+
+      /// <summary>
+      /// Tests if the matrix complies with the schema with the passed schema identifier.
+      /// </summary>
+      /// <param name="schemaIdentifier">The identifier of the schema to test for.</param>
+      /// <returns>True if the matrix complies with the specified schema, otherwise false.</returns>
+      public bool CompliesWithSchema(string schemaIdentifier)
+      {
+         var schemaIdentifiers = SchemaIdentifiers;
+
+         return schemaIdentifiers != null
+                ? InternalTools.CompliesWithSchema(schemaIdentifiers, schemaIdentifier)
+                : false;
       }
 
       /// <summary>

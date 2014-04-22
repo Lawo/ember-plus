@@ -1,6 +1,6 @@
 /*
    libember_slim -- ANSI C implementation of the Ember+ Protocol
-   Copyright (C) 2012-2014  L-S-B Broadcast Technologies GmbH
+   Copyright (C) 2012  L-S-B Broadcast Technologies GmbH
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Lesser General Public
@@ -269,8 +269,8 @@ void glow_writeQualifiedNodeImpl(BerOutput *pOut,
          ember_writeBoolean(pOut, &glowTags.nodeContents.isOnline, pNode->isOnline);
 
       if((fields & GlowFieldFlag_SchemaIdentifier)
-      && pNode->pSchemaIdentifier != NULL)
-         ember_writeString(pOut, &glowTags.nodeContents.schemaIdentifier, pNode->pSchemaIdentifier);
+      && pNode->pSchemaIdentifiers != NULL)
+         ember_writeString(pOut, &glowTags.nodeContents.schemaIdentifiers, pNode->pSchemaIdentifiers);
 
       ember_writeContainerEnd(pOut); // end node.contents
    }
@@ -346,8 +346,8 @@ void glow_writeQualifiedParameterImpl(BerOutput *pOut,
       ember_writeContainerEnd(pOut);
    }
 
-   if((fields & GlowFieldFlag_SchemaIdentifier) && pParameter->pSchemaIdentifier != NULL)
-      ember_writeString(pOut, &glowTags.parameterContents.schemaIdentifier, pParameter->pSchemaIdentifier);
+   if((fields & GlowFieldFlag_SchemaIdentifier) && pParameter->pSchemaIdentifiers != NULL)
+      ember_writeString(pOut, &glowTags.parameterContents.schemaIdentifiers, pParameter->pSchemaIdentifiers);
 
    ember_writeContainerEnd(pOut); // end parameter.contents
 
@@ -492,8 +492,8 @@ void glow_writeQualifiedMatrixImpl(BerOutput *pOut,
       }
 
       if((fields & GlowFieldFlag_SchemaIdentifier) == GlowFieldFlag_SchemaIdentifier
-      && pMatrix->pSchemaIdentifier != NULL)
-         ember_writeString(pOut, &glowTags.matrixContents.schemaIdentifier, pMatrix->pSchemaIdentifier);
+      && pMatrix->pSchemaIdentifiers != NULL)
+         ember_writeString(pOut, &glowTags.matrixContents.schemaIdentifiers, pMatrix->pSchemaIdentifiers);
    }
 
    ember_writeContainerEnd(pOut); // end matrix.contents

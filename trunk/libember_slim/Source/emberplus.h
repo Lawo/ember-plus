@@ -1,6 +1,6 @@
 /*
    libember_slim -- ANSI C implementation of the Ember+ Protocol
-   Copyright (C) 2012-2014  L-S-B Broadcast Technologies GmbH
+   Copyright (C) 2012  L-S-B Broadcast Technologies GmbH
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Lesser General Public
@@ -25,7 +25,7 @@
   * The upper byte is the major version number.
   * The lower byte is the minor version number.
   */
-#define EMBER_LIBRARY_VERSION (0x0132) //1.50
+#define EMBER_LIBRARY_VERSION (0x0133) //1.51
 
 #include "glowtx.h"
 #include "glowrx.h"

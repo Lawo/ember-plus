@@ -1,6 +1,6 @@
 /*
    libember_slim sample
-   Copyright (C) 2012-2014  L-S-B Broadcast Technologies GmbH
+   Copyright (C) 2012  L-S-B Broadcast Technologies GmbH
 */
 
 #include <stdlib.h>

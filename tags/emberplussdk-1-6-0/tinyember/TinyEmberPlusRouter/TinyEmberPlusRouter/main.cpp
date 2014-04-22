@@ -6,7 +6,7 @@
 #include "glow/Dispatcher.h"
 
 
-#define VERSION_STRING "1.5.0"
+#define VERSION_STRING "1.6.0"
 #define TCP_PORT 9092
 
 // =====================================================

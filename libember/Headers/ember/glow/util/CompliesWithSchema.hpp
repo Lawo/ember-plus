@@ -17,33 +17,28 @@
     Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
-#ifndef __LIBEMBER_GLOW_GLOWDTD_HPP
-#define __LIBEMBER_GLOW_GLOWDTD_HPP
+#ifndef __LIBEMBER_GLOW_UTIL_COMPLIESWITHSCHEMA_HPP
+#define __LIBEMBER_GLOW_UTIL_COMPLIESWITHSCHEMA_HPP
 
-#include "../util/Api.hpp"
+#include <string>
 
-#define LIBEMBER_GLOWDTD_VERSION_MAJOR    2
-#define LIBEMBER_GLOWDTD_VERSION_MINOR    31
-
-namespace libember { namespace glow
-{ 
+namespace libember { namespace glow { namespace util
+{
     /**
-     * Provides methods to retrieve the current dtd version
+     * Tests whether the string containing a collection of schema identifiers contains
+     * a specified schema.
+     * @param schemaIdentifiers A string containing a collection of schema identifiers.
+     * @param schemaIdentifier The schema identifier to find.
+     * @return true, if the schema identifier is part of the collection. Otherwise, this
+     *      method returns false.
      */
-    struct LIBEMBER_API GlowDtd
+    inline bool complies_with_schema(std::string const& schemaIdentifiers, std::string const& schemaIdentifier)
     {
-         /**
-          * Returns the current dtd version, where the high byte contains the major version
-          * and the lower byte the minor version.
-          * @return The current dtd version.
-          */
-         static unsigned short version();
-    };
+        return schemaIdentifiers.find(schemaIdentifier) != std::string::npos;
+    }
+}
 }
 }
 
-#ifdef LIBEMBER_HEADER_ONLY
-#  include "impl/GlowDtd.ipp"
-#endif
+#endif // __LIBEMBER_GLOW_UTIL_COMPLIESWITHSCHEMA_HPP
 
-#endif //  __LIBEMBER_GLOW_GLOWDTD_HPP

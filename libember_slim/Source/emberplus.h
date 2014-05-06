@@ -25,7 +25,7 @@
   * The upper byte is the major version number.
   * The lower byte is the minor version number.
   */
-#define EMBER_LIBRARY_VERSION (0x013E) //1.62
+#define EMBER_LIBRARY_VERSION (0x0146) //1.70
 
 #include "glowtx.h"
 #include "glowrx.h"

@@ -23,6 +23,7 @@
 #include "GlowContentElement.hpp"
 #include "GlowElementCollection.hpp"
 #include "NodeProperty.hpp"
+#include "util/CompliesWithSchema.hpp"
 
 namespace libember { namespace glow
 {
@@ -54,10 +55,11 @@ namespace libember { namespace glow
             void setDescription(std::string const& description);
 
             /**
-             * Sets the schema identifier string.
-             * @param identifier The name of the schema this node belongs to.
+             * Sets the string containing the schema identifiers. The identifiers
+             * are separated by the linefeed character (0x0A, '\n')
+             * @param identifier The names of the schema identifiers this node uses.
              */
-            void setSchemaIdentifier(std::string const& identifier);
+            void setSchemaIdentifiers(std::string const& identifiers);
 
             /**
              * Sets the root property. This property may be used if a provider acts as proxy
@@ -93,10 +95,19 @@ namespace libember { namespace glow
             std::string description() const;
 
             /**
-             * Returns the schema identifier string.
-             * @return The schema identifier string.
+             * Returns the string containing the schema identifiers. The identifiers
+             * are separated with the line feed character (0x0A, '\n').
+             * @return The string containing the schema identifiers.
              */
-            std::string schemaIdentifier() const;
+            std::string schemaIdentifiers() const;
+
+            /**
+             * Tests if the node complies with the specified schema.
+             * @param schemaIdentifier The identifier of the schema to test.
+             * @return true, if the schema is supported. Otherwise, this method
+             *      return false.
+             */
+            bool compliesWithSchema(std::string const& schemaIdentifier) const;
 
             /**
              * Returns the root node flag
@@ -131,6 +142,17 @@ namespace libember { namespace glow
         private:
             ber::Tag m_childrenTag;
     };
+
+
+    /******************************************************
+     * Inline implementation                              *
+     ******************************************************/
+
+
+    inline bool GlowNodeBase::compliesWithSchema(std::string const& schemaIdentifier) const
+    {
+        return util::complies_with_schema(schemaIdentifiers(), schemaIdentifier);
+    }
 }
 }
 

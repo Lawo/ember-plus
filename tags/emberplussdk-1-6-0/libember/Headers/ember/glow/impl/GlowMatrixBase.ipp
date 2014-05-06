@@ -49,9 +49,9 @@ namespace libember { namespace glow
     }
 
     LIBEMBER_INLINE
-    void GlowMatrixBase::setSchemaIdentifier(std::string const& identifier)
+    void GlowMatrixBase::setSchemaIdentifiers(std::string const& identifiers)
     {
-        contents().set(GlowTags::MatrixContents::SchemaIdentifier(), identifier);
+        contents().set(GlowTags::MatrixContents::SchemaIdentifiers(), identifiers);
     }
 
     LIBEMBER_INLINE
@@ -229,9 +229,9 @@ namespace libember { namespace glow
     }
 
     LIBEMBER_INLINE
-    std::string GlowMatrixBase::schemaIdentifier() const
+    std::string GlowMatrixBase::schemaIdentifiers() const
     {
-        ber::Value const value = contents().get(GlowTags::MatrixContents::SchemaIdentifier());
+        ber::Value const value = contents().get(GlowTags::MatrixContents::SchemaIdentifiers());
         return util::ValueConverter::valueOf(value, std::string());
     }
 

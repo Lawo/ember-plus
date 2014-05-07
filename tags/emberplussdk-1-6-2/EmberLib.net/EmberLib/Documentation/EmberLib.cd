@@ -1,0 +1,196 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="EmberLib.AsyncDomReader" Collapsed="true">
+    <Position X="0.5" Y="8" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>CAAAQAAAAgAEBAQAAAAgAAAAADAEAAAAAAAAAAAABAA=</HashCode>
+      <FileName>AsyncDomReader.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="EmberLib.AsyncEmberReader" Collapsed="true">
+    <Position X="0.5" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAQBCkCgAABBAIAAAAAFAAIAAAAEAAAAQAAgABAAQ=</HashCode>
+      <FileName>AsyncEmberReader.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="EmberLib.Crc" Collapsed="true">
+    <Position X="2.5" Y="8" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAiAAAAAACAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Crc.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="EmberLib.EmberApplicationInterface" Collapsed="true">
+    <Position X="4.25" Y="8" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAIAAAAAAEAAAAAAAAAAAAAIAQAAAAAAAAA=</HashCode>
+      <FileName>EmberApplicationInterface.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="EmberLib.EmberContainer" Collapsed="true">
+    <Position X="2.75" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>DIBAABAAAAgAABAAAQAABAAAAAAABAAAAAAAAQ0AEAA=</HashCode>
+      <FileName>EmberContainer.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="EmberLib.EmberLeaf&lt;T&gt;" Collapsed="true">
+    <Position X="11.5" Y="5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AABAAAAgAAgAABAAAAAABAAAAAAABAAAAAAgAQUAAAA=</HashCode>
+      <FileName>EmberLeaf.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="EmberLib.BooleanEmberLeaf" Collapsed="true">
+    <Position X="2.5" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>EmberLeaf.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="EmberLib.IntegerEmberLeaf" Collapsed="true">
+    <Position X="7" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>EmberLeaf.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="EmberLib.LongEmberLeaf" Collapsed="true">
+    <Position X="11.5" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>EmberLeaf.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="EmberLib.RealEmberLeaf" Collapsed="true">
+    <Position X="16" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>EmberLeaf.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="EmberLib.StringEmberLeaf" Collapsed="true">
+    <Position X="18.25" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAA=</HashCode>
+      <FileName>EmberLeaf.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="EmberLib.OctetStringEmberLeaf" Collapsed="true">
+    <Position X="20.5" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AIAAAAAAAAAAAAAAAAAAAAAAgAAAAAAAAAAAAAEAAAA=</HashCode>
+      <FileName>EmberLeaf.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="EmberLib.ObjectIdentifierEmberLeaf" Collapsed="true">
+    <Position X="4.75" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAA=</HashCode>
+      <FileName>EmberLeaf.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="EmberLib.RelativeObjectEmberLeaf" Collapsed="true">
+    <Position X="9.25" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>EmberLeaf.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="EmberLib.DateTimeEmberLeaf" Collapsed="true">
+    <Position X="13.75" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AoAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIAAA=</HashCode>
+      <FileName>EmberLeaf.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="EmberLib.EmberNode" Collapsed="true">
+    <Position X="12.75" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>ALBAAEADIAggABBEAAAIRgBABAAEBAAAAQAAAwUAAAA=</HashCode>
+      <FileName>EmberNode.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="EmberLib.EmberReader" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="6" Y="8" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAACAIAgCAIAAAAAEAgBAAIAUAAAAAAAAAAAAA=</HashCode>
+      <FileName>EmberReader.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="EmberLib.EmberSequence" Collapsed="true">
+    <Position X="3.75" Y="3.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AIAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>EmberSequence.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="EmberLib.EmberSet" Collapsed="true">
+    <Position X="1.5" Y="3.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AIAAQAAAAAAAAAAAAAAAAAAAAAQABAAAAAAAQRQAAAA=</HashCode>
+      <FileName>EmberSet.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="EmberLib.EmberWriter" Collapsed="true">
+    <Position X="2.5" Y="9" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAQAAAAAAAQAgASAAAAACAABAAAAAAAAAAAAEABBA=</HashCode>
+      <FileName>EmberWriter.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="EmberLib.Legacy.AsyncFrameReader" Collapsed="true">
+    <Position X="0.5" Y="9.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAABQAAAAACAACAAAAAgAAACAAAAAEAAAAAAAAAAAAA=</HashCode>
+      <FileName>Legacy\AsyncFrameReader.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="EmberLib.Legacy.EmberDynamicContainer" Collapsed="true">
+    <Position X="1.5" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAgAAAAAAAAAAAQAAAA=</HashCode>
+      <FileName>Legacy\EmberDynamicContainer.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="EmberLib.Legacy.EmberFrame" Collapsed="true">
+    <Position X="3.75" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAQAAAQAAQAAAAAAFAAACAAAAAAUAAAA=</HashCode>
+      <FileName>Legacy\EmberFrame.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="EmberLib.Xml.XmlExport" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="4.25" Y="9" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAIAAAAAAEAAAAAAAAABBAAAAAAAIAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Xml\XmlExport.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="EmberLib.Xml.XmlExportState" Collapsed="true">
+    <Position X="6" Y="9" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>ABAAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAA=</HashCode>
+      <FileName>Xml\XmlExport.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="EmberLib.Xml.XmlImport" Collapsed="true">
+    <Position X="2.5" Y="10" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAEAAAAAAAAEAAAAIIEAAAAAAAAAAAAAACAAAAAAAAA=</HashCode>
+      <FileName>Xml\XmlImport.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Interface Name="EmberLib.IEmberVisitor&lt;TState, TResult&gt;" Collapsed="true">
+    <Position X="2.5" Y="11.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>IEmberVisitor.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

@@ -56,7 +56,7 @@ namespace libember { namespace glow { namespace util
                 }
         
                 ber::Tag tag;
-            }
+            };
         }
 
         /**
@@ -85,7 +85,7 @@ namespace libember { namespace glow { namespace util
                 }
                 return first;
             }
-        }
+        };
 
         /**
          * Specialization for the default const_iterator of a dom::Container class.
@@ -109,7 +109,7 @@ namespace libember { namespace glow { namespace util
                 iterator const result = std::find_if(first, last, detail::NodeApplicationTagEquals(tag));
                 return result;
             }
-        }
+        };
 
         /**
          * Specialization for the default iterator of a dom::Container class.
@@ -133,7 +133,7 @@ namespace libember { namespace glow { namespace util
                 iterator const result = std::find_if(first, last, detail::NodeApplicationTagEquals(tag));
                 return result;
             }
-        }
+        };
     }
 
     /**

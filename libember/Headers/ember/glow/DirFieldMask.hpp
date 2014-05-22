@@ -20,6 +20,8 @@
 #ifndef __LIBEMBER_GLOW_DIRFIELDMASK_HPP
 #define __LIBEMBER_GLOW_DIRFIELDMASK_HPP
 
+//SimianIgnore
+
 namespace libember { namespace glow
 {
     /**
@@ -73,5 +75,7 @@ namespace libember { namespace glow
     };
 }
 }
+
+//EndSimianIgnore
 
 #endif  // __LIBEMBER_GLOW_DIRFIELDMASK_HPP

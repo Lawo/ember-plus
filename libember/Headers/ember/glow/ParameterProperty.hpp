@@ -22,6 +22,8 @@
 
 #include "../ber/Tag.hpp"
 
+//SimianIgnore
+
 namespace libember { namespace glow
 { 
     /**
@@ -86,5 +88,7 @@ namespace libember { namespace glow
     };
 }
 }
+
+//EndSimianIgnore
 
 #endif  // __LIBEMBER_GLOW_PARAMETERPROPERTY_HPP

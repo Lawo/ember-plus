@@ -48,6 +48,14 @@ namespace libs101
             {}
 
             /**
+             * Initializes a new instance.
+             * @param value The value to initialize this instance with.
+             */
+            explicit Byte(value_type value)
+                : m_value(value)
+            {}
+
+            /**
              * Returns the value.
              * @return The value.
              */

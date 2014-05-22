@@ -52,6 +52,14 @@ namespace libember { namespace glow
         {}
 
         /**
+         * Initializes a new instance.
+         * @param value The value to initialize this instance with.
+         */
+        explicit NodeProperty(value_type value)
+            : m_value(value)
+        {}
+
+        /**
          * Returns the value.
          * @return The value.
          */

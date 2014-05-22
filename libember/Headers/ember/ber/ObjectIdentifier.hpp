@@ -63,7 +63,7 @@ namespace libember { namespace ber
 
             /**
              * Returns true if the ObjectIdentifier does not contain any elements.
-             * @retunr True if the ObjectIdentifier does not contain any elements.
+             * @return True if the ObjectIdentifier does not contain any elements.
              */
             bool empty() const;
 

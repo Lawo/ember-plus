@@ -44,24 +44,24 @@ namespace libember { namespace glow
 
         public:
             /**
-             * Initializes a new instance of DirFieldMask. 
-             * @param flag The flag to initializes the instance with.
+             * Initializes a new instance.
+             * @param value The value to initializes the instance with.
              */
-            DirFieldMask(_Domain flag)
-                : m_value(flag)
+            DirFieldMask(_Domain value)
+                : m_value(value)
             {}
 
             /**
-             * Initializes a new instance of DirFieldMask. 
-             * @param flags The flags to initializes the instance with.
+             * Initializes a new instance.
+             * @param value The value to initializes the instance with.
              */
-            explicit DirFieldMask(value_type flags)
-                : m_value(flags)
+            explicit DirFieldMask(value_type value)
+                : m_value(value)
             {}
 
             /**
-             * Returns the mask.
-             * @return The mask.
+             * Returns the value.
+             * @return The value.
              */
             value_type value() const
             {

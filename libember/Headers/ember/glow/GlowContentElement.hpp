@@ -99,7 +99,7 @@ namespace libember { namespace glow
 
             /**
              * Checks if the passed property exists in the content set.
-             * @property Property to look for.
+             * @param property Property to look for.
              * @return True if the property exists, otherwise false.
              * @note The PropertyType must have a field named value.
              */

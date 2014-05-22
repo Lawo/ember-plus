@@ -55,16 +55,16 @@ namespace libember { namespace glow
             typedef unsigned int value_type;
 
             /**
-             * Initializes a new FunctionProperty.
-             * @param value The property type to initialize this instance with.
+             * Initializes a new instance.
+             * @param value The value to initialize this instance with.
              */
             FunctionProperty(_Domain value)
                 : m_value(value)
             {}
 
             /** 
-             * Returns the value of the function property.
-             * @return The value of the function property.
+             * Returns the value.
+             * @return The value.
              */
             value_type value() const
             {

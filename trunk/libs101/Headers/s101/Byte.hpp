@@ -20,6 +20,8 @@
 #ifndef __LIBS101_BYTE_HPP
 #define __LIBS101_BYTE_HPP
 
+//SimianIgnore
+
 namespace libs101 
 {
     /**
@@ -71,6 +73,8 @@ namespace libs101
             value_type m_value;
     };
 }
+
+//EndSimianIgnore
 
 #endif  // __LIBS101_BYTE_HPP
 

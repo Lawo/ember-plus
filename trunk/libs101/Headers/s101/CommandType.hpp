@@ -20,6 +20,8 @@
 #ifndef __LIBS101_COMMANDTYPE_HPP
 #define __LIBS101_COMMANDTYPE_HPP
 
+//SimianIgnore
+
 namespace libs101
 {
     /**
@@ -93,6 +95,8 @@ namespace libs101
         return !(left == right);
     }
 }
+
+//EndSimianIgnore
 
 #endif  // __LIBS101_COMMANDTYPE_HPP
 

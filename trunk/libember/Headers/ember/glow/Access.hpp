@@ -50,16 +50,16 @@ namespace libember { namespace glow
 
         public:
             /**
-             * Initializes a new instance of Access.
-             * @param type The access type to initialize this instance with.
+             * Initializes a new instance.
+             * @param value The value to initialize this instance with.
              */
-            Access(_Domain type)
-                : m_value(type)
+            Access(_Domain value)
+                : m_value(value)
             {}
 
             /**
-             * Returns the access type.
-             * @return The access type.
+             * Returns the value.
+             * @return The value.
              */
             value_type value() const
             {

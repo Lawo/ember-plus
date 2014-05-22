@@ -41,16 +41,16 @@ namespace libember { namespace glow
 
         public:
             /**
-             * Initializes a parameter type. 
-             * @param type Parameter type to initialize this instance with.
+             * Initializes a new instance.
+             * @param value The value to initialize this instance with.
              */
-            MatrixAddressingMode(_Domain type)
-                : m_value(type)
+            MatrixAddressingMode(_Domain value)
+                : m_value(value)
             {}
 
             /**
-             * Returns the access type.
-             * @return The access type.
+             * Returns the value.
+             * @return The value.
              */
             value_type value() const
             {

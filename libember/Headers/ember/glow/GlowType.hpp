@@ -68,6 +68,12 @@ namespace libember { namespace glow
             GlowType(_Domain value);
 
             /**
+             * Initializes a new instance.
+             * @param value The value to initialize this instance with.
+             */
+            explicit GlowType(value_type value);
+
+            /**
              * Returns the value.
              * @return The value.
              */
@@ -88,6 +94,10 @@ namespace libember { namespace glow
     /**************************************************************************/
 
     inline GlowType::GlowType(_Domain value)
+        : m_value(value)
+    {}
+
+    inline GlowType::GlowType(value_type value)
         : m_value(value)
     {}
 

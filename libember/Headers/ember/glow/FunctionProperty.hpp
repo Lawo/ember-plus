@@ -72,7 +72,6 @@ namespace libember { namespace glow
             }
 
         private:
-            /** Contains the property value passed to the constructor. */
             value_type m_value;
     };
 }

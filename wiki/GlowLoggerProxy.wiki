@@ -18,3 +18,8 @@ After pressing the *Start* button, the application basically does the following:
  # A connection is established with the provider identified by *Provider Host Name* and *Provider Port*.
  # Any bytes received from the consumer are forwarded to the provider and vice versa.
  # The received bytes are also fed into a logger which writes a log file to the folder entered in *Log Folder*. A new file is created for each connection.
+
+
+= Feedback =
+
+Please ask questions in the [https://groups.google.com/forum/#!forum/ember-plus-development forum] and file bugs and feature requests with the [http://code.google.com/p/ember-plus/issues/list issue tracker].

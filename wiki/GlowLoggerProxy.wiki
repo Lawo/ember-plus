@@ -22,4 +22,4 @@ After pressing the *Start* button, the application basically does the following:
 
 = Feedback =
 
-Please ask questions in the [https://groups.google.com/forum/#!forum/ember-plus-development forum] and file bugs and feature requests with the [http://code.google.com/p/ember-plus/issues/list issue tracker].
+Please ask questions in the [https://groups.google.com/forum/#!forum/ember-plus-discuss forum] and file bugs and feature requests with the [http://code.google.com/p/ember-plus/issues/list issue tracker].

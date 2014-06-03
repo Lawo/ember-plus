@@ -109,7 +109,7 @@ namespace libember { namespace glow
              * must be ignored.
              * @param first The first enumeration entry containing the name-value pair.
              * @param last The end of the enumeration entry buffer.
-             * @note The InputIterator must contain a pair of type std::tuple<std::string, int>, where
+             * @note The InputIterator must contain a pair of type std::pair<std::string, int>, where
              *      the string is the enumeration name and the int the enumeration value to send
              *      to the provider.
              */

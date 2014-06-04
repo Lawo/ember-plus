@@ -47,7 +47,7 @@ namespace libember { namespace glow
             GlowStringIntegerCollection(ber::Tag const& tag, InputIterator first, InputIterator last);
 
             /**
-             * Inserts a new StreamEntry into the collection.
+             * Inserts a new entry into the collection.
              * @param name The enumeration entry name
              * @param value The enumeration entry value. This is the value that has to be sent 
              *      to the remote device.

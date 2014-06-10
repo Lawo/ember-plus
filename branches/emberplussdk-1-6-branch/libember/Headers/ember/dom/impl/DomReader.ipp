@@ -20,6 +20,7 @@
 #ifndef __LIBEMBER_DOM_IMPL_DOMREADER_IPP
 #define __LIBEMBER_DOM_IMPL_DOMREADER_IPP
 
+#include <memory>
 #include <stdexcept>
 #include "../../util/Inline.hpp"
 #include "../VariantLeaf.hpp"
@@ -48,40 +49,39 @@ namespace libember { namespace dom
         m_input = &input;
         m_bytesAvailable = input.size();
 
-        Node* root = 0;
-
+        std::auto_ptr<Node> root;
         if (read())
         {
-            root = decodeNode(factory);
+            root.reset(decodeNode(factory));
 
-            if ((root == 0) || (root != 0 && !isContainer()))
+            if ((root.get() == 0) || !isContainer())
             {
                 throw std::runtime_error("Root node is not a container");
             }
             DomReader tempReader(this);
-            decodeTreeRecursive(tempReader, reinterpret_cast<Container*>(root), factory);
+            decodeTreeRecursive(tempReader, reinterpret_cast<Container*>(root.get()), factory);
         }
 
         m_input = 0;
-        return root;
+        return root.release();
     }
 
     LIBEMBER_INLINE
     void DomReader::decodeTreeRecursive(DomReader& reader, Container* parent, NodeFactory const& factory)
     {
-        while(reader.read())
+        while (reader.read())
         {
-            Node* node = reader.decodeNode(factory);
-
-            if (node != 0)
+            std::auto_ptr<Node> node(reader.decodeNode(factory));
+            if (node.get() != 0)
             {
                 if (reader.isContainer())
                 {
                     DomReader tempReader(&reader);
-                    decodeTreeRecursive(tempReader, reinterpret_cast<Container*>(node), factory);
+                    decodeTreeRecursive(tempReader, reinterpret_cast<Container*>(node.get()), factory);
                 }
 
-                parent->insert(parent->end(), node);
+                parent->insert(parent->end(), node.get());
+                node.release();
             }
         }
     }

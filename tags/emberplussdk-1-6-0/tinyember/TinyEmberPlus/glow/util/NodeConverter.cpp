@@ -80,7 +80,7 @@ namespace glow { namespace util
 
             if (schema.empty() == false)
             {
-                m_node->setSchemaIdentifiers(schema);
+                m_node->setSchemaIdentifier(schema);
             }
         }
 

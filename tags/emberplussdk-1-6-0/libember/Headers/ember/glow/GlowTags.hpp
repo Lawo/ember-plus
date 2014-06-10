@@ -84,7 +84,7 @@ namespace libember { namespace glow
              * Returns the context-specific tag identifying the node's schema identifier.
              * @return The context-specific tag identifying the node's schema identifier.
              */
-            static ber::Tag SchemaIdentifiers();
+            static ber::Tag SchemaIdentifier();
         };
 
         struct LIBEMBER_API Node 
@@ -281,7 +281,7 @@ namespace libember { namespace glow
              * Returns the context-specific tag identifying the parameter's schema identifier.
              * @return The context-specific tag identifying the parameter's schema identifier.
              */
-            static ber::Tag SchemaIdentifiers();
+            static ber::Tag SchemaIdentifier();
         };
         
         struct LIBEMBER_API StreamEntry
@@ -493,7 +493,7 @@ namespace libember { namespace glow
              * Returns the context-specific tag identifying the matrix' schema identifier.
              * @return The context-specific tag identifying the matrix' schema identifier.
              */
-            static ber::Tag SchemaIdentifiers();
+            static ber::Tag SchemaIdentifier();
         };
 
         struct LIBEMBER_API Signal

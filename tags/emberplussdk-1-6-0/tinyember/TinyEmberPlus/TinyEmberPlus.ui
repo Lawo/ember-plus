@@ -336,17 +336,17 @@
      </property>
     </widget>
    </widget>
-   <widget class="QLabel" name="portHintLabel">
+   <widget class="QLabel" name="label_5">
     <property name="geometry">
      <rect>
       <x>370</x>
       <y>10</y>
-      <width>271</width>
+      <width>145</width>
       <height>21</height>
      </rect>
     </property>
     <property name="text">
-     <string>Listening on TCP/IP port</string>
+     <string>Listening on TCP/IP port 9000</string>
     </property>
    </widget>
   </widget>

@@ -346,32 +346,18 @@ namespace EmberLib.Glow
       }
 
       /// <summary>
-      /// Gets or sets the "schemaIdentifiers" field of the "contents" SET.
+      /// Gets or sets the "schemaIdentifier" field of the "contents" SET.
       /// Getter returns null if field not present.
       /// </summary>
-      public string SchemaIdentifiers
+      public string SchemaIdentifier
       {
-         get { return GetContentRef<string>(GlowTags.ParameterContents.SchemaIdentifiers); }
+         get { return GetContentRef<string>(GlowTags.ParameterContents.SchemaIdentifier); }
          set
          {
-            var tag = GlowTags.ParameterContents.SchemaIdentifiers;
+            var tag = GlowTags.ParameterContents.SchemaIdentifier;
 
             EnsureContentsAndRemove(tag).Insert(new StringEmberLeaf(tag, value));
          }
-      }
-
-      /// <summary>
-      /// Tests if the parameter complies with the schema with the passed schema identifier.
-      /// </summary>
-      /// <param name="schemaIdentifier">The identifier of the schema to test for.</param>
-      /// <returns>True if the parameter complies with the specified schema, otherwise false.</returns>
-      public bool CompliesWithSchema(string schemaIdentifier)
-      {
-         var schemaIdentifiers = SchemaIdentifiers;
-
-         return schemaIdentifiers != null
-                ? InternalTools.CompliesWithSchema(schemaIdentifiers, schemaIdentifier)
-                : false;
       }
 
       /// <summary>

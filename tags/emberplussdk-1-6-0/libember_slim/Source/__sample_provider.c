@@ -226,7 +226,7 @@ static void createGain(SampleNode *pParent)
    pParam->param.pFormat = "%Lf db";
    fields |= GlowFieldFlag_Format;
 
-   pParam->param.pSchemaIdentifiers = stringDup("de.l-s-b.emberplus.samples.gain");
+   pParam->param.pSchemaIdentifier = stringDup("de.l-s-b.emberplus.samples.gain");
    fields |= GlowFieldFlag_SchemaIdentifier;
 
    pParam->fields = (GlowFieldFlags)fields;
@@ -409,7 +409,7 @@ static void buildTree(SampleNode *pRoot)
    createNode(pAudio, "dangling", NULL);
 
    pStreams = createNode(pNonFood, "streams", "see 'em move");
-   pStreams->node.pSchemaIdentifiers = stringDup("de.l-s-b.emberplus.samples.streams");
+   pStreams->node.pSchemaIdentifier = stringDup("de.l-s-b.emberplus.samples.streams");
    pStreams->fields |= GlowFieldFlag_SchemaIdentifier;
    createStream1(pStreams);
    createStream2(pStreams);

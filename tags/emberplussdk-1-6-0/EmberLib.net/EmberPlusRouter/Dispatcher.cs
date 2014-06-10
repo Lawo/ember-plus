@@ -127,7 +127,7 @@ namespace EmberPlusRouter
 
          if((dirFieldMask == GlowFieldFlags.All)
          && String.IsNullOrEmpty(matrix.SchemaIdentifier) == false)
-            glow.SchemaIdentifiers = matrix.SchemaIdentifier;
+            glow.SchemaIdentifier = matrix.SchemaIdentifier;
 
          return glow;
       }
@@ -359,7 +359,7 @@ namespace EmberPlusRouter
 
          if((dirFieldMask == GlowFieldFlags.All)
          && String.IsNullOrEmpty(element.SchemaIdentifier) == false)
-            glow.SchemaIdentifiers = element.SchemaIdentifier;
+            glow.SchemaIdentifier = element.SchemaIdentifier;
 
          return glow;
       }
@@ -390,7 +390,7 @@ namespace EmberPlusRouter
 
          if((dirFieldMask == GlowFieldFlags.All)
          && String.IsNullOrEmpty(element.SchemaIdentifier) == false)
-            glow.SchemaIdentifiers = element.SchemaIdentifier;
+            glow.SchemaIdentifier = element.SchemaIdentifier;
 
          return glow;
       }
@@ -418,7 +418,7 @@ namespace EmberPlusRouter
 
          if((dirFieldMask == GlowFieldFlags.All)
          && String.IsNullOrEmpty(element.SchemaIdentifier) == false)
-            glow.SchemaIdentifiers = element.SchemaIdentifier;
+            glow.SchemaIdentifier = element.SchemaIdentifier;
 
          return glow;
       }
@@ -538,6 +538,10 @@ namespace EmberPlusRouter
                   result.Insert(tupleItemDesc);
             }
          }
+
+         if((dirFieldMask == GlowFieldFlags.All)
+         && String.IsNullOrEmpty(element.SchemaIdentifier) == false)
+            glow.SchemaIdentifier = element.SchemaIdentifier;
 
          return glow;
       }

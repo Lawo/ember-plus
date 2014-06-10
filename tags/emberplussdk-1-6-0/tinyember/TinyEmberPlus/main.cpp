@@ -84,26 +84,10 @@ class LocalScheduler : public glow::ProviderInterface
 int main(int argc, char *argv[])
 {
     QApplication app(argc, argv);
-
-    auto first = argv;
-    auto const last = argv + argc;
-    auto port = short(9000);
-
-    for (; first != last; first++)
-    {
-        auto const item = QString(*first);
-        if (item.contains("port", Qt::CaseInsensitive) && (std::next(first) != last))
-        {
-            std::advance(first, 1);
-            port = QString(*first).toShort();
-            break;
-        }
-    }
-
     auto result = -1;
     {
         LocalScheduler scheduler;
-        glow::ConsumerProxy proxy(&app, &scheduler, port);
+        glow::ConsumerProxy proxy(&app, &scheduler);
 
         TinyEmberPlus window(&proxy);
         window.show();

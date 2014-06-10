@@ -76,7 +76,7 @@ typedef struct
       BerTag streamIdentifier;
       BerTag enumMap;
       BerTag streamDescriptor;
-      BerTag schemaIdentifiers;
+      BerTag schemaIdentifier;
    } parameterContents;
 
    struct
@@ -99,7 +99,7 @@ typedef struct
       BerTag description;
       BerTag isRoot;
       BerTag isOnline;
-      BerTag schemaIdentifiers;
+      BerTag schemaIdentifier;
    } nodeContents;
 
    struct
@@ -175,7 +175,7 @@ typedef struct
       BerTag parametersLocation;
       BerTag gainParameterNumber;
       BerTag labels;
-      BerTag schemaIdentifiers;
+      BerTag schemaIdentifier;
    } matrixContents;
 
    struct
@@ -481,9 +481,9 @@ typedef struct SGlowNode
    bool isOnline;
 
    /**
-     * the "schemaIdentifiers" field.
+     * the "schemaIdentifier" field.
      */
-   pstr pSchemaIdentifiers;
+   pstr pSchemaIdentifier;
 } GlowNode;
 
 
@@ -673,9 +673,9 @@ typedef struct SGlowParameter
    pcstr pEnumeration;
 
    /**
-     * the "schemaIdentifiers" field.
+     * the "schemaIdentifier" field.
      */
-   pstr pSchemaIdentifiers;
+   pstr pSchemaIdentifier;
 } GlowParameter;
 
 
@@ -901,9 +901,9 @@ typedef struct SGlowMatrix
    int labelsLength;
 
    /**
-     * the "schemaIdentifiers" field.
+     * the "schemaIdentifier" field.
      */
-   pstr pSchemaIdentifiers;
+   pstr pSchemaIdentifier;
 } GlowMatrix;
 
 

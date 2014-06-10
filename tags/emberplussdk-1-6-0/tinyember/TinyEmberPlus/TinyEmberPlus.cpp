@@ -40,7 +40,6 @@ TinyEmberPlus::TinyEmberPlus(::glow::ConsumerProxy* proxy, QWidget *parent, Qt::
 {
     m_dialog.setupUi(this);
     m_dialog.gadgetTreeView->setContextMenuPolicy( Qt::CustomContextMenu );
-    m_dialog.portHintLabel->setText(QString("Listening on TCP/IP port ") + QVariant(proxy->port()).toString());
 
     m_timer = new QTimer(this);
     m_timer->setInterval(100);

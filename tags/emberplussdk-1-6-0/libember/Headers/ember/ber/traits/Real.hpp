@@ -83,7 +83,7 @@ namespace libember { namespace ber
                         while((mantissa & 0x01) == 0x00)
                             mantissa >>= 1;
 
-                        std::size_t const exponentLength = ber::encodedLength<long long>(exponent);
+                        int const exponentLength = ber::encodedLength<long long>(exponent);
                         unsigned char preamble = static_cast<unsigned char>(0x80 | (exponentLength - 1));
 
                         if((bits & 0x8000000000000000ULL) != 0)
@@ -170,21 +170,21 @@ namespace libember { namespace ber
                 else
                 {
                     unsigned long long bits = 0;
-                    unsigned int const sign = (preamble & 0x40);
-                    unsigned int const exponentLength = 1 + (preamble & 3);
-                    unsigned int const mantissaShift = ((preamble >> 2) & 3);
+                    int const sign = (preamble & 0x40);
+                    int const exponentLength = 1 + (preamble & 3);
+                    int const mantissaShift = ((preamble >> 2) & 3);
 
                     long long exponent = ber::decode<long long>(input, exponentLength);
-                    unsigned long long mantissa = ber::decode<unsigned long long>(input, encodedLength - exponentLength - 1) << mantissaShift;
+                    long long mantissa = ber::decode<unsigned long long>(input, encodedLength - exponentLength - 1) << mantissaShift;
 
-                    while((mantissa & 0x7FFFF00000000000ULL) == 0x00)
+                    while((mantissa & 0x7FFFF00000000000LL) == 0x00)
                         mantissa <<= 8;
 
-                    while((mantissa & 0x7FF0000000000000ULL) == 0x00)
+                    while((mantissa & 0x7FF0000000000000LL) == 0x00)
                         mantissa <<= 1;
 
-                    mantissa &= 0x0FFFFFFFFFFFFFULL;
-                    bits = (static_cast<unsigned long long>(exponent + 1023) << 52) | mantissa;
+                    mantissa &= 0x0FFFFFFFFFFFFFLL;
+                    bits = ((exponent + 1023) << 52) | mantissa;
 
                     if (sign != 0)
                         bits |= (0x8000000000000000ULL);

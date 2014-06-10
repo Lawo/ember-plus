@@ -31,9 +31,6 @@ namespace net
             /** Destructor */
             virtual ~TcpServer();
 
-            /** Gets the port this server is listening to. */
-            int port() const;
-
             /**
              * Sends the passed data to all currently connected clients.
              * @param array The array to transmit.
@@ -65,17 +62,11 @@ namespace net
             ClientCollection m_clients;
             TcpClientFactory *const m_factory;
             QMutex m_mutex;
-            int m_port;
     };
 
     /**************************************************************************
      * Mandatory inline implementation                                        *
      **************************************************************************/
-
-    inline int TcpServer::port() const
-    {
-        return m_port;
-    }
 
     template<typename InputIterator>
     inline void TcpServer::write(InputIterator first, InputIterator last)

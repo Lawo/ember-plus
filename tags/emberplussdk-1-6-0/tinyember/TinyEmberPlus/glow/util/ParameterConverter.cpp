@@ -71,7 +71,7 @@ namespace glow { namespace util
 
             if (schema.empty() == false)
             {
-                m_parameter->setSchemaIdentifiers(schema);
+                m_parameter->setSchemaIdentifier(schema);
             }
         }
 

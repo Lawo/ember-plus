@@ -5,10 +5,6 @@
 -- This file defines the Glow DTD used with the Ember+ protocol.
 --
 -- Change Log:
--- 2.31:
---   - NOTE: This version describes the data schema of Ember+ 1.6.2.
---   - Renamed all fields called "schemaIdentifier" to "schemaIdentifiers"
---     to match semantics.
 -- 2.30:
 --   - NOTE: This version describes the data schema of Ember+ 1.6.
 --   - Added Schema Extensions
@@ -109,24 +105,24 @@ QualifiedParameter ::=
 
 ParameterContents ::=
     SET {
-        identifier        [ 0] EmberString             OPTIONAL,
-        description       [ 1] EmberString             OPTIONAL,
-        value             [ 2] Value                   OPTIONAL,
-        minimum           [ 3] MinMax                  OPTIONAL,
-        maximum           [ 4] MinMax                  OPTIONAL,
-        access            [ 5] ParameterAccess         OPTIONAL,
-        format            [ 6] EmberString             OPTIONAL,
-        enumeration       [ 7] EmberString             OPTIONAL,
-        factor            [ 8] Integer32               OPTIONAL,
-        isOnline          [ 9] BOOLEAN                 OPTIONAL,
-        formula           [10] EmberString             OPTIONAL,
-        step              [11] Integer32               OPTIONAL,
-        default           [12] Value                   OPTIONAL,
-        type              [13] ParameterType           OPTIONAL,
-        streamIdentifier  [14] Integer32               OPTIONAL,
-        enumMap           [15] StringIntegerCollection OPTIONAL,
-        streamDescriptor  [16] StreamDescription       OPTIONAL,
-        schemaIdentifiers [17] EmberString             OPTIONAL
+        identifier       [ 0] EmberString             OPTIONAL,
+        description      [ 1] EmberString             OPTIONAL,
+        value            [ 2] Value                   OPTIONAL,
+        minimum          [ 3] MinMax                  OPTIONAL,
+        maximum          [ 4] MinMax                  OPTIONAL,
+        access           [ 5] ParameterAccess         OPTIONAL,
+        format           [ 6] EmberString             OPTIONAL,
+        enumeration      [ 7] EmberString             OPTIONAL,
+        factor           [ 8] Integer32               OPTIONAL,
+        isOnline         [ 9] BOOLEAN                 OPTIONAL,
+        formula          [10] EmberString             OPTIONAL,
+        step             [11] Integer32               OPTIONAL,
+        default          [12] Value                   OPTIONAL,
+        type             [13] ParameterType           OPTIONAL,
+        streamIdentifier [14] Integer32               OPTIONAL,
+        enumMap          [15] StringIntegerCollection OPTIONAL,
+        streamDescriptor [16] StreamDescription       OPTIONAL,
+        schemaIdentifier [17] EmberString             OPTIONAL
     }
 
 
@@ -279,11 +275,11 @@ QualifiedNode ::=
 
 NodeContents ::=
     SET {
-        identifier        [0] EmberString OPTIONAL,
-        description       [1] EmberString OPTIONAL,
-        isRoot            [2] BOOLEAN     OPTIONAL,
-        isOnline          [3] BOOLEAN     OPTIONAL,   -- default is true
-        schemaIdentifiers [4] EmberString OPTIONAL
+        identifier       [0] EmberString OPTIONAL,
+        description      [1] EmberString OPTIONAL,
+        isRoot           [2] BOOLEAN     OPTIONAL,
+        isOnline         [3] BOOLEAN     OPTIONAL,   -- default is true
+        schemaIdentifier [4] EmberString OPTIONAL
     }
 
 
@@ -318,7 +314,7 @@ MatrixContents ::=
         parametersLocation       [ 8] ParametersLocation   OPTIONAL,
         gainParameterNumber      [ 9] Integer32            OPTIONAL, -- nToN: number of connection gain parameter
         labels                   [10] LabelCollection      OPTIONAL,
-        schemaIdentifiers        [11] EmberString          OPTIONAL
+        schemaIdentifier         [11] EmberString          OPTIONAL
     }
 
 -- Addressing scheme for node at MatrixContents.parametersLocation:

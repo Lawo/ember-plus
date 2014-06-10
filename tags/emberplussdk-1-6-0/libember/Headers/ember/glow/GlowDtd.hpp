@@ -23,7 +23,7 @@
 #include "../util/Api.hpp"
 
 #define LIBEMBER_GLOWDTD_VERSION_MAJOR    2
-#define LIBEMBER_GLOWDTD_VERSION_MINOR    31
+#define LIBEMBER_GLOWDTD_VERSION_MINOR    30
 
 namespace libember { namespace glow
 { 

@@ -341,7 +341,8 @@ namespace libember { namespace util
     template<typename IteratorType>
     inline bool TypeErasedIterator<ValueType>::PayloadImpl<IteratorType>::equals(Payload const* other) const
     {
-        return (other != 0) && (other->typeId() == typeId()) && (m_iterator == static_cast<PayloadImpl const*>(other)->m_iterator);
+        PayloadImpl const* const dest = dynamic_cast<PayloadImpl const*>(other);
+        return (dest != 0) && (m_iterator == dest->m_iterator);
     }
 
     template<typename ValueType>

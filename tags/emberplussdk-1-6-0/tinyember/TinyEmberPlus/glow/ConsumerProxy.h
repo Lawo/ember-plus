@@ -42,15 +42,11 @@ namespace glow
              * Initializes a new consumer proxy.
              * @param app Reference to the application object.
              * @param provider Reference to the provider interface.
-             * @param port The tcp ip port to listen for connections.
              */
-            ConsumerProxy(QApplication* app, ProviderInterface* provider, short port);
+            ConsumerProxy(QApplication* app, ProviderInterface* provider);
 
             /** Destructor */
             ~ConsumerProxy();
-
-            /** Gets the port the TCP server is listening to. */
-            int port() const;
 
             /**
              * Encodes the passed tree and sends it to all currently connected consumers.
@@ -135,11 +131,6 @@ namespace glow
 
             static Settings s_settings;
     };
-
-    inline int ConsumerProxy::port() const
-    {
-        return m_server->port();
-    }
 }
 
 #endif//__TINYEMBER_GLOW_CONSUMERPROXY_H

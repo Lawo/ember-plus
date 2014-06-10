@@ -1,13 +1,6 @@
 TinyEmber+ Changelog
 ---------------------------------------
 
-Version 2.10.9
-- Compiled with new libember (Dtd 2.30)
-- Added the possibility to pass the port to listen to.
-	Use for example "TinyEmberPlus -port 9999".
-
-	If no port is specifed, 9000 will be used.
-
 Version 2.10.8
 - Added support for the schema identifier.
 

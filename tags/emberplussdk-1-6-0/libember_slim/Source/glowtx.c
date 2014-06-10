@@ -269,8 +269,8 @@ void glow_writeQualifiedNodeImpl(BerOutput *pOut,
          ember_writeBoolean(pOut, &glowTags.nodeContents.isOnline, pNode->isOnline);
 
       if((fields & GlowFieldFlag_SchemaIdentifier)
-      && pNode->pSchemaIdentifiers != NULL)
-         ember_writeString(pOut, &glowTags.nodeContents.schemaIdentifiers, pNode->pSchemaIdentifiers);
+      && pNode->pSchemaIdentifier != NULL)
+         ember_writeString(pOut, &glowTags.nodeContents.schemaIdentifier, pNode->pSchemaIdentifier);
 
       ember_writeContainerEnd(pOut); // end node.contents
    }
@@ -346,8 +346,8 @@ void glow_writeQualifiedParameterImpl(BerOutput *pOut,
       ember_writeContainerEnd(pOut);
    }
 
-   if((fields & GlowFieldFlag_SchemaIdentifier) && pParameter->pSchemaIdentifiers != NULL)
-      ember_writeString(pOut, &glowTags.parameterContents.schemaIdentifiers, pParameter->pSchemaIdentifiers);
+   if((fields & GlowFieldFlag_SchemaIdentifier) && pParameter->pSchemaIdentifier != NULL)
+      ember_writeString(pOut, &glowTags.parameterContents.schemaIdentifier, pParameter->pSchemaIdentifier);
 
    ember_writeContainerEnd(pOut); // end parameter.contents
 
@@ -492,8 +492,8 @@ void glow_writeQualifiedMatrixImpl(BerOutput *pOut,
       }
 
       if((fields & GlowFieldFlag_SchemaIdentifier) == GlowFieldFlag_SchemaIdentifier
-      && pMatrix->pSchemaIdentifiers != NULL)
-         ember_writeString(pOut, &glowTags.matrixContents.schemaIdentifiers, pMatrix->pSchemaIdentifiers);
+      && pMatrix->pSchemaIdentifier != NULL)
+         ember_writeString(pOut, &glowTags.matrixContents.schemaIdentifier, pMatrix->pSchemaIdentifier);
    }
 
    ember_writeContainerEnd(pOut); // end matrix.contents

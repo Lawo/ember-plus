@@ -73,6 +73,7 @@ namespace libember { namespace glow
             /**
              * Insert a new StreamEntry, which contains an array of bytes. The format of the byte array
              * must be provided by the Parameter's StreamDescriptor.
+             * @param streamIdentifier The stream identifier.
              * @param first The first element to copy to the stream value buffer.
              * @param last The first item beyond the stream buffer.
              */

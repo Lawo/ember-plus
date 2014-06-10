@@ -70,7 +70,7 @@ namespace libember { namespace glow
             /**
              * Sets the string containing the schema identifiers. The identifiers
              * are separated by the linefeed character (0x0A, '\n')
-             * @param identifier The names of the schema identifiers this parameter uses.
+             * @param identifiers The names of the schema identifiers this parameter uses.
              */
             void setSchemaIdentifiers(std::string const& identifiers);
 
@@ -90,8 +90,8 @@ namespace libember { namespace glow
             /**
              * Sets the enumeration property by concatenating the provided strings. The strings 
              * are separated by a '\n' character.
-             * @first First element to use in the enumeration.
-             * @last Points the the first element not being used.
+             * @param first First element to use in the enumeration.
+             * @param last Points the the first element not being used.
              */
             template<typename InputIterator>
             void setEnumeration(InputIterator first, InputIterator last);

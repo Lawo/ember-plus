@@ -6,6 +6,7 @@
 --
 -- Change Log:
 -- 2.31:
+--   - NOTE: This version describes the data schema of Ember+ 1.6.2.
 --   - Renamed all fields called "schemaIdentifier" to "schemaIdentifiers"
 --     to match semantics.
 -- 2.30:

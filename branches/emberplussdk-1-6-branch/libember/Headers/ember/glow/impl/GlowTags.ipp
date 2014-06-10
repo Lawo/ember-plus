@@ -135,9 +135,9 @@ namespace libember { namespace glow
     }
 
     LIBEMBER_INLINE
-    ber::Tag GlowTags::NodeContents::SchemaIdentifier()
+    ber::Tag GlowTags::NodeContents::SchemaIdentifiers()
     {
-        return ber::make_tag(ber::Class::ContextSpecific, NodeProperty::SchemaIdentifier);
+        return ber::make_tag(ber::Class::ContextSpecific, NodeProperty::SchemaIdentifiers);
     }
 
     /**
@@ -291,9 +291,9 @@ namespace libember { namespace glow
     }
 
     LIBEMBER_INLINE
-    ber::Tag GlowTags::ParameterContents::SchemaIdentifier()
+    ber::Tag GlowTags::ParameterContents::SchemaIdentifiers()
     {
-        return ber::make_tag(ber::Class::ContextSpecific, ParameterProperty::SchemaIdentifier);
+        return ber::make_tag(ber::Class::ContextSpecific, ParameterProperty::SchemaIdentifiers);
     }
 
     /**
@@ -495,9 +495,9 @@ namespace libember { namespace glow
     }
 
     LIBEMBER_INLINE
-    ber::Tag GlowTags::MatrixContents::SchemaIdentifier()
+    ber::Tag GlowTags::MatrixContents::SchemaIdentifiers()
     {
-        return ber::make_tag(ber::Class::ContextSpecific, MatrixProperty::SchemaIdentifier);
+        return ber::make_tag(ber::Class::ContextSpecific, MatrixProperty::SchemaIdentifiers);
     }
 
     /**

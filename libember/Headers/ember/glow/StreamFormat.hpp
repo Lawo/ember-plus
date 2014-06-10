@@ -57,16 +57,16 @@ namespace libember { namespace glow
             typedef std::size_t value_type;
 
             /**
-             * Initializes a new StreamFormat instance.
-             * @param value The format type
+             * Initializes a new instance.
+             * @param value The value to initialize this instance with.
              */
             StreamFormat(_Domain value)
                 : m_value(value)
             {}
 
             /**
-             * Returns the format value.
-             * @return The format value.
+             * Returns the value.
+             * @return The value.
              */
             value_type value() const
             {

@@ -57,7 +57,7 @@ namespace libember { namespace glow
             /**
              * Sets the string containing the schema identifiers. The identifiers
              * are separated by the linefeed character (0x0A, '\n')
-             * @param identifier The names of the schema identifiers this node uses.
+             * @param identifiers The names of the schema identifiers this node uses.
              */
             void setSchemaIdentifiers(std::string const& identifiers);
 

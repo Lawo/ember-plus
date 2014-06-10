@@ -42,16 +42,16 @@ namespace libember { namespace glow
 
         public:
             /**
-             * Initializes a ConnectionOperation.
-             * @param type The connection operation to initialize this instance with.
+             * Initializes a new instance.
+             * @param value The value to initialize this instance with.
              */
-            ConnectionOperation(_Domain type)
-                : m_value(type)
+            ConnectionOperation(_Domain value)
+                : m_value(value)
             {}
 
             /**
-             * Returns the connection operation.
-             * @return The connection operation.
+             * Returns the value.
+             * @return The value.
              */
             value_type value() const
             {

@@ -47,16 +47,16 @@ namespace libember { namespace glow
 
         public:
             /**
-             * Initializes a parameter type. 
-             * @param type Parameter type to initialize this instance with.
+             * Initializes a new instance.
+             * @param value The value to initialize this instance with.
              */
-            ParameterType(_Domain type)
-                : m_value(type)
+            ParameterType(_Domain value)
+                : m_value(value)
             {}
 
             /**
-             * Returns the command value.
-             * @return The command value.
+             * Returns the value.
+             * @return The value.
              */
             value_type value() const
             {

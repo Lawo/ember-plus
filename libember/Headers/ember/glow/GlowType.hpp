@@ -62,14 +62,14 @@ namespace libember { namespace glow
 
         public:
             /**
-             * Constructor 
-             * @param type The glow type to initialize this instance with.
+             * Initializes a new instance.
+             * @param value The value to initialize this instance with.
              */
-            GlowType(_Domain type);
+            GlowType(_Domain value);
 
             /**
-             * Returns the type identifier.
-             * @return Returns the type identifier.
+             * Returns the value.
+             * @return The value.
              */
             value_type value() const;
 
@@ -87,8 +87,8 @@ namespace libember { namespace glow
     /* Inline implementation                                                  */
     /**************************************************************************/
 
-    inline GlowType::GlowType(_Domain type)
-        : m_value(type)
+    inline GlowType::GlowType(_Domain value)
+        : m_value(value)
     {}
 
     inline GlowType::value_type GlowType::value() const

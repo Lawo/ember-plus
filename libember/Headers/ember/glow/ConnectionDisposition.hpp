@@ -43,16 +43,16 @@ namespace libember { namespace glow
 
         public:
             /**
-             * Initializes a ConnectionDisposition. 
-             * @param type Connection disposition type to initialize this instance with.
+             * Initializes a new instance.
+             * @param value The value to initialize this instance with.
              */
-            ConnectionDisposition(_Domain type)
-                : m_value(type)
+            ConnectionDisposition(_Domain value)
+                : m_value(value)
             {}
 
             /**
-             * Returns the connection disposition.
-             * @return The connection disposition.
+             * Returns the value.
+             * @return The value.
              */
             value_type value() const
             {

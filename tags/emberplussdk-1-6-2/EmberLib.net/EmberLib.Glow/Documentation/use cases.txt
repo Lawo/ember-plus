@@ -1,0 +1,235 @@
+
+------------------- Transmission of the Matrix Description
+
+Consumer -> Provider:
+
+<QualifiedNode path="1.2">
+  <children>
+    <Command number="32" />
+  </children>
+</QualifiedNode>
+
+Provider -> Consumer:
+
+<QualifiedNode number="1.2">
+  <children>
+    <Matrix number="1">
+      <contents>
+        <identifier>matrix</identifier>
+        <description>Sample Matrix</description>
+        <targetCount>4</targetCount>
+        <sourceCount>4</sourceCount>
+        <type>nToN</type>
+        <parametersLocation type="RelativeOid">1.2.2</parametersLocation>
+        <labels>
+          <label basePath="1.2.3.1" description="Primary" />
+          <label basePath="1.2.3.2" description="Internal" />
+        </labels>
+      </contents>
+    </Matrix>
+  </children>
+</QualifiedNode>
+
+
+------------------- Transmission of Targets, Sources and Connections
+
+Consumer -> Provider:
+
+<QualifiedMatrix path="1.2.1">
+  <children>
+    <Command number="32" />
+  </children>
+</QualifiedMatrix>
+
+Provider -> Consumer:
+
+<QualifiedMatrix path="1.2.1">
+  <contents>
+    <identifier>matrix</identifier>
+    <!-- … -->
+  </contents>
+  <targets>
+    <target number="1" />
+    <target number="2" />
+    <target number="3" />
+    <target number="4" />
+  </targets>
+  <sources>
+    <source number="1" />
+    <source number="2" />
+    <source number="3" />
+    <source number="4" />
+  </sources>
+  <connections>
+    <connection target="1">
+      <sources>4</sources>
+    </connection>
+    <connection target="2">
+      <sources>1.2</sources>
+    </connection>
+    <connection target="3">
+      <sources>4.2.3</sources>
+    </connection>
+    <!-- no connection reported for target 4 => target 4 has no active connections -->
+  </connections
+</QualifiedMatrix>
+
+
+------------------- Issuing Connects or Disconnects
+
+Consumer -> Provider:
+
+<QualifiedMatrix path="1.2.1">
+  <connections>
+    <connection target="1">
+      <sources>1.3</sources>
+      <operation>connect</operation>
+    </connection>
+    <connection target="2">
+      <sources>2</sources>
+      <operation>disconnect</operation>
+    </connection>
+  </connections>
+</QualifiedMatrix>
+
+
+Provider -> Consumer:
+
+<QualifiedMatrix path="1.2.1">
+  <connections>
+    <connection target="1">
+      <sources>4.1.3</sources>
+      <errorLevel>taken</errorLevel>
+    </connection>
+    <connection target="2">
+      <sources>1</sources>
+      <errorLevel>taken</errorLevel>
+    </connection>
+  </connections>
+</QualifiedMatrix>
+
+
+------------------- Requesting Labels
+
+Consumer -> Provider:
+
+<QualifiedNode path="1.2.3.1.1">
+  <!-- path: 1.2.3.1       .1
+             label.basePath targets -->
+  <children>
+    <Command number="32" dirFieldMask="4" />
+  </children>
+</QualifiedNode>
+
+
+Provider -> Consumer:
+
+<QualifiedNode path="1.2.3.1.1">
+  <children>
+    <Parameter number="1">
+      <contents>
+        <value type="UTF8">Primary Label of Target 1</value>
+      </contents>
+    </Parameter>
+    <Parameter number="2">
+      <contents>
+        <value type="UTF8">Primary Label of Target 2</value>
+      </contents>
+    </Parameter>
+    <Parameter number="3">
+      <contents>
+        <value type="UTF8">Primary Label of Target 3</value>
+      </contents>
+    </Parameter>
+    <Parameter number="4">
+      <contents>
+        <value type="UTF8">Primary Label of Target 4</value>
+      </contents>
+    </Parameter>
+  </children>
+</QualifiedNode>
+
+
+------------------- Changing Labels
+
+Consumer -> Provider:
+
+<QualifiedParameter path="1.2.3.1.1.4">
+  <!-- path: 1.2.3.1       .1      .4
+             label.basePath targets target4 -->
+  <contents>
+    <value type="UTF8">New Primary Label of Target 4</value>
+  </contents>
+</QualifiedNode>
+
+
+Provider -> Consumer:
+
+<QualifiedParameter path="1.2.3.1.1.4">
+  <contents>
+    <value type="UTF8">New Primary Label of Target 4</value>
+  </contents>
+</QualifiedNode>
+
+
+------------------- Requesting Connection Parameters
+
+Consumer -> Provider:
+
+<QualifiedNode path="1.2.2.3.1.4">
+  <!-- path: 1.2.2             .3          .1      .4
+             parametersLocation connections target1 source4 -->
+  <children>
+    <Command number="32" />
+  </children>
+</QualifiedNode>
+
+
+Provider -> Consumer:
+
+<QualifiedNode path="1.2.2.3.1.4">
+  <children>
+    <Parameter number="1">
+      <contents>
+        <identifier>gain</identifier>
+        <description>gain of connection target1 <- source4</description>
+        <value type="Real">-64.0</value>
+        <minimum type="Real">-128.0</value>
+        <maximum type="Real">15.0</maximum>
+        <access>readWrite</access>
+      </contents>
+    </Parameter>
+    <Parameter number="2">
+      <contents>
+        <identifier>peak</identifier>
+        <description>peak level of connection target1 <- source4</description>
+        <type>Integer</type>
+        <minimum type="Real">0</value>
+        <maximum type="Real">255</maximum>
+        <streamIdentifier>110</streamIdentifier>
+      </contents>
+    </Parameter>
+  </children>
+</QualifiedNode>
+
+
+------------------- Changing Connection Parameters
+
+Consumer -> Provider:
+
+<QualifiedParameter path="1.2.2.3.1.4.1">
+  <!-- path: 1.2.2       .3          .1      .4      .1
+       parametersLocation connections target1 source4 gain -->
+  <contents>
+    <value type="Real">10.0</value>
+  </contents>
+</QualifiedParameter>
+
+
+Provider -> Consumer:
+
+<QualifiedParameter path="1.2.2.3.1.4.1">
+  <contents>
+    <value type="Real">10.0</value>
+  </contents>
+</QualifiedParameter>

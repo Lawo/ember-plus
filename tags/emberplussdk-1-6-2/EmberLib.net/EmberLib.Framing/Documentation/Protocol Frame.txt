@@ -1,0 +1,40 @@
+﻿Index                Field                Length in bytes
+-----                -----                ---------------
+0                    slot                 1
+1                    msg (0x0E)           1
+2                    command              1
+3                    framingVersion       1
+
+only if command is 0 (payload):
+
+4                    flags                1
+5                    dtd                  1
+6                    appBytesCount        1
+7                    appBytes             appBytesCount
+7 + appBytesCount    payload              packageLength - (7 + appBytesCount)
+
+
+only if command is 3 (provider state):
+
+4                    providerState        1
+
+-----------------------------------------------------------------------------
+
+command: 0 - Ember Payload
+         1 - KeepAlive Request
+         2 - KeepAlive Response
+         3 - Provider State
+
+dtd: 1 - Glow
+     ... more tbd
+
+flags: 0x80 - first package
+       0x40 - last package
+       0x20 - empty package
+
+appBytes: additional, application-defined info (usually depending on the dtd)
+
+payload: ember encoded data
+
+providerState: 0 - passive
+               1 - active

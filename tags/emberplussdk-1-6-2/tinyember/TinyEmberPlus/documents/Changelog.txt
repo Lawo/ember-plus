@@ -1,0 +1,55 @@
+TinyEmber+ Changelog
+---------------------------------------
+
+Version 2.10.9
+- Compiled with new libember (Dtd 2.30)
+- Added the possibility to pass the port to listen to.
+	Use for example "TinyEmberPlus -port 9999".
+
+	If no port is specifed, 9000 will be used.
+
+Version 2.10.8
+- Added support for the schema identifier.
+
+Version 2.10.7
+- Added the possibility to transmit enumerations as enum map.
+
+Version 2.10.6
+- Fixed length encoding bug in libember.
+
+Version 2.10.5
+- Added the possibility to send a ProviderState message.
+
+Version 2.10.4
+- Fixed: when no DirFieldMask is set in a GetDirectory request, the response only contained the node number.
+- To import an existing gadget tree, the parameter type must no longer be set. The value can now also be used
+  to determine the parameter type.
+- Added the possibility to "unmount" a node. Unmounted nodes will not be reported in GetDirectory requests.
+- Added the possibility to mark a node as offline.
+
+Version 2.10.3
+- Added options to mark a node offline and to unmount a node.
+
+Version 2.10.1
+- Compiled with new libember (Dtd 2.10), which fixed a bug in the real encoding.
+
+Version 2.10.0
+- Compiled with new libember (Dtd 2.10)
+
+Version 2.2.8
+- Fixed a bug which prevented a user from creating a node at root level.
+- Removed the unused toolbar.
+
+Version 2.2.7
+- Added a boolean parameter type
+- The parameter type is no longer transmitted to connected consumers.
+- The main window now displays the tcp/ip port the application listens to.
+
+Version 2.2.6
+- The dialogs to create a node or parameter now assure that it is not possible
+  to create an object with an identifier that already exists.
+- When a new node or parameter has been created, all properties are now marked
+  dirty. That way the complete object will be transmitted to currently connected
+  consumers.
+- It is now no longer possible to create several root nodes.
+

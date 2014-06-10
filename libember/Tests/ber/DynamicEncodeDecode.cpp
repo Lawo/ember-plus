@@ -21,6 +21,7 @@
 #include <sstream>
 #include <stdexcept>
 #include "ember/ber/Ber.hpp"
+#include "ember/dom/AsyncBerReader.hpp"
 
 //SimianIgnore
 

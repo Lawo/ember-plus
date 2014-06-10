@@ -544,8 +544,8 @@ static void element_print(const Element *pThis, bool isVerbose)
             printf_s("  format:           %s\n", pParameter->pFormat);
          if(pParameter->pFormula != NULL)
             printf_s("  formula:\n%s\n", pParameter->pFormula);
-         if(pParameter->pSchemaIdentifier != NULL)
-            printf_s("  schemaIdentifier: %s\n", pParameter->pSchemaIdentifier);
+         if(pParameter->pSchemaIdentifiers != NULL)
+            printf_s("  schemaIdentifiers: %s\n", pParameter->pSchemaIdentifiers);
       }
    }
    else if(pThis->type == GlowElementType_Node)
@@ -558,8 +558,8 @@ static void element_print(const Element *pThis, bool isVerbose)
          printf_s("  isRoot:           %s\n", pThis->glow.node.isRoot ? "true" : "false");
          printf_s("  isOnline:         %s\n", pThis->glow.node.isOnline ? "true" : "false");
 
-         if(pThis->glow.node.pSchemaIdentifier != NULL)
-            printf_s("  schemaIdentifier: %s\n", pThis->glow.node.pSchemaIdentifier);
+         if(pThis->glow.node.pSchemaIdentifiers != NULL)
+            printf_s("  schemaIdentifiers: %s\n", pThis->glow.node.pSchemaIdentifiers);
       }
    }
    else if(pThis->type == GlowElementType_Matrix)
@@ -602,8 +602,8 @@ static void element_print(const Element *pThis, bool isVerbose)
                printf_s("%d\n", pMatrix->parametersLocation.choice.inlineId);
             }
          }
-         if(pMatrix->pSchemaIdentifier != NULL)
-            printf_s("  schemaIdentifier:            %s\n", pMatrix->pSchemaIdentifier);
+         if(pMatrix->pSchemaIdentifiers != NULL)
+            printf_s("  schemaIdentifiers:            %s\n", pMatrix->pSchemaIdentifiers);
       }
    }
    else if(pThis->type == GlowElementType_Function)
@@ -627,8 +627,6 @@ static void element_print(const Element *pThis, bool isVerbose)
             for(index = 0; index < pFunction->resultLength; index++)
                printf_s("    %s:%d\n", pFunction->pResult[index].pName, pFunction->pResult[index].type);
          }
-         if(pFunction->pSchemaIdentifier != NULL)
-            printf_s("  schemaIdentifier:            %s\n", pFunction->pSchemaIdentifier);
       }
    }
 }
@@ -691,7 +689,7 @@ static void onNode(const GlowNode *pNode, GlowFieldFlags fields, const berint *p
          pElement->glow.node.isRoot = pNode->isRoot;
 
       if(fields & GlowFieldFlag_SchemaIdentifier)
-         pElement->glow.node.pSchemaIdentifier = stringDup(pNode->pSchemaIdentifier);
+         pElement->glow.node.pSchemaIdentifiers = stringDup(pNode->pSchemaIdentifiers);
    }
 }
 
@@ -747,7 +745,7 @@ static void onParameter(const GlowParameter *pParameter, GlowFieldFlags fields, 
       if(fields & GlowFieldFlag_StreamDescriptor)
          memcpy(&pLocalParam->streamDescriptor, &pParameter->streamDescriptor, sizeof(GlowStreamDescription));
       if(fields & GlowFieldFlag_SchemaIdentifier)
-         pLocalParam->pSchemaIdentifier = stringDup(pParameter->pSchemaIdentifier);
+         pLocalParam->pSchemaIdentifiers = stringDup(pParameter->pSchemaIdentifiers);
 
       if(pSession->pEnumeration != NULL)
       {
@@ -801,7 +799,7 @@ static void onMatrix(const GlowMatrix *pMatrix, const berint *pPath, int pathLen
       memcpy(&pElement->glow.matrix.matrix, pMatrix, sizeof(*pMatrix));
       pElement->glow.matrix.matrix.pIdentifier = stringDup(pMatrix->pIdentifier);
       pElement->glow.matrix.matrix.pDescription = stringDup(pMatrix->pDescription);
-      pElement->glow.matrix.matrix.pSchemaIdentifier = stringDup(pMatrix->pSchemaIdentifier);
+      pElement->glow.matrix.matrix.pSchemaIdentifiers = stringDup(pMatrix->pSchemaIdentifiers);
    }
 }
 
@@ -938,8 +936,6 @@ static void onFunction(const GlowFunction *pFunction, const berint *pPath, int p
          for(index = 0; index < pFunction->resultLength; index++)
             cloneTupleItemDescription(&pElement->glow.function.pResult[index], &pFunction->pResult[index]);
       }
-
-      pElement->glow.function.pSchemaIdentifier = stringDup(pFunction->pSchemaIdentifier);
    }
 }
 

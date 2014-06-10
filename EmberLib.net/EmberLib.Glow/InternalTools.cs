@@ -176,6 +176,17 @@ namespace EmberLib.Glow
          }
       }
 
+      public static bool CompliesWithSchema(string schemaIdentifiers, string schemaIdentifier)
+      {
+         if(schemaIdentifier == null)
+            throw new ArgumentNullException("schemaIdentifier");
+
+         if(schemaIdentifiers == null)
+            throw new ArgumentNullException("schemaIdentifiers");
+
+         return schemaIdentifiers.Contains(schemaIdentifier);
+      }
+
       #region Implementation
       static long GetIntegerNodeValue(EmberNode node)
       {

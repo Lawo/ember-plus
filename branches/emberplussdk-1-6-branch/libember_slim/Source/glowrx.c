@@ -183,10 +183,10 @@ static void onItemReady_NodeContents(NonFramingGlowReader *pThis)
          pThis->glow.node.isOnline = berReader_getBoolean(pBase);
          fields |= GlowFieldFlag_IsOnline;
       }
-      else if(berTag_equals(pTag, &glowTags.nodeContents.schemaIdentifier))
+      else if(berTag_equals(pTag, &glowTags.nodeContents.schemaIdentifiers))
       {
-         pThis->glow.node.pSchemaIdentifier = newarr(char, pBase->length + 1);
-         berReader_getString(pBase, pThis->glow.node.pSchemaIdentifier, pBase->length + 1);
+         pThis->glow.node.pSchemaIdentifiers = newarr(char, pBase->length + 1);
+         berReader_getString(pBase, pThis->glow.node.pSchemaIdentifiers, pBase->length + 1);
          fields |= GlowFieldFlag_SchemaIdentifier;
       }
       else
@@ -314,10 +314,10 @@ static void onItemReady_ParameterContents(NonFramingGlowReader *pThis)
          pThis->glow.parameter.streamIdentifier = berReader_getInteger(pBase);
          fields |= GlowFieldFlag_StreamIdentifier;
       }
-      else if(berTag_equals(pTag, &glowTags.parameterContents.schemaIdentifier))
+      else if(berTag_equals(pTag, &glowTags.parameterContents.schemaIdentifiers))
       {
-         pThis->glow.parameter.pSchemaIdentifier = newarr(char, pBase->length + 1);
-         berReader_getString(pBase, pThis->glow.parameter.pSchemaIdentifier, pBase->length + 1);
+         pThis->glow.parameter.pSchemaIdentifiers = newarr(char, pBase->length + 1);
+         berReader_getString(pBase, pThis->glow.parameter.pSchemaIdentifiers, pBase->length + 1);
          fields |= GlowFieldFlag_SchemaIdentifier;
       }
       else
@@ -520,10 +520,10 @@ static void onItemReady_MatrixContents(NonFramingGlowReader *pThis)
             pParams->kind = GlowParametersLocationKind_Inline;
          }
       }
-      else if(berTag_equals(pTag, &glowTags.matrixContents.schemaIdentifier))
+      else if(berTag_equals(pTag, &glowTags.matrixContents.schemaIdentifiers))
       {
-         pThis->glow.matrix.pSchemaIdentifier = newarr(char, pBase->length + 1);
-         berReader_getString(pBase, pThis->glow.matrix.pSchemaIdentifier, pBase->length + 1);
+         pThis->glow.matrix.pSchemaIdentifiers = newarr(char, pBase->length + 1);
+         berReader_getString(pBase, pThis->glow.matrix.pSchemaIdentifiers, pBase->length + 1);
       }
       else
       {

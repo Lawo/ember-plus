@@ -39,9 +39,15 @@ namespace libember { namespace glow
             /**
              * Creates a new GlowStreamCollection, which is used as root node. The returned instance must
              * be deleted manually when it is no longer needed.
+             * @deprecated Use the default constructor instead.
              * @return A new instance of GlowStreamCollection.
              */
             static GlowStreamCollection* create();
+
+            /**
+             * Constructor, initializes a new stream collection with the application tag set to GlowTags::Root() (Application - 30).
+             */
+            GlowStreamCollection();
 
             /**
              * Inserts a new StreamEntry into the collection.

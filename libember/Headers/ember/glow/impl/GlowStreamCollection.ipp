@@ -32,6 +32,11 @@ namespace libember { namespace glow
     }
 
     LIBEMBER_INLINE
+    GlowStreamCollection::GlowStreamCollection()
+        : GlowElement(GlowType::StreamCollection, GlowTags::Root())
+    {}
+
+    LIBEMBER_INLINE
     GlowStreamCollection::GlowStreamCollection(ber::Tag const& tag)
         : GlowElement(GlowType::StreamCollection, tag)
     {}

@@ -1,4 +1,5 @@
 #summary Ember+ SDK Release Notes
+#labels Featured
 
 = Ember+ SDK Release Notes =
 

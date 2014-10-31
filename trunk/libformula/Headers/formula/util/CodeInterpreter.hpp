@@ -25,11 +25,11 @@ namespace libformula { namespace util
 
             /**
              * Computes the term with the provided value used for the $ variable.
-             * @param it Value of the variable.
+             * @param value Value of the variable.
              * @return Returns the result of the term computation.
              */
             template<typename ValueType>
-            ValueType compute(ValueType it);
+            ValueType compute(ValueType value) const;
 
         public:
             /** @see CodeEmitter */
@@ -162,12 +162,9 @@ namespace libformula { namespace util
 
         private:
             OpCodeCollection m_code;
-            ValueStack::value_type m_it;
-            ValueStack m_stack;
     };
 
     inline CodeInterpreter::CodeInterpreter()
-        : m_it(ValueStack::value_type(0L))
     {}
 
     inline void CodeInterpreter::emitPushLong(long value)
@@ -226,10 +223,10 @@ namespace libformula { namespace util
     }
 
     template<typename ValueType>
-    inline ValueType CodeInterpreter::compute(ValueType it)
+    inline ValueType CodeInterpreter::compute(ValueType value) const
     {
-        m_it = it;
-        m_stack.clear();
+        ValueStack::value_type it = value;
+        ValueStack stack;
 
         auto first = std::begin(m_code);
         auto const last = std::end(m_code);
@@ -240,66 +237,66 @@ namespace libformula { namespace util
             {
                 case OpCode::Add:
                 {
-                    auto const y = m_stack.pop();
-                    auto const x = m_stack.pop();
+                    auto const y = stack.pop();
+                    auto const x = stack.pop();
                     auto const r = x + y;
-                    m_stack.push(r);
+                    stack.push(r);
                     break;
                 }
                 case OpCode::Sub:
                 {
-                    auto const y = m_stack.pop();
-                    auto const x = m_stack.pop();
+                    auto const y = stack.pop();
+                    auto const x = stack.pop();
                     auto const r = x - y;
-                    m_stack.push(r);
+                    stack.push(r);
                     break;
                 }
                 case OpCode::Mul:
                 {
-                    auto const y = m_stack.pop();
-                    auto const x = m_stack.pop();
+                    auto const y = stack.pop();
+                    auto const x = stack.pop();
                     auto const r = x * y;
-                    m_stack.push(r);
+                    stack.push(r);
                     break;
                 }
                 case OpCode::Div:
                 {
-                    auto const y = m_stack.pop();
-                    auto const x = m_stack.pop();
+                    auto const y = stack.pop();
+                    auto const x = stack.pop();
                     auto const r = x / y;
-                    m_stack.push(r);
+                    stack.push(r);
                     break;
                 }
                 case OpCode::Idiv:
                 {
-                    auto const y = m_stack.pop();
-                    auto const x = m_stack.pop();
+                    auto const y = stack.pop();
+                    auto const x = stack.pop();
                     auto const r = detail::ValueStackItemOperation::idiv(x, y);
-                    m_stack.push(r);
+                    stack.push(r);
                     break;
                 }
                 case OpCode::Mod:
                 {
-                    auto const y = m_stack.pop();
-                    auto const x = m_stack.pop();
+                    auto const y = stack.pop();
+                    auto const x = stack.pop();
                     auto const r = x % y;
-                    m_stack.push(r);
+                    stack.push(r);
                     break;
                 }
                 case OpCode::PushIt:
-                    m_stack.push(m_it);
+                    stack.push(it);
                     break;
                 case OpCode::PushLong:
-                    m_stack.push(code.m_long);
+                    stack.push(code.m_long);
                     break;
                 case OpCode::PushReal:
-                    m_stack.push(code.m_real);
+                    stack.push(code.m_real);
                     break;
                 case OpCode::Negate:
                 {
-                    auto const x = m_stack.pop();
+                    auto const x = stack.pop();
                     auto const r = -x;
-                    m_stack.push(r);
+                    stack.push(r);
                     break;
                 }
                 case OpCode::Call:
@@ -310,165 +307,165 @@ namespace libformula { namespace util
                     {
                         case FunctionType::Exp:
                         {
-                            auto const x = m_stack.pop<real_type>();
+                            auto const x = stack.pop<real_type>();
                             auto const r = std::exp(x);
-                            m_stack.push(r);
+                            stack.push(r);
                             break;
                         }
                         case FunctionType::Pow:
                         {
-                            auto const y = m_stack.pop<real_type>();
-                            auto const x = m_stack.pop<real_type>();
+                            auto const y = stack.pop<real_type>();
+                            auto const x = stack.pop<real_type>();
                             auto const r = std::pow(x, y);
-                            m_stack.push(r);
+                            stack.push(r);
                             break;
                         }
                         case FunctionType::Cos:
                         {
-                            auto const x = m_stack.pop<real_type>();
+                            auto const x = stack.pop<real_type>();
                             auto const r = std::cos(x);
-                            m_stack.push(r);
+                            stack.push(r);
                             break;
                         }
                         case FunctionType::Sin:
                         {
-                            auto const x = m_stack.pop<real_type>();
+                            auto const x = stack.pop<real_type>();
                             auto const r = std::sin(x);
-                            m_stack.push(r);
+                            stack.push(r);
                             break;
                         }
                         case FunctionType::Tan:
                         {
-                            auto const x = m_stack.pop<real_type>();
+                            auto const x = stack.pop<real_type>();
                             auto const r = std::tan(x);
-                            m_stack.push(r);
+                            stack.push(r);
                             break;
                         }
                         case FunctionType::Acos:
                         {
-                            auto const x = m_stack.pop<real_type>();
+                            auto const x = stack.pop<real_type>();
                             auto const r = std::acos(x);
-                            m_stack.push(r);
+                            stack.push(r);
                             break;
                         }
                         case FunctionType::Asin:
                         {
-                            auto const x = m_stack.pop<real_type>();
+                            auto const x = stack.pop<real_type>();
                             auto const r = std::asin(x);
-                            m_stack.push(r);
+                            stack.push(r);
                             break;
                         }
                         case FunctionType::Atan:
                         {
                             if (args == 1)
                             {
-                                auto const x = m_stack.pop<real_type>();
+                                auto const x = stack.pop<real_type>();
                                 auto const r = std::atan(x);
-                                m_stack.push(r);
+                                stack.push(r);
                             }
                             else if (args == 2)
                             {
-                                auto const y = m_stack.pop<real_type>();
-                                auto const x = m_stack.pop<real_type>();
+                                auto const y = stack.pop<real_type>();
+                                auto const x = stack.pop<real_type>();
                                 auto const r = std::atan2(y, x);
-                                m_stack.push(r);
+                                stack.push(r);
                             }
 
                             break;
                         }
                         case FunctionType::Cosh:
                         {
-                            auto const x = m_stack.pop<real_type>();
+                            auto const x = stack.pop<real_type>();
                             auto const r = std::cosh(x);
-                            m_stack.push(r);
+                            stack.push(r);
                             break;
                         }
                         case FunctionType::Sinh:
                         {
-                            auto const x = m_stack.pop<real_type>();
+                            auto const x = stack.pop<real_type>();
                             auto const r = std::sinh(x);
-                            m_stack.push(r);
+                            stack.push(r);
                             break;
                         }
                         case FunctionType::Tanh:
                         {
-                            auto const x = m_stack.pop<real_type>();
+                            auto const x = stack.pop<real_type>();
                             auto const r = std::tanh(x);
-                            m_stack.push(r);
+                            stack.push(r);
                             break;
                         }
                         case FunctionType::Int:
                         {
-                            auto const x = m_stack.pop<long_type>();
-                            m_stack.push(x);
+                            auto const x = stack.pop<long_type>();
+                            stack.push(x);
                             break;
                         }
                         case FunctionType::Float:
                         {
-                            auto const x = m_stack.pop<real_type>();
-                            m_stack.push(x);
+                            auto const x = stack.pop<real_type>();
+                            stack.push(x);
                             break;
                         }
                         case FunctionType::Log:
                         {
                             if (args == 1)
                             {
-                                auto const x = m_stack.pop<real_type>();
+                                auto const x = stack.pop<real_type>();
                                 auto const r = std::log(x);
-                                m_stack.push(r);
+                                stack.push(r);
                             }
                             else if (args == 2)
                             {
-                                auto const y = m_stack.pop<real_type>();
-                                auto const x = m_stack.pop<real_type>();
+                                auto const y = stack.pop<real_type>();
+                                auto const x = stack.pop<real_type>();
                                 auto const a = std::log(x);
                                 auto const b = std::log(y);
                                 auto const r = a / b;
-                                m_stack.push(r);
+                                stack.push(r);
                             }
 
                             break;
                         }
                         case FunctionType::Ln:
                         {
-                            auto const x = m_stack.pop<real_type>();
+                            auto const x = stack.pop<real_type>();
                             auto const r = std::log(x);
-                            m_stack.push(r);
+                            stack.push(r);
                             break;
                         }
                         case FunctionType::Round:
                         {
-                            auto const x = m_stack.pop<real_type>();
+                            auto const x = stack.pop<real_type>();
                             auto const r = std::floor(x);
-                            m_stack.push(r);
+                            stack.push(r);
                             break;
                         }
                         case FunctionType::Ceil:
                         {
-                            auto const x = m_stack.pop<real_type>();
+                            auto const x = stack.pop<real_type>();
                             auto const r = std::ceil(x);
-                            m_stack.push(r);
+                            stack.push(r);
                             break;
                         }
                         case FunctionType::Sqrt:
                         {
-                            auto const x = m_stack.pop<real_type>();
+                            auto const x = stack.pop<real_type>();
                             auto const r = std::sqrt(x);
-                            m_stack.push(r);
+                            stack.push(r);
                             break;
                         }
                         case FunctionType::Abs:
                         {
-                            auto const x = m_stack.pop();
+                            auto const x = stack.pop();
                             auto const r = detail::ValueStackItemOperation::abs(x);
-                            m_stack.push(r);
+                            stack.push(r);
                             break;
                         }
                         case FunctionType::Sgn:
                         {
-                            auto const x = m_stack.pop();
+                            auto const x = stack.pop();
                             auto const r = detail::ValueStackItemOperation::sgn(x);
-                            m_stack.push(r);
+                            stack.push(r);
                             break;
                         }
                     }
@@ -477,13 +474,13 @@ namespace libformula { namespace util
             }
         }
 
-        if (m_stack.empty())
+        if (stack.empty())
         {
-            return m_it.toValueType<ValueType>();
+            return it.toValueType<ValueType>();
         }
         else
         {
-            auto const result = m_stack.pop();
+            auto const result = stack.pop();
             return result.toValueType<ValueType>();
         }
     }

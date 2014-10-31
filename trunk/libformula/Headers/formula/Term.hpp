@@ -25,7 +25,7 @@ namespace libformula
     {
         public:
             /**
-             * Intializes a new term by parsing and compiling the provided
+             * Initializes a new term by parsing and compiling the provided
              * term string.
              * @param first Points to the first item in the buffer containing
              *      the term to compile.
@@ -42,7 +42,7 @@ namespace libformula
              * @return Returns the result of the computation.
              */
             template<typename ValueType>
-            ValueType compute(ValueType value);
+            ValueType compute(ValueType value) const;
 
         private:
             std::shared_ptr<CodeEmitterType> m_emitter;
@@ -67,7 +67,7 @@ namespace libformula
 
     template<typename CodeEmitterType>
     template<typename ValueType>
-    ValueType Term<CodeEmitterType>::compute(ValueType value)
+    ValueType Term<CodeEmitterType>::compute(ValueType value) const
     {
         auto const result = m_emitter->compute(value);
         return result;

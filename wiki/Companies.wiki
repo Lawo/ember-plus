@@ -21,6 +21,8 @@
   * [http://www.slgbroadcast.com SLG Broadcast]
   * [http://www.coolux.de coolux Media Systems]
   * [http://www.dhd-audio.de DHD Audio]
+  * [http://www.grassvalley.com/products/ignite GrassValley (Ignite)]
+  * [http://www.grassvalley.com/products/ignite Evertz (Magnum)]
 
 === The following companies are said to use Ember+: ===
   * [http://www.studer.ch Studer]

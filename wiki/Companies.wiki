@@ -28,3 +28,4 @@
 === The following companies are said to use Ember+: ===
   * [http://www.studer.ch Studer]
   * [http://www.skyline.be Skyline (DataMiner)]
+  * [http://www.ntp.dk NTP]

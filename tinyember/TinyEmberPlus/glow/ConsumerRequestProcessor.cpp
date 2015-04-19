@@ -11,7 +11,6 @@
 #include "util/NodeConverter.h"
 #include "util/ParameterConverter.h"
 #include <ember/Ember.hpp>
-#include "../gadget/util/EntityPath.ipp"
 using namespace libember;
 using namespace gadget::util;
 

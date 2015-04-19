@@ -126,7 +126,7 @@ namespace gadget { namespace util
      * @return The node that matches the specified path or nullptr, if the node could not be found.
      */
     /*template<typename InputIterator>
-    Node const* resolve_node(Node const* root, InputIterator first, InputIterator last);/*
+    Node const* resolve_node(Node const* root, InputIterator first, InputIterator last)
     {
         auto const size = std::distance(first, last);
         if (root->number() == *first)
@@ -158,7 +158,7 @@ namespace gadget { namespace util
      * @return The node that matches the specified path or nullptr, if the node could not be found.
      */
     /*template<typename InputIterator>
-    Node* resolve_node(Node* root, InputIterator first, InputIterator last);/*
+    Node* resolve_node(Node* root, InputIterator first, InputIterator last)
     {
         auto const size = std::distance(first, last);
         auto node = static_cast<Node*>(root);
@@ -201,7 +201,7 @@ namespace gadget { namespace util
      * @return The parameter that matches the specified path or nullptr, if the parameter could not be found.
      */
     /*template<typename InputIterator>
-    Parameter const* resolve_parameter(Node const* root, InputIterator first, InputIterator last);/*
+    Parameter const* resolve_parameter(Node const* root, InputIterator first, InputIterator last)
     {
         auto const size = std::distance(first, last);
         if (size > 0)
@@ -233,7 +233,7 @@ namespace gadget { namespace util
      * @return The parameter that matches the specified path or nullptr, if the parameter could not be found.
      */
     /*template<typename InputIterator>
-    Parameter* resolve_parameter(Node* root, InputIterator first, InputIterator last);/*
+    Parameter* resolve_parameter(Node* root, InputIterator first, InputIterator last)
     {
         auto const size = std::distance(first, last);
         if (size > 0)

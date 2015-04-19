@@ -9,7 +9,7 @@ namespace gadget
     struct StreamFormat
     {
         public:
-            enum _Domain
+            typedef enum _Domain
             {
                 UnsignedInt8                  = ( 0),
                 UnsignedInt16BigEndian        = ( 2),
@@ -31,7 +31,7 @@ namespace gadget
                 IeeeFloat64LittleEndian       = (23),
 
                 Invalid = (0xFFFFFFFF),
-            };
+            } _Domain;
 
             typedef std::size_t value_type;
 

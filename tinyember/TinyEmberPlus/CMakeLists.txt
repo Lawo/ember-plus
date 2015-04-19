@@ -75,4 +75,4 @@ QT4_WRAP_UI( UI_HEADERS ${UIS} )
 QT4_WRAP_CPP( MOC_SRCS ${MOC_HEADERS})
 
 add_executable(${PROJECT_NAME} ${HEADER_FILES} ${SOURCE_FILES} ${MOC_HEADERS} ${RES_SOURCES} ${UI_HEADERS})
-target_link_libraries(${PROJECT_NAME} libember_static ${QT_LIBRARIES})
+target_link_libraries(${PROJECT_NAME} ember_static ${QT_LIBRARIES})

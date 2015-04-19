@@ -3,6 +3,10 @@
 
 #include "../../gadget/StreamFormat.h"
 #include "../../gadget/ParameterTypeVisitor.h"
+#include "../../gadget/Parameter.h"
+#include "../../gadget/EnumParameter.h"
+#include "../../gadget/IntegerParameter.h"
+#include "../../gadget/RealParameter.h"
 
 /** Forward declarations */
 namespace libember { namespace glow

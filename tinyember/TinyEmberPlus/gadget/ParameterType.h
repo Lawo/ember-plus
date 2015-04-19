@@ -10,7 +10,7 @@ namespace gadget
     struct ParameterType
     {
         public:
-            enum _Domain
+            typedef enum _Domain
             {
                 Integer = 1,
                 Real,
@@ -19,7 +19,7 @@ namespace gadget
                 Trigger,
                 Enum,
                 Octets,
-            };
+            } _Domain;
 
             typedef std::size_t value_type;
 

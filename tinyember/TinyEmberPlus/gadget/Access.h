@@ -9,13 +9,13 @@ namespace gadget
     struct Access
     {
         public:
-            enum _Domain
+            typedef enum _Domain
             {
                 None = 0,
                 ReadOnly,
                 WriteOnly,
                 ReadWrite,
-            };
+            } _Domain;
 
             typedef std::size_t value_type;
 

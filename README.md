@@ -16,6 +16,6 @@ Therefore: Please note the possibility in Ember+ of defining a "schema" within y
 
 Feel free to implement Ember+ in your devices. It's there now, the base of it has been used for years successfully. Please feel free to download the latest package of information in the download section of this developer site.
 
-[Here is a list of companies that are already using Ember+.](wiki/Companies)
+[Here is a list of companies that are already using Ember+.](../../wiki/Companies)
 
 Enjoy!

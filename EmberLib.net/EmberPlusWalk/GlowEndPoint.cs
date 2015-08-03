@@ -231,7 +231,7 @@ namespace EmberPlusWalk
          if(root != null)
             OnGlowRootReady(new GlowRootReadyArgs(root));
          else
-            OnNotification(new NotificationArgs(String.Format("Unexpected Ember Root: {0} ({1})", root, root.GetType())));
+            OnNotification(new NotificationArgs(String.Format("Unexpected Ember Root: {0} ({1})", e.Root, e.Root.GetType())));
       }
 
       /// <summary>

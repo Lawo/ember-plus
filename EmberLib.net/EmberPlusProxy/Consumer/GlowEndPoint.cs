@@ -267,7 +267,7 @@ namespace EmberPlusProxy.Consumer
          if(root != null)
             OnGlowRootReady(new GlowRootReadyArgs(root));
          else
-            OnNotification(new NotificationArgs(String.Format("Unexpected Ember Root: {0} ({1})", root, root.GetType())));
+            OnNotification(new NotificationArgs(String.Format("Unexpected Ember Root: {0} ({1})", e.Root, e.Root.GetType())));
       }
 
       void GlowReader_KeepAliveRequestReceived(object sender, FramingReader.KeepAliveRequestReceivedArgs e)

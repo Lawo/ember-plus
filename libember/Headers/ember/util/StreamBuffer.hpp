@@ -424,6 +424,7 @@ namespace libember { namespace util
         swap(m_head, other.m_head);
         swap(m_tail, other.m_tail);
         swap(m_size, other.m_size);
+        swap(m_maxsize, other.m_maxsize);
     }
 
     template<typename ValueType, unsigned short ChunkSize>

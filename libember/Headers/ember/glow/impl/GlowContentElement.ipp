@@ -56,10 +56,7 @@ namespace libember { namespace glow
 
                 if (m_container != 0)
                 {
-                    dom::Set::const_iterator const first = m_container->begin();
-                    dom::Set::const_iterator const last = m_container->end();
-
-                    m_propertyFlags = generatePropertyFlags(first, last);
+                    m_propertyFlags = generatePropertyFlags(m_container->begin(), m_container->end());
                 }
             }
         }

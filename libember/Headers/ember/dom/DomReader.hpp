@@ -180,8 +180,7 @@ namespace libember { namespace dom
     template<typename ValueType>
     inline ValueType DomReader::decode()
     {
-        typedef ValueType value_type;
-        value_type const value = ber::decode<value_type>(*m_input, m_length);
+        ValueType const value = ber::decode<ValueType>(*m_input, m_length);
 
         m_bytesRead += m_length;
         return value;

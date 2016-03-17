@@ -1,8 +1,8 @@
 #include <ember/glow/util/Validation.hpp>
 #include <qmessagebox.h>
-#include "gadget\Node.h"
-#include "util\StringConverter.h"
-#include "util\Validation.h"
+#include "gadget/Node.h"
+#include "util/StringConverter.h"
+#include "util/Validation.h"
 #include "CreateNodeDialog.h"
 
 CreateNodeDialog::CreateNodeDialog(QWidget* parent, gadget::Node const* owner)

@@ -10,7 +10,7 @@ namespace gadget
     struct ParameterType
     {
         public:
-            typedef enum _Domain
+            enum _Domain
             {
                 Integer = 1,
                 Real,

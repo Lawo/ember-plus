@@ -13,7 +13,7 @@ RealView::RealView(QWidget* parent, gadget::RealParameter* parameter)
     m_parameter->registerListener(this);
 
     auto streamFormats = util::StreamFormatConverter();
-    for each(auto& entry in streamFormats)
+    for(auto& entry : streamFormats)
     {
         auto const text = QString::fromStdString(entry.second);
         m_view->streamFormatBox->addItem(text);
@@ -115,11 +115,13 @@ void RealView::updateUi()
     if (m_parameter->dirtyState().isSet(::gadget::ParameterField::SubscriptionCount))
     {
         auto const subscriptions = m_parameter->subscribers();
-        auto stream = std::stringstream();
+        // GCC 4.8 specific fix bug 54316
+        std::unique_ptr<std::stringstream> stream;
+        stream.reset( new std::stringstream());
         auto const suffix = subscriptions != 1 ? "subscribers" : "subscriber";
-        stream << "Streaming (" << subscriptions << " " << suffix << ")";
+        *stream.get() << "Streaming (" << subscriptions << " " << suffix << ")";
 
-        m_view->streamingGroupBox->setTitle(QString::fromStdString(stream.str()));
+        m_view->streamingGroupBox->setTitle(QString::fromStdString(stream->str()));
     }
 
     m_view->displayValueText->setText(QString::fromStdString(m_parameter->toDisplayValue()));

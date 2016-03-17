@@ -125,7 +125,7 @@ namespace glow
                 auto const& manager = gadget::StreamManager::instance();
                 auto const& nodes = node->nodes();
                 auto const& parameters = node->parameters();
-                for each(auto parameter in parameters)
+                for(auto parameter : parameters)
                 {
                     if (manager.isParameterTransmittedViaStream(parameter) && parameter->dirtyState().isSet(gadget::ParameterField::ForceUpdate) == false)
                     {
@@ -141,7 +141,7 @@ namespace glow
                     }
                 }
 
-                for each(auto child in nodes)
+                for(auto child : nodes)
                 {
                     auto const isDirty = isNotificationRequired(child);
                     if (isDirty)
@@ -162,13 +162,13 @@ namespace glow
         }
 
         auto const& nodes = node->nodes();
-        for each(auto child in nodes)
+        for(auto child : nodes)
         {
             transformQualified(root, child);
         }
 
         auto const& parameters = node->parameters();
-        for each(auto parameter in parameters)
+        for(auto parameter : parameters)
         {
             transformQualified(root, parameter);
         }
@@ -181,14 +181,14 @@ namespace glow
             parent = util::NodeConverter::create(parent, node, node->dirtyState())->children();
 
             auto const& nodes = node->nodes();
-            for each(auto child in nodes)
+            for(auto child : nodes)
             {
                 if (child->isDirty())
                     transform(parent, child);
             }
 
             auto const& parameters = node->parameters();
-            for each(auto parameter in parameters)
+            for(auto parameter : parameters)
             {
                 transform(parent, parameter);
             }

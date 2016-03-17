@@ -2,7 +2,7 @@
 #define __TINYEMBER_SERIALIZATION_GADGETTREEREADER_H
 
 #include "../../gadget/Node.h"
-#include <ember\Ember.hpp>
+#include <ember/Ember.hpp>
 
 /** Forward declarations */
 namespace gadget
@@ -27,7 +27,7 @@ namespace serialization { namespace detail
      */
     class GadgetTreeReader
     {
-        friend class Archive;
+        friend class serialization::Archive;
         private:
             /**
              * Initializes a new reader.

@@ -27,7 +27,7 @@ namespace glow
      * to send an ember tree to the connected consumers.
      */
     class ConsumerProxy : 
-        public gadget::Node::DirtyStateListener,
+        public gadget::Node::DirtyStateListenerT,
         private net::TcpClientFactory
     {
         public:

@@ -25,7 +25,7 @@ namespace util
             template<typename InputIterator>
             static bool isUniqueIdentifier(InputIterator first, InputIterator last, String const& identifier)
             {
-                auto const result = std::find_if(first, last, [&identifier](decltype(*first) const& it) -> bool
+                auto const result = std::find_if(first, last, [&identifier](decltype(*first) /*const&*/ it) -> bool
                 {
                     return it->identifier() == identifier;
                 });

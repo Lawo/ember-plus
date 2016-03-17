@@ -29,7 +29,7 @@ namespace gadget
     {
         friend class Node;
         public:
-            typedef DirtyStateListener<ParameterFieldState::flag_type, Parameter const*> DirtyStateListener;
+            typedef DirtyStateListener<ParameterFieldState::flag_type, Parameter const*> DirtyStateListenerT;
 
             /** Destructor */
             virtual ~Parameter();
@@ -186,13 +186,13 @@ namespace gadget
              * Registers a new dirty state listener for this parameter.
              * @param listener The listener instance to add to the collection of listeners.
              */
-            void registerListener(DirtyStateListener* listener);
+            void registerListener(DirtyStateListenerT* listener);
 
             /**
              * Removes an existing dirty state listener from this parameter.
              * @param listener The listener to remove.
              */
-            void unregisterListener(DirtyStateListener* listener);
+            void unregisterListener(DirtyStateListenerT* listener);
 
             /**
              * Returns true if a valid stream identifier is set.
@@ -260,7 +260,7 @@ namespace gadget
             Formula m_formula;
             ParameterFieldState m_state;
             Access::value_type m_access;
-            std::list<DirtyStateListener*> m_listeners;
+            std::list<DirtyStateListenerT*> m_listeners;
             std::shared_ptr<StreamDescriptor> m_streamDescriptor;
     };
 }

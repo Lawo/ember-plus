@@ -1,6 +1,6 @@
 #ifndef __TINYEMBER_GADGET_STREAMFORMAT_H
 #define __TINYEMBER_GADGET_STREAMFORMAT_H
-
+#include <cstring>
 namespace gadget
 {
     /**
@@ -9,7 +9,7 @@ namespace gadget
     struct StreamFormat
     {
         public:
-            typedef enum _Domain
+            enum _Domain
             {
                 UnsignedInt8                  = ( 0),
                 UnsignedInt16BigEndian        = ( 2),

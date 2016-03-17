@@ -9,7 +9,7 @@ namespace gadget
     struct Access
     {
         public:
-            typedef enum _Domain
+            enum _Domain
             {
                 None = 0,
                 ReadOnly,

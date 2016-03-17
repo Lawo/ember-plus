@@ -1,8 +1,8 @@
 #ifndef __TINYEMBER_GADGETVIEWCONTEXTMENU_H
 #define __TINYEMBER_GADGETVIEWCONTEXTMENU_H
 
-#include "gadget\Node.h"
-#include "gadget\Parameter.h"
+#include "gadget/Node.h"
+#include "gadget/Parameter.h"
 #include <qtreewidget.h>
 
 namespace glow {

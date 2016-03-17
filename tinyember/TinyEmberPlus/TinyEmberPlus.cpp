@@ -1,16 +1,16 @@
-#include "gadget\Node.h"
-#include "gadget\Parameter.h"
-#include "gadget\StreamManager.h"
-#include "glow\ConsumerRequestProcessor.h"
-#include "glow\ConsumerProxy.h"
-#include "glow\util\StreamConverter.h"
-#include "serialization\Archive.h"
-#include "util\StringConverter.h"
+#include "gadget/Node.h"
+#include "gadget/Parameter.h"
+#include "gadget/StreamManager.h"
+#include "glow/ConsumerRequestProcessor.h"
+#include "glow/ConsumerProxy.h"
+#include "glow/util/StreamConverter.h"
+#include "serialization/Archive.h"
+#include "util/StringConverter.h"
 #include "GadgetViewContextMenu.h"
 #include "TinyEmberPlus.h"
 #include "TreeWidgetItemData.h"
 #include "ViewFactory.h"
-#include <ember\Ember.hpp>
+#include <ember/Ember.hpp>
 #include <sstream>
 #include <qdialog.h>
 #include <qfileinfo.h>
@@ -143,7 +143,7 @@ void TinyEmberPlus::rebuildTree(gadget::Node* parent, QTreeWidgetItem* owner)
     auto& parameters = parent->parameters();
     auto& children = parent->nodes();
 
-    for each(auto parameter in parameters)
+    for(auto parameter : parameters)
     {
         auto const icon = QIcon(":/image/resources/leaf.png");
         auto const item = new QTreeWidgetItem(owner);
@@ -152,7 +152,7 @@ void TinyEmberPlus::rebuildTree(gadget::Node* parent, QTreeWidgetItem* owner)
         item->setData(1, 0, QVariant::fromValue(TreeWidgetItemData(parameter)));
     }
 
-    for each(auto node in children)
+    for(auto node : children)
     {
         auto const icon = QIcon(":/image/resources/globe-small.png");
         auto const item = new QTreeWidgetItem(owner);

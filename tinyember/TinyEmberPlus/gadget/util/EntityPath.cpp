@@ -1,9 +1,11 @@
 #include "EntityPath.h"
 #include "../../gadget/Parameter.h"
 #include "../../gadget/Node.h"
+#include <algorithm>
 
-namespace gadget { namespace util 
+namespace gadget { namespace util
 {
+
     std::size_t entity_depth(Node const* entity)
     {
         std::size_t depth = 0;

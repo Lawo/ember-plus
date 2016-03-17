@@ -14,7 +14,7 @@ namespace gadget
 /**
  * A view which can be used to edit a string parameter.
  */
-class StringView : public QFrame, gadget::Parameter::DirtyStateListener
+class StringView : public QFrame, gadget::Parameter::DirtyStateListenerT
 {
     Q_OBJECT
     public:

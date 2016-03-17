@@ -165,7 +165,7 @@ namespace gadget
         setStreamDescriptor(descriptor);
     }
 
-    void Parameter::registerListener(DirtyStateListener* listener)
+    void Parameter::registerListener(DirtyStateListenerT* listener)
     {
         auto const first = std::begin(m_listeners);
         auto const last = std::end(m_listeners);
@@ -177,7 +177,7 @@ namespace gadget
         }
     }
 
-    void Parameter::unregisterListener(DirtyStateListener* listener)
+    void Parameter::unregisterListener(DirtyStateListenerT* listener)
     {
         m_listeners.remove(listener);
     }
@@ -194,7 +194,7 @@ namespace gadget
 
     void Parameter::notify() const
     {
-        for each(auto listener in m_listeners)
+        for(auto listener : m_listeners)
         {
             listener->notifyStateChanged(m_state, this);
         }

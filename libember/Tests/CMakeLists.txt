@@ -1,0 +1,5 @@
+cmake_minimum_required(VERSION 3.3)
+project(libember_test)
+add_subdirectory(ber)
+add_subdirectory(glow)
+add_subdirectory(util)

@@ -4,7 +4,7 @@
 #include <qdialog.h>
 #include <list>
 #include "ui_EditEnumerationDialog.h"
-#include "util\StringConverter.h"
+#include "util/StringConverter.h"
 
 /**
  * A dialog to edit the entries of an enumeration parameter.
@@ -105,7 +105,7 @@ inline EditEnumerationDialog::EditEnumerationDialog(QWidget* parent, InputIterat
 {
     m_dialog->setupUi(this);
 
-    for each(auto& item in m_items)
+    for(auto& item : m_items)
     {
         auto const text = ::util::StringConverter::toUtf8QString(item);
         m_dialog->itemList->addItem(text);

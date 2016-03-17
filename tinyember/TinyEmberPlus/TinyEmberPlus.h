@@ -4,8 +4,8 @@
 #include <QtGui/QMainWindow>
 #include <qdatetime.h>
 #include <qtimer.h>
-#include "glow\ProviderInterface.h"
-#include "serialization\SettingsSerializer.h"
+#include "glow/ProviderInterface.h"
+#include "serialization/SettingsSerializer.h"
 #include "ui_TinyEmberPlus.h"
 
 /** Forward declarations */

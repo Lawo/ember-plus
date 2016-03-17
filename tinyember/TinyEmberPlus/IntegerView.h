@@ -14,7 +14,7 @@ namespace gadget
 /**
  * A view which can be used to edit an integer parameter.
  */
-class IntegerView : public QFrame, gadget::Parameter::DirtyStateListener
+class IntegerView : public QFrame, gadget::Parameter::DirtyStateListenerT
 {
     Q_OBJECT
     public:

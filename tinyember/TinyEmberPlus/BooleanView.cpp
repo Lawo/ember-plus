@@ -1,6 +1,6 @@
 #include "BooleanView.h"
 #include "gadget/BooleanParameter.h"
-#include "util\StringConverter.h"
+#include "util/StringConverter.h"
 #include <sstream>
 
 BooleanView::BooleanView(QWidget* parent, gadget::BooleanParameter* parameter)

@@ -22,12 +22,12 @@ namespace gadget
         if (parent != nullptr)
             parent->remove(this);
 
-        for each(auto item in parameters)
+        for(auto item : parameters)
         {
             delete item;
         }
 
-        for each(auto item in children)
+        for(auto item : children)
         {
             delete item;
         }
@@ -160,19 +160,19 @@ namespace gadget
 
         if (recursive)
         {
-            for each(auto node in m_children)
+            for(auto node : m_children)
             {
                 node->clearDirtyState(recursive);
             }
 
-            for each(auto parameter in m_parameters)
+            for(auto parameter : m_parameters)
             {
                 parameter->clearDirtyState();
             }
         }
     }
 
-    void Node::registerListener(DirtyStateListener* listener)
+    void Node::registerListener(DirtyStateListenerT* listener)
     {
         auto const first = std::begin(m_listeners);
         auto const last = std::end(m_listeners);
@@ -184,14 +184,14 @@ namespace gadget
         }
     }
 
-    void Node::unregisterListener(DirtyStateListener* listener)
+    void Node::unregisterListener(DirtyStateListenerT* listener)
     {
         m_listeners.remove(listener);
     }
 
     void Node::notify() const
     {
-        for each(auto listener in m_listeners)
+        for(auto listener : m_listeners)
         {
             listener->notifyStateChanged(m_state, this);
         }

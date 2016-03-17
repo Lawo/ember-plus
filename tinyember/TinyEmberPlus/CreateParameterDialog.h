@@ -2,7 +2,7 @@
 #define __TINYEMBER_CREATEPARAMETERDIALOG_H
 
 #include <QDialog>
-#include "gadget\ParameterType.h"
+#include "gadget/ParameterType.h"
 #include "ui_CreateParameterDialog.h"
 
 /** Forward declaration */

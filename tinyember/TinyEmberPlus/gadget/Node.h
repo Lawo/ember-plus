@@ -6,6 +6,7 @@
 #include "Collection.h"
 #include "DirtyStateListener.h"
 #include "NodeField.h"
+#include "Parameter.h"
 
 namespace gadget
 {
@@ -23,8 +24,8 @@ namespace gadget
         friend class ParameterFactory;
         public:
             typedef Collection<Node*> NodeCollection;
-            typedef Collection<Parameter*> ParameterCollection;
-            typedef DirtyStateListener<NodeFieldState::flag_type, Node const*> DirtyStateListener;
+            typedef Collection<gadget::Parameter*> ParameterCollection;
+            typedef DirtyStateListener<NodeFieldState::flag_type, Node const*> DirtyStateListenerT;
 
             /** Destructor */
             virtual ~Node();
@@ -140,13 +141,13 @@ namespace gadget
              * a property of the node changes.
              * @param listener The listener to add.
              */
-            void registerListener(DirtyStateListener* listener);
+            void registerListener(DirtyStateListenerT* listener);
 
             /**
              * Removes a dirty state listener from this node.
              * @param listener The listener to remove.
              */
-            void unregisterListener(DirtyStateListener* listener);
+            void unregisterListener(DirtyStateListenerT* listener);
 
             /**
              * Marks the node dirty by setting the DirtyChildEntity flag.
@@ -199,7 +200,7 @@ namespace gadget
             Node* m_parent;
             NodeCollection m_children;
             ParameterCollection m_parameters;
-            std::list<DirtyStateListener*> m_listeners;
+            std::list<DirtyStateListenerT*> m_listeners;
             bool m_isOnline;
             bool m_isMounted;
             mutable NodeFieldState m_state;

@@ -1,3 +1,15 @@
 build/*
 *.tmp
 documentation/~$ber+ Documentation.docx
+/libember/.idea/.name
+/libember/.idea/encodings.xml
+/libember/.idea/libember.iml
+/libember/.idea/misc.xml
+/libember/.idea/modules.xml
+/libember/.idea/workspace.xml
+/libs101/.idea/.name
+/libs101/.idea/encodings.xml
+/libs101/.idea/libs101.iml
+/libs101/.idea/misc.xml
+/libs101/.idea/modules.xml
+/libs101/.idea/workspace.xml

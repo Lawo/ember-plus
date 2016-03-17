@@ -65,11 +65,12 @@ void StringView::updateUi()
     if (m_parameter->dirtyState().isSet(::gadget::ParameterField::SubscriptionCount))
     {
         auto const subscriptions = m_parameter->subscribers();
-        auto stream = std::stringstream();
+        std::unique_ptr<std::stringstream> stream;
+        stream.reset( new std::stringstream());
         auto const suffix = subscriptions != 1 ? "subscribers" : "subscriber";
-        stream << "Streaming (" << subscriptions << " " << suffix << ")";
+        *stream.get() << "Streaming (" << subscriptions << " " << suffix << ")";
 
-        m_view->streamingGroupBox->setTitle(QString::fromStdString(stream.str()));
+        m_view->streamingGroupBox->setTitle(QString::fromStdString(stream->str()));
     }
 }
 

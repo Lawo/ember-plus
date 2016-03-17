@@ -31,7 +31,7 @@ namespace gadget
 
     void StreamManager::RandomValueGenerator::visit(StringParameter* parameter)
     {
-        auto const length = std::min(4U, parameter->maxLength());
+        auto const length = std::min(4U, (unsigned int)parameter->maxLength());
         auto value = std::string(length, ' ');
         for (auto i = 0U; i < length; ++i)
         {

@@ -1,0 +1,3 @@
+#project(tinyember)
+add_subdirectory(TinyEmberPlus)
+add_subdirectory(TinyEmberPlusRouter/TinyEmberPlusRouter)

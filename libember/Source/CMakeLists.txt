@@ -1,4 +1,4 @@
-project(libember_static)
+project(ember)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
 include_directories(../Headers)
 set(${PROJECT_NAME}_INCLUDE_DIRS
@@ -23,4 +23,5 @@ file(GLOB SOURCE_FILES
         glow/*.cpp
         *.cpp)
 
-add_library(${PROJECT_NAME} STATIC ${HEADER_FILES} ${SOURCE_FILES})
+add_library(${PROJECT_NAME}_static STATIC ${HEADER_FILES} ${SOURCE_FILES})
+add_library(${PROJECT_NAME}_shared SHARED ${HEADER_FILES} ${SOURCE_FILES})

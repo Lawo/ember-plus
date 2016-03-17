@@ -1,8 +1,6 @@
 #ifndef __TINYEMBER_GADGET_DIRTYSTATE_H
 #define __TINYEMBER_GADGET_DIRTYSTATE_H
 
-#include <cstring>
-
 namespace gadget
 {
     /** Forward declarations */
@@ -21,14 +19,14 @@ namespace gadget
     template<typename FlagType>
     struct DirtyState
     {
-        //template<typename FlagType>
-        friend bool operator == <>(DirtyState<FlagType> const& x, DirtyState<FlagType> const& y);
+        template<typename FlagType>
+        friend bool operator ==(DirtyState<FlagType> const& x, DirtyState<FlagType> const& y);
 
-        //template<typename FlagType>
-        friend bool operator != <>(DirtyState<FlagType> const& x, DirtyState<FlagType> const& y);
+        template<typename FlagType>
+        friend bool operator !=(DirtyState<FlagType> const& x, DirtyState<FlagType> const& y);
 
         public:
-            typedef size_t value_type;
+            typedef std::size_t value_type;
             typedef FlagType flag_type;
 
             /** 

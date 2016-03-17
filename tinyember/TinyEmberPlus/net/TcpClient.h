@@ -1,7 +1,7 @@
 #ifndef __TINYEMBER_NET_TCPCLIENT_H
 #define __TINYEMBER_NET_TCPCLIENT_H
 
-#include <QTcpSocket>
+#include <QtNetwork\qtcpsocket.h>
 
 namespace net
 {

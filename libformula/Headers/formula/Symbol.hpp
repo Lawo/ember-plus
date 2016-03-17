@@ -14,7 +14,7 @@ namespace libformula
     struct Symbol
     {
         public:
-            typedef /*typename*/ InputIterator const_iterator;
+            typedef typename InputIterator const_iterator;
             typedef std::size_t index_type;
 
             /**

@@ -114,13 +114,13 @@ namespace libformula { namespace util
                 case SymbolType::IntegerValue:
                 {
                     std::stringstream stream;
-                    stream << "long " << symbol.template toValueType<long_type>();//c++03
+                    stream << "long " << symbol.toValueType<long_type>();
                     return stream.str();
                 }
                 case SymbolType::RealValue:
                 {
                     std::stringstream stream;
-                    stream << "real " << symbol.template toValueType<real_type>();//c++03
+                    stream << "real " << symbol.toValueType<real_type>();
                     return stream.str();
                 }
                 default:

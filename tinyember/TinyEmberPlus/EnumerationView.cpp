@@ -14,7 +14,7 @@ EnumerationView::EnumerationView(QWidget* parent, gadget::EnumParameter* paramet
     m_view->valueComboBox->blockSignals(true);
 
     auto streamFormats = util::StreamFormatConverter();
-    for(auto& entry : streamFormats)
+    for each(auto& entry in streamFormats)
     {
         auto const text = QString::fromStdString(entry.second);
         m_view->streamFormatBox->addItem(text);
@@ -138,13 +138,11 @@ void EnumerationView::updateUi()
     if (m_parameter->dirtyState().isSet(::gadget::ParameterField::SubscriptionCount))
     {
         auto const subscriptions = m_parameter->subscribers();
-        // GCC 4.8 specific fix bug 54316
-        std::unique_ptr<std::stringstream> stream;
-        stream.reset( new std::stringstream());
+        auto stream = std::stringstream();
         auto const suffix = subscriptions != 1 ? "subscribers" : "subscriber";
-        *stream.get() << "Streaming (" << subscriptions << " " << suffix << ")";
+        stream << "Streaming (" << subscriptions << " " << suffix << ")";
 
-        m_view->streamingGroupBox->setTitle(QString::fromStdString(stream->str()));
+        m_view->streamingGroupBox->setTitle(QString::fromStdString(stream.str()));
     }
 }
 

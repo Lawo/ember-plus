@@ -14,7 +14,7 @@ namespace gadget
 /**
  * A view which can be used to edit an enumeration parameter.
  */
-class EnumerationView : public QFrame, gadget::Parameter::DirtyStateListenerT
+class EnumerationView : public QFrame, gadget::Parameter::DirtyStateListener
 {
     Q_OBJECT
     public:

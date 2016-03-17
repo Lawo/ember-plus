@@ -14,7 +14,7 @@ namespace gadget
 /**
  * A view displaying the properties of a real parameter.
  */
-class RealView : public QFrame, gadget::Parameter::DirtyStateListenerT
+class RealView : public QFrame, gadget::Parameter::DirtyStateListener
 {
     Q_OBJECT
     public:

@@ -2,8 +2,7 @@
 #define __TINYEMBER_NET_TCPSERVER_H
 
 #include <vector>
-#include <QTcpServer>
-#include <QApplication>
+#include <QtNetwork/qtcpserver.h>
 #include <qmutex.h>
 #include <qthread.h>
 

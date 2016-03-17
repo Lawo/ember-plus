@@ -4,7 +4,7 @@
 namespace gadget
 {
     /** Forward declarations */
-    //class Parameter;
+    class Parameter;
     class BooleanParameter;
     class EnumParameter;
     class StringParameter;

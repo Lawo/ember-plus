@@ -13,7 +13,7 @@ namespace gadget
     {
         public:
             typedef typename DirtyState<FlagType>::flag_type flag_type;
-            typedef /*typename */ ObjectType object_type;
+            typedef typename ObjectType object_type;
 
             /** Destructor */
             virtual ~DirtyStateListener();

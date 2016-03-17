@@ -1,12 +1,12 @@
 #include <algorithm>
 #include <iostream>
-#include <ember/Ember.hpp>
-#include <s101/CommandType.hpp>
-#include <s101/Dtd.hpp>
-#include <s101/PackageFlag.hpp>
-#include <s101/StreamEncoder.hpp>
-#include <s101/MessageType.hpp>
-#include <QHostAddress>
+#include <ember\Ember.hpp>
+#include <s101\CommandType.hpp>
+#include <s101\Dtd.hpp>
+#include <s101\PackageFlag.hpp>
+#include <s101\StreamEncoder.hpp>
+#include <s101\MessageType.hpp>
+#include <qhostaddress.h>
 #include "Consumer.h"
 #include "ProviderInterface.h"
 

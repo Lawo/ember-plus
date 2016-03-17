@@ -17,7 +17,7 @@ namespace serialization { namespace detail
      */
     class GadgetTreeWriter 
     {
-        friend class serialization::Archive;
+        friend class Archive;
         typedef libember::util::OctetStream OctetStream;
         public:
             typedef OctetStream::const_iterator const_iterator;
@@ -50,6 +50,7 @@ namespace serialization { namespace detail
 
             /** Destructor */
             ~GadgetTreeWriter();
+
             /**
              * Recursively writes a node and all of its parameters and child nodes.
              * @param node The node to encode.

@@ -2,7 +2,7 @@
 #define __TINYEMBER_GADGET_PARAMETERFACTORY_H
 
 #include "../Types.h"
-#include "Node.h"
+
 namespace gadget
 {
     /** Forward declarations */
@@ -11,7 +11,7 @@ namespace gadget
     class IntegerParameter;
     class StringParameter;
     class RealParameter;
-    //class Node;
+    class Node;
     
     /**
      * Factory class which is able to create parameter instances for the default implementations.

@@ -14,7 +14,7 @@ namespace gadget
 /**
  * A view which can be used to edit a boolean parameter.
  */
-class BooleanView : public QFrame, gadget::Parameter::DirtyStateListenerT
+class BooleanView : public QFrame, gadget::Parameter::DirtyStateListener
 {
     Q_OBJECT
     public:

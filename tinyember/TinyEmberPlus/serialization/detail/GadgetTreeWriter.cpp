@@ -40,12 +40,12 @@ namespace serialization { namespace detail
         auto const& params = node->parameters();
         auto children = transform->children();
 
-        for(auto param : params)
+        for each(auto param in params)
         {
             write(param, children);
         }
 
-        for(auto child : nodes)
+        for each(auto child in nodes)
         {
             write(child, children);
         }

@@ -1,17 +1,16 @@
 #include "ConsumerRequestProcessor.h"
-#include "../gadget/Node.h"
-#include "../gadget/BooleanParameter.h"
-#include "../gadget/EnumParameter.h"
-#include "../gadget/IntegerParameter.h"
-#include "../gadget/RealParameter.h"
-#include "../gadget/StringParameter.h"
-//#include "../gadget/util/EntityPath.h"
-#include "../gadget/util/EntityPath.ipp"
+#include "..\gadget\Node.h"
+#include "..\gadget\BooleanParameter.h"
+#include "..\gadget\EnumParameter.h"
+#include "..\gadget\IntegerParameter.h"
+#include "..\gadget\RealParameter.h"
+#include "..\gadget\StringParameter.h"
+#include "..\gadget\util\EntityPath.h"
 #include "ConsumerProxy.h"
-#include "util/NodeConverter.h"
-#include "util/ParameterConverter.h"
-#include <ember/Ember.hpp>
-#include "../gadget/util/EntityPath.ipp"
+#include "util\NodeConverter.h"
+#include "util\ParameterConverter.h"
+#include <ember\Ember.hpp>
+
 using namespace libember;
 using namespace gadget::util;
 
@@ -111,7 +110,7 @@ namespace glow
             
             if (children != nullptr)
             {
-                for(auto& child : *children)
+                for each(auto& child in *children)
                 {
                     auto const type = libember::ber::Type::fromTag(child.typeTag());
                     switch(type.value())
@@ -197,7 +196,7 @@ namespace glow
                 if (behavior == ResponseBehavior::ForceQualifiedContainer 
                 || (context.isQualifiedRequest() && behavior != ResponseBehavior::ForceExpandedContainer))
                 {
-                    for(auto child : nodes)
+                    for each(auto child in nodes)
                     {
                         if(child->isMounted())
                         {
@@ -205,7 +204,7 @@ namespace glow
                         }
                     }
 
-                    for(auto parameter : parameters)
+                    for each(auto parameter in parameters)
                     {
                         util::ParameterConverter::createQualified(response, parameter, parameterFlags.value);
                     }
@@ -215,11 +214,11 @@ namespace glow
                     auto local = util::NodeConverter::createStructured(response, node);
                     auto container = local->children();
 
-                    for(auto parameter : parameters)
+                    for each(auto parameter in parameters)
                     {
                         util::ParameterConverter::create(container, parameter, parameterFlags.value);
                     }
-                    for(auto child : nodes)
+                    for each(auto child in nodes)
                     {
                         util::NodeConverter::create(container, child, nodeFlags.value);
                     }
@@ -275,7 +274,7 @@ namespace glow
             auto children = request->children();
             if (children != nullptr)
             {
-                for(auto& child : *children)
+                for each(auto& child in *children)
                 {
                     auto const type = libember::ber::Type::fromTag(child.typeTag());
                     switch(type.value())

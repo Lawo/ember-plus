@@ -70,6 +70,54 @@ namespace libformula { namespace util
         {
         };
 
+        /**
+         * Long to long conversion.
+         */
+        template<>
+        struct ItemCast<ValueStackItemType::Long, long_type>
+        {
+            static long_type as(ValueStackItem const& item)
+            {
+                return item.m_long;
+            }
+        };
+
+        /**
+         * Long to real conversion
+         */
+        template<>
+        struct ItemCast<ValueStackItemType::Long, real_type>
+        {
+            static real_type as(ValueStackItem const& item)
+            {
+                return static_cast<real_type>(item.m_long);
+            }
+        };
+
+        /**
+         * Real to long conversion
+         */
+        template<>
+        struct ItemCast<ValueStackItemType::Real, long_type>
+        {
+            static long_type as(ValueStackItem const& item)
+            {
+                return static_cast<long_type>(item.m_real);
+            }
+        };
+
+        /**
+         * Real to real conversion
+         */
+        template<>
+        struct ItemCast<ValueStackItemType::Real, real_type>
+        {
+            static real_type as(ValueStackItem const& item)
+            {
+                return item.m_real;
+            }
+        };
+
         public:
             /**
              * Initializes a new ValueStackItem with the specified long value.
@@ -133,46 +181,6 @@ namespace libformula { namespace util
                 long_type m_long;
                 real_type m_real;
             };
-    };
-
-    /**
-     * Long to long conversion.
-     */
-    template<>
-    struct ValueStackItem::ItemCast<ValueStackItemType::Long, long_type> {
-        static long_type as(ValueStackItem const &item) {
-            return item.m_long;
-        }
-    };
-
-    /**
-     * Long to real conversion
-     */
-    template<>
-    struct ValueStackItem::ItemCast<ValueStackItemType::Long, real_type> {
-        static real_type as(ValueStackItem const &item) {
-            return static_cast<real_type>(item.m_long);
-        }
-    };
-
-    /**
-     * Real to long conversion
-     */
-    template<>
-    struct ValueStackItem::ItemCast<ValueStackItemType::Real, long_type> {
-        static long_type as(ValueStackItem const &item) {
-            return static_cast<long_type>(item.m_real);
-        }
-    };
-
-    /**
-     * Real to real conversion
-     */
-    template<>
-    struct ValueStackItem::ItemCast<ValueStackItemType::Real, real_type> {
-        static real_type as(ValueStackItem const &item) {
-            return item.m_real;
-        }
     };
 
     /**

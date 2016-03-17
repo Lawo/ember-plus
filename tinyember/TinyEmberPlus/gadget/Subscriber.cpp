@@ -33,7 +33,7 @@ namespace gadget
     {
         addRef();
         auto subscribables = m_subscribables;
-        for(auto subscribable : subscribables)
+        for each(auto subscribable in subscribables)
         {
             subscribable->unsubscribe(this);
         }
@@ -129,7 +129,7 @@ namespace gadget
     {
         auto const isSubscribed = this->isSubscribed();
         auto subscribers = m_subscribers;
-        for(auto subscriber : subscribers)
+        for each(auto subscriber in subscribers)
         {
             subscriber->unsubscribe(this);
             subscriber->releaseRef();

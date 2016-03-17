@@ -1,4 +1,4 @@
-#include <formula/TermCompiler.hpp>
+#include <formula\TermCompiler.hpp>
 #include <sstream>
 #include <cstdio>
 #include "ParameterTypeVisitor.h"
@@ -41,7 +41,7 @@ namespace gadget
         if (m_format.size() > 0)
         {
             char buffer[256];
-            snprintf(buffer, 256, m_format.c_str(), value);
+            sprintf_s(buffer, 256, m_format.c_str(), value);
             return std::string(buffer);
         }
         else

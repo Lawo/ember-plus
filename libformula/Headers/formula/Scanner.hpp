@@ -2,7 +2,6 @@
 #define __LIBFORMULA_SCANNER_HPP
 
 #include <string>
-#include <cstring>
 #include "ErrorStack.hpp"
 #include "Symbol.hpp"
 
@@ -15,14 +14,14 @@ namespace libformula
     template<typename InputIterator>
     class Scanner
     {
-            typedef std::vector<Symbol<InputIterator> > SymbolContainerT;
+        typedef std::vector<Symbol<InputIterator>> SymbolContainer;
         public:
-            typedef typename SymbolContainerT::value_type value_type;
-            typedef typename SymbolContainerT::size_type size_type;
-            typedef typename SymbolContainerT::const_iterator const_iterator;
-            typedef typename SymbolContainerT::reference reference;
-            typedef typename SymbolContainerT::const_reference const_reference;
-            typedef InputIterator input_type;
+            typedef typename SymbolContainer::value_type value_type;
+            typedef typename SymbolContainer::size_type size_type;
+            typedef typename SymbolContainer::const_iterator const_iterator;
+            typedef typename SymbolContainer::reference reference;
+            typedef typename SymbolContainer::const_reference const_reference;
+            typedef typename InputIterator input_type;
 
             /**
              * Initializes a new scanner which immediately scans the provided term.
@@ -91,7 +90,7 @@ namespace libformula
             InputIterator scanNumber(InputIterator first, InputIterator last, ErrorStack *error);
 
         private:
-            SymbolContainerT m_symbols;
+            SymbolContainer m_symbols;
     };
 
     /**************************************************************************
@@ -190,47 +189,47 @@ namespace libformula
 
         *cursor = 0;
 
-        if (strncmp(buffer, "sqrt", 4) == 0)
+        if (std::strncmp(buffer, "sqrt", 4) == 0)
             push(value_type(SymbolType::Sqrt, size(), first, it));
-        else if (strncmp(buffer, "log", 3) == 0)
+        else if (std::strncmp(buffer, "log", 3) == 0)
             push(value_type(SymbolType::Log, size(), first, it));
-        else if (strncmp(buffer, "ln", 2) == 0)
+        else if (std::strncmp(buffer, "ln", 2) == 0)
             push(value_type(SymbolType::Ln, size(), first, it));
-        else if (strncmp(buffer, "round", 5) == 0)
+        else if (std::strncmp(buffer, "round", 5) == 0)
             push(value_type(SymbolType::Round, size(), first, it));
-        else if (strncmp(buffer, "ceil", 4) == 0)
+        else if (std::strncmp(buffer, "ceil", 4) == 0)
             push(value_type(SymbolType::Ceil, size(), first, it));
-        else if (strncmp(buffer, "int", 3) == 0)
+        else if (std::strncmp(buffer, "int", 3) == 0)
             push(value_type(SymbolType::Int, size(), first, it));
-        else if (strncmp(buffer, "float", 5) == 0)
+        else if (std::strncmp(buffer, "float", 5) == 0)
             push(value_type(SymbolType::Float, size(), first, it));
-        else if (strncmp(buffer, "exp", 3) == 0)
+        else if (std::strncmp(buffer, "exp", 3) == 0)
             push(value_type(SymbolType::Exp, size(), first, it));
-        else if (strncmp(buffer, "sinh", 4) == 0)
+        else if (std::strncmp(buffer, "sinh", 4) == 0)
             push(value_type(SymbolType::Sinh, size(), first, it));
-        else if (strncmp(buffer, "sin", 3) == 0)
+        else if (std::strncmp(buffer, "sin", 3) == 0)
             push(value_type(SymbolType::Sin, size(), first, it));
-        else if (strncmp(buffer, "cosh", 4) == 0)
+        else if (std::strncmp(buffer, "cosh", 4) == 0)
             push(value_type(SymbolType::Cosh, size(), first, it));
-        else if (strncmp(buffer, "cos", 3) == 0)
+        else if (std::strncmp(buffer, "cos", 3) == 0)
             push(value_type(SymbolType::Cos, size(), first, it));
-        else if (strncmp(buffer, "tanh", 4) == 0)
+        else if (std::strncmp(buffer, "tanh", 4) == 0)
             push(value_type(SymbolType::Tanh, size(), first, it));
-        else if (strncmp(buffer, "tan", 3) == 0)
+        else if (std::strncmp(buffer, "tan", 3) == 0)
             push(value_type(SymbolType::Tan, size(), first, it));
-        else if (strncmp(buffer, "atan", 4) == 0)
+        else if (std::strncmp(buffer, "atan", 4) == 0)
             push(value_type(SymbolType::Atan, size(), first, it));
-        else if (strncmp(buffer, "acos", 4) == 0)
+        else if (std::strncmp(buffer, "acos", 4) == 0)
             push(value_type(SymbolType::Acos, size(), first, it));
-        else if (strncmp(buffer, "asin", 4) == 0)
+        else if (std::strncmp(buffer, "asin", 4) == 0)
             push(value_type(SymbolType::Asin, size(), first, it));
-        else if (strncmp(buffer, "pi", 2) == 0)
+        else if (std::strncmp(buffer, "pi", 2) == 0)
             push(value_type(SymbolType::Pi, size(), first, it));
-        else if (strncmp(buffer, "e", 1) == 0)
+        else if (std::strncmp(buffer, "e", 1) == 0)
             push(value_type(SymbolType::E, size(), first, it));
-        else if (strncmp(buffer, "abs", 3) == 0)
+        else if (std::strncmp(buffer, "abs", 3) == 0)
             push(value_type(SymbolType::Abs, size(), first, it));
-        else if (strncmp(buffer, "sgn", 3) == 0)
+        else if (std::strncmp(buffer, "sgn", 3) == 0)
             push(value_type(SymbolType::Sgn, size(), first, it));
         else
         {

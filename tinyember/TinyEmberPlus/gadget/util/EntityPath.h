@@ -125,8 +125,8 @@ namespace gadget { namespace util
      * @param last Reference to the first element beyond the buffer storing the path.
      * @return The node that matches the specified path or nullptr, if the node could not be found.
      */
-    template<typename InputIterator>
-    inline Node const* resolve_node(Node const* root, InputIterator first, InputIterator last)
+    /*template<typename InputIterator>
+    Node const* resolve_node(Node const* root, InputIterator first, InputIterator last);/*
     {
         auto const size = std::distance(first, last);
         if (root->number() == *first)
@@ -147,7 +147,7 @@ namespace gadget { namespace util
         }
 
         return nullptr;
-    }
+    }*/
 
     /**
      * Searches for a child node which is identified by the provided pair of iterators which
@@ -157,8 +157,8 @@ namespace gadget { namespace util
      * @param last Reference to the first element beyond the buffer storing the path.
      * @return The node that matches the specified path or nullptr, if the node could not be found.
      */
-    template<typename InputIterator>
-    inline Node* resolve_node(Node* root, InputIterator first, InputIterator last)
+    /*template<typename InputIterator>
+    Node* resolve_node(Node* root, InputIterator first, InputIterator last);/*
     {
         auto const size = std::distance(first, last);
         auto node = static_cast<Node*>(root);
@@ -190,7 +190,7 @@ namespace gadget { namespace util
         }
 
         return node;
-    }
+    }*/
 
     /**
      * Searches for a parameter which is identified by the provided pair of iterators which
@@ -200,8 +200,8 @@ namespace gadget { namespace util
      * @param last Reference to the first element beyond the buffer storing the path.
      * @return The parameter that matches the specified path or nullptr, if the parameter could not be found.
      */
-    template<typename InputIterator>
-    inline Parameter const* resolve_parameter(Node const* root, InputIterator first, InputIterator last)
+    /*template<typename InputIterator>
+    Parameter const* resolve_parameter(Node const* root, InputIterator first, InputIterator last);/*
     {
         auto const size = std::distance(first, last);
         if (size > 0)
@@ -222,7 +222,7 @@ namespace gadget { namespace util
         }
 
         return nullptr;
-    }
+    }*/
 
     /**
      * Searches for a parameter which is identified by the provided pair of iterators which
@@ -232,8 +232,8 @@ namespace gadget { namespace util
      * @param last Reference to the first element beyond the buffer storing the path.
      * @return The parameter that matches the specified path or nullptr, if the parameter could not be found.
      */
-    template<typename InputIterator>
-    inline Parameter* resolve_parameter(Node* root, InputIterator first, InputIterator last)
+    /*template<typename InputIterator>
+    Parameter* resolve_parameter(Node* root, InputIterator first, InputIterator last);/*
     {
         auto const size = std::distance(first, last);
         if (size > 0)
@@ -254,7 +254,7 @@ namespace gadget { namespace util
         }
 
         return nullptr;
-    }
+    }*/
 }
 }
 

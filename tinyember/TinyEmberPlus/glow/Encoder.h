@@ -3,11 +3,11 @@
 
 #include <vector>
 #include <ember/Ember.hpp>
-#include <s101\CommandType.hpp>
-#include <s101\Dtd.hpp>
-#include <s101\MessageType.hpp>
-#include <s101\PackageFlag.hpp>
-#include <s101\StreamEncoder.hpp>
+#include <s101/CommandType.hpp>
+#include <s101/Dtd.hpp>
+#include <s101/MessageType.hpp>
+#include <s101/PackageFlag.hpp>
+#include <s101/StreamEncoder.hpp>
 
 namespace glow
 {
@@ -197,7 +197,7 @@ namespace glow
         auto encoder = libs101::StreamEncoder<unsigned char>();
         auto const version = libember::glow::GlowDtd::version();
         auto const isEmpty = first == last;
-        auto const flags = unsigned char(
+        auto const flags = (unsigned char)(
                 (m_isFirstPacket ? libs101::PackageFlag::FirstPackage : 0) |
                 (isLastPacket ? libs101::PackageFlag::LastPackage : 0) |
                 (isEmpty ? libs101::PackageFlag::EmptyPackage : 0)

@@ -1,7 +1,9 @@
+#include "../../gadget/ParameterTypeVisitor.h"
+#include "../../gadget/StreamFormat.h"
 #include <map>
 #include <memory>
 #include <vector>
-#include <ember\Ember.hpp>
+#include <ember/Ember.hpp>
 #include "StreamConverter.h"
 #include "../../gadget/BooleanParameter.h"
 #include "../../gadget/EnumParameter.h"
@@ -10,6 +12,239 @@
 #include "../../gadget/StringParameter.h"
 #include "../../gadget/Parameter.h"
 #include "../../gadget/StreamManager.h"
+
+/**************************************************************************
+ * Inline implementation                                                  *
+ **************************************************************************/
+
+template<typename OutputIterator>
+inline void glow::util::StreamConverter::encode(long long value, gadget::StreamFormat const& format, OutputIterator first, OutputIterator last)
+{
+    auto const type = format.value();
+    switch(type)
+    {
+        case gadget::StreamFormat::UnsignedInt8:
+            *first = (value & 0xFF);
+            break;
+
+        case gadget::StreamFormat::UnsignedInt16BigEndian:
+            *first++ = ((value >> 8) & 0xFF);
+            *first++ = ((value >> 0) & 0xFF);
+            break;
+
+        case gadget::StreamFormat::UnsignedInt16LittleEndian:
+            *first++ = ((value >> 0) & 0xFF);
+            *first++ = ((value >> 8) & 0xFF);
+            break;
+
+        case gadget::StreamFormat::UnsignedInt32BigEndian:
+            *first++ = ((value >> 24) & 0xFF);
+            *first++ = ((value >> 16) & 0xFF);
+            *first++ = ((value >>  8) & 0xFF);
+            *first++ = ((value >>  0) & 0xFF);
+            break;
+
+        case gadget::StreamFormat::UnsignedInt32LittleEndian:
+            *first++ = ((value >>  0) & 0xFF);
+            *first++ = ((value >>  8) & 0xFF);
+            *first++ = ((value >> 16) & 0xFF);
+            *first++ = ((value >> 24) & 0xFF);
+            break;
+
+        case gadget::StreamFormat::UnsignedInt64BigEndian:
+            *first++ = ((value >> 56) & 0xFF);
+            *first++ = ((value >> 48) & 0xFF);
+            *first++ = ((value >> 40) & 0xFF);
+            *first++ = ((value >> 32) & 0xFF);
+            *first++ = ((value >> 24) & 0xFF);
+            *first++ = ((value >> 16) & 0xFF);
+            *first++ = ((value >>  8) & 0xFF);
+            *first++ = ((value >>  0) & 0xFF);
+            break;
+
+        case gadget::StreamFormat::UnsignedInt64LittleEndian:
+            *first++ = ((value >>  0) & 0xFF);
+            *first++ = ((value >>  8) & 0xFF);
+            *first++ = ((value >> 16) & 0xFF);
+            *first++ = ((value >> 24) & 0xFF);
+            *first++ = ((value >> 32) & 0xFF);
+            *first++ = ((value >> 40) & 0xFF);
+            *first++ = ((value >> 48) & 0xFF);
+            *first++ = ((value >> 56) & 0xFF);
+            break;
+
+        case gadget::StreamFormat::SignedInt8:
+            *first = (value & 0xFF);
+            break;
+
+        case gadget::StreamFormat::SignedInt16BigEndian:
+            *first++ = ((value >> 8) & 0xFF);
+            *first++ = ((value >> 0) & 0xFF);
+            break;
+
+        case gadget::StreamFormat::SignedInt16LittleEndian:
+            *first++ = ((value >> 0) & 0xFF);
+            *first++ = ((value >> 8) & 0xFF);
+            break;
+
+        case gadget::StreamFormat::SignedInt32BigEndian:
+            *first++ = ((value >> 24) & 0xFF);
+            *first++ = ((value >> 16) & 0xFF);
+            *first++ = ((value >>  8) & 0xFF);
+            *first++ = ((value >>  0) & 0xFF);
+            break;
+
+        case gadget::StreamFormat::SignedInt32LittleEndian:
+            *first++ = ((value >>  0) & 0xFF);
+            *first++ = ((value >>  8) & 0xFF);
+            *first++ = ((value >> 16) & 0xFF);
+            *first++ = ((value >> 24) & 0xFF);
+            break;
+
+        case gadget::StreamFormat::SignedInt64BigEndian:
+            *first++ = ((value >> 56) & 0xFF);
+            *first++ = ((value >> 48) & 0xFF);
+            *first++ = ((value >> 40) & 0xFF);
+            *first++ = ((value >> 32) & 0xFF);
+            *first++ = ((value >> 24) & 0xFF);
+            *first++ = ((value >> 16) & 0xFF);
+            *first++ = ((value >>  8) & 0xFF);
+            *first++ = ((value >>  0) & 0xFF);
+            break;
+
+        case gadget::StreamFormat::SignedInt64LittleEndian:
+            *first++ = ((value >>  0) & 0xFF);
+            *first++ = ((value >>  8) & 0xFF);
+            *first++ = ((value >> 16) & 0xFF);
+            *first++ = ((value >> 24) & 0xFF);
+            *first++ = ((value >> 32) & 0xFF);
+            *first++ = ((value >> 40) & 0xFF);
+            *first++ = ((value >> 48) & 0xFF);
+            *first++ = ((value >> 56) & 0xFF);
+            break;
+
+        case gadget::StreamFormat::IeeeFloat32BigEndian:
+            *first++ = ((value >> 24) & 0xFF);
+            *first++ = ((value >> 16) & 0xFF);
+            *first++ = ((value >>  8) & 0xFF);
+            *first++ = ((value >>  0) & 0xFF);
+            break;
+
+        case gadget::StreamFormat::IeeeFloat32LittleEndian:
+            *first++ = ((value >>  0) & 0xFF);
+            *first++ = ((value >>  8) & 0xFF);
+            *first++ = ((value >> 16) & 0xFF);
+            *first++ = ((value >> 24) & 0xFF);
+            break;
+
+        case gadget::StreamFormat::IeeeFloat64BigEndian:
+            *first++ = ((value >> 56) & 0xFF);
+            *first++ = ((value >> 48) & 0xFF);
+            *first++ = ((value >> 40) & 0xFF);
+            *first++ = ((value >> 32) & 0xFF);
+            *first++ = ((value >> 24) & 0xFF);
+            *first++ = ((value >> 16) & 0xFF);
+            *first++ = ((value >>  8) & 0xFF);
+            *first++ = ((value >>  0) & 0xFF);
+            break;
+
+        case gadget::StreamFormat::IeeeFloat64LittleEndian:
+            *first++ = ((value >>  0) & 0xFF);
+            *first++ = ((value >>  8) & 0xFF);
+            *first++ = ((value >> 16) & 0xFF);
+            *first++ = ((value >> 24) & 0xFF);
+            *first++ = ((value >> 32) & 0xFF);
+            *first++ = ((value >> 40) & 0xFF);
+            *first++ = ((value >> 48) & 0xFF);
+            *first++ = ((value >> 56) & 0xFF);
+            break;
+    }
+}
+
+template<typename OutputIterator>
+inline void glow::util::StreamConverter::encode(double value, gadget::StreamFormat const& format, OutputIterator first, OutputIterator last)
+{
+    if (format.value() == gadget::StreamFormat::IeeeFloat64BigEndian
+    ||  format.value() == gadget::StreamFormat::IeeeFloat64LittleEndian)
+    {
+        long long transformed = *(reinterpret_cast<long long*>(&value));
+        encode(transformed, format, first, last);
+    }
+    else
+    {
+        auto valueAsSingle = static_cast<float>(value);
+        long long transformed = *(reinterpret_cast<long*>(&valueAsSingle));
+        encode(transformed, format, first, last);
+    }
+}
+
+template<typename OutputIterator>
+inline void glow::util::StreamConverter::encode(gadget::Parameter* parameter, OutputIterator first, OutputIterator last)
+{
+    glow::util::StreamConverter::OctetStreamEntryEncoder<OutputIterator>::encode(parameter, first, last);
+}
+
+template<typename OutputIterator>
+inline void glow::util::StreamConverter::OctetStreamEntryEncoder<OutputIterator>::encode(gadget::Parameter* parameter, OutputIterator first, OutputIterator last)
+{
+    auto volatile encoder = OctetStreamEntryEncoder(parameter, first, last);
+}
+
+template<typename OutputIterator>
+glow::util::StreamConverter::OctetStreamEntryEncoder<OutputIterator>::OctetStreamEntryEncoder(gadget::Parameter* parameter, OutputIterator first, OutputIterator last)
+    : m_first(first)
+    , m_last(last)
+{
+    parameter->accept(*this);
+}
+
+template<typename OutputIterator>
+void glow::util::StreamConverter::OctetStreamEntryEncoder<OutputIterator>::visit(gadget::BooleanParameter* parameter)
+{
+    /* Booleans are not supported */
+}
+
+template<typename OutputIterator>
+void glow::util::StreamConverter::OctetStreamEntryEncoder<OutputIterator>::visit(gadget::EnumParameter* parameter)
+{
+    if (parameter->hasStreamDescriptor())
+    {
+        long long const value = parameter->index();
+        gadget::StreamFormat const format = parameter->streamDescriptor()->format();
+        auto const offset = parameter->streamDescriptor()->offset();
+        glow::util::StreamConverter::encode(value, format, m_first + offset, m_last);
+    }
+}
+
+template<typename OutputIterator>
+void glow::util::StreamConverter::OctetStreamEntryEncoder<OutputIterator>::visit(gadget::StringParameter* parameter)
+{
+    /* Strings are not supported for octet streams */
+}
+
+template<typename OutputIterator>
+void glow::util::StreamConverter::OctetStreamEntryEncoder<OutputIterator>::visit(gadget::IntegerParameter* parameter)
+{
+    if (parameter->hasStreamDescriptor())
+    {
+        long long const value = parameter->value();
+        auto const format = parameter->streamDescriptor()->format();
+        auto const offset = parameter->streamDescriptor()->offset();
+        glow::util::StreamConverter::encode(value, format, m_first + offset, m_last);
+    }
+}
+
+template<typename OutputIterator>
+void glow::util::StreamConverter::OctetStreamEntryEncoder<OutputIterator>::visit(gadget::RealParameter* parameter)
+{
+    if (parameter->hasStreamDescriptor())
+    {
+        auto const value = parameter->value();
+        auto const format = parameter->streamDescriptor()->format();
+        auto const offset = parameter->streamDescriptor()->offset();
+        glow::util::StreamConverter::encode(value, format, m_first + offset, m_last);
+    }
+}
 
 using namespace ::libember::glow;
 
@@ -38,12 +273,12 @@ namespace glow { namespace util
 
     void StreamConverter::SingleStreamEntryFactory::visit(gadget::IntegerParameter* parameter)
     {
-        m_entry = new GlowStreamEntry(parameter->streamIdentifier(), parameter->value());
+        m_entry = new GlowStreamEntry((int)parameter->streamIdentifier(), static_cast<int>(parameter->value()));
     }
 
     void StreamConverter::SingleStreamEntryFactory::visit(gadget::RealParameter* parameter)
     {
-        m_entry = new GlowStreamEntry(parameter->streamIdentifier(), parameter->value());
+        m_entry = new GlowStreamEntry((int)parameter->streamIdentifier(), (gadget::RealParameter::value_type)parameter->value());
     }
 
     StreamConverter::SingleStreamEntryFactory::SingleStreamEntryFactory(gadget::Parameter* parameter)
@@ -78,7 +313,7 @@ namespace glow { namespace util
         }
 
         {
-            for each(auto& pair in dic)
+            for(auto& pair : dic)
             {
                 auto& streams = *pair.second;
                 auto const identifier = pair.first;
@@ -128,7 +363,7 @@ namespace glow { namespace util
                         auto const size = offset + format.size();
 
                         auto buffer = std::vector<unsigned char>(size, 0x00);
-                        for each(auto parameter in streams)
+                        for(auto parameter : streams)
                         {
                             encode(parameter, std::begin(buffer), std::end(buffer));
                             parameter->clearDirtyState();

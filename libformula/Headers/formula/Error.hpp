@@ -3,7 +3,7 @@
 
 #include "ErrorType.hpp"
 #include "Symbol.hpp"
-#include "util\Util.hpp"
+#include "util/Util.hpp"
 
 namespace libformula
 {

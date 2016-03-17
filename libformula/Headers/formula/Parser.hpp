@@ -270,13 +270,13 @@ namespace libformula
 
             if (type.value() == SymbolType::IntegerValue)
             {
-                auto const value = symbol.toValueType<long_type>() * sign;
+                auto const value = symbol.template toValueType<long_type>() * sign;
                 code->emitPushLong(value);
                 move();
             }
             else if (type.value() == SymbolType::RealValue)
             {
-                auto const value = symbol.toValueType<real_type>() * sign;
+                auto const value = symbol.template toValueType<real_type>() * sign;
                 code->emitPushReal(value);
                 move();
             }

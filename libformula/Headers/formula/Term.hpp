@@ -5,7 +5,7 @@
 #include "ErrorStack.hpp"
 #include "Scanner.hpp"
 #include "Parser.hpp"
-#include "util\CodeInterpreter.hpp"
+#include "util/CodeInterpreter.hpp"
 #include <memory>
 
 namespace libformula

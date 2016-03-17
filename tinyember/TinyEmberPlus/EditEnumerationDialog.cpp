@@ -1,5 +1,5 @@
 #include <algorithm>
-#include "util\StringConverter.h"
+#include "util/StringConverter.h"
 #include "EditEnumerationDialog.h"
 
 

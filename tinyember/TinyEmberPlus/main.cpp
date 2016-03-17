@@ -13,8 +13,8 @@
 #include <QtGui/QApplication>
 
 #include "gadget/Subscriber.h"
-#include "glow\ConsumerProxy.h"
-#include "glow\ProviderInterface.h"
+#include "glow/ConsumerProxy.h"
+#include "glow/ProviderInterface.h"
 
 /**
  * The LocalScheduler class marshalls asynchronous consumer request to the ui thread,

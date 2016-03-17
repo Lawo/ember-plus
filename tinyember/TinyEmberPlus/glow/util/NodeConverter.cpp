@@ -1,7 +1,7 @@
-#include <ember\Ember.hpp>
+#include <ember/Ember.hpp>
 #include "../../gadget/Node.h"
 #include "../../gadget/util/EntityPath.h"
-#include "glow/ConsumerProxy.h"
+#include "../../glow/ConsumerProxy.h"
 #include "NodeConverter.h"
 
 using namespace gadget;

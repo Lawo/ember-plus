@@ -17,9 +17,11 @@
 
 std::string identOf(std::string baseStr, int n)
 {
-   auto stream = std::stringstream();
-   stream << baseStr << "-" << n;
-   return stream.str();
+   //auto stream = std::stringstream();
+   std::unique_ptr<std::stringstream> stream;
+   stream.reset( new std::stringstream());
+   *stream.get() << baseStr << "-" << n;
+   return stream->str();
 }
 
 void createOneToN(model::Node* router, int nodeNumber, glow::Dispatcher* dispatcher)
@@ -45,7 +47,7 @@ void createOneToN(model::Node* router, int nodeNumber, glow::Dispatcher* dispatc
    auto matrix = new model::matrix::OneToNLinearMatrix(2, oneToN, "matrix", dispatcher, signalCount, signalCount);
    matrix->setLabelsPath(labels->path());
 
-   for each(auto target in matrix->targets())
+   for(auto target : matrix->targets())
    {
       auto source = matrix->getSource(target->number());
       matrix->connect(target, &source, &source + 1, nullptr);
@@ -92,11 +94,11 @@ void createNToN(model::Node* router, int nodeNumber, glow::Dispatcher* dispatche
 
    auto const gainParameterNumber = 1;
 
-   for each(auto target in targets)
+   for(auto target : targets)
    {
       auto targetNode = new model::Node(target->number(), xpointParams, identOf("t", target->number()));
 
-      for each(auto source in sources)
+      for(auto source : sources)
       {
          auto sourceNode = new model::Node(source->number(), targetNode, identOf("s", source->number()));
          (new model::IntegerParameter(gainParameterNumber, sourceNode, "gain", dispatcher, -128, 15))->setValue(0);
@@ -108,7 +110,7 @@ void createNToN(model::Node* router, int nodeNumber, glow::Dispatcher* dispatche
    matrix->setParametersPath(parameters->path());
    matrix->setGainParameterNumber(gainParameterNumber);
 
-   for each(auto target in matrix->targets())
+   for(auto target : matrix->targets())
    {
       if(target->number() % 2 == 0)
       {
@@ -141,7 +143,7 @@ void createDynamic(model::Node* router, int nodeNumber, glow::Dispatcher* dispat
    auto matrix = new model::matrix::DynamicNToNLinearMatrix(2, dynamic, "matrix", dispatcher, signalCount, signalCount);
    matrix->setLabelsPath(labels->path());
 
-   for each(auto target in matrix->targets())
+   for(auto target : matrix->targets())
    {
       auto source = matrix->getSource(target->number());
       matrix->connect(target, &source, &source + 1, nullptr);
@@ -310,9 +312,10 @@ int main(int argc, char *argv[])
 {
     QCoreApplication a(argc, argv);
 
-    auto dispatcher = glow::Dispatcher(&a, TCP_PORT);
-    auto root = createTree(&dispatcher);
-    dispatcher.setRoot(root);
+    std::unique_ptr<glow::Dispatcher> dispatcher;
+    dispatcher.reset(new glow::Dispatcher(&a, TCP_PORT));
+    auto root = createTree(dispatcher.get());
+    dispatcher->setRoot(root);
 
     // Task will be deleted by the application object.
     auto task = new Task(&a);

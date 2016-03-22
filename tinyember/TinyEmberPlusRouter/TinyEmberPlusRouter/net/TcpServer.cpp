@@ -33,7 +33,7 @@ namespace net
     void TcpServer::write(QByteArray const& array)
     {
         QMutexLocker const lock(&m_mutex);
-        for each(auto client in m_clients)
+        for(auto client : m_clients)
         {
             client->write(array);
         }

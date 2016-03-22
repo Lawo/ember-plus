@@ -1,11 +1,11 @@
 #include <iostream>
-#include <QtCore>
+#include <qt4/QtCore/QtCore>
 #include <ember/glow/GlowNodeFactory.hpp>
-#include <s101\CommandType.hpp>
-#include <s101\Dtd.hpp>
-#include <s101\PackageFlag.hpp>
-#include <s101\StreamEncoder.hpp>
-#include <s101\MessageType.hpp>
+#include <s101/CommandType.hpp>
+#include <s101/Dtd.hpp>
+#include <s101/PackageFlag.hpp>
+#include <s101/StreamEncoder.hpp>
+#include <s101/MessageType.hpp>
 #include "Dispatcher.h"
 #include "Encoder.h"
 #include "Consumer.h"
@@ -49,7 +49,7 @@ namespace glow
    {
       auto encoder = Encoder::createEmberMessage(glow);
 
-      for each(auto packet in encoder)
+      for(auto packet : encoder)
          write(packet.begin(), packet.end());
    }
 

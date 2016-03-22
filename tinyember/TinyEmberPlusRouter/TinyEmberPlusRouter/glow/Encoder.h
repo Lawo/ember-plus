@@ -190,7 +190,7 @@ namespace glow
         auto encoder = libs101::StreamEncoder<unsigned char>();
         auto const version = libember::glow::GlowDtd::version();
         auto const isEmpty = first == last;
-        auto const flags = unsigned char(
+        auto const flags = (unsigned char)(
                 (m_isFirstPacket ? libs101::PackageFlag::FirstPackage : 0) |
                 (isLastPacket ? libs101::PackageFlag::LastPackage : 0) |
                 (isEmpty ? libs101::PackageFlag::EmptyPackage : 0)

@@ -1,7 +1,7 @@
 #ifndef __TINYEMBERROUTER_GLOW_DISPATCHER_H
 #define __TINYEMBERROUTER_GLOW_DISPATCHER_H
 
-#include <QtCore>
+#include <qt4/QtCore/QtCore>
 #include "../model/NotificationSink.h"
 #include "../net/TcpClientFactory.h"
 #include "../net/TcpServer.h"
@@ -11,6 +11,7 @@
 
 namespace glow
 {
+    class Consumer;
    /**
      * The application's Ember+ front-end.
      * Aggregates net::TcpServer to listen for inbound connections from consumers.
@@ -20,8 +21,8 @@ namespace glow
      */
    class Dispatcher : public model::NotificationSink, public net::TcpClientFactory
    {
-      friend class Consumer;
-      friend class Walker;
+      friend class glow::Consumer;
+      friend class glow::Walker;
 
 
    // ========================================================

@@ -15,7 +15,7 @@ namespace model
 
    Element::~Element()
    {
-      for each(auto child in *this)
+      for(auto child : *this)
          delete child;
 
       if(m_path != nullptr)
@@ -74,7 +74,7 @@ namespace model
 
    Element* Element::findChild(int number) const
    {
-      for each(auto child in m_children)
+      for(auto child : m_children)
       {
          if(child->number() == number)
             return child;

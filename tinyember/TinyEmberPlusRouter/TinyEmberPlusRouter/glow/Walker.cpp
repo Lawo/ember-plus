@@ -192,7 +192,7 @@ namespace glow
 
    void Walker::walkStreamCollection(libember::glow::GlowStreamCollection const* glow)
    {
-      for each(libember::dom::Node const& ember in *glow)
+      for(libember::dom::Node const& ember : *glow)
       {
          auto streamEntry = dynamic_cast<libember::glow::GlowStreamEntry const*>(&ember);
 

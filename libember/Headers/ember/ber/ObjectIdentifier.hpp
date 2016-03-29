@@ -74,6 +74,18 @@ namespace libember { namespace ber
             size_type size() const;
 
             /**
+             * Returns reference to the first element of this oid.
+             * @return Reference to the first element of this oid.
+             */
+            reference front();
+
+            /**
+             * Returns reference to the first element of this oid.
+             * @return Reference to the first element of this oid.
+             */
+            const_reference front() const;
+
+            /**
              * Returns reference to the last element of this oid.
              * @return Reference to the last element of this oid.
              */
@@ -86,7 +98,7 @@ namespace libember { namespace ber
             const_reference back() const;
 
             /**
-             * Return a const iterator referring to the first identifier contained 
+             * Return a const iterator referring to the first identifier contained
              * within this object identifier
              * @return A const iterator referring to the first identifier contained
              *      within this object identifier.
@@ -104,7 +116,7 @@ namespace libember { namespace ber
             const_iterator end() const;
 
             /**
-             * Return an iterator referring to the first identifier contained 
+             * Return an iterator referring to the first identifier contained
              * within this object identifier
              * @return An iterator referring to the first identifier contained
              *      within this object identifier.
@@ -141,16 +153,26 @@ namespace libember { namespace ber
             value_type operator[](int index) const;
 
             /**
-             * Appends the given element value to the end of the oid. 
+             * Appends the given element value to the end of the oid.
              * @param value The value to append to the oid.
              */
             void push_back(value_type value);
 
             /**
-             * Prepends the given element value to the beginning of the oid. 
+             * Prepends the given element value to the beginning of the oid.
              * @param value The value to prepend to the oid.
              */
             void push_front(value_type value);
+
+            /**
+             * Removes the last element of the oid.
+             */
+            void pop_back();
+
+            /**
+             * Removes the first element of the oid.
+             */
+            void pop_front();
 
         private:
 #ifdef _MSC_VER
@@ -225,12 +247,12 @@ namespace libember { namespace ber
         return m_items.end();
     }
 
-    inline ObjectIdentifier::iterator ObjectIdentifier::begin() 
+    inline ObjectIdentifier::iterator ObjectIdentifier::begin()
     {
         return m_items.begin();
     }
 
-    inline ObjectIdentifier::iterator ObjectIdentifier::end() 
+    inline ObjectIdentifier::iterator ObjectIdentifier::end()
     {
         return m_items.end();
     }
@@ -238,6 +260,16 @@ namespace libember { namespace ber
     inline ObjectIdentifier::size_type ObjectIdentifier::size() const
     {
         return m_items.size();
+    }
+
+    inline ObjectIdentifier::reference ObjectIdentifier::front()
+    {
+        return m_items.front();
+    }
+
+    inline ObjectIdentifier::const_reference ObjectIdentifier::front() const
+    {
+        return m_items.front();
     }
 
     inline ObjectIdentifier::reference ObjectIdentifier::back()
@@ -248,6 +280,16 @@ namespace libember { namespace ber
     inline ObjectIdentifier::const_reference ObjectIdentifier::back() const
     {
         return m_items.back();
+    }
+
+    inline void ObjectIdentifier::pop_back()
+    {
+        return m_items.pop_back();
+    }
+
+    inline void ObjectIdentifier::pop_front()
+    {
+        return m_items.pop_front();
     }
 
     inline bool operator!=(ObjectIdentifier const& lhs, ObjectIdentifier const& rhs)

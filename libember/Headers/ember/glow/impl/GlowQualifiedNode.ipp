@@ -49,7 +49,7 @@ namespace libember { namespace glow
     GlowQualifiedNode::GlowQualifiedNode(ber::ObjectIdentifier const& path, ber::Tag const& tag)
         : GlowNodeBase(GlowType::QualifiedNode, tag, GlowTags::Node::Contents(), GlowTags::Node::Children())
     {
-        insert(begin(), new dom::VariantLeaf(GlowTags::Node::Number(), path));
+        insert(begin(), new dom::VariantLeaf(GlowTags::QualifiedNode::Path(), path));
     }
 
     LIBEMBER_INLINE

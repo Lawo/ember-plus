@@ -55,12 +55,10 @@ typedef struct SGlowOutput
      */
    int packageCount;
 
-#ifdef _DEBUG
    /**
      * private field
      */
    int positionHint;
-#endif
 } GlowOutput;
 
 #ifdef _DEBUG

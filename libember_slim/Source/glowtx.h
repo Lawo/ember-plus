@@ -20,6 +20,12 @@
 #ifndef __LIBEMBER_SLIM_GLOWTX_H
 #define __LIBEMBER_SLIM_GLOWTX_H
 
+#ifdef LIBEMBER_DLL_EXPORTS
+#define LIBRARY_API __declspec(dllexport)
+#else
+#define LIBRARY_API
+#endif
+
 #include "glow.h"
 
 // ====================================================================
@@ -74,7 +80,7 @@ typedef struct SGlowOutput
   * @param slotId the slot id as described in the
   *     framing protocol documentation.
   */
-void glowOutput_init(GlowOutput *pThis,
+LIBRARY_API void glowOutput_init(GlowOutput *pThis,
                      byte *pMemory,
                      unsigned int size,
                      byte slotId);
@@ -87,7 +93,7 @@ void glowOutput_init(GlowOutput *pThis,
   * @param isLastPackage if true, the EmberFramingFlag_LastPackage flag
   *     is set in the header.
   */
-void glowOutput_beginPackage(GlowOutput *pThis, bool isLastPackage);
+LIBRARY_API void glowOutput_beginPackage(GlowOutput *pThis, bool isLastPackage);
 
 /**
   * Begins a new package by writing the framing header and the start tag
@@ -97,7 +103,7 @@ void glowOutput_beginPackage(GlowOutput *pThis, bool isLastPackage);
   * @param isLastPackage if true, the EmberFramingFlag_LastPackage flag
   *     is set in the header.
   */
-void glowOutput_beginStreamPackage(GlowOutput *pThis, bool isLastPackage);
+LIBRARY_API void glowOutput_beginStreamPackage(GlowOutput *pThis, bool isLastPackage);
 
 /**
   * Finishes the framed package. After this function
@@ -109,7 +115,7 @@ void glowOutput_beginStreamPackage(GlowOutput *pThis, bool isLastPackage);
   * @note you need to call this function when you have
   *     written a complete glow tree to @p pThis.
   */
-unsigned int glowOutput_finishPackage(GlowOutput *pThis);
+LIBRARY_API unsigned int glowOutput_finishPackage(GlowOutput *pThis);
 
 
 // ====================================================================
@@ -131,7 +137,7 @@ unsigned int glowOutput_finishPackage(GlowOutput *pThis);
   *     number. May be NULL only if pathLength is 0.
   * @param pathLength number of node numbers at @p pPath.
   */
-void glow_writeQualifiedNode(GlowOutput *pOut,
+LIBRARY_API void glow_writeQualifiedNode(GlowOutput *pOut,
                              const GlowNode *pNode,
                              GlowFieldFlags fields,
                              const berint *pPath,
@@ -150,7 +156,7 @@ void glow_writeQualifiedNode(GlowOutput *pOut,
   *     number. May be NULL only if pathLength is 0.
   * @param pathLength number of node numbers at @p pPath.
   */
-void glow_writeQualifiedParameter(GlowOutput *pOut,
+LIBRARY_API void glow_writeQualifiedParameter(GlowOutput *pOut,
                                   const GlowParameter *pParameter,
                                   GlowFieldFlags fields,
                                   const berint *pPath,
@@ -179,7 +185,7 @@ void glow_writeQualifiedParameter(GlowOutput *pOut,
   *     - parentType = GlowElementType_Matrix:
   *       command is nested in a QualifiedMatrix
   */
-void glow_writeQualifiedCommand(GlowOutput *pOut,
+LIBRARY_API void glow_writeQualifiedCommand(GlowOutput *pOut,
                                 const GlowCommand *pCommand,
                                 const berint *pPath,
                                 int pathLength,
@@ -190,7 +196,7 @@ void glow_writeQualifiedCommand(GlowOutput *pOut,
   * @param pOut pointer to the output to be used for in-memory framing.
   * @param pEntry pointer to GlowStreamEntry object to write.
   */
-void glow_writeStreamEntry(GlowOutput *pOut, const GlowStreamEntry *pEntry);
+LIBRARY_API void glow_writeStreamEntry(GlowOutput *pOut, const GlowStreamEntry *pEntry);
 
 /**
   * Writes a Matrix to the passed GlowOutput, encoding @p pMatrix
@@ -208,7 +214,7 @@ void glow_writeStreamEntry(GlowOutput *pOut, const GlowStreamEntry *pEntry);
   *     This is encoded in the "path" field of the QualifiedMatrix.
   * @param pathLength number of node numbers at @p pPath.
   */
-void glow_writeQualifiedMatrix(GlowOutput *pOut,
+LIBRARY_API void glow_writeQualifiedMatrix(GlowOutput *pOut,
                                const GlowMatrix *pMatrix,
                                GlowFieldFlags fields,
                                const berint *pPath,
@@ -223,7 +229,7 @@ void glow_writeQualifiedMatrix(GlowOutput *pOut,
   *     This is encoded in the "path" field of the QualifiedMatrix.
   * @param matrixPathLength number of node numbers at @p pPath.
   */
-void glow_writeTargetsPrefix(GlowOutput *pOut,
+LIBRARY_API void glow_writeTargetsPrefix(GlowOutput *pOut,
                              const berint *pMatrixPath,
                              int matrixPathLength);
 
@@ -233,7 +239,7 @@ void glow_writeTargetsPrefix(GlowOutput *pOut,
   * @param pOut pointer to the output to be used for in-memory framing.
   * @param pConnection pointer to the target to write.
   */
-void glow_writeTarget(GlowOutput *pOut, const GlowSignal *pTarget);
+LIBRARY_API void glow_writeTarget(GlowOutput *pOut, const GlowSignal *pTarget);
 
 /**
   * Writes the suffix for the "targets" sequence of a QualifiedMatrix.
@@ -241,7 +247,7 @@ void glow_writeTarget(GlowOutput *pOut, const GlowSignal *pTarget);
   * Only valid if preceeded by a call to glow_writeTargetsPrefix.
   * @param pOut pointer to the output to be used for in-memory framing.
   */
-void glow_writeTargetsSuffix(GlowOutput *pOut);
+LIBRARY_API void glow_writeTargetsSuffix(GlowOutput *pOut);
 
 /**
   * Writes the prefix for the "sources" sequence of a QualifiedMatrix.
@@ -252,7 +258,7 @@ void glow_writeTargetsSuffix(GlowOutput *pOut);
   *     This is encoded in the "path" field of the QualifiedMatrix.
   * @param matrixPathLength number of node numbers at @p pPath.
   */
-void glow_writeSourcesPrefix(GlowOutput *pOut,
+LIBRARY_API void glow_writeSourcesPrefix(GlowOutput *pOut,
                              const berint *pMatrixPath,
                              int matrixPathLength);
 
@@ -262,7 +268,7 @@ void glow_writeSourcesPrefix(GlowOutput *pOut,
   * @param pOut pointer to the output to be used for in-memory framing.
   * @param pConnection pointer to the source to write.
   */
-void glow_writeSource(GlowOutput *pOut, const GlowSignal *pSource);
+LIBRARY_API void glow_writeSource(GlowOutput *pOut, const GlowSignal *pSource);
 
 /**
   * Writes the suffix for the "sources" sequence of a QualifiedMatrix.
@@ -270,7 +276,7 @@ void glow_writeSource(GlowOutput *pOut, const GlowSignal *pSource);
   * Only valid if preceeded by a call to glow_writeSourcesPrefix.
   * @param pOut pointer to the output to be used for in-memory framing.
   */
-void glow_writeSourcesSuffix(GlowOutput *pOut);
+LIBRARY_API void glow_writeSourcesSuffix(GlowOutput *pOut);
 
 /**
   * Writes the prefix for the "connections" sequence of a QualifiedMatrix.
@@ -281,7 +287,7 @@ void glow_writeSourcesSuffix(GlowOutput *pOut);
   *     This is encoded in the "path" field of the QualifiedMatrix.
   * @param matrixPathLength number of node numbers at @p pPath.
   */
-void glow_writeConnectionsPrefix(GlowOutput *pOut,
+LIBRARY_API void glow_writeConnectionsPrefix(GlowOutput *pOut,
                                  const berint *pMatrixPath,
                                  int matrixPathLength);
 
@@ -291,7 +297,7 @@ void glow_writeConnectionsPrefix(GlowOutput *pOut,
   * @param pOut pointer to the output to be used for in-memory framing.
   * @param pConnection pointer to the connection to write.
   */
-void glow_writeConnection(GlowOutput *pOut, const GlowConnection *pConnection);
+LIBRARY_API void glow_writeConnection(GlowOutput *pOut, const GlowConnection *pConnection);
 
 /**
   * Writes the suffix for the "connections" sequence of a QualifiedMatrix.
@@ -299,7 +305,7 @@ void glow_writeConnection(GlowOutput *pOut, const GlowConnection *pConnection);
   * Only valid if preceeded by a call to glow_writeConnectionsPrefix.
   * @param pOut pointer to the output to be used for in-memory framing.
   */
-void glow_writeConnectionsSuffix(GlowOutput *pOut);
+LIBRARY_API void glow_writeConnectionsSuffix(GlowOutput *pOut);
 
 /**
   * Writes a Function to the passed GlowOutput, encoding @p pFunction
@@ -315,7 +321,7 @@ void glow_writeConnectionsSuffix(GlowOutput *pOut);
   *     This is encoded in the "path" field of the QualifiedFunction.
   * @param pathLength number of node numbers at @p pPath.
   */
-void glow_writeQualifiedFunction(GlowOutput *pOut,
+LIBRARY_API void glow_writeQualifiedFunction(GlowOutput *pOut,
                                  const GlowFunction *pFunction,
                                  GlowFieldFlags fields,
                                  const berint *pPath,
@@ -328,6 +334,6 @@ void glow_writeQualifiedFunction(GlowOutput *pOut,
   * @param pInvocationResult pointer to the InvocationResult to write.
   * @return the number of bytes written to the output.
   */
-unsigned int glow_writeInvocationResultPackage(GlowOutput *pOut, const GlowInvocationResult *pRoot);
+LIBRARY_API unsigned int glow_writeInvocationResultPackage(GlowOutput *pOut, const GlowInvocationResult *pRoot);
 
 #endif//__LIBEMBER_SLIM_GLOWTX_H

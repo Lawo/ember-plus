@@ -20,6 +20,12 @@
 #ifndef __LIBEMBER_SLIM_EMBERPLUS_H
 #define __LIBEMBER_SLIM_EMBERPLUS_H
 
+#ifdef LIBEMBER_DLL_EXPORTS
+#define LIBRARY_API __declspec(dllexport)
+#else
+#define LIBRARY_API
+#endif
+
 /**
   * The version of the library implementation as an uint16.
   * The upper byte is the major version number.
@@ -40,7 +46,7 @@
   * @param allocMemory the callback to invoke for memory allocation.
   * @param freeMemory the callback to invoke to free memory.
   */
-void ember_init(throwError_t throwError,
+LIBRARY_API void ember_init(throwError_t throwError,
                 failAssertion_t failAssertion,
                 allocMemory_t allocMemory,
                 freeMemory_t freeMemory);

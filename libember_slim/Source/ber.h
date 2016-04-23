@@ -20,6 +20,12 @@
 #ifndef __LIBEMBER_SLIM_BER_H
 #define __LIBEMBER_SLIM_BER_H
 
+#ifdef LIBEMBER_DLL_EXPORTS
+#define LIBRARY_API __declspec(dllexport)
+#else
+#define LIBRARY_API
+#endif
+
 #include "bertypes.h"
 #include "bertag.h"
 #include "berio.h"
@@ -37,21 +43,21 @@
   * @param pTag pointer to the tag to get the length of.
   * @return the encoded length of the tag in bytes.
   */
-int ber_getTagLength(const BerTag *pTag);
+LIBRARY_API int ber_getTagLength(const BerTag *pTag);
 
 /**
   * Get the encoded length of @p value in bytes.
   * @param value value to get the length of.
   * @return the encoded length of the value in bytes.
   */
-int ber_getIntegerLength(berint value);
+LIBRARY_API int ber_getIntegerLength(berint value);
 
 /**
   * Get the encoded length of @p value in bytes.
   * @param value value to get the length of.
   * @return the encoded length of the value in bytes.
   */
-int ber_getLongLength(berlong value);
+LIBRARY_API int ber_getLongLength(berlong value);
 
 /**
   * Get the encoded length of a tag,length tuple in bytes.
@@ -60,7 +66,7 @@ int ber_getLongLength(berlong value);
   *      the tag,length tuple.
   * @return the encoded length of the tag,length tuple in bytes.
   */
-int ber_getHeaderLength(const BerTag *pTag, int length);
+LIBRARY_API int ber_getHeaderLength(const BerTag *pTag, int length);
 
 /**
   * Get the encoded length of a multi-byte unsigned int32
@@ -68,21 +74,21 @@ int ber_getHeaderLength(const BerTag *pTag, int length);
   * @param value the unsigned int32 to get the length of.
   * @return the encoded length of the multi-byte integer in bytes.
   */
-int ber_getMultiByteIntegerLength(dword value);
+LIBRARY_API int ber_getMultiByteIntegerLength(dword value);
 
 /**
   * Get the encoded length of a zero-terminated character string.
   * @param pValue pointer to the first character of the string.
   * @return the encoded length of the string.
   */
-int ber_getStringLength(pcstr pValue);
+LIBRARY_API int ber_getStringLength(pcstr pValue);
 
 /**
   * Get the encoded length of an integer array encoded as RELATIVE-OID.
   * @param pValue pointer to the first subidentifier of the oid.
   * @return the encoded length of the oid.
   */
-int ber_getRelativeOidLength(const berint *pValue, int count);
+LIBRARY_API int ber_getRelativeOidLength(const berint *pValue, int count);
 
 /**
   * Copies a human-readable name of the passed @p type into the buffer
@@ -91,7 +97,7 @@ int ber_getRelativeOidLength(const berint *pValue, int count);
   * @param bufferLength size of the buffer pointed to by @p pBuffer.
   * @param type the ber type to get the name of.
   */
-void ber_getTypeName(pstr pBuffer, int bufferLength, bertype type);
+LIBRARY_API void ber_getTypeName(pstr pBuffer, int bufferLength, bertype type);
 
 /**
   * Gets a pointer to a human readable, single-letter ber class
@@ -100,7 +106,7 @@ void ber_getTypeName(pstr pBuffer, int bufferLength, bertype type);
   * @return universal:"U", application:"A", etc.
   * @note the returned string must not be freed by the caller.
   */
-pcstr ber_getShortClassName(BerClass berClass);
+LIBRARY_API pcstr ber_getShortClassName(BerClass berClass);
 
 
 // ====================================================================
@@ -117,7 +123,7 @@ pcstr ber_getShortClassName(BerClass berClass);
   * @param pTag pointer to the tag to encode.
   * @return the number of bytes written to @p pOut.
   */
-int ber_encodeTag(BerOutput *pOut, const BerTag *pTag);
+LIBRARY_API int ber_encodeTag(BerOutput *pOut, const BerTag *pTag);
 
 /**
   * Encodes a ber length (as in a TLV) to the passed output.
@@ -125,7 +131,7 @@ int ber_encodeTag(BerOutput *pOut, const BerTag *pTag);
   * @param value the length to encode.
   * @return the number of bytes written to @p pOut.
   */
-int ber_encodeLength(BerOutput *pOut, int value);
+LIBRARY_API int ber_encodeLength(BerOutput *pOut, int value);
 
 /**
   * Encodes a multi-byte unsigned int32 to the passed output.
@@ -133,7 +139,7 @@ int ber_encodeLength(BerOutput *pOut, int value);
   * @param value the unsigned int32 to encode.
   * @return the number of bytes written to @p pOut.
   */
-int ber_encodeMultiByteInteger(BerOutput *pOut, dword value);
+LIBRARY_API int ber_encodeMultiByteInteger(BerOutput *pOut, dword value);
 
 /**
   * Encodes a boolean value to the passed output.
@@ -141,7 +147,7 @@ int ber_encodeMultiByteInteger(BerOutput *pOut, dword value);
   * @param value the boolean value to encode.
   * @return the number of bytes written to @p pOut.
   */
-int ber_encodeBoolean(BerOutput *pOut, bool value);
+LIBRARY_API int ber_encodeBoolean(BerOutput *pOut, bool value);
 
 /**
   * Encodes an int32 value to the passed output.
@@ -152,7 +158,7 @@ int ber_encodeBoolean(BerOutput *pOut, bool value);
   *      prior to calling this function.
   * @return the number of bytes written to @p pOut.
   */
-int ber_encodeInteger(BerOutput *pOut, berint value, int length);
+LIBRARY_API int ber_encodeInteger(BerOutput *pOut, berint value, int length);
 
 /**
   * Encodes a int64 value to the passed output.
@@ -163,7 +169,7 @@ int ber_encodeInteger(BerOutput *pOut, berint value, int length);
   *      prior to calling this function.
   * @return the number of bytes written to @p pOut.
   */
-int ber_encodeLong(BerOutput *pOut, berlong value, int length);
+LIBRARY_API int ber_encodeLong(BerOutput *pOut, berlong value, int length);
 
 /**
   * Encodes a floating-point value to the passed output.
@@ -171,7 +177,7 @@ int ber_encodeLong(BerOutput *pOut, berlong value, int length);
   * @param value the floating-point value to encode.
   * @return the number of bytes written to @p pOut.
   */
-int ber_encodeReal(BerOutput *pOut, double value);
+LIBRARY_API int ber_encodeReal(BerOutput *pOut, double value);
 
 /**
   * Encodes a zero-terminated string to the passed output.
@@ -179,7 +185,7 @@ int ber_encodeReal(BerOutput *pOut, double value);
   * @param value the zero-terminated string to encode.
   * @return the number of bytes written to @p pOut.
   */
-int ber_encodeString(BerOutput *pOut, pcstr pValue);
+LIBRARY_API int ber_encodeString(BerOutput *pOut, pcstr pValue);
 
 /**
   * Encodes an octet string value to the passed output.
@@ -190,7 +196,7 @@ int ber_encodeString(BerOutput *pOut, pcstr pValue);
   *     pointed to by @p pValue.
   * @return the number of bytes written to @p pOut.
   */
-int ber_encodeOctetString(BerOutput *pOut, const byte *pValue, int length);
+LIBRARY_API int ber_encodeOctetString(BerOutput *pOut, const byte *pValue, int length);
 
 /**
   * Encodes an relative oid value to the passed output.
@@ -200,7 +206,7 @@ int ber_encodeOctetString(BerOutput *pOut, const byte *pValue, int length);
   * @param count number of subidentifiers at @p pValue.
   * @return the number of bytes written to @p pOut.
   */
-int ber_encodeRelativeOid(BerOutput *pOut, const berint *pValue, int count);
+LIBRARY_API int ber_encodeRelativeOid(BerOutput *pOut, const berint *pValue, int count);
 
 
 
@@ -215,14 +221,14 @@ int ber_encodeRelativeOid(BerOutput *pOut, const berint *pValue, int count);
   * @param pIn pointer to the input to decode from.
   * @return the decoded tag.
   */
-BerTag ber_decodeTag(BerInput *pIn);
+LIBRARY_API BerTag ber_decodeTag(BerInput *pIn);
 
 /**
   * Decodes a ber length (as in a TLV) from the passed input.
   * @param pIn pointer to the input to decode from.
   * @return the decoded length.
   */
-int ber_decodeLength(BerInput *pIn);
+LIBRARY_API int ber_decodeLength(BerInput *pIn);
 
 /**
   * Decodes a multi-byte unsigned int32 from the passed input.
@@ -231,14 +237,14 @@ int ber_decodeLength(BerInput *pIn);
   *     the number of bytes consumed. May be NULL.
   * @return the decoded multi-byte integer.
   */
-dword ber_decodeMultiByteInteger(BerInput *pIn, int *pConsumedBytesCount);
+LIBRARY_API dword ber_decodeMultiByteInteger(BerInput *pIn, int *pConsumedBytesCount);
 
 /**
   * Decodes a boolean value from the passed input.
   * @param pIn pointer to the input to decode from.
   * @return the decoded boolean value.
   */
-bool ber_decodeBoolean(BerInput *pIn);
+LIBRARY_API bool ber_decodeBoolean(BerInput *pIn);
 
 /**
   * Decodes an int32 value from the passed input.
@@ -247,7 +253,7 @@ bool ber_decodeBoolean(BerInput *pIn);
   *     the encoding.
   * @return the decoded integer.
   */
-berint ber_decodeInteger(BerInput *pIn, int length);
+LIBRARY_API berint ber_decodeInteger(BerInput *pIn, int length);
 
 /**
   * Decodes an int64 value from the passed input.
@@ -256,7 +262,7 @@ berint ber_decodeInteger(BerInput *pIn, int length);
   *     the encoding.
   * @return the decoded integer.
   */
-berlong ber_decodeLong(BerInput *pIn, int length);
+LIBRARY_API berlong ber_decodeLong(BerInput *pIn, int length);
 
 /**
   * Decodes a floating-point value from the passed input.
@@ -265,7 +271,7 @@ berlong ber_decodeLong(BerInput *pIn, int length);
   *     the encoding.
   * @return the decoded floating-point value.
   */
-double ber_decodeReal(BerInput *pIn, int length);
+LIBRARY_API double ber_decodeReal(BerInput *pIn, int length);
 
 /**
   * Decodes a character string from the passed input into
@@ -278,7 +284,7 @@ double ber_decodeReal(BerInput *pIn, int length);
   *     @p pDest must point to a buffer big enough to hold
   *     this number of bytes.
   */
-void ber_decodeString(BerInput *pIn, pstr pDest, int length);
+LIBRARY_API void ber_decodeString(BerInput *pIn, pstr pDest, int length);
 
 /**
   * Decodes an octet string from the passed input.
@@ -289,7 +295,7 @@ void ber_decodeString(BerInput *pIn, pstr pDest, int length);
   *     @p pDest must point to a buffer big enough to hold
   *     this number of bytes.
   */
-void ber_decodeOctetString(BerInput *pIn, byte *pDest, int length);
+LIBRARY_API void ber_decodeOctetString(BerInput *pIn, byte *pDest, int length);
 
 /**
   * Decodes a relative oid value from the passed input.
@@ -301,6 +307,6 @@ void ber_decodeOctetString(BerInput *pIn, byte *pDest, int length);
   *     the encoding.
   * @return the number of decoded subidentifiers.
   */
-int ber_decodeRelativeOid(BerInput *pIn, berint *pDest, int destSize, int length);
+LIBRARY_API int ber_decodeRelativeOid(BerInput *pIn, berint *pDest, int destSize, int length);
 
 #endif

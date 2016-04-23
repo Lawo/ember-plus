@@ -20,6 +20,12 @@
 #ifndef __LIBEMBER_SLIM_BERREADER_H
 #define __LIBEMBER_SLIM_BERREADER_H
 
+#ifdef LIBEMBER_DLL_EXPORTS
+#define LIBRARY_API __declspec(dllexport)
+#else
+#define LIBRARY_API
+#endif
+
 #include "bertypes.h"
 #include "bytebuffer.h"
 #include "bertag.h"
@@ -69,21 +75,21 @@ typedef struct SBerReader
   * BerReader instance are invoked.
   * @param pThis pointer to the object to process.
   */
-void berReader_init(BerReader *pThis);
+LIBRARY_API void berReader_init(BerReader *pThis);
 
 /**
   * Frees all memory allocated by a BerReader instance.
   * BerReader instance are invoked.
   * @param pThis pointer to the object to process.
   */
-void berReader_free(BerReader *pThis);
+LIBRARY_API void berReader_free(BerReader *pThis);
 
 /**
   * Resets a BerReader instance.
   * Clears all fields except the buffer.
   * @param pThis pointer to the object to process.
   */
-void berReader_reset(BerReader *pThis);
+LIBRARY_API void berReader_reset(BerReader *pThis);
 
 /**
   * Gets the value of the current TLTLV as a boolean.
@@ -91,7 +97,7 @@ void berReader_reset(BerReader *pThis);
   * @param pThis pointer to the object to process.
   * @return the decoded value.
   */
-bool berReader_getBoolean(const BerReader *pThis);
+LIBRARY_API bool berReader_getBoolean(const BerReader *pThis);
 
 /**
   * Gets the value of the current TLTLV as an int32.
@@ -99,7 +105,7 @@ bool berReader_getBoolean(const BerReader *pThis);
   * @param pThis pointer to the object to process.
   * @return the decoded value.
   */
-berint berReader_getInteger(const BerReader *pThis);
+LIBRARY_API berint berReader_getInteger(const BerReader *pThis);
 
 /**
   * Gets the value of the current TLTLV as a int64.
@@ -107,7 +113,7 @@ berint berReader_getInteger(const BerReader *pThis);
   * @param pThis pointer to the object to process.
   * @return the decoded value.
   */
-berlong berReader_getLong(const BerReader *pThis);
+LIBRARY_API berlong berReader_getLong(const BerReader *pThis);
 
 /**
   * Gets the value of the current TLTLV as a double.
@@ -115,7 +121,7 @@ berlong berReader_getLong(const BerReader *pThis);
   * @param pThis pointer to the object to process.
   * @return the decoded value.
   */
-double berReader_getReal(const BerReader *pThis);
+LIBRARY_API double berReader_getReal(const BerReader *pThis);
 
 /**
   * Gets the value of the current TLTLV as a zero-terminated utf-8 string.
@@ -127,7 +133,7 @@ double berReader_getReal(const BerReader *pThis);
   * @note Currently libember_slim only supports the ASCII character
   *     range (0 through 127).
   */
-void berReader_getString(const BerReader *pThis, pstr pDest, int size);
+LIBRARY_API void berReader_getString(const BerReader *pThis, pstr pDest, int size);
 
 /**
   * Gets the value of the current TLTLV as a byte array.
@@ -138,7 +144,7 @@ void berReader_getString(const BerReader *pThis, pstr pDest, int size);
   *     of @p size characters will be stored at @p pDest.
   * @return number of decoded octets.
   */
-int berReader_getOctetString(const BerReader *pThis, byte *pDest, int size);
+LIBRARY_API int berReader_getOctetString(const BerReader *pThis, byte *pDest, int size);
 
 /**
   * Gets the value of the current TLTLV as a an array of integers,
@@ -152,6 +158,6 @@ int berReader_getOctetString(const BerReader *pThis, byte *pDest, int size);
   * @note This function slightly bends the ASN.1 standard and
   *     is subject to be removed.
   */
-int berReader_getRelativeOid(const BerReader *pThis, berint *pDest, int destSize);
+LIBRARY_API int berReader_getRelativeOid(const BerReader *pThis, berint *pDest, int destSize);
 
 #endif

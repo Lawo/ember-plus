@@ -1,5 +1,5 @@
 /*
-   LIBEMBER_SLIM_slim -- ANSI C implementation of the Ember+ Protocol
+   libember_slim -- ANSI C implementation of the Ember+ Protocol
    Copyright (C) 2012-2014  L-S-B Broadcast Technologies GmbH
 
    This library is free software; you can redistribute it and/or
@@ -17,8 +17,8 @@
    Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
-#ifndef __LIBEMBER_AP_H
-#define __LIBEMBER_AP_H
+#ifndef __LIBEMBER_API_H
+#define __LIBEMBER_API_H
 
 /*
  * Preprocessor definitions for generic symbol import/export support
@@ -50,5 +50,5 @@
 #  define LIBEMBER_LOCAL
 #endif
 
-#endif  // __LIBEMBER_AP_H
+#endif  // __LIBEMBER_API_H
 

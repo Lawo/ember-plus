@@ -2,9 +2,9 @@
 #define __TINYEMBERROUTER_NET_TCPSERVER_H
 
 #include <vector>
-#include <QtNetwork/QTcpServer.h>
-#include <qmutex.h>
-#include <qthread.h>
+#include <qt4/QtNetwork/qtcpserver.h>
+#include <qt4/QtCore/qmutex.h>
+#include <qt4/QtCore/qthread.h>
 
 namespace net
 {

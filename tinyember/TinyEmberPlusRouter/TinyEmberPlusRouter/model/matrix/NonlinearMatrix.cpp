@@ -16,7 +16,7 @@ namespace model { namespace matrix
 
    Signal* NonlinearMatrix::getTarget(int number) const
    {
-      for each(auto signal in targets())
+      for(auto signal : targets())
       {
          if(signal->number() == number)
             return signal;
@@ -27,7 +27,7 @@ namespace model { namespace matrix
 
    Signal* NonlinearMatrix::getSource(int number) const
    {
-      for each(auto signal in sources())
+      for(auto signal : sources())
       {
          if(signal->number() == number)
             return signal;

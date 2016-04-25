@@ -9,10 +9,10 @@ namespace model { namespace matrix
 
    Matrix::~Matrix()
    {
-      for each(auto signal in m_targets)
+      for(auto signal : m_targets)
          delete signal;
 
-      for each(auto signal in m_sources)
+      for(auto signal : m_sources)
          delete signal;
    }
 }}

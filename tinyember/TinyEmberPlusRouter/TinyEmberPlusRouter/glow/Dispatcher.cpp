@@ -46,7 +46,7 @@ namespace glow
                }
                else
                {
-                  for each(auto child in *parent)
+                  for(auto child : *parent)
                   {
                      auto glowElement = m_dispatcher->elementToGlow(child, glow->dirFieldMask().value(), false);
                      glowRoot->insert(glowRoot->end(), glowElement);
@@ -141,7 +141,7 @@ namespace glow
 
             if(connections != nullptr)
             {
-               for each(libember::dom::Node const& ember in *connections)
+               for(libember::dom::Node const& ember : *connections)
                {
                   auto connection = dynamic_cast<libember::glow::GlowConnection const*>(&ember);
 
@@ -154,7 +154,7 @@ namespace glow
                         auto glowSources = connection->sources();
                         auto sources = std::vector<model::matrix::Signal*>();
 
-                        for each(auto sourceNumber in glowSources)
+                        for(auto sourceNumber : glowSources)
                         {
                            auto source = matrix->getSource(sourceNumber);
 
@@ -264,14 +264,14 @@ namespace glow
 
       if(hasDirField(libember::glow::DirFieldMask::All))
       {
-         for each(auto item in element->arguments())
+         for(auto item : element->arguments())
          {
             auto arguments = glow->arguments();
             auto glowTupleItem = new libember::glow::GlowTupleItemDescription(item.type(), item.name());
             arguments->insert(arguments->end(), glowTupleItem);
          }
 
-         for each(auto item in element->result())
+         for(auto item : element->result())
          {
             auto result = glow->result();
             auto glowTupleItem = new libember::glow::GlowTupleItemDescription(item.type(), item.name());
@@ -311,10 +311,10 @@ namespace glow
             auto glowTargets = glow->targets();
             auto glowSources = glow->sources();
 
-            for each(auto signal in element->targets())
+            for(auto signal : element->targets())
                glowTargets->insert(glowTargets->end(), new libember::glow::GlowTarget(signal->number()));
 
-            for each(auto signal in element->sources())
+            for(auto signal : element->sources())
                glowSources->insert(glowSources->end(), new libember::glow::GlowSource(signal->number()));
          }
       }
@@ -359,7 +359,7 @@ namespace glow
       {
          auto glowConnections = glow->connections();
 
-         for each(auto signal in element->targets())
+         for(auto signal : element->targets())
          {
             auto glowConnection = new libember::glow::GlowConnection(signal->number());
 
@@ -367,7 +367,7 @@ namespace glow
             {
                auto sourceNumbers = std::vector<int>();
 
-               for each(auto source in signal->connectedSources())
+               for(auto source : signal->connectedSources())
                   sourceNumbers.insert(sourceNumbers.end(), source->number());
 
                glowConnection->setSources(libember::ber::ObjectIdentifier(sourceNumbers.begin(), sourceNumbers.end()));
@@ -398,7 +398,7 @@ namespace glow
       auto glowConnection = new libember::glow::GlowConnection(target->number());
 
       auto sourceNumbers = std::vector<int>();
-      for each(auto source in target->connectedSources())
+      for(auto source : target->connectedSources())
          sourceNumbers.insert(sourceNumbers.end(), source->number());
 
       glowConnection->setSources(libember::ber::ObjectIdentifier(sourceNumbers.begin(), sourceNumbers.end()));
@@ -459,7 +459,7 @@ namespace glow
    {
       auto encoder = Encoder::createEmberMessage(glow);
 
-      for each(auto packet in encoder)
+      for(auto packet : encoder)
          m_server.write(packet.begin(), packet.end());
    }
 }

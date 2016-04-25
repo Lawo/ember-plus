@@ -20,12 +20,7 @@
 #ifndef __LIBEMBER_SLIM_GLOW_H
 #define __LIBEMBER_SLIM_GLOW_H
 
-#ifdef LIBEMBER_DLL_EXPORTS
-#define LIBRARY_API __declspec(dllexport)
-#else
-#define LIBRARY_API
-#endif
-
+#include "api.h"
 #include "ember.h"
 
 
@@ -497,7 +492,7 @@ typedef struct SGlowNode
   * Frees all memory allocated by a GlowNode instance.
   * @param pThis pointer to the object to process.
   */
-LIBRARY_API void glowNode_free(GlowNode *pThis);
+LIBEMBER_API void glowNode_free(GlowNode *pThis);
 
 
 /**
@@ -562,7 +557,7 @@ typedef struct SGlowValue
   * @param pThis pointer to the object to process.
   * @param pDest pointer to the source value.
   */
-LIBRARY_API void glowValue_copyFrom(GlowValue *pThis, const GlowValue *pSource);
+LIBEMBER_API void glowValue_copyFrom(GlowValue *pThis, const GlowValue *pSource);
 
 #define glowValue_copyTo(pSource, pDest) glowValue_copyFrom(pDest, pSource)
 
@@ -571,7 +566,7 @@ LIBRARY_API void glowValue_copyFrom(GlowValue *pThis, const GlowValue *pSource);
   * Frees all memory allocated by a GlowValue instance.
   * @param pThis pointer to the object to process.
   */
-LIBRARY_API void glowValue_free(GlowValue *pThis);
+LIBEMBER_API void glowValue_free(GlowValue *pThis);
 
 
 /**
@@ -689,7 +684,7 @@ typedef struct SGlowParameter
   * Frees all memory allocated by a GlowValue instance.
   * @param pThis pointer to the object to process.
   */
-LIBRARY_API void glowParameter_free(GlowParameter *pThis);
+LIBEMBER_API void glowParameter_free(GlowParameter *pThis);
 
 
 /**
@@ -720,7 +715,7 @@ typedef struct SGlowInvocation
   * Frees all memory allocated by a GlowInvocation instance.
   * @param pThis pointer to the object to process.
   */
-LIBRARY_API void glowInvocation_free(GlowInvocation *pThis);
+LIBEMBER_API void glowInvocation_free(GlowInvocation *pThis);
 
 
 /**
@@ -755,7 +750,7 @@ typedef struct SGlowCommand
   * Frees all memory allocated by a GlowCommand instance.
   * @param pThis pointer to the object to process.
   */
-LIBRARY_API void glowCommand_free(GlowCommand *pThis);
+LIBEMBER_API void glowCommand_free(GlowCommand *pThis);
 
 
 /**
@@ -834,7 +829,7 @@ typedef struct SGlowParametersLocation
 /**
   * Returns true if pThis points to a valid (initialized) GlowParametersLocation struct.
   */
-LIBRARY_API bool glowParametersLocation_isValid(const GlowParametersLocation *pThis);
+LIBEMBER_API bool glowParametersLocation_isValid(const GlowParametersLocation *pThis);
 
 
 /**
@@ -917,7 +912,7 @@ typedef struct SGlowMatrix
   * Frees all memory allocated by a GlowMatrix instance.
   * @param pThis pointer to the object to process.
   */
-LIBRARY_API void glowMatrix_free(GlowMatrix *pThis);
+LIBEMBER_API void glowMatrix_free(GlowMatrix *pThis);
 
 
 /**
@@ -957,7 +952,7 @@ typedef struct SGlowConnection
   * Frees all memory allocated by a GlowMatrix instance.
   * @param pThis pointer to the object to process.
   */
-LIBRARY_API void glowConnection_free(GlowConnection *pThis);
+LIBEMBER_API void glowConnection_free(GlowConnection *pThis);
 
 
 /**
@@ -994,7 +989,7 @@ typedef struct SGlowTupleItemDescription
   * Frees all memory allocated by a GlowTupleItemDescription instance.
   * @param pThis pointer to the object to process.
   */
-LIBRARY_API void glowTupleItemDescription_free(GlowTupleItemDescription *pThis);
+LIBEMBER_API void glowTupleItemDescription_free(GlowTupleItemDescription *pThis);
 
 
 /**
@@ -1040,7 +1035,7 @@ typedef struct SGlowFunction
   * Frees all memory allocated by a GlowFunction instance.
   * @param pThis pointer to the object to process.
   */
-LIBRARY_API void glowFunction_free(GlowFunction *pThis);
+LIBEMBER_API void glowFunction_free(GlowFunction *pThis);
 
 
 /**
@@ -1075,6 +1070,6 @@ typedef struct SGlowInvocationResult
   * Frees all memory allocated by a GlowInvocationResult instance.
   * @param pThis pointer to the object to process.
   */
-LIBRARY_API void glowInvocationResult_free(GlowInvocationResult *pThis);
+LIBEMBER_API void glowInvocationResult_free(GlowInvocationResult *pThis);
 
 #endif// __LIBEMBER_SLIM_GLOW_H

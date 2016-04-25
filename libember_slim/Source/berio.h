@@ -20,13 +20,8 @@
 #ifndef __LIBEMBER_SLIM_BERIO_H
 #define __LIBEMBER_SLIM_BERIO_H
 
-#ifdef LIBEMBER_DLL_EXPORTS
-#define LIBRARY_API __declspec(dllexport)
-#else
-#define LIBRARY_API
-#endif
-
 #include <stdio.h>
+#include "api.h"
 #include "bertypes.h"
 
 // ======================================================
@@ -97,14 +92,14 @@ typedef struct SBerMemoryInput
   * @param pMemory pointer to the memory location to read from.
   * @param size number of bytes at @p pMemory.
   */
-LIBRARY_API void berMemoryInput_init(BerMemoryInput *pThis, const byte *pMemory, unsigned int size);
+LIBEMBER_API void berMemoryInput_init(BerMemoryInput *pThis, const byte *pMemory, unsigned int size);
 
 /**
   * Returns a value indicating whether all bytes from the
   * passed BerMemoryInput have been read.
   * @param pThis pointer to the object to process.
   */
-LIBRARY_API bool berMemoryInput_isEof(const struct SBerMemoryInput *pThis);
+LIBEMBER_API bool berMemoryInput_isEof(const struct SBerMemoryInput *pThis);
 
 
 // ======================================================
@@ -139,7 +134,7 @@ typedef struct SBerFileInput
   * @param pFile pointer to the io buffer to read from.
   *     Must be open and readable.
   */
-LIBRARY_API void berFileInput_init(BerFileInput *pThis, FILE *pFile);
+LIBEMBER_API void berFileInput_init(BerFileInput *pThis, FILE *pFile);
 
 
 // ======================================================
@@ -210,13 +205,13 @@ typedef struct SBerMemoryOutput
   * @param pMemory pointer to the memory location to write to.
   * @param size number of bytes at @p pMemory.
   */
-LIBRARY_API void berMemoryOutput_init(BerMemoryOutput *pThis, byte *pMemory, unsigned int size);
+LIBEMBER_API void berMemoryOutput_init(BerMemoryOutput *pThis, byte *pMemory, unsigned int size);
 
 /**
   * Resets the position of a BerMemoryOutput instance.
   * @param pThis pointer to the object to process.
   */
-LIBRARY_API void berMemoryOutput_reset(BerMemoryOutput *pThis);
+LIBEMBER_API void berMemoryOutput_reset(BerMemoryOutput *pThis);
 
 
 /**
@@ -245,6 +240,6 @@ typedef struct SBerFileOutput
   * @param pFile pointer to the io buffer to write to.
   *     Must be open and writeable.
   */
-LIBRARY_API void berFileOutput_init(BerFileOutput *pThis, FILE *pFile);
+LIBEMBER_API void berFileOutput_init(BerFileOutput *pThis, FILE *pFile);
 
 #endif

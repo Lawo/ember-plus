@@ -20,12 +20,7 @@
 #ifndef __LIBEMBER_SLIM_EMBER_H
 #define __LIBEMBER_SLIM_EMBER_H
 
-#ifdef LIBEMBER_DLL_EXPORTS
-#define LIBRARY_API __declspec(dllexport)
-#else
-#define LIBRARY_API
-#endif
-
+#include "api.h"
 #include "ber.h"
 #include "emberasyncreader.h"
 #include "emberframing.h"
@@ -94,7 +89,7 @@ typedef void (*freeMemory_t)(void *pMemory);
   * @note Each call to ember_WriteContainerBegin must be matched
   *      with a later call to ember_WriteContainerEnd.
   */
-LIBRARY_API void ember_writeContainerBegin(BerOutput *pOut, const BerTag *pTag, bertype type);
+LIBEMBER_API void ember_writeContainerBegin(BerOutput *pOut, const BerTag *pTag, bertype type);
 
 /**
   * Writes the begin TLTL of a SEQUENCE. Shortcut for
@@ -105,7 +100,7 @@ LIBRARY_API void ember_writeContainerBegin(BerOutput *pOut, const BerTag *pTag, 
   * @note Each call to ember_WriteSequenceBegin must be matched
   *      with a later call to ember_WriteContainerEnd.
   */
-LIBRARY_API void ember_writeSequenceBegin(BerOutput *pOut, const BerTag *pTag);
+LIBEMBER_API void ember_writeSequenceBegin(BerOutput *pOut, const BerTag *pTag);
 
 /**
   * Writes the begin TLTL of a SET. Shortcut for
@@ -116,7 +111,7 @@ LIBRARY_API void ember_writeSequenceBegin(BerOutput *pOut, const BerTag *pTag);
   * @note Each call to ember_WriteSetBegin must be matched
   *      with a later call to ember_WriteContainerEnd.
   */
-LIBRARY_API void ember_writeSetBegin(BerOutput *pOut, const BerTag *pTag);
+LIBEMBER_API void ember_writeSetBegin(BerOutput *pOut, const BerTag *pTag);
 
 /**
   * Writes a container terminator.
@@ -124,7 +119,7 @@ LIBRARY_API void ember_writeSetBegin(BerOutput *pOut, const BerTag *pTag);
   * @note Each call to ember_WriteContainerEnd must
   *      be matched with a prior call to ember_WriteContainerBegin.
   */
-LIBRARY_API void ember_writeContainerEnd(BerOutput *pOut);
+LIBEMBER_API void ember_writeContainerEnd(BerOutput *pOut);
 
 /**
   * Writes a TLTLV with a boolean value, using the definite
@@ -134,7 +129,7 @@ LIBRARY_API void ember_writeContainerEnd(BerOutput *pOut);
   * @param pTag pointer to the outer tag of the TLTLV.
   * @param value the value to write.
   */
-LIBRARY_API void ember_writeBoolean(BerOutput *pOut, const BerTag *pTag, bool value);
+LIBEMBER_API void ember_writeBoolean(BerOutput *pOut, const BerTag *pTag, bool value);
 
 /**
   * Writes a TLTLV with an int32 value, using the definite
@@ -144,7 +139,7 @@ LIBRARY_API void ember_writeBoolean(BerOutput *pOut, const BerTag *pTag, bool va
   * @param pTag pointer to the outer tag of the TLTLV.
   * @param value the value to write.
   */
-LIBRARY_API void ember_writeInteger(BerOutput *pOut, const BerTag *pTag, berint value);
+LIBEMBER_API void ember_writeInteger(BerOutput *pOut, const BerTag *pTag, berint value);
 
 /**
   * Writes a TLTLV with a int64 value, using the definite
@@ -154,7 +149,7 @@ LIBRARY_API void ember_writeInteger(BerOutput *pOut, const BerTag *pTag, berint 
   * @param pTag pointer to the outer tag of the TLTLV.
   * @param value the value to write.
   */
-LIBRARY_API void ember_writeLong(BerOutput *pOut, const BerTag *pTag, berlong value);
+LIBEMBER_API void ember_writeLong(BerOutput *pOut, const BerTag *pTag, berlong value);
 
 /**
   * Writes a TLTLV with a double value, using the definite
@@ -164,7 +159,7 @@ LIBRARY_API void ember_writeLong(BerOutput *pOut, const BerTag *pTag, berlong va
   * @param pTag pointer to the outer tag of the TLTLV.
   * @param value the value to write.
   */
-LIBRARY_API void ember_writeReal(BerOutput *pOut, const BerTag *pTag, double value);
+LIBEMBER_API void ember_writeReal(BerOutput *pOut, const BerTag *pTag, double value);
 
 /**
   * Writes a TLTLV with a zero-terminated string value, using the definite
@@ -176,7 +171,7 @@ LIBRARY_API void ember_writeReal(BerOutput *pOut, const BerTag *pTag, double val
   * @param pValue pointer to the first character of
   *      the zero-terminated string to write.
   */
-LIBRARY_API void ember_writeString(BerOutput *pOut, const BerTag *pTag, pcstr pValue);
+LIBEMBER_API void ember_writeString(BerOutput *pOut, const BerTag *pTag, pcstr pValue);
 
 /**
   * Writes a TLTLV with an octet string value, using the definite
@@ -187,7 +182,7 @@ LIBRARY_API void ember_writeString(BerOutput *pOut, const BerTag *pTag, pcstr pV
   * @param pValue pointer to the first byte of the octet
   *      string to write.
   */
-LIBRARY_API void ember_writeOctetString(BerOutput *pOut, const BerTag *pTag, const byte *pValue, int valueLength);
+LIBEMBER_API void ember_writeOctetString(BerOutput *pOut, const BerTag *pTag, const byte *pValue, int valueLength);
 
 /**
   * Writes a TLTLV with a RelativeOid value, using the definite
@@ -197,6 +192,6 @@ LIBRARY_API void ember_writeOctetString(BerOutput *pOut, const BerTag *pTag, con
   * @param pTag pointer to the outer tag of the TLTLV.
   * @param pValue pointer to the first subidentifier of the RelativeOid.
   */
-LIBRARY_API void ember_writeRelativeOid(BerOutput *pOut, const BerTag *pTag, const berint *pValue, int count);
+LIBEMBER_API void ember_writeRelativeOid(BerOutput *pOut, const BerTag *pTag, const berint *pValue, int count);
 
 #endif

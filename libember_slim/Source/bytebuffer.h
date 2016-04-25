@@ -20,12 +20,7 @@
 #ifndef __LIBEMBER_SLIM_BYTEBUFFER_H
 #define __LIBEMBER_SLIM_BYTEBUFFER_H
 
-#ifdef LIBEMBER_DLL_EXPORTS
-#define LIBRARY_API __declspec(dllexport)
-#else
-#define LIBRARY_API
-#endif
-
+#include "api.h"
 #include "bertypes.h"
 
 /**
@@ -63,7 +58,7 @@ typedef struct SByteBuffer
   * @pMemory the address of the memory chunk allocated for the buffer.
   * @param size the size of the memory chunk at @p pMemory in bytes.
   */
-LIBRARY_API void byteBuffer_init(ByteBuffer *pThis, byte *pMemory, unsigned int size);
+LIBEMBER_API void byteBuffer_init(ByteBuffer *pThis, byte *pMemory, unsigned int size);
 
 /**
   * Initializes a dynamic ByteBuffer instance, which allocates
@@ -73,7 +68,7 @@ LIBRARY_API void byteBuffer_init(ByteBuffer *pThis, byte *pMemory, unsigned int 
   * @param pThis pointer to the object to process.
   * @param size the initial size of the buffer.
   */
-LIBRARY_API void byteBuffer_initDynamic(ByteBuffer *pThis, unsigned int size);
+LIBEMBER_API void byteBuffer_initDynamic(ByteBuffer *pThis, unsigned int size);
 
 /**
   * Add a byte to the buffer, advancing the write position.
@@ -82,13 +77,13 @@ LIBRARY_API void byteBuffer_initDynamic(ByteBuffer *pThis, unsigned int size);
   * @note If the buffer is full, this operation calls the
   *     throwError callback.
   */
-LIBRARY_API void byteBuffer_add(ByteBuffer *pThis, byte b);
+LIBEMBER_API void byteBuffer_add(ByteBuffer *pThis, byte b);
 
 /**
   * Resets the write position to the begin of the buffer.
   * @param pThis pointer to the object to process.
   */
-LIBRARY_API void byteBuffer_reset(ByteBuffer *pThis);
+LIBEMBER_API void byteBuffer_reset(ByteBuffer *pThis);
 
 /**
   * Ensures that the size of the dynamic buffer is at least @p size bytes.
@@ -96,7 +91,7 @@ LIBRARY_API void byteBuffer_reset(ByteBuffer *pThis);
   * @param pThis pointer to the object to process.
   * @param size new size of the buffer.
   */
-LIBRARY_API void byteBuffer_resize(ByteBuffer *pThis, unsigned int size);
+LIBEMBER_API void byteBuffer_resize(ByteBuffer *pThis, unsigned int size);
 
 /**
   * Gets a value indicating whether the passed byte buffer
@@ -105,12 +100,12 @@ LIBRARY_API void byteBuffer_resize(ByteBuffer *pThis, unsigned int size);
   * @return True if the byte buffer's write cursor is past the
   *      end of the buffer, otherwise false.
   */
-LIBRARY_API bool byteBuffer_isEmpty(const ByteBuffer *pThis);
+LIBEMBER_API bool byteBuffer_isEmpty(const ByteBuffer *pThis);
 
 /**
   * Frees all memory allocated by the dynamic buffer.
   * @param pThis pointer to the object to process.
   */
-LIBRARY_API void byteBuffer_free(ByteBuffer *pThis);
+LIBEMBER_API void byteBuffer_free(ByteBuffer *pThis);
 
 #endif

@@ -36,9 +36,6 @@
 #endif
 
 #if defined LIBEMBER_DLL                // Define this if libember is compiled or used as a DLL/shared object
-#  ifdef LIBEMBER_HEADER_ONLY
-#    error "LIBEMBER_DLL may not be used in conjunction with LIBEMBER_HEADER_ONLY"
-#  endif
 #  ifdef LIBEMBER_DLL_EXPORTS           // Defined libember is being built (instead of using it)
 #    define LIBEMBER_API LIBEMBER_HELPER_DLL_EXPORT
 #  else

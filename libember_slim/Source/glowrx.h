@@ -20,6 +20,7 @@
 #ifndef __LIBEMBER_SLIM_GLOWRX_H
 #define __LIBEMBER_SLIM_GLOWRX_H
 
+#include "api.h"
 #include "glow.h"
 
 // ====================================================================
@@ -346,7 +347,7 @@ typedef struct SNonFramingGlowReader
   * @note you need to call nonFramingGlowReader_free to release
   *     all memory allocated by nonFramingGlowReader_init.
   */
-void nonFramingGlowReader_init(NonFramingGlowReader *pThis,
+LIBEMBER_API void nonFramingGlowReader_init(NonFramingGlowReader *pThis,
                                onNode_t onNode,
                                onParameter_t onParameter,
                                onCommand_t onCommand,
@@ -359,13 +360,13 @@ void nonFramingGlowReader_init(NonFramingGlowReader *pThis,
   * by a prior call to nonFramingGlowReader_init.
   * @param pThis pointer to the object to process.
   */
-void nonFramingGlowReader_free(NonFramingGlowReader *pThis);
+LIBEMBER_API void nonFramingGlowReader_free(NonFramingGlowReader *pThis);
 
 /**
   * Resets the internal state of the passedNonFramingGlowReader.
   * @param pThis pointer to the object to process.
   */
-void nonFramingGlowReader_reset(NonFramingGlowReader *pThis);
+LIBEMBER_API void nonFramingGlowReader_reset(NonFramingGlowReader *pThis);
 
 
 // ====================================================================
@@ -426,7 +427,7 @@ typedef struct SGlowReader
   * @note you need to call glowReader_free to release
   *     all memory allocated by glowReader_init.
   */
-void glowReader_init(GlowReader *pThis,
+LIBEMBER_API void glowReader_init(GlowReader *pThis,
                      onNode_t onNode,
                      onParameter_t onParameter,
                      onCommand_t onCommand,
@@ -441,7 +442,7 @@ void glowReader_init(GlowReader *pThis,
   * by a prior call to GlowReader_init.
   * @param pThis pointer to the object to process.
   */
-void glowReader_free(GlowReader *pThis);
+LIBEMBER_API void glowReader_free(GlowReader *pThis);
 
 /**
   * Feeds multiple bytes of framed Ember data using the Glow DTD into
@@ -453,12 +454,12 @@ void glowReader_free(GlowReader *pThis);
   * @param pBytes pointer to the first byte to feed.
   * @param count the number of bytes at @p pBytes to feed.
   */
-void glowReader_readBytes(GlowReader *pThis, const byte *pBytes, int count);
+LIBEMBER_API void glowReader_readBytes(GlowReader *pThis, const byte *pBytes, int count);
 
 /**
   * Resets the internal state of the passed GlowReader.
   * @param pThis pointer to the object to process.
   */
-void glowReader_reset(GlowReader *pThis);
+LIBEMBER_API void glowReader_reset(GlowReader *pThis);
 
 #endif//__LIBEMBER_SLIM_GLOWRX_H

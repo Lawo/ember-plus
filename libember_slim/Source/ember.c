@@ -19,6 +19,7 @@
 
 #include <string.h>
 #include "ember.h"
+#include "emberplus.h"
 #include "emberinternal.h"
 
 

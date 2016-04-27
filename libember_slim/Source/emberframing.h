@@ -20,6 +20,7 @@
 #ifndef __LIBEMBER_SLIM_EMBERFRAMING_H
 #define __LIBEMBER_SLIM_EMBERFRAMING_H
 
+#include "api.h"
 #include "berio.h"
 
 
@@ -137,7 +138,7 @@ typedef struct SBerFramingOutput
   * @param appBytesCount number of application-defined bytes at
   *     @p pAppBytes.
   */
-void berFramingOutput_init(BerFramingOutput *pThis,
+LIBEMBER_API void berFramingOutput_init(BerFramingOutput *pThis,
                            byte *pMemory,
                            unsigned int size,
                            byte slotId,
@@ -152,7 +153,7 @@ void berFramingOutput_init(BerFramingOutput *pThis,
   * @param pThis pointer to the object to process.
   * @param flags contains a combination of package flags
   */
-void berFramingOutput_writeHeader(BerFramingOutput *pThis, EmberFramingFlags flags);
+LIBEMBER_API void berFramingOutput_writeHeader(BerFramingOutput *pThis, EmberFramingFlags flags);
 
 /**
   * Finishes the framed package. After this function
@@ -164,7 +165,7 @@ void berFramingOutput_writeHeader(BerFramingOutput *pThis, EmberFramingFlags fla
   * @note you need to call this function when you have
   *     written a complete ember tree to @p pThis.
   */
-unsigned int berFramingOutput_finish(BerFramingOutput *pThis);
+LIBEMBER_API unsigned int berFramingOutput_finish(BerFramingOutput *pThis);
 
 
 // ======================================================
@@ -182,7 +183,7 @@ unsigned int berFramingOutput_finish(BerFramingOutput *pThis);
   * @param slotId the S101 slot id of the remote host.
   * @return the number of bytes written to @p pBuffer.
   */
-unsigned int emberFraming_writeKeepAliveRequest(byte *pBuffer, unsigned int size, byte slotId);
+LIBEMBER_API unsigned int emberFraming_writeKeepAliveRequest(byte *pBuffer, unsigned int size, byte slotId);
 
 /**
   * Frames a Keep-Alive Response message into the passed buffer.
@@ -193,7 +194,7 @@ unsigned int emberFraming_writeKeepAliveRequest(byte *pBuffer, unsigned int size
   * @param slotId the S101 slot id of the remote host.
   * @return the number of bytes written to @p pBuffer.
   */
-unsigned int emberFraming_writeKeepAliveResponse(byte *pBuffer, unsigned int size, byte slotId);
+LIBEMBER_API unsigned int emberFraming_writeKeepAliveResponse(byte *pBuffer, unsigned int size, byte slotId);
 
 
 // ======================================================
@@ -258,7 +259,7 @@ typedef struct SEmberFramingReader
   *     function called when a complete package has been unframed.
   * @param state application-defined argument passed to onPackageReceived.
   */
-void emberFramingReader_init(EmberFramingReader *pThis,
+LIBEMBER_API void emberFramingReader_init(EmberFramingReader *pThis,
                              byte *pMemory,
                              unsigned int size,
                              onPackageReceived_t onPackageReceived,
@@ -270,7 +271,7 @@ void emberFramingReader_init(EmberFramingReader *pThis,
   * can be unframed.
   * @param pThis pointer to the object to process.
   */
-void emberFramingReader_reset(EmberFramingReader *pThis);
+LIBEMBER_API void emberFramingReader_reset(EmberFramingReader *pThis);
 
 /**
   * Feeds multiple bytes of framed data into an EmberFramingReader
@@ -281,6 +282,6 @@ void emberFramingReader_reset(EmberFramingReader *pThis);
   * @param count number of bytes at @p pBytes to feed into the
   *     reader.
   */
-void emberFramingReader_readBytes(EmberFramingReader *pThis, const byte *pBytes, int count);
+LIBEMBER_API void emberFramingReader_readBytes(EmberFramingReader *pThis, const byte *pBytes, int count);
 
 #endif

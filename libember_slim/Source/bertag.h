@@ -20,6 +20,7 @@
 #ifndef __LIBEMBER_SLIM_BERTAG_H
 #define __LIBEMBER_SLIM_BERTAG_H
 
+#include "api.h"
 #include "bertypes.h"
 
 // ======================================================
@@ -132,7 +133,7 @@ typedef struct SBerTag
   * @berClass the tag class to initialize BerTag.preamble with.
   * @param number the tag number to initialize BerTag.number with.
   */
-void berTag_init(BerTag *pThis, BerClass berClass, tagnumber number);
+LIBEMBER_API void berTag_init(BerTag *pThis, BerClass berClass, tagnumber number);
 
 /**
   * Gets a value indicating whether the passed tag has the
@@ -140,35 +141,35 @@ void berTag_init(BerTag *pThis, BerClass berClass, tagnumber number);
   * @param pThis pointer to the object to process.
   * @return True if the passed tag has the container flag set.
   */
-bool berTag_isContainer(const BerTag *pThis);
+LIBEMBER_API bool berTag_isContainer(const BerTag *pThis);
 
 /**
   * Sets a value indicating whether the passed tag has the
   * container flag set.
   * @param pThis pointer to the object to process.
   */
-void berTag_setContainer(BerTag *pThis, bool value);
+LIBEMBER_API void berTag_setContainer(BerTag *pThis, bool value);
 
 /**
   * Gets the ber class of the passed tag.
   * @param pThis pointer to the object to process.
   * @return The ber class of the passed tag.
   */
-BerClass berTag_getClass(const BerTag *pThis);
+LIBEMBER_API BerClass berTag_getClass(const BerTag *pThis);
 
 /**
   * Sets the ber class of the passed tag.
   * @param pThis pointer to the object to process.
   * @param value The new ber class to set.
   */
-void berTag_setClass(BerTag *pThis, BerClass value);
+LIBEMBER_API void berTag_setClass(BerTag *pThis, BerClass value);
 
 /**
   * Sets the ber class of the passed tag.
   * @param pThis pointer to the object to process.
   * @param value The new ber class to set.
   */
-bool berTag_isZero(const BerTag *pThis);
+LIBEMBER_API bool berTag_isZero(const BerTag *pThis);
 
 /**
   * Converts the passed tag to a tag with the same class
@@ -177,7 +178,7 @@ bool berTag_isZero(const BerTag *pThis);
   * @return A copy of the tag pointed to by @p pThis with
   *      the container flag set.
   */
-BerTag berTag_toContainer(const BerTag *pThis);
+LIBEMBER_API BerTag berTag_toContainer(const BerTag *pThis);
 
 /**
   * Gets the number of the tag as a bertype value,
@@ -188,7 +189,7 @@ BerTag berTag_toContainer(const BerTag *pThis);
   *      APPLICATION-1 will be returned as (BerType_ApplicationFlag | 1).
   *      UNIVERSAL-1 will be returned as 1.
   */
-bertype berTag_numberAsType(const BerTag *pThis);
+LIBEMBER_API bertype berTag_numberAsType(const BerTag *pThis);
 
 #ifdef SECURE_CRT
 /**
@@ -198,7 +199,7 @@ bertype berTag_numberAsType(const BerTag *pThis);
   * @param pBuffer pointer to the buffer to store
   *      the zero-terminated string to.
   */
-void berTag_toString(const BerTag *pThis, pstr pBuffer, int bufferSize);
+LIBEMBER_API void berTag_toString(const BerTag *pThis, pstr pBuffer, int bufferSize);
 #else
 /**
   * Writes a human-readable string representation of
@@ -209,7 +210,7 @@ void berTag_toString(const BerTag *pThis, pstr pBuffer, int bufferSize);
   * @param bufferSize size of the buffer pointed to
   *      by @p pBuffer.
   */
-void berTag_toString(const BerTag *pThis, pstr pBuffer);
+LIBEMBER_API void berTag_toString(const BerTag *pThis, pstr pBuffer);
 #endif
 
 /**
@@ -218,6 +219,6 @@ void berTag_toString(const BerTag *pThis, pstr pBuffer);
   * @param pThis pointer to the object to process.
   * @param pThat pointer to the BerTag to compare to @p pThis.
   */
-bool berTag_equals(const BerTag *pThis, const BerTag *pThat);
+LIBEMBER_API bool berTag_equals(const BerTag *pThis, const BerTag *pThat);
 
 #endif

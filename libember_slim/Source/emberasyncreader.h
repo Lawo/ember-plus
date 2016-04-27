@@ -20,6 +20,7 @@
 #ifndef __LIBEMBER_SLIM_EMBERASYNCREADER_H
 #define __LIBEMBER_SLIM_EMBERASYNCREADER_H
 
+#include "api.h"
 #include "berreader.h"
 
 #ifndef EMBER_MAX_TREE_DEPTH
@@ -142,7 +143,7 @@ typedef struct SEmberAsyncReader
   * EmberAsyncReader instance are invoked.
   * @param pThis pointer to the object to process.
   */
-void emberAsyncReader_init(EmberAsyncReader *pThis);
+LIBEMBER_API void emberAsyncReader_init(EmberAsyncReader *pThis);
 
 /**
   * Frees all dynamically allocated memory used by the
@@ -150,7 +151,7 @@ void emberAsyncReader_init(EmberAsyncReader *pThis);
   * by a prior call to emberAsyncReader_init.
   * @param pThis pointer to the object to process.
   */
-void emberAsyncReader_free(EmberAsyncReader *pThis);
+LIBEMBER_API void emberAsyncReader_free(EmberAsyncReader *pThis);
 
 /**
   * Feeds a single input byte into the reader. If this byte completes
@@ -160,7 +161,7 @@ void emberAsyncReader_free(EmberAsyncReader *pThis);
   * @param pThis pointer to the object to process.
   * @param b The input byte to process.</param>
   */
-void emberAsyncReader_readByte(EmberAsyncReader *pThis, byte b);
+LIBEMBER_API void emberAsyncReader_readByte(EmberAsyncReader *pThis, byte b);
 
 /**
   * Feeds a multiple input bytes into the reader. Everytime a complete
@@ -171,12 +172,12 @@ void emberAsyncReader_readByte(EmberAsyncReader *pThis, byte b);
   * @param pBytes pointer to the first byte to feed to @p pThis.</param>
   * @param count number of bytes to feed to @p pThis.</param>
   */
-void emberAsyncReader_readBytes(EmberAsyncReader *pThis, const byte *pBytes, int count);
+LIBEMBER_API void emberAsyncReader_readBytes(EmberAsyncReader *pThis, const byte *pBytes, int count);
 
 /**
   * Resets the internal state of the passed EmberAsyncReader.
   * @param pThis pointer to the object to process.
   */
-void emberAsyncReader_reset(EmberAsyncReader *pThis);
+LIBEMBER_API void emberAsyncReader_reset(EmberAsyncReader *pThis);
 
 #endif

@@ -85,7 +85,7 @@ static const unsigned short _crcTable[256] =
 
 static unsigned short crc_addByte(unsigned short crc, byte b)
 {
-   return (unsigned short)((crc >> 8) ^ _crcTable[(byte)(crc ^ b)]);
+   return (unsigned short)((crc >> 8) ^ _crcTable[(byte)((crc ^ b) & 0xFF)]);
 }
 
 

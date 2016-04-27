@@ -27,6 +27,7 @@
   */
 #define EMBER_LIBRARY_VERSION (0x0146) //1.70
 
+#include "api.h"
 #include "glowtx.h"
 #include "glowrx.h"
 
@@ -40,7 +41,7 @@
   * @param allocMemory the callback to invoke for memory allocation.
   * @param freeMemory the callback to invoke to free memory.
   */
-void ember_init(throwError_t throwError,
+LIBEMBER_API void ember_init(throwError_t throwError,
                 failAssertion_t failAssertion,
                 allocMemory_t allocMemory,
                 freeMemory_t freeMemory);

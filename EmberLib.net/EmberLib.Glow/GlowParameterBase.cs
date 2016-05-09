@@ -19,7 +19,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.Text;
 using BerLib;
 
 namespace EmberLib.Glow
@@ -357,6 +356,26 @@ namespace EmberLib.Glow
             var tag = GlowTags.ParameterContents.SchemaIdentifiers;
 
             EnsureContentsAndRemove(tag).Insert(new StringEmberLeaf(tag, value));
+         }
+      }
+
+      /// <summary>
+      /// Gets or sets the OID of the template containing the description
+      /// of this element. If not present, <c>null</c> is being returned.
+      /// </summary>
+      public int[] TemplateReference
+      {
+         get
+         {
+            var tag = GlowTags.ParameterContents.TemplateReference;
+            return GetChildValue<int[]>(tag);
+         }
+         set
+         {
+            var tag = GlowTags.ParameterContents.TemplateReference;
+
+            AssertNotPresent(tag);
+            Insert(new RelativeOidEmberLeaf(tag, value));
          }
       }
 

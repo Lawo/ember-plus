@@ -102,6 +102,12 @@ namespace EmberLib.Glow
       /// <param name="glow">The GlowInvocationResult to process.</param>
       protected abstract void OnInvocationResult(GlowInvocationResult glow);
 
+      /// <summary>
+      /// Called for every GlowTemplate found in the glow tree.
+      /// </summary>
+      /// <param name="glow">The GlowTemplate to process.</param>
+      protected abstract void OnTemplate(GlowTemplate glow, int[] path);
+
       #region Implementation
       LinkedList<int> _path = new LinkedList<int>();
 
@@ -318,6 +324,16 @@ namespace EmberLib.Glow
 
          return null;
       }
+
+      [SuppressMessage("Microsoft.Design", "CA1033")]
+      object IGlowVisitor<object, object>.Visit(GlowTemplate glow, object state)
+      {
+         Push(glow.Number);
+         OnTemplate(glow, PathToArray());
+         Pop();
+
+         return null;
+      }
       #endregion
-   }
+    }
 }

@@ -19,7 +19,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.Text;
 using BerLib;
 
 namespace EmberLib.Glow
@@ -33,7 +32,7 @@ namespace EmberLib.Glow
       /// Creates a new instance of GlowFunctionBase.
       /// </summary>
       protected GlowFunctionBase(BerTag? tag, uint type)
-      : base(tag, type)
+         : base(tag, type)
       {
       }
 
@@ -86,7 +85,7 @@ namespace EmberLib.Glow
          }
          set
          {
-            if(value.Tag != GlowTags.FunctionContents.Arguments)
+            if (value.Tag != GlowTags.FunctionContents.Arguments)
                throw new ArgumentException("Tag mismatch");
 
             EnsureContentsAndRemove(value.Tag).Insert(value);
@@ -120,7 +119,7 @@ namespace EmberLib.Glow
       {
          var arguments = Arguments;
 
-         if(arguments == null)
+         if (arguments == null)
          {
             arguments = new EmberSequence(GlowTags.FunctionContents.Arguments);
             Arguments = arguments;
@@ -146,7 +145,7 @@ namespace EmberLib.Glow
          }
          set
          {
-            if(value.Tag != GlowTags.FunctionContents.Result)
+            if (value.Tag != GlowTags.FunctionContents.Result)
                throw new ArgumentException("Tag mismatch");
 
             EnsureContentsAndRemove(value.Tag).Insert(value);
@@ -171,6 +170,26 @@ namespace EmberLib.Glow
       }
 
       /// <summary>
+      /// Gets or sets the OID of the template containing the description
+      /// of this element. If not present, <c>null</c> is being returned.
+      /// </summary>
+      public int[] TemplateReference
+      {
+         get
+         {
+            var tag = GlowTags.FunctionContents.TemplateReference;
+            return GetChildValue<int[]>(tag);
+         }
+         set
+         {
+            var tag = GlowTags.FunctionContents.TemplateReference;
+
+            AssertNotPresent(tag);
+            Insert(new RelativeOidEmberLeaf(tag, value));
+         }
+      }
+
+      /// <summary>
       /// Ensures that the "result" field is present, creating a
       /// new EmberSequence and assigning it to the "result" field
       /// if necessary.
@@ -180,7 +199,7 @@ namespace EmberLib.Glow
       {
          var result = Result;
 
-         if(result == null)
+         if (result == null)
          {
             result = new EmberSequence(GlowTags.FunctionContents.Result);
             Result = result;

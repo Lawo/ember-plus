@@ -52,6 +52,7 @@ namespace EmberLib.Glow
       public const uint TupleItemDescription     = BerType.ApplicationFlag | 21;
       public const uint Invocation               = BerType.ApplicationFlag | 22;
       public const uint InvocationResult         = BerType.ApplicationFlag | 23;
+      public const uint Template                 = BerType.ApplicationFlag | 24;
    }
 
 
@@ -63,7 +64,7 @@ namespace EmberLib.Glow
       /// <summary>
       /// The version of the Glow DTD implemented by this library
       /// </summary>
-      public const ushort Version = 0x021F;
+      public const ushort Version = 0x0228;
    }
 
 
@@ -84,6 +85,7 @@ namespace EmberLib.Glow
    /// </summary>
    public static class GlowFieldFlags
    {
+      public const int Sparse            = -2;
       public const int All               = -1;
       public const int Identifier        = 1;
       public const int Description       = 2;
@@ -237,6 +239,7 @@ namespace EmberLib.Glow
          public static readonly BerTag EnumMap = new BerTag(BerClass.ContextSpecific, 15);
          public static readonly BerTag StreamDescriptor = new BerTag(BerClass.ContextSpecific, 16);
          public static readonly BerTag SchemaIdentifiers = new BerTag(BerClass.ContextSpecific, 17);
+         public static readonly BerTag TemplateReference = new BerTag(BerClass.ContextSpecific, 18);
       }
 
       /// <summary>
@@ -269,11 +272,12 @@ namespace EmberLib.Glow
          public static readonly BerTag IsRoot = new BerTag(BerClass.ContextSpecific, 2);
          public static readonly BerTag IsOnline = new BerTag(BerClass.ContextSpecific, 3);
          public static readonly BerTag SchemaIdentifiers = new BerTag(BerClass.ContextSpecific, 4);
+         public static readonly BerTag TemplateReference = new BerTag(BerClass.ContextSpecific, 5);
       }
 
-      /// <summary>
-      /// context-specific tags used by the "Command" type
-      /// </summary>
+        /// <summary>
+        /// context-specific tags used by the "Command" type
+        /// </summary>
       public static class Command
       {
          public static readonly BerTag Number = new BerTag(BerClass.ContextSpecific, 0);
@@ -372,6 +376,7 @@ namespace EmberLib.Glow
          public static readonly BerTag GainParameterNumber = new BerTag(BerClass.ContextSpecific, 9);
          public static readonly BerTag Labels = new BerTag(BerClass.ContextSpecific, 10);
          public static readonly BerTag SchemaIdentifiers = new BerTag(BerClass.ContextSpecific, 11);
+         public static readonly BerTag TemplateReference = new BerTag(BerClass.ContextSpecific, 12);
       }
 
       /// <summary>
@@ -436,6 +441,7 @@ namespace EmberLib.Glow
          public static readonly BerTag Description = new BerTag(BerClass.ContextSpecific, 1);
          public static readonly BerTag Arguments = new BerTag(BerClass.ContextSpecific, 2);
          public static readonly BerTag Result = new BerTag(BerClass.ContextSpecific, 3);
+         public static readonly BerTag TemplateReference = new BerTag(BerClass.ContextSpecific, 4);
       }
 
       /// <summary>
@@ -464,6 +470,16 @@ namespace EmberLib.Glow
          public static readonly BerTag InvocationId = new BerTag(BerClass.ContextSpecific, 0);
          public static readonly BerTag Success = new BerTag(BerClass.ContextSpecific, 1);
          public static readonly BerTag Result = new BerTag(BerClass.ContextSpecific, 2);
+      }
+
+      /// <summary>
+      /// context-specific tags used by the "Template" type
+      /// </summary>
+      public static class Template
+      {
+         public static readonly BerTag Number = new BerTag(BerClass.ContextSpecific, 0);
+         public static readonly BerTag Element = new BerTag(BerClass.ContextSpecific, 1);
+         public static readonly BerTag Description = new BerTag(BerClass.ContextSpecific, 2);
       }
    }
 }

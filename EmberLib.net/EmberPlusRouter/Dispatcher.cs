@@ -331,8 +331,12 @@ namespace EmberPlusRouter
          {
          }
 
+         protected override void OnTemplate(GlowTemplate glow, int[] path)
+         {
+         }
+
          #region Implementation
-         Dispatcher _dispatcher;
+            Dispatcher _dispatcher;
          Client _source;
          #endregion
       }

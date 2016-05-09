@@ -231,8 +231,12 @@ namespace EmberPlusRegistryProvider
          {
          }
 
+         protected override void OnTemplate(GlowTemplate glow, int[] path)
+         {
+         }
+
          #region Implementation
-         RegistryProvider _registry;
+            RegistryProvider _registry;
          Client _client;
          Item _rootItem;
 

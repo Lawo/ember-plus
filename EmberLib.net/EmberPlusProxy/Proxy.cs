@@ -370,6 +370,11 @@ namespace EmberPlusProxy
          {
             return glow;
          }
+
+         public GlowContainer Visit(GlowTemplate glow, object state)
+         {
+             return glow;
+         }
          #endregion
       }
       #endregion
@@ -547,6 +552,11 @@ namespace EmberPlusProxy
          public IEnumerable<GlowContainer> Visit(GlowInvocationResult glow, object state)
          {
             throw new NotImplementedException();
+         }
+
+         public IEnumerable<GlowContainer> Visit(GlowTemplate glow, object state)
+         {
+             throw new NotImplementedException();
          }
          #endregion
       }

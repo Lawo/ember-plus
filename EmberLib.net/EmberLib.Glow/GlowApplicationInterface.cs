@@ -17,11 +17,8 @@
    Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
-using System;
-using System.Collections.Generic;
-using System.Text;
-using BerLib;
 using System.Xml;
+using BerLib;
 
 namespace EmberLib.Glow
 {
@@ -60,6 +57,7 @@ namespace EmberLib.Glow
             case GlowType.TupleItemDescription:    return new GlowTupleItemDescription(tag);
             case GlowType.Invocation:              return new GlowInvocation(tag);
             case GlowType.InvocationResult:        return new GlowInvocationResult(tag);
+            case GlowType.Template:                return new GlowTemplate(tag);
          }
 
          return null;
@@ -92,6 +90,7 @@ namespace EmberLib.Glow
             case GlowType.TupleItemDescription:    return new GlowTupleItemDescription(tag);
             case GlowType.Invocation:              return new GlowInvocation(tag);
             case GlowType.InvocationResult:        return new GlowInvocationResult(tag);
+            case GlowType.Template:                return new GlowTemplate(tag);
          }
 
          return base.CreateNodeFromXml(type, tag, reader);

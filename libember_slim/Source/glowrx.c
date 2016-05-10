@@ -1145,9 +1145,6 @@ static void onPackageReceived(const byte *pPackage, int length, voidptr state)
    ASSERT(pThis != NULL);
    ASSERT(pPackage != NULL);
 
-   if(pThis->onPackageReceived != NULL)
-      pThis->onPackageReceived(pPackage, length, pThis->base.state);
-
    if(length >= 7
    && pPackage[1] == EMBER_MESSAGE_ID
    && pPackage[2] == EMBER_COMMAND_PAYLOAD
@@ -1157,12 +1154,30 @@ static void onPackageReceived(const byte *pPackage, int length, voidptr state)
       headerLength = 7 + appBytesCount;
 
       if(pPackage[4] & EmberFramingFlag_FirstPackage)
+      {
          emberAsyncReader_reset(&pThis->base.base);
+
+         if(pThis->onFirstPackageReceived != NULL)
+            pThis->onFirstPackageReceived(pPackage, length, pThis->base.state);
+      }
+
+      if(pThis->onPackageReceived != NULL)
+         pThis->onPackageReceived(pPackage, length, pThis->base.state);
 
       emberAsyncReader_readBytes(&pThis->base.base, pPackage + headerLength, length - headerLength);
 
       if(pPackage[4] & EmberFramingFlag_LastPackage)
+      {
          glowReader_reset(pThis);
+
+         if(pThis->onLastPackageReceived != NULL)
+            pThis->onLastPackageReceived(pPackage, length, pThis->base.state);
+      }
+   }
+   else
+   {
+       if(pThis->onOtherPackageReceived != NULL)
+          pThis->onOtherPackageReceived(pPackage, length, pThis->base.state);
    }
 }
 
@@ -1186,6 +1201,9 @@ void glowReader_init(GlowReader *pThis,
    ASSERT(pRxBuffer != NULL);
    ASSERT(rxBufferSize > 0);
 
+   pThis->onOtherPackageReceived = NULL;
+   pThis->onFirstPackageReceived = NULL;
+   pThis->onLastPackageReceived = NULL;
    pThis->onPackageReceived = NULL;
    nonFramingGlowReader_init(&pThis->base, onNode, onParameter, onCommand, onStreamEntry, state);
    emberFramingReader_init(&pThis->framing, pRxBuffer, rxBufferSize, onPackageReceived, pThis);

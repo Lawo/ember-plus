@@ -399,6 +399,26 @@ typedef struct SGlowReader
      * received.
      */
    onPackageReceived_t onPackageReceived;
+
+   /**
+     * Callback invoked everytime a non-ember packet has been received.
+     * set.
+     */
+   onPackageReceived_t onOtherPackageReceived;
+
+   /**
+     * Callback invoked everytime a valid framing package has been
+     * received with the @see EmberFramingFlag_FirstPackage flag
+     * set.
+     */
+   onPackageReceived_t onFirstPackageReceived;
+
+   /**
+     * Callback invoked everytime a valid framing package has been
+     * received with the @see EmberFramingFlag_LastPackage flag
+     * set.
+     */
+   onPackageReceived_t onLastPackageReceived;
 } GlowReader;
 
 /**

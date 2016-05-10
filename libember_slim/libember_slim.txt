@@ -2,16 +2,24 @@
 ============================================
 
 libember_slim
-Copyright (C) 2012-2014
-L-S-B Broadcast Technologies GmbH
+Copyright (C) 2012-2016
+LAWO GmbH
 
 =============================================
 
-authors: pbo@l-s-b.de, rni@l-s-b.de
-date:    2014-04-23
+authors: marius.keuck@lawo.com, roman.nick@lawo.com, pbo@l-s-b.de
+date:    2016-05-10
 
 
 ------------------------------- Change Log:
+- 1.70
+  - Added callbacks for "other package received", "first package received" and "last package received".
+	onOtherPackageReceived is invoked whenever a non-ember plus packet has been detected. This is a kind of
+	breaking change, since the original callback onPackageReceived is no longer invoked in that case.
+	onPackageReceived is invoked whenever an ember plus packet has been decoded.
+	onFirstPackageReceived is invoked whenever the "EmberFramingFlag_FirstPackage" flag is set.
+	OnLastPackageReceived is invoked whenever the "EmberFramingFlag_LastPackage" flag is set.
+
 - 1.62:
   - Implements Glow DTD 2.31 (mutliple schemas)
 

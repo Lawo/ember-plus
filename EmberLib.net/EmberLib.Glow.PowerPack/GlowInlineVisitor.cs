@@ -161,6 +161,16 @@ namespace EmberLib.Glow.PowerPack
       {
          return false;
       }
+
+      bool IGlowVisitor<object, bool>.Visit(GlowTemplate glow, object state)
+      {
+         return false;
+      }
+
+      bool IGlowVisitor<object, bool>.Visit(GlowQualifiedTemplate glow, object state)
+      {
+         return false;
+      }
       #endregion
    }
 }

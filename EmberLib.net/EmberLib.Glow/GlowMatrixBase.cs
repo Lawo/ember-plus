@@ -478,14 +478,13 @@ namespace EmberLib.Glow
          get
          {
             var tag = GlowTags.MatrixContents.TemplateReference;
-            return GetChildValue<int[]>(tag);
+            return GetContentRef<int[]>(tag);
          }
          set
          {
             var tag = GlowTags.MatrixContents.TemplateReference;
 
-            AssertNotPresent(tag);
-            Insert(new RelativeOidEmberLeaf(tag, value));
+            EnsureContentsAndRemove(tag).Insert(new RelativeOidEmberLeaf(tag, value));
          }
       }
 

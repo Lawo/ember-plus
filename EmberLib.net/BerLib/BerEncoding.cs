@@ -19,8 +19,8 @@
 
 using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Diagnostics;
+using System.Text;
 
 namespace BerLib
 {
@@ -381,21 +381,26 @@ namespace BerLib
             output.WriteByte(0x41); // 01000001 Value is MINUS-INFINITY
             size = 1;
          }
+         else if (double.IsNaN(value))
+         {
+            output.WriteByte(0x42); // 01000010 Value is NOT-A-NUMBER
+            size = 1;
+         }
          else
          {
             long longValue = DoubleToInt64Bits(value);
 
-            if(longValue != 0)
+            if (longValue != 0)
             {
                long exponent = ((0x7FF0000000000000L & longValue) >> 52) - 1023;
-               long mantissa =   0x000FFFFFFFFFFFFFL & longValue;
-               mantissa |=       0x0010000000000000L; // set virtual delimeter
+               long mantissa = 0x000FFFFFFFFFFFFFL & longValue;
+               mantissa |= 0x0010000000000000L; // set virtual delimeter
 
                // normalize mantissa (required by CER and DER)
-               while((mantissa & 0xFF) == 0)
+               while ((mantissa & 0xFF) == 0)
                   mantissa >>= 8;
 
-               while((mantissa & 0x01) == 0)
+               while ((mantissa & 0x01) == 0)
                   mantissa >>= 1;
 
                int exponentLength = GetLongLength(exponent);
@@ -404,7 +409,7 @@ namespace BerLib
                byte preamble = 0x80;
                preamble |= (byte)(exponentLength - 1);
 
-               if(((ulong)longValue & 0x8000000000000000UL) != 0)
+               if (((ulong)longValue & 0x8000000000000000UL) != 0)
                   preamble |= 0x40; // Sign
 
                output.WriteByte(preamble);
@@ -615,6 +620,10 @@ namespace BerLib
             {
                value = double.NegativeInfinity;
             }
+            else if (length == 1 && preamble == 0x42) // not a number
+            {
+               value = double.NaN;
+            }
             else
             {
                long longValue;
@@ -628,10 +637,10 @@ namespace BerLib
                long mantissa = DecodeLong(input, length - exponentLength - 1, false) << ff;
 
                // de-normalize mantissa (required by CER and DER)
-               while((mantissa & 0x7FFFF00000000000L) == 0x0)
+               while ((mantissa & 0x7FFFF00000000000L) == 0x0)
                   mantissa <<= 8;
 
-               while((mantissa & 0x7FF0000000000000L) == 0x0)
+               while ((mantissa & 0x7FF0000000000000L) == 0x0)
                   mantissa <<= 1;
 
                mantissa &= 0x0FFFFFFFFFFFFFL;
@@ -639,7 +648,7 @@ namespace BerLib
                longValue = (exponent + 1023) << 52;
                longValue |= mantissa;
 
-               if(sign != 0)
+               if (sign != 0)
                {
                   ulong qword = (ulong)longValue | 0x8000000000000000UL;
                   longValue = (long)qword;

@@ -17,9 +17,6 @@
    Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
-using System;
-using System.Collections.Generic;
-using System.Text;
 using BerLib;
 
 namespace EmberLib.Glow
@@ -53,6 +50,7 @@ namespace EmberLib.Glow
       public const uint Invocation               = BerType.ApplicationFlag | 22;
       public const uint InvocationResult         = BerType.ApplicationFlag | 23;
       public const uint Template                 = BerType.ApplicationFlag | 24;
+      public const uint QualifiedTemplate        = BerType.ApplicationFlag | 25;
    }
 
 
@@ -478,6 +476,16 @@ namespace EmberLib.Glow
       public static class Template
       {
          public static readonly BerTag Number = new BerTag(BerClass.ContextSpecific, 0);
+         public static readonly BerTag Element = new BerTag(BerClass.ContextSpecific, 1);
+         public static readonly BerTag Description = new BerTag(BerClass.ContextSpecific, 2);
+      }
+
+      /// <summary>
+      /// context-specific tags used by the "QualifiedTemplate" type
+      /// </summary>
+      public static class QualifiedTemplate
+      {
+         public static readonly BerTag Path = new BerTag(BerClass.ContextSpecific, 0);
          public static readonly BerTag Element = new BerTag(BerClass.ContextSpecific, 1);
          public static readonly BerTag Description = new BerTag(BerClass.ContextSpecific, 2);
       }

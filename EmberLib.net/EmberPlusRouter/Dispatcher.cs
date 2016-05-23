@@ -331,7 +331,7 @@ namespace EmberPlusRouter
          {
          }
 
-         protected override void OnTemplate(GlowTemplate glow, int[] path)
+         protected override void OnTemplate(GlowTemplateBase glow, int[] path)
          {
          }
 

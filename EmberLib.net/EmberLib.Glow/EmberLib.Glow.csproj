@@ -104,6 +104,7 @@
     <Compile Include="GlowParametersLocation.cs" />
     <Compile Include="GlowQualifiedFunction.cs" />
     <Compile Include="GlowQualifiedMatrix.cs" />
+    <Compile Include="GlowQualifiedTemplate.cs" />
     <Compile Include="GlowSignal.cs" />
     <Compile Include="GlowSource.cs" />
     <Compile Include="GlowTarget.cs" />
@@ -131,6 +132,7 @@
     <Compile Include="GlowParameter.cs" />
     <Compile Include="Framing\GlowReader.cs" />
     <Compile Include="GlowTemplate.cs" />
+    <Compile Include="GlowTemplateBase.cs" />
     <Compile Include="GlowTupleItemDescription.cs" />
     <Compile Include="GlowValue.cs" />
     <Compile Include="GlowWalker.cs" />

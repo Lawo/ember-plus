@@ -17,9 +17,6 @@
    Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace EmberLib.Glow
 {
@@ -40,5 +37,6 @@ namespace EmberLib.Glow
       TResult Visit(GlowQualifiedFunction glow, TState state);
       TResult Visit(GlowInvocationResult glow, TState state);
       TResult Visit(GlowTemplate glow, TState state);
+      TResult Visit(GlowQualifiedTemplate glow, TState state);
    }
 }

@@ -66,6 +66,13 @@ namespace libember { namespace ber
                     // 0x41 Indicates positive infinity
                     output.append(0x41);
                 }
+                else if (
+                    value == std::numeric_limits<value_type>::quiet_NaN() ||
+                    value == std::numeric_limits<value_type>::signaling_NaN())
+                {
+                    // 0x42 Indicates NaN
+                    output.append(0x42);
+                }
                 else
                 {
                     double const real = value;
@@ -99,7 +106,9 @@ namespace libember { namespace ber
             static std::size_t encodedLength(value_type value)
             {
                 if (value == +std::numeric_limits<value_type>::infinity()
-                ||  value == -std::numeric_limits<value_type>::infinity())
+                ||  value == -std::numeric_limits<value_type>::infinity()
+                ||  value == std::numeric_limits<value_type>::quiet_NaN()
+                ||  value == std::numeric_limits<value_type>::signaling_NaN())
                 {
                     return 1;
                 }
@@ -166,6 +175,10 @@ namespace libember { namespace ber
                 else if (encodedLength == 1 && preamble == 0x41)
                 {
                     return -std::numeric_limits<value_type>::infinity();
+                }
+                else if (encodedLength == 1 && preamble == 0x42)
+                {
+                    return std::numeric_limits<value_type>::quiet_NaN();
                 }
                 else
                 {

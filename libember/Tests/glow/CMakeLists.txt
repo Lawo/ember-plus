@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.3)
+cmake_minimum_required(VERSION 3.0)
 project(libember_test_glow)
 include_directories(../../Headers)
 set(SOURCE_FILES

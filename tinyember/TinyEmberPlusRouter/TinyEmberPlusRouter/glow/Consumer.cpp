@@ -1,5 +1,5 @@
 #include <iostream>
-#include <qt4/QtCore/QtCore>
+#include <QtCore/QtCore>
 #include <ember/glow/GlowNodeFactory.hpp>
 #include <s101/CommandType.hpp>
 #include <s101/Dtd.hpp>

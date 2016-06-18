@@ -1,7 +1,7 @@
 #ifndef __TINYEMBERROUTER_GLOW_DISPATCHER_H
 #define __TINYEMBERROUTER_GLOW_DISPATCHER_H
 
-#include <qt4/QtCore/QtCore>
+#include <QtCore/QtCore>
 #include "../model/NotificationSink.h"
 #include "../net/TcpClientFactory.h"
 #include "../net/TcpServer.h"

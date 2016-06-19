@@ -1,4 +1,5 @@
 project(ember)
+set(CMAKE_MACOSX_RPATH 1) # See CMake policy CMP0042
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
 include_directories(../Headers)
 set(${PROJECT_NAME}_INCLUDE_DIRS

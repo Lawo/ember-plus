@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.0)
+cmake_minimum_required(VERSION 2.8)
 project(libember_all)
 
 set(CMAKE_VERBOSE_MAKEFILE ON)

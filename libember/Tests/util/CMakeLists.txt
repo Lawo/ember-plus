@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.0)
+cmake_minimum_required(VERSION 2.8)
 project(libember_test_util)
 include_directories(../../Headers)
 set(SOURCE_FILES

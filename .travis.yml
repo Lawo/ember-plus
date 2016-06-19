@@ -1,0 +1,18 @@
+language: cpp
+
+# Run twice - to test both gcc and clang support
+compiler:
+  - gcc
+  - clang
+
+before_install:
+# -qq = --quiet --quiet --assume-yes
+  - sudo apt-get update -qq
+  - sudo apt-get install -qq cmake qt4-dev-tools
+
+before_script:
+  - mkdir build
+  - cd build
+  - cmake ..
+
+script: make

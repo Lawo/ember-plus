@@ -13,6 +13,7 @@ find_package( Qt4 REQUIRED QtCore QtGui QtNetwork)
 include( ${QT_USE_FILE} )
 
 include_directories( ${CMAKE_BINARY_DIR}
+        ${CMAKE_CURRENT_BINARY_DIR} # generated ui_.h files
         ../../libember/Headers
         ../../libformula/Headers
         ../../libs101/Headers)

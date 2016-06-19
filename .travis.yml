@@ -1,3 +1,4 @@
+dist: precise
 language: cpp
 
 # Run twice - to test both gcc and clang support
@@ -6,14 +7,22 @@ compiler:
   - clang
 
 before_install:
-# -qq = --quiet --quiet --assume-yes
-  - sudo add-apt-repository ppa:ubuntu-toolchain-r/test -y
-  - sudo apt-get update -qq
+  - sudo add-apt-repository ppa:ubuntu-toolchain-r/test -y # GCC 4.8
+  - sudo add-apt-repository ppa:george-edison55/precise-backports -y # CMake 3.0
+
+  - sudo apt-get update -qq # -qq = --quiet --quiet --assume-yes
 
 # Update to newer GCC - Travis only has 4.6, which doesn't support -std=c++11
   - if [ "$CXX" = "g++" ]; then sudo apt-get install -qq g++-4.8; fi
-  - if [ "$CXX" = "g++" ]; then export CXX="g++-4.8" CC="gcc-4.8"; fi
-  - sudo apt-get install -qq cmake qt4-dev-tools
+  - if [ "$CXX" = "g++" ]; then export CXX="g++-4.8" CC="gcc-4.8"; $CXX --version; fi
+
+  # Try to get CMake to upgrade
+  - sudo apt-get remove cmake
+  - sudo apt-get install -qq cmake
+  - cmake --version
+
+  # Install QT4
+  - sudo apt-get install -qq qt4-dev-tools
 
 before_script:
   - mkdir build

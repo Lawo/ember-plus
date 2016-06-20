@@ -1,5 +1,8 @@
 project(TinyEmberPlus)
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -Wno-unused-local-typedefs")
+
+if(NOT MSVC)
+        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -Wno-unused-local-typedefs")
+endif()
 
 set(QT_USE_QTGUI TRUE)
 set(QT_USE_QTXML TRUE)

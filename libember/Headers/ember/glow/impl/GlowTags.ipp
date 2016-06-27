@@ -140,6 +140,12 @@ namespace libember { namespace glow
         return ber::make_tag(ber::Class::ContextSpecific, NodeProperty::SchemaIdentifiers);
     }
 
+    LIBEMBER_INLINE
+    ber::Tag GlowTags::NodeContents::TemplateReference()
+    {
+        return ber::make_tag(ber::Class::ContextSpecific, NodeProperty::TemplateReference);
+    }
+
     /**
      * QualifiedParameter Tags
      */
@@ -294,6 +300,12 @@ namespace libember { namespace glow
     ber::Tag GlowTags::ParameterContents::SchemaIdentifiers()
     {
         return ber::make_tag(ber::Class::ContextSpecific, ParameterProperty::SchemaIdentifiers);
+    }
+
+    LIBEMBER_INLINE
+    ber::Tag GlowTags::ParameterContents::TemplateReference()
+    {
+        return ber::make_tag(ber::Class::ContextSpecific, ParameterProperty::TemplateReference);
     }
 
     /**
@@ -500,6 +512,12 @@ namespace libember { namespace glow
         return ber::make_tag(ber::Class::ContextSpecific, MatrixProperty::SchemaIdentifiers);
     }
 
+    LIBEMBER_INLINE
+    ber::Tag GlowTags::MatrixContents::TemplateReference()
+    {
+        return ber::make_tag(ber::Class::ContextSpecific, MatrixProperty::TemplateReference);
+    }
+
     /**
      * Signal Tags
      */
@@ -626,6 +644,12 @@ namespace libember { namespace glow
         return ber::make_tag(ber::Class::ContextSpecific, 3);
     }
 
+    LIBEMBER_INLINE
+    ber::Tag GlowTags::FunctionContents::TemplateReference()
+    {
+        return ber::make_tag(ber::Class::ContextSpecific, 4);
+    }
+
     /**
      * TupleItemDescription tags
      */
@@ -676,6 +700,43 @@ namespace libember { namespace glow
 
     LIBEMBER_INLINE
         ber::Tag GlowTags::InvocationResult::Result()
+    {
+        return ber::make_tag(ber::Class::ContextSpecific, 2);
+    }
+
+
+    LIBEMBER_INLINE
+    ber::Tag GlowTags::Template::Number()
+    {
+        return ber::make_tag(ber::Class::ContextSpecific, 0);
+    }
+
+    LIBEMBER_INLINE
+        ber::Tag GlowTags::Template::Description()
+    {
+        return ber::make_tag(ber::Class::ContextSpecific, 1);
+    }
+
+    LIBEMBER_INLINE
+    ber::Tag GlowTags::Template::Element()
+    {
+        return ber::make_tag(ber::Class::ContextSpecific, 2);
+    }
+
+    LIBEMBER_INLINE
+    ber::Tag GlowTags::QualifiedTemplate::Path()
+    {
+        return ber::make_tag(ber::Class::ContextSpecific, 0);
+    }
+
+    LIBEMBER_INLINE
+        ber::Tag GlowTags::QualifiedTemplate::Description()
+    {
+        return ber::make_tag(ber::Class::ContextSpecific, 1);
+    }
+
+    LIBEMBER_INLINE
+        ber::Tag GlowTags::QualifiedTemplate::Element()
     {
         return ber::make_tag(ber::Class::ContextSpecific, 2);
     }

@@ -74,6 +74,12 @@ namespace libember { namespace glow
              * @param isOnline The current online state of the node.
              */
             void setIsOnline(bool isOnline);
+            
+            /**
+             * Inserts the object identifier to the template describing the structure
+             * of this element.
+             */
+            void setTemplateReference(ber::ObjectIdentifier const& path);
 
             /**
              * Returns a modifiable element collection that contains the children.
@@ -128,6 +134,12 @@ namespace libember { namespace glow
              * @return Element collection containing the children of this node.
              */
             GlowElementCollection const* children() const;
+
+            /**
+             * Returns the object identifier of the template reference. If not present,
+             * an empty oid is being returned.
+             */
+            ber::ObjectIdentifier templateReference() const;
 
         protected:
             /**

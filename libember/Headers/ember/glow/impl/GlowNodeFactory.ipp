@@ -44,6 +44,8 @@
 #include "../GlowSource.hpp"
 #include "../GlowConnection.hpp"
 #include "../GlowLabel.hpp"
+#include "../GlowTemplate.hpp"
+#include "../GlowQualifiedTemplate.hpp"
 
 namespace libember { namespace glow 
 {
@@ -127,6 +129,12 @@ namespace libember { namespace glow
 
             case GlowType::TupleItemDescription:
                 return new GlowTupleItemDescription(tag);
+
+            case GlowType::Template:
+                return new GlowTemplate(tag);
+
+            case GlowType::QualifiedTemplate:
+                return new GlowQualifiedTemplate(tag);
 
             default:
                 return 0;

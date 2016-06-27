@@ -287,6 +287,12 @@ namespace libember { namespace glow
             void setStreamDescriptor(StreamFormat const& format, int offset);
 
             /**
+             * Inserts the object identifier to the template describing the structure
+             * of this element.
+             */
+            void setTemplateReference(ber::ObjectIdentifier const& path);
+
+            /**
              * Returns a modifiable Element collection which may contain one or more commands that
              * shall be applied to this parameter.
              */
@@ -441,6 +447,12 @@ namespace libember { namespace glow
              * @return The element collection which may contain commands.
              */
             GlowElementCollection const* children() const;
+
+            /**
+             * Returns the object identifier of the template reference. If not present,
+             * an empty oid is being returned.
+             */
+            ber::ObjectIdentifier templateReference() const;
 
         protected:
             /**

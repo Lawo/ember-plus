@@ -214,6 +214,12 @@ namespace libember { namespace glow
     }
 
     LIBEMBER_INLINE
+    void GlowParameterBase::setTemplateReference(ber::ObjectIdentifier const& path)
+    {
+        contents().set(GlowTags::ParameterContents::TemplateReference(), path);
+    }
+
+    LIBEMBER_INLINE
     GlowElementCollection* GlowParameterBase::children()
     {
         iterator const first = begin();
@@ -467,6 +473,13 @@ namespace libember { namespace glow
     {
         ber::Value const value = contents().get(GlowTags::ParameterContents::IsOnline());
         return util::ValueConverter::valueOf(value, true);
+    }
+
+    LIBEMBER_INLINE
+    ber::ObjectIdentifier GlowParameterBase::templateReference() const
+    {
+        ber::Value const value = contents().get(GlowTags::ParameterContents::TemplateReference());
+        return util::ValueConverter::valueOf(value, ber::ObjectIdentifier());
     }
 }
 }

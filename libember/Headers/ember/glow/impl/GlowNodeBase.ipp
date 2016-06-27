@@ -73,6 +73,12 @@ namespace libember { namespace glow
     }
 
     LIBEMBER_INLINE
+    void GlowNodeBase::setTemplateReference(ber::ObjectIdentifier const& path)
+    {
+        contents().set(GlowTags::NodeContents::TemplateReference(), path);
+    }
+
+    LIBEMBER_INLINE
     GlowElementCollection* GlowNodeBase::children()
     {
         iterator const first = begin();
@@ -139,6 +145,13 @@ namespace libember { namespace glow
         {
             return 0;
         }
+    }
+
+    LIBEMBER_INLINE
+    ber::ObjectIdentifier GlowNodeBase::templateReference() const
+    {
+        ber::Value const value = contents().get(GlowTags::NodeContents::TemplateReference());
+        return util::ValueConverter::valueOf(value, ber::ObjectIdentifier());
     }
 }
 }

@@ -85,6 +85,12 @@ namespace libember { namespace glow
              * @return The context-specific tag identifying the node's schema identifier.
              */
             static ber::Tag SchemaIdentifiers();
+
+            /**
+             * Returns the context-specific tag identifying the template reference.
+             * @return The context-specific tag identifying the template reference.
+             */
+            static ber::Tag TemplateReference();
         };
 
         struct LIBEMBER_API Node 
@@ -282,6 +288,12 @@ namespace libember { namespace glow
              * @return The context-specific tag identifying the parameter's schema identifier.
              */
             static ber::Tag SchemaIdentifiers();
+
+            /**
+             * Returns the context-specific tag identifying the template reference.
+             * @return The context-specific tag identifying the template reference.
+             */
+            static ber::Tag TemplateReference();
         };
         
         struct LIBEMBER_API StreamEntry
@@ -494,6 +506,12 @@ namespace libember { namespace glow
              * @return The context-specific tag identifying the matrix' schema identifier.
              */
             static ber::Tag SchemaIdentifiers();
+
+            /**
+             * Returns the context-specific tag identifying the template reference.
+             * @return The context-specific tag identifying the template reference.
+             */
+            static ber::Tag TemplateReference();
         };
 
         struct LIBEMBER_API Signal
@@ -614,6 +632,12 @@ namespace libember { namespace glow
              * @return The context-specific tag identifying the result of a function.
              */
             static ber::Tag Result();
+
+            /**
+             * Returns the context-specific tag identifying the template reference.
+             * @return The context-specific tag identifying the template reference.
+             */
+            static ber::Tag TemplateReference();
         };
 
         struct LIBEMBER_API TupleItemDescription
@@ -665,6 +689,48 @@ namespace libember { namespace glow
              * @return The context-specific tag identifying the result value of an InvocationResult.
              */
             static ber::Tag Result();
+        };
+
+        struct LIBEMBER_API Template 
+        {
+            /**
+             * Returns the context-specific tag identifying a number.
+             * @return Returns the context-specific tag identifying a number.
+             */
+            static ber::Tag Number(); 
+
+            /**
+             * Returns the context-specific tag identifying the description. 
+             * @return Returns the context-specific tag identifying the description.
+             */
+            static ber::Tag Description();
+
+            /**
+             * Returns the context-specific tag identifying the element described by the template.
+             * @return Returns the context-specific tag identifying the element described by the template.
+             */
+            static ber::Tag Element();
+        };
+
+        struct LIBEMBER_API QualifiedTemplate
+        {
+            /**
+             * Returns the context-specific tag identifying the path of the template.
+             * @return Returns the context-specific tag identifying the path.
+             */
+            static ber::Tag Path(); 
+
+            /**
+             * Returns the context-specific tag identifying the description. 
+             * @return Returns the context-specific tag identifying the description.
+             */
+            static ber::Tag Description();
+
+            /**
+             * Returns the context-specific tag identifying the element described by the template.
+             * @return Returns the context-specific tag identifying the element described by the template.
+             */
+            static ber::Tag Element();
         };
     };
 }

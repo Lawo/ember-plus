@@ -48,7 +48,9 @@ namespace libember { namespace glow
                 Arguments = 2,
 
                 /** The collection which contains the result type. */
-                Result = 3
+                Result = 3,
+
+                TemplateReference = 4
             };
 
         public:

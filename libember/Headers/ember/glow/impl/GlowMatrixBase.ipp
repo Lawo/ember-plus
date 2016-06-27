@@ -125,6 +125,12 @@ namespace libember { namespace glow
     }
 
     LIBEMBER_INLINE
+    void GlowMatrixBase::setTemplateReference(ber::ObjectIdentifier const& path)
+    {
+        contents().set(GlowTags::MatrixContents::TemplateReference(), path);
+    }
+
+    LIBEMBER_INLINE
     dom::Sequence* GlowMatrixBase::labels()
     {
         iterator const first = contents().begin();
@@ -371,6 +377,13 @@ namespace libember { namespace glow
         {
             return 0;
         }
+    }
+
+    LIBEMBER_INLINE
+    ber::ObjectIdentifier GlowMatrixBase::templateReference() const
+    {
+        ber::Value const value = contents().get(GlowTags::MatrixContents::TemplateReference());
+        return util::ValueConverter::valueOf(value, ber::ObjectIdentifier());
     }
 }
 }

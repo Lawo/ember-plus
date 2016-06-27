@@ -53,7 +53,8 @@ namespace libember { namespace glow
             StreamIdentifier = 14,
             EnumMap = 15,
             StreamDescriptor = 16,
-            SchemaIdentifiers = 17
+            SchemaIdentifiers = 17,
+            TemplateReference = 18
         };
 
         typedef unsigned int value_type;

@@ -124,6 +124,12 @@ namespace libember { namespace glow
             void setGainParameterNumber(int gainParameterNumber);
 
             /**
+             * Inserts the object identifier to the template describing the structure
+             * of this element.
+             */
+            void setTemplateReference(ber::ObjectIdentifier const& path);
+
+            /**
              * Returns a modifiable sequence collection that contains the labels.
              * The element will be inserted if it doesn't already exist.
              * @return The label collection.
@@ -295,6 +301,12 @@ namespace libember { namespace glow
              */
             template<typename OutputIterator>
             size_type typedConnections(OutputIterator dest) const;
+
+            /**
+             * Returns the object identifier of the template reference. If not present,
+             * an empty oid is being returned.
+             */
+            ber::ObjectIdentifier templateReference() const;
 
     protected:
             /**

@@ -55,7 +55,9 @@ namespace libember { namespace glow
                 QualifiedFunction = 20,
                 TupleItemDescription = 21,
                 Invocation = 22,
-                InvocationResult = 23
+                InvocationResult = 23,
+                Template = 24,
+                QualifiedTemplate = 25
             };
 
             typedef unsigned int value_type;

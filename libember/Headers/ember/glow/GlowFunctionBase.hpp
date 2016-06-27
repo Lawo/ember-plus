@@ -55,6 +55,12 @@ namespace libember { namespace glow
             void setDescription(std::string const& description);
 
             /**
+             * Inserts the object identifier to the template describing the structure
+             * of this element.
+             */
+            void setTemplateReference(ber::ObjectIdentifier const& path);
+
+            /**
              * Returns the sequence containing the arguments. If the sequence does not
              * yet exist, it will be created. 
              * @return The sequence containing the arguments.
@@ -123,6 +129,12 @@ namespace libember { namespace glow
              */
             template<typename OutputIterator>
             size_type typedResult(OutputIterator dest) const;
+
+            /**
+             * Returns the object identifier of the template reference. If not present,
+             * an empty oid is being returned.
+             */
+            ber::ObjectIdentifier templateReference() const;
 
         protected:
             /**

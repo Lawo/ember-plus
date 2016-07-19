@@ -1,5 +1,10 @@
 project(ember)
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
+set(CMAKE_MACOSX_RPATH 1) # See CMake policy CMP0042
+
+if(NOT MSVC)
+        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
+endif()
+   
 include_directories(../Headers)
 set(${PROJECT_NAME}_INCLUDE_DIRS
         ${PROJECT_SOURCE_DIR}/Headers)
@@ -25,3 +30,6 @@ file(GLOB SOURCE_FILES
 
 add_library(${PROJECT_NAME}_static STATIC ${HEADER_FILES} ${SOURCE_FILES})
 add_library(${PROJECT_NAME}_shared SHARED ${HEADER_FILES} ${SOURCE_FILES})
+
+target_compile_definitions(${PROJECT_NAME}_shared PUBLIC LIBEMBER_DLL=1)
+target_compile_definitions(${PROJECT_NAME}_shared PRIVATE LIBEMBER_DLL_EXPORTS=1)

@@ -7,8 +7,8 @@
 #ifndef __TINYEMBERROUTER_NET_TCPCLIENT_H
 #define __TINYEMBERROUTER_NET_TCPCLIENT_H
 
-#include <qt4/QtNetwork/qtcpsocket.h>
-#include <qt4/QtCore/qobject.h>
+#include <QtNetwork/qtcpsocket.h>
+#include <QtCore/qobject.h>
 
 namespace net
 {

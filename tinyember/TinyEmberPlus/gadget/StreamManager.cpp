@@ -6,6 +6,7 @@
 
 #include <algorithm>
 #include <cmath>
+#include <cstdlib>
 #include "BooleanParameter.h"
 #include "EnumParameter.h"
 #include "IntegerParameter.h"
@@ -37,7 +38,7 @@ namespace gadget
 
     void StreamManager::RandomValueGenerator::visit(StringParameter* parameter)
     {
-        auto const length = std::min(4U, (unsigned int)parameter->maxLength());
+        auto const length = std::min((StreamManager::size_type)4, parameter->maxLength());
         auto value = std::string(length, ' ');
         for (auto i = 0U; i < length; ++i)
         {

@@ -12,6 +12,7 @@
 #include "../NotificationSink.h"
 #include "../../util/Collection.h"
 #include "../../util/Types.h"
+#include <stdexcept>
 
 namespace model { namespace matrix
 {

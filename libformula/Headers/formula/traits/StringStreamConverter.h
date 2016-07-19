@@ -9,6 +9,7 @@
 
 #include <memory>
 #include <vector>
+#include <cstdlib>
 #include "../Types.hpp"
 
 #pragma warning( push )

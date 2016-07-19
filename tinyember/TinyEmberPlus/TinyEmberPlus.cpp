@@ -6,6 +6,9 @@
 
 #include "gadget/Node.h"
 #include "gadget/Parameter.h"
+#include "gadget/EnumParameter.h"
+#include "gadget/IntegerParameter.h"
+#include "gadget/RealParameter.h"
 #include "gadget/StreamManager.h"
 #include "glow/ConsumerRequestProcessor.h"
 #include "glow/ConsumerProxy.h"

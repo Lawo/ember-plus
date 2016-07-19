@@ -1,4 +1,10 @@
+
 # Ember+ control protocol - Slick and free for all! #
+
+## Status
+[![Build Status](https://travis-ci.org/Lawo/ember-plus.svg?branch=master)](https://travis-ci.org/Lawo/ember-plus)
+
+## Introduction
 
 The topic of control protocols keeps manufacturers and system integrators busy for years. _Ember+_ is an initiative out of the [Lawo Group](http://www.lawo.com/) and [L-S-B Broadcast Technologies GmbH](http://www.l-s-b.de). Even for our small group of companies it was well worth defining a control protocol, which allows our equipment to interact without significant development effort.
 

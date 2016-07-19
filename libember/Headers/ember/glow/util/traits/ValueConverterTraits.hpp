@@ -1,12 +1,9 @@
 #ifndef __LIBEMBER_GLOW_UTIL_TRAITS_VALUECONVERTERTRAITS_HPP
 #define __LIBEMBER_GLOW_UTIL_TRAITS_VALUECONVERTERTRAITS_HPP
 
-#include "../../../ber/Value.hpp"
-
-//SimianIgnore
-
-namespace libember { namespace glow { namespace util
-{   
+    Copyright (C) 2012-2016 Lawo GmbH (http://www.lawo.com).
+    Distributed under the Boost Software License, Version 1.0.
+    (See accompanying file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
     /**
      * Default implementation for a value converter.
      */

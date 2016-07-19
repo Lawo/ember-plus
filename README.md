@@ -6,7 +6,7 @@
 
 ## Introduction
 
-The topic of control protocols keeps manufacturers and system integrators busy for years. _Ember+_ is an initiative out of the [Lawo Group](http://www.lawo.com/) and [L-S-B Broadcast Technologies GmbH](http://www.l-s-b.de). Even for our small group of companies it was well worth defining a control protocol, which allows our equipment to interact without significant development effort.
+The topic of control protocols keeps manufacturers and system integrators busy for years. _Ember+_ is an initiative out of the [Lawo Group](http://www.lawo.com/) that was started, because even for our small group of companies it was well worth defining a control protocol, which allows all of our equipment to interact without significant development effort.
 
 We have decided to make this protocol openly available to everyone interested. This developer website gives public access to everything needed to get up to speed with _Ember+_: documentation, software libraries in various programming languages and platforms, source code and binaries. Our regular releases also include helpful examples and tools, allowing to implement _Ember+_ even into many existing products within a very short time.
 

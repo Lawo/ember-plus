@@ -1,3 +1,9 @@
+/*
+    Copyright (C) 2012-2016 Lawo GmbH (http://www.lawo.com).
+    Distributed under the Boost Software License, Version 1.0.
+    (See accompanying file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+*/
+
 #ifndef __TINYEMBER_GADGET_ACCESS_H
 #define __TINYEMBER_GADGET_ACCESS_H
 
@@ -9,13 +15,13 @@ namespace gadget
     struct Access
     {
         public:
-            enum _Domain
+            typedef enum _Domain
             {
                 None = 0,
                 ReadOnly,
                 WriteOnly,
                 ReadWrite,
-            };
+            } _Domain;
 
             typedef std::size_t value_type;
 

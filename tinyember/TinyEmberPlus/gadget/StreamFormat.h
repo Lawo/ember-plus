@@ -1,3 +1,9 @@
+/*
+    Copyright (C) 2012-2016 Lawo GmbH (http://www.lawo.com).
+    Distributed under the Boost Software License, Version 1.0.
+    (See accompanying file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+*/
+
 #ifndef __TINYEMBER_GADGET_STREAMFORMAT_H
 #define __TINYEMBER_GADGET_STREAMFORMAT_H
 #include <cstring>
@@ -9,7 +15,7 @@ namespace gadget
     struct StreamFormat
     {
         public:
-            enum _Domain
+            typedef enum _Domain
             {
                 UnsignedInt8                  = ( 0),
                 UnsignedInt16BigEndian        = ( 2),
@@ -31,7 +37,7 @@ namespace gadget
                 IeeeFloat64LittleEndian       = (23),
 
                 Invalid = (0xFFFFFFFF),
-            };
+            } _Domain;
 
             typedef std::size_t value_type;
 

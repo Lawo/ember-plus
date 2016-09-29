@@ -1,5 +1,8 @@
 project(TinyEmberPlus)
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -Wno-unused-local-typedefs")
+
+if(NOT MSVC)
+        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -Wno-unused-local-typedefs")
+endif()
 
 set(QT_USE_QTGUI TRUE)
 set(QT_USE_QTXML TRUE)
@@ -13,6 +16,7 @@ find_package( Qt4 REQUIRED QtCore QtGui QtNetwork)
 include( ${QT_USE_FILE} )
 
 include_directories( ${CMAKE_BINARY_DIR}
+        ${CMAKE_CURRENT_BINARY_DIR} # generated ui_.h files
         ../../libember/Headers
         ../../libformula/Headers
         ../../libs101/Headers)
@@ -75,4 +79,4 @@ QT4_WRAP_UI( UI_HEADERS ${UIS} )
 QT4_WRAP_CPP( MOC_SRCS ${MOC_HEADERS})
 
 add_executable(${PROJECT_NAME} ${HEADER_FILES} ${SOURCE_FILES} ${MOC_HEADERS} ${RES_SOURCES} ${UI_HEADERS})
-target_link_libraries(${PROJECT_NAME} libember_static ${QT_LIBRARIES})
+target_link_libraries(${PROJECT_NAME} ember_static ${QT_LIBRARIES})

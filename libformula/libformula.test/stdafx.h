@@ -1,7 +1,8 @@
-// stdafx.h : include file for standard system include files,
-// or project specific include files that are used frequently, but
-// are changed infrequently
-//
+/*
+    Copyright (C) 2012-2016 Lawo GmbH (http://www.lawo.com).
+    Distributed under the Boost Software License, Version 1.0.
+    (See accompanying file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+*/
 
 #pragma once
 

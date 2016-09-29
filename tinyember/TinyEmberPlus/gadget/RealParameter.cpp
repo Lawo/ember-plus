@@ -1,3 +1,9 @@
+/*
+    Copyright (C) 2012-2016 Lawo GmbH (http://www.lawo.com).
+    Distributed under the Boost Software License, Version 1.0.
+    (See accompanying file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+*/
+
 #include <formula/TermCompiler.hpp>
 #include <sstream>
 #include <cstdio>
@@ -41,7 +47,11 @@ namespace gadget
         if (m_format.size() > 0)
         {
             char buffer[256];
+            #ifdef WIN32
+            sprintf_s(buffer, 256, m_format.c_str(), value);
+            #else
             snprintf(buffer, 256, m_format.c_str(), value);
+            #endif
             return std::string(buffer);
         }
         else

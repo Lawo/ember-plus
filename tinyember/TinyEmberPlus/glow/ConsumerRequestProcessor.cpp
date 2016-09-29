@@ -1,3 +1,9 @@
+/*
+    Copyright (C) 2012-2016 Lawo GmbH (http://www.lawo.com).
+    Distributed under the Boost Software License, Version 1.0.
+    (See accompanying file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+*/
+
 #include "ConsumerRequestProcessor.h"
 #include "../gadget/Node.h"
 #include "../gadget/BooleanParameter.h"
@@ -11,7 +17,6 @@
 #include "util/NodeConverter.h"
 #include "util/ParameterConverter.h"
 #include <ember/Ember.hpp>
-#include "../gadget/util/EntityPath.ipp"
 using namespace libember;
 using namespace gadget::util;
 

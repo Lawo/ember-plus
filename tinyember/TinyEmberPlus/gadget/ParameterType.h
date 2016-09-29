@@ -1,3 +1,9 @@
+/*
+    Copyright (C) 2012-2016 Lawo GmbH (http://www.lawo.com).
+    Distributed under the Boost Software License, Version 1.0.
+    (See accompanying file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+*/
+
 #ifndef __TINYEMBER_GADGET_PARAMETERTYPE_H
 #define __TINYEMBER_GADGET_PARAMETERTYPE_H
 
@@ -10,7 +16,7 @@ namespace gadget
     struct ParameterType
     {
         public:
-            enum _Domain
+            typedef enum _Domain
             {
                 Integer = 1,
                 Real,
@@ -19,7 +25,7 @@ namespace gadget
                 Trigger,
                 Enum,
                 Octets,
-            };
+            } _Domain;
 
             typedef std::size_t value_type;
 

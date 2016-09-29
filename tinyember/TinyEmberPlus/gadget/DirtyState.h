@@ -1,7 +1,14 @@
+/*
+    Copyright (C) 2012-2016 Lawo GmbH (http://www.lawo.com).
+    Distributed under the Boost Software License, Version 1.0.
+    (See accompanying file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+*/
+
 #ifndef __TINYEMBER_GADGET_DIRTYSTATE_H
 #define __TINYEMBER_GADGET_DIRTYSTATE_H
 
 #include <cstring>
+#include <cstddef>
 
 namespace gadget
 {
@@ -21,11 +28,9 @@ namespace gadget
     template<typename FlagType>
     struct DirtyState
     {
-        //template<typename FlagType>
-        friend bool operator == <>(DirtyState<FlagType> const& x, DirtyState<FlagType> const& y);
+        friend bool operator ==(DirtyState<FlagType> const& x, DirtyState<FlagType> const& y);
 
-        //template<typename FlagType>
-        friend bool operator != <>(DirtyState<FlagType> const& x, DirtyState<FlagType> const& y);
+        friend bool operator !=(DirtyState<FlagType> const& x, DirtyState<FlagType> const& y);
 
         public:
             typedef size_t value_type;

@@ -86,4 +86,4 @@ namespace libember { namespace glow
 }
 }
 
-#endif  // __LIBEMBER_GLOW_GLOWNODEBASE_IPP
+#endif  // __LIBEMBER_GLOW_GLOWTEMPLATEBASE_IPP

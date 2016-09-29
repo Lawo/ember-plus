@@ -48,6 +48,8 @@
 #include "GlowInvocationResult.hpp"
 #include "GlowFunction.hpp"
 #include "GlowQualifiedFunction.hpp"
+#include "GlowTemplate.hpp"
+#include "GlowQualifiedTemplate.hpp"
 
 #endif  // __LIBEMBER_GLOW_GLOW_HPP
 

@@ -84,7 +84,7 @@ namespace libember { namespace glow
 }
 
 #ifdef LIBEMBER_HEADER_ONLY
-#  include "impl/GlowNodeBase.ipp"
+#  include "impl/GlowTemplateBase.ipp"
 #endif
 
 #endif  // __LIBEMBER_GLOW_GLOWTEMPLATEBASE_HPP

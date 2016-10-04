@@ -663,13 +663,14 @@ double ber_decodeReal(BerInput *pIn, int length)
 
       qwValue = 0;
 
-      if(length == 1 && preamble == 0x40) // positive infinity
+      if(length == 1 )
       {
-         qwValue = 0x7FF0000000000000ULL;
-      }
-      else if(length == 1 && preamble == 0x41) // negative infinity
-      {
-         qwValue = 0x8FF0000000000000ULL;
+          if ( preamble == 0x40) // positive infinity
+              qwValue = 0x7FF0000000000000ULL;
+          else if ( preamble == 0x41) // positive infinity
+              qwValue = 0x8FF0000000000000ULL;
+          else
+              qwValue = 0x7fC0000000000000ULL;
       }
       else
       {
@@ -717,13 +718,14 @@ double ber_decodeReal(BerInput *pIn, int length)
 
       dwValue = 0;
 
-      if(length == 1 && preamble == 0x40) // positive infinity
+      if(length == 1 )
       {
-         dwValue = 0x7FF00000L;
-      }
-      else if(length == 1 && preamble == 0x41) // negative infinity
-      {
-         dwValue = 0x8FF00000L;
+          if ( preamble == 0x40) // positive infinity
+              qwValue = 0x7FF00000L;
+          else if ( preamble == 0x41) // positive infinity
+              qwValue = 0x8FF00000L;
+          else
+              qwValue = 0x7fC00000L;
       }
       else
       {

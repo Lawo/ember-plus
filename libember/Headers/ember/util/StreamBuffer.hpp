@@ -281,7 +281,7 @@ namespace libember { namespace util
     template<typename ValueType, unsigned short ChunkSize>
     inline void StreamBuffer<ValueType, ChunkSize>::clear()
     {
-        StreamBuffer empty;
+        StreamBuffer empty(m_maxsize);
         swap(empty);
     }
 

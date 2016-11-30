@@ -1,6 +1,6 @@
 ﻿/*
    EmberLib.net -- .NET implementation of the Ember+ Protocol
-   Copyright (C) 2012-2014  L-S-B Broadcast Technologies GmbH
+   Copyright (C) 2012  L-S-B Broadcast Technologies GmbH
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Lesser General Public
@@ -544,6 +544,50 @@ namespace EmberLib.Glow.PowerPack.Xml
       object IGlowVisitor<XmlWriter, object>.Visit(GlowSubContainer glow, XmlWriter state)
       {
          return null;
+      }
+
+      object IGlowVisitor<XmlWriter, object>.Visit(GlowTemplate glow, XmlWriter state)
+      {
+          state.WriteStartElement("Template");
+          {
+              state.WriteAttributeString("number", glow.Number.ToString());
+
+              if (glow.Description != null)
+              {
+                  state.WriteAttributeString("description", glow.Description);
+              }
+
+              if (glow.Element != null)
+              {
+                  state.WriteStartElement("element");
+                  glow.Element.Accept(this, state);
+                  state.WriteEndElement();
+              }
+          }
+          state.WriteEndElement();
+          return null;
+      }
+
+      object IGlowVisitor<XmlWriter, object>.Visit(GlowQualifiedTemplate glow, XmlWriter state)
+      {
+          state.WriteStartElement("QualifiedTemplate");
+          {
+              state.WriteAttributeString("path", ConvertPath(glow.Path));
+
+              if (glow.Description != null)
+              {
+                  state.WriteAttributeString("description", glow.Description);
+              }
+
+              if (glow.Element != null)
+              {
+                  state.WriteStartElement("element");
+                  glow.Element.Accept(this, state);
+                  state.WriteEndElement();
+              }
+          }
+          state.WriteEndElement();
+          return null;
       }
       #endregion
    }

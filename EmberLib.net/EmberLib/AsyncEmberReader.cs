@@ -116,6 +116,7 @@ namespace EmberLib
       /// <param name="length">The number of bytes in <paramref name="bytes"/> to feed.</param>
       public void ReadBytes(byte[] bytes, int offset, int length)
       {
+         if (length == 0) return;
          length += offset;
 
          if(bytes == null)

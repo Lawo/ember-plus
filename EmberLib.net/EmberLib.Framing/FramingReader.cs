@@ -190,6 +190,7 @@ namespace EmberLib.Framing
       /// <param name="length">Number of bytes in <paramref name="bytes"/> to decode.</param>
       public void ReadBytes(byte[] bytes, int offset, int length)
       {
+         if (length == 0) return;
          length += offset;
 
          if(bytes == null)

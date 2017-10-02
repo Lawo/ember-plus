@@ -44,6 +44,7 @@ typedef struct
    bertype type;
    int length;
    int bytesRead;
+   int hasContent;
 } __EmberAsyncContainer;
 
 

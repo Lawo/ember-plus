@@ -25,6 +25,7 @@ static void container_init(__EmberAsyncContainer *pThis, const BerTag *pTag, ber
    pThis->type = type;
    pThis->length = length;
    pThis->bytesRead = 0;
+   pThis->hasContent = 0;
 }
 
 static bool container_isEof(const __EmberAsyncContainer *pThis)
@@ -231,9 +232,41 @@ bool readByte_Length(EmberAsyncReader *pThis, byte b)
             if(pThis->onNewContainer != NULL)
                pThis->onNewContainer(pBase);
 
+            byte hasContent = 0;
+            __EmberAsyncContainer* c = 0;
+
+            if((pThis->pCurrentContainer != 0) && (pBase->tag.preamble == 0x80))
+            {
+               switch (pThis->pCurrentContainer->type)
+               {
+                  case 0x800a:
+                  case 0x8003:
+                     switch (pBase->tag.number)
+                     {
+                        case 1: // contents
+                        case 2: // children
+                           hasContent = pBase->tag.number;
+                           c = pThis->pCurrentContainer;
+                           break;
+
+                        default:
+                           break;
+                     }
+                     break;
+
+                   default:
+                     break;
+                }
+            }
+
             pushContainer(pThis);
 
             disposeCurrentTlv(pThis);
+            if(c != 0)
+            {
+               c->hasContent = hasContent;
+            }
+
             return isEofOk;
          }
 

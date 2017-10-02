@@ -98,7 +98,16 @@ static void onItemReady_Node(NonFramingGlowReader *pThis)
    berint number;
    const BerReader *pBase = &pThis->base.base;
 
-   if(pBase->isContainer == false)
+   if(pBase->isContainer)
+   {
+      const EmberAsyncReader* pReader = &pThis->base;
+      if(!pReader->pCurrentContainer->hasContent)
+      {
+         if(pThis->onNode != NULL)
+            pThis->onNode(&pThis->glow.node, GlowFieldFlag_None, pThis->path, pThis->pathLength, pThis->state);
+      }
+   }
+   else
    {
       if(berTag_equals(&pBase->tag, &glowTags.node.number))
       {
@@ -116,6 +125,12 @@ static void onItemReady_QualifiedNode(NonFramingGlowReader *pThis)
 
    if(pBase->isContainer)
    {
+      const EmberAsyncReader* pReader = &pThis->base;
+      if(!pReader->pCurrentContainer->hasContent)
+      {
+         if(pThis->onNode != NULL)
+            pThis->onNode(&pThis->glow.node, GlowFieldFlag_None, pThis->path, pThis->pathLength, pThis->state);
+      }
       pThis->pathLength = 0;
    }
    else

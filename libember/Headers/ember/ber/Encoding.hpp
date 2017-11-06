@@ -16,6 +16,7 @@
 #include "traits/ObjectIdentifier.hpp"
 #include "traits/Boolean.hpp"
 #include "traits/Integral.hpp"
+#include "traits/Null.hpp"
 #include "traits/Real.hpp"
 #include "traits/StdString.hpp"
 #include "Value.hpp"

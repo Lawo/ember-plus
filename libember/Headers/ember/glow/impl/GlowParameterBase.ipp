@@ -136,6 +136,12 @@ namespace libember { namespace glow
     }
 
     LIBEMBER_INLINE
+    void GlowParameterBase::setDefault(ber::Null const& value)
+    {
+        contents().set(GlowTags::ParameterContents::Default(), value);
+    }
+
+    LIBEMBER_INLINE
     void GlowParameterBase::setValue(double value)
     {
         contents().set(GlowTags::ParameterContents::Value(), value);
@@ -161,6 +167,12 @@ namespace libember { namespace glow
 
     LIBEMBER_INLINE
     void GlowParameterBase::setValue(ber::Octets const& value)
+    {
+        contents().set(GlowTags::ParameterContents::Value(), value);
+    }
+
+    LIBEMBER_INLINE
+    void GlowParameterBase::setValue(ber::Null const& value)
     {
         contents().set(GlowTags::ParameterContents::Value(), value);
     }

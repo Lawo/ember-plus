@@ -154,6 +154,9 @@ namespace libember { namespace dom
                     case ber::Type::OctetString:
                         return new dom::VariantLeaf(tag, decode<ber::Octets>());
 
+                    case ber::Type::Null:
+                        return new dom::VariantLeaf(tag, decode<ber::Null>());
+
                     default:
                         break;
                 }

@@ -200,6 +200,16 @@ namespace libember { namespace glow
             void setDefault(ber::Octets const& value);
 
             /**
+            * Sets the default value of this parameter to null. This can be used to indicate that
+            * no value is present at all.
+            * If a parameter is nullable, its default value must be set to null and its type
+            * must be reported when querying the parameter.
+            *
+            * @param value The null value.
+            */
+            void setDefault(ber::Null const& value = ber::Null());
+
+            /**
              * Sets the value of this parameter.
              * @param value Parameter value, as double.
              */
@@ -238,6 +248,14 @@ namespace libember { namespace glow
              * @param value Parameter value, as octets.
              */
             void setValue(ber::Octets const& value);
+
+            /**
+             * Sets the value of this parameter to null. This can be used to indicate that
+             * no value is present at all.
+             *
+             * @param value The null value.
+             */
+            void setValue(ber::Null const& value = ber::Null());
 
             /**
              * Sets the way the parameter can be accessed.

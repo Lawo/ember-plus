@@ -20,6 +20,19 @@
     
 int main(int, char const* const*)
 {
+
+    {
+        libember::util::OctetStream stream;
+        libember::ber::encodeFrame(stream, libember::ber::Null());
+        libember::ber::Value value = libember::ber::decode(stream);
+
+        if (value.universalTag().number() != libember::ber::Type::Null)
+        {
+            THROW_TEST_EXCEPTION("Unexpected type.");
+        }
+    }
+
+
     try
     {
         {

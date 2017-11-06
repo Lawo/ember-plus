@@ -60,6 +60,10 @@ namespace EmberLib.Glow
             case BerType.OctetString:
                value = new GlowValue(((OctetStringEmberLeaf)leaf).Value);
                break;
+
+            case BerType.Null:
+               value = GlowValue.Null;
+               break;
          }
 
          return value;
@@ -84,6 +88,7 @@ namespace EmberLib.Glow
             case GlowParameterType.String:  return new StringEmberLeaf(tag, value.String);
             case GlowParameterType.Boolean: return new BooleanEmberLeaf(tag, value.Boolean);
             case GlowParameterType.Octets:  return new OctetStringEmberLeaf(tag, value.Octets);
+            case GlowParameterType.None:    return new NullEmberLeaf(tag);
          }
 
          return null;

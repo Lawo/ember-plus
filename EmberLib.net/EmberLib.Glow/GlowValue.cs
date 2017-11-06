@@ -84,6 +84,11 @@ namespace EmberLib.Glow
       }
 
       /// <summary>
+      /// Gets the null representation of the value.
+      /// </summary>
+      public static readonly GlowValue Null = new GlowValue();
+
+      /// <summary>
       /// Gets the contained string value. Throws an exception
       /// if type if not GlowParameterType.String.
       /// </summary>
@@ -135,6 +140,9 @@ namespace EmberLib.Glow
       {
          switch(Type)
          {
+            case GlowParameterType.None:
+               return "(null)";
+
             case GlowParameterType.String:
                return String;
 
@@ -256,6 +264,12 @@ namespace EmberLib.Glow
       }
 
       #region Implementation
+      GlowValue()
+         : base(GlowParameterType.None)
+      {
+
+      }
+
       string _string;
       bool _boolean;
       byte[] _octets;

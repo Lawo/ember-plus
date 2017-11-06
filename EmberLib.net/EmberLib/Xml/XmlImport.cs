@@ -106,6 +106,11 @@ namespace EmberLib.Xml
             {
                switch(type)
                {
+                  case BerType.Null:
+                  {
+                     node = new NullEmberLeaf(tag);
+                     break;
+                  }
                   case BerType.Boolean:
                   {
                      bool value;

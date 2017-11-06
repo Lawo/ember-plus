@@ -189,6 +189,35 @@ namespace EmberLib
       #endregion
    }
 
+   public sealed class NullEmberLeaf : EmberLeaf<object>
+   {
+      public NullEmberLeaf(BerTag tag)
+         : base(tag)
+      {
+         Value = null;
+         BerTypeNumber = BerType.Null;
+      }
+
+      public override TResult Accept<TState, TResult>(IEmberVisitor<TState, TResult> visitor, TState state)
+      {
+         return visitor.Visit(this, state);
+      }
+
+      internal override int Update()
+      {
+         var output = new BerMemoryOutput();
+
+         BerEncoding.EncodeTag(output, Tag.ToContainer());
+         BerEncoding.EncodeLength(output, 2);
+         BerEncoding.EncodeTag(output, new BerTag(BerType.Boolean));
+         BerEncoding.EncodeLength(output, 0);
+
+         Encoded = output.ToArray();
+         EncodedLength = Encoded.Length;
+
+         return EncodedLength;
+      }
+   }
 
    /// <summary>
    /// Leaf class to hold a primitive BOOLEAN value.

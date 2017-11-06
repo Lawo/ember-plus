@@ -172,6 +172,11 @@ namespace EmberLib.Xml
 
          return WriteLeaf(node, state, buffer.ToString());
       }
+
+      object IEmberVisitor<XmlExportState, object>.Visit(NullEmberLeaf node, XmlExportState state)
+      {
+         return WriteLeaf(node, state, string.Empty);
+      }
       #endregion
    }
 

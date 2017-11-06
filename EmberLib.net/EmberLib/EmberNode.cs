@@ -256,6 +256,10 @@ namespace EmberLib
                   node = new ObjectIdentifierEmberLeaf(tag, reader.GetObjectIdentifier());
                   break;
 
+               case BerType.Null:
+                  node = new NullEmberLeaf(tag);
+                  break;
+
                default:
                   Debug.WriteLine("Unknown BER value type: " + type);
                   break;

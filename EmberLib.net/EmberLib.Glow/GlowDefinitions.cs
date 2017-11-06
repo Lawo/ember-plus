@@ -97,6 +97,7 @@ namespace EmberLib.Glow
    /// </summary>
    public static class GlowParameterType
    {
+      public const int None    = 0;
       public const int Integer = 1;
       public const int Real    = 2;
       public const int String  = 3;

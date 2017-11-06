@@ -43,5 +43,6 @@ namespace EmberLib
       TResult Visit(OctetStringEmberLeaf node, TState state);
       TResult Visit(ObjectIdentifierEmberLeaf node, TState state);
       TResult Visit(RelativeOidEmberLeaf node, TState state);
+      TResult Visit(NullEmberLeaf node, TState state);
    }
 }

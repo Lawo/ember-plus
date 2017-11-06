@@ -144,4 +144,11 @@ LIBEMBER_API int berReader_getOctetString(const BerReader *pThis, byte *pDest, i
   */
 LIBEMBER_API int berReader_getRelativeOid(const BerReader *pThis, berint *pDest, int destSize);
 
+
+/**
+* Gets the value of the current TLTLV as a null value.
+* @param pThis pointer to the object to process.
+*/
+LIBEMBER_API void berReader_getNull(const BerReader *pThis);
+
 #endif

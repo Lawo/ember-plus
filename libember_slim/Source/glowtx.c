@@ -151,6 +151,10 @@ static void writeValue(BerOutput *pOut, const BerTag *pTag, const GlowValue *pVa
          ember_writeOctetString(pOut, pTag, pValue->choice.octets.pOctets, pValue->choice.octets.length);
          break;
 
+      case GlowParameterType_None:
+          ember_writeNull(pOut, pTag);
+          break;
+
       default:
          throwError(506, "GlowValue object has unsupported type!");
          break;
@@ -261,10 +265,42 @@ void glow_writeQualifiedNodeImpl(BerOutput *pOut,
       && pNode->pSchemaIdentifiers != NULL)
          ember_writeString(pOut, &glowTags.nodeContents.schemaIdentifiers, pNode->pSchemaIdentifiers);
 
+      if ((fields & GlowFieldFlag_TemplateReference)
+      && pNode->pTemplateReference != NULL)
+          ember_writeRelativeOid(pOut, &glowTags.nodeContents.templateReference, pNode->pTemplateReference, pNode->templateReferenceLength);
+
       ember_writeContainerEnd(pOut); // end node.contents
    }
 
    ember_writeContainerEnd(pOut); // end node
+}
+
+
+void glow_writeQualifiedTemplateImpl(BerOutput *pOut,
+    const GlowTemplate *pTemplate,
+    GlowFieldFlags fields,
+    const berint *pPath,
+    int pathLength)
+{
+    ASSERT(pOut != NULL);
+    ASSERT(pTemplate != NULL);
+
+    ember_writeContainerBegin(pOut, &glowTags.elementCollection.element, GlowType_QualifiedTemplate);
+    ember_writeRelativeOid(pOut, &glowTags.qualifiedTemplate.path, pPath, pathLength);
+
+    if (fields != 0)
+    {
+        ember_writeSetBegin(pOut, &glowTags.qualifiedNode.contents);
+
+        if ((fields & GlowFieldFlag_Description) == GlowFieldFlag_Description
+            && pTemplate->pDescription != NULL)
+            ember_writeString(pOut, &glowTags.qualifiedTemplate.description, pTemplate->pDescription);
+
+
+        ember_writeContainerEnd(pOut); // end node.contents
+    }
+
+    ember_writeContainerEnd(pOut); // end node
 }
 
 void glow_writeQualifiedParameterImpl(BerOutput *pOut,
@@ -293,6 +329,9 @@ void glow_writeQualifiedParameterImpl(BerOutput *pOut,
 
    if(fields & GlowFieldFlag_Value)
       writeValue(pOut, &glowTags.parameterContents.value, &pParameter->value);
+
+   if (fields & GlowFieldFlag_DefaultValue)
+       writeValue(pOut, &glowTags.parameterContents.value, &pParameter->defaultValue);
 
    if(fields & GlowFieldFlag_Minimum)
       writeMinMax(pOut, &glowTags.parameterContents.minimum, &pParameter->minimum);
@@ -326,6 +365,9 @@ void glow_writeQualifiedParameterImpl(BerOutput *pOut,
 
    if((fields & GlowFieldFlag_Enumeration) && pParameter->pEnumeration != NULL)
       ember_writeString(pOut, &glowTags.parameterContents.enumeration, pParameter->pEnumeration);
+
+   if ((fields & GlowFieldFlag_TemplateReference) && pParameter->pTemplateReference != NULL)
+       ember_writeRelativeOid(pOut, &glowTags.parameterContents.templateReference, pParameter->pTemplateReference, pParameter->templateReferenceLength);
 
    if(fields & GlowFieldFlag_StreamDescriptor)
    {
@@ -483,6 +525,10 @@ void glow_writeQualifiedMatrixImpl(BerOutput *pOut,
       if((fields & GlowFieldFlag_SchemaIdentifier) == GlowFieldFlag_SchemaIdentifier
       && pMatrix->pSchemaIdentifiers != NULL)
          ember_writeString(pOut, &glowTags.matrixContents.schemaIdentifiers, pMatrix->pSchemaIdentifiers);
+
+
+      if ((fields & GlowFieldFlag_TemplateReference) && pMatrix->pTemplateReference != NULL)
+          ember_writeRelativeOid(pOut, &glowTags.matrixContents.templateReference, pMatrix->pTemplateReference, pMatrix->templateReferenceLength);
    }
 
    ember_writeContainerEnd(pOut); // end matrix.contents
@@ -575,6 +621,10 @@ void glow_writeQualifiedFunctionImpl(BerOutput *pOut,
    && pFunction->pDescription != NULL)
       ember_writeString(pOut, &glowTags.functionContents.description, pFunction->pDescription);
 
+
+   if ((fields & GlowFieldFlag_TemplateReference) && pFunction->pTemplateReference != NULL)
+       ember_writeRelativeOid(pOut, &glowTags.functionContents.templateReference, pFunction->pTemplateReference, pFunction->templateReferenceLength);
+
    if(fields == GlowFieldFlag_All)
    {
       if(pFunction->pArguments != NULL)
@@ -648,6 +698,21 @@ void glow_writeQualifiedNode(GlowOutput *pOut,
 
    glow_writeQualifiedNodeImpl(&pOut->base.base.base, pNode, fields, pPath, pathLength);
 }
+
+void glow_writeQualifiedTemplate(GlowOutput *pOut,
+    const GlowTemplate *pTemplate,
+    GlowFieldFlags fields,
+    const berint *pPath,
+    int pathLength)
+{
+    ASSERT(pOut != NULL);
+    ASSERT(pTemplate != NULL);
+    ASSERT(pPath != NULL || pathLength == 0);
+    ASSERT(pOut->positionHint == 0);
+
+    glow_writeQualifiedTemplateImpl(&pOut->base.base.base, pTemplate, fields, pPath, pathLength);
+}
+
 
 void glow_writeQualifiedParameter(GlowOutput *pOut,
                                   const GlowParameter *pParameter,

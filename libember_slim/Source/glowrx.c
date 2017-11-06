@@ -65,6 +65,12 @@ static void readValue(const BerReader *pBase, GlowValue *pValue)
          }
          break;
 
+      case BerType_Null:
+          pValue->flag = GlowParameterType_None;
+          pValue->choice.integer = 0;
+          berReader_getNull(pBase);
+          break;
+
       default:
          throwError(507, "BerReader reports unsupported GlowValue type!");
          break;
@@ -92,6 +98,74 @@ static void readMinMax(const BerReader *pBase, GlowMinMax *pMinMax)
 }
 
 typedef void (*onItemReady_t)(NonFramingGlowReader *pThis);
+
+
+static void onItemReady_Template(NonFramingGlowReader *pThis)
+{
+    const BerReader *pBase = &pThis->base.base;
+    berint number;
+
+    if (pBase->isContainer)
+    {
+        if (pThis->onTemplate != NULL)
+            pThis->onTemplate(&pThis->glow.template, GlowFieldFlag_None, pThis->path, pThis->pathLength, pThis->state);
+
+        // reset read template
+        glowTemplate_free(&pThis->glow.template);
+        pThis->fields = GlowFieldFlag_None;
+    }
+    else
+    {
+        if (berTag_equals(&pBase->tag, &glowTags.template.number))
+        {
+            number = berReader_getInteger(pBase);
+
+            pThis->path[pThis->pathLength] = number;
+            pThis->pathLength++;
+        }
+        else if (berTag_equals(&pBase->tag, &glowTags.template.description))
+        {
+            pThis->glow.parameter.pDescription = newarr(char, pBase->length + 1);
+            pThis->fields |= GlowFieldFlag_Description;
+            berReader_getString(pBase, pThis->glow.template.pDescription, pBase->length + 1);
+        }
+    }
+}
+
+static void onItemReady_QualifiedTemplate(NonFramingGlowReader *pThis)
+{
+    const BerReader *pBase = &pThis->base.base;
+
+    if (pBase->isContainer)
+    {
+        if (pThis->onTemplate != NULL)
+            pThis->onTemplate(&pThis->glow.template, GlowFieldFlag_None, pThis->path, pThis->pathLength, pThis->state);
+
+        // reset read template
+        glowTemplate_free(&pThis->glow.template);
+        pThis->fields = GlowFieldFlag_None;
+        pThis->pathLength = 0;
+    }
+    else
+    {
+        if (berTag_equals(&pBase->tag, &glowTags.qualifiedTemplate.path))
+        {
+            if (pThis->pathLength != 0)
+                throwError(504, "QualifiedTemplate encountered on non-root level!");
+
+            pThis->pathLength = berReader_getRelativeOid(pBase, pThis->path, GLOW_MAX_TREE_DEPTH);
+
+            if (pThis->pathLength == 0)
+                throwError(503, "empty path in QualifiedTemplate!");
+        }
+        else if (berTag_equals(&pBase->tag, &glowTags.qualifiedTemplate.description))
+        {
+            pThis->glow.parameter.pDescription = newarr(char, pBase->length + 1);
+            pThis->fields |= GlowFieldFlag_Description;
+            berReader_getString(pBase, pThis->glow.template.pDescription, pBase->length + 1);
+        }
+    }
+}
 
 static void onItemReady_Node(NonFramingGlowReader *pThis)
 {
@@ -193,6 +267,12 @@ static void onItemReady_NodeContents(NonFramingGlowReader *pThis)
          berReader_getString(pBase, pThis->glow.node.pSchemaIdentifiers, pBase->length + 1);
          fields |= GlowFieldFlag_SchemaIdentifier;
       }
+      else if (berTag_equals(pTag, &glowTags.nodeContents.templateReference))
+      {
+          pThis->glow.node.pTemplateReference = newarr(berint, pBase->length);
+          pThis->glow.node.templateReferenceLength = berReader_getRelativeOid(pBase, pThis->glow.node.pTemplateReference, pBase->length);
+          fields |= GlowFieldFlag_TemplateReference;
+      }
       else
       {
          if(pThis->onUnsupportedTltlv != NULL)
@@ -278,6 +358,11 @@ static void onItemReady_ParameterContents(NonFramingGlowReader *pThis)
          readValue(pBase, &pThis->glow.parameter.value);
          fields |= GlowFieldFlag_Value;
       }
+      else if (berTag_equals(pTag, &glowTags.parameterContents.defaultValue))
+      {
+          readValue(pBase, &pThis->glow.parameter.defaultValue);
+          fields |= GlowFieldFlag_DefaultValue;
+      }
       else if(berTag_equals(pTag, &glowTags.parameterContents.minimum))
       {
          readMinMax(pBase, &pThis->glow.parameter.minimum);
@@ -323,6 +408,12 @@ static void onItemReady_ParameterContents(NonFramingGlowReader *pThis)
          pThis->glow.parameter.pSchemaIdentifiers = newarr(char, pBase->length + 1);
          berReader_getString(pBase, pThis->glow.parameter.pSchemaIdentifiers, pBase->length + 1);
          fields |= GlowFieldFlag_SchemaIdentifier;
+      }
+      else if (berTag_equals(pTag, &glowTags.parameterContents.templateReference))
+      {
+          pThis->glow.parameter.pTemplateReference = newarr(berint, pBase->length);
+          pThis->glow.parameter.templateReferenceLength = berReader_getRelativeOid(pBase, pThis->glow.parameter.pTemplateReference, pBase->length);
+          fields |= GlowFieldFlag_TemplateReference;
       }
       else
       {
@@ -477,17 +568,19 @@ static void onItemReady_MatrixContents(NonFramingGlowReader *pThis)
       if(berTag_equals(pTag, &glowTags.matrixContents.identifier))
       {
          pThis->glow.matrix.pIdentifier = newarr(char, pBase->length + 1);
+         pThis->fields |= GlowFieldFlag_Identifier;
          berReader_getString(pBase, pThis->glow.matrix.pIdentifier, pBase->length + 1);
          glow_assertIdentifierValid(pThis->glow.matrix.pIdentifier, true);
       }
       else if(berTag_equals(pTag, &glowTags.matrixContents.description))
       {
          pThis->glow.matrix.pDescription = newarr(char, pBase->length + 1);
+         pThis->fields |= GlowFieldFlag_Description;
          berReader_getString(pBase, pThis->glow.matrix.pDescription, pBase->length + 1);
       }
       else if(berTag_equals(pTag, &glowTags.matrixContents.type))
       {
-         pThis->glow.matrix.type = (GlowMatrixType)berReader_getInteger(pBase);
+          pThis->glow.matrix.type = (GlowMatrixType)berReader_getInteger(pBase);
       }
       else if(berTag_equals(pTag, &glowTags.matrixContents.addressingMode))
       {
@@ -527,7 +620,14 @@ static void onItemReady_MatrixContents(NonFramingGlowReader *pThis)
       else if(berTag_equals(pTag, &glowTags.matrixContents.schemaIdentifiers))
       {
          pThis->glow.matrix.pSchemaIdentifiers = newarr(char, pBase->length + 1);
+         pThis->fields |= GlowFieldFlag_SchemaIdentifier;
          berReader_getString(pBase, pThis->glow.matrix.pSchemaIdentifiers, pBase->length + 1);
+      }
+      else if (berTag_equals(pTag, &glowTags.matrixContents.templateReference))
+      {
+          pThis->glow.matrix.pTemplateReference = newarr(berint, pBase->length);
+          pThis->fields |= GlowFieldFlag_TemplateReference;
+          pThis->glow.matrix.templateReferenceLength = berReader_getRelativeOid(pBase, pThis->glow.matrix.pTemplateReference, pBase->length);
       }
       else
       {
@@ -691,6 +791,12 @@ static void onItemReady_FunctionContents(NonFramingGlowReader *pThis)
       {
          pThis->glow.function.pDescription = newarr(char, pBase->length + 1);
          berReader_getString(pBase, pThis->glow.function.pDescription, pBase->length + 1);
+      }
+      else if (berTag_equals(pTag, &glowTags.functionContents.templateReference))
+      {
+          pThis->glow.function.pTemplateReference = newarr(berint, pBase->length);
+          pThis->fields |= GlowFieldFlag_TemplateReference;
+          pThis->glow.function.templateReferenceLength = berReader_getRelativeOid(pBase, pThis->glow.function.pTemplateReference, pBase->length);
       }
    }
 }
@@ -864,6 +970,12 @@ static onItemReady_t getOnItemReady_EnterContainer(const BerReader *pBase)
 
    switch(pBase->type)
    {
+      case GlowType_Template:
+         bzero(pThis->glow.template);
+         return onItemReady_Template;
+      case GlowType_QualifiedTemplate:
+          bzero(pThis->glow.template);
+          return onItemReady_QualifiedTemplate;
       case GlowType_Node:
          bzero(pThis->glow.node);
          pThis->glow.node.isOnline = true;
@@ -1003,6 +1115,8 @@ static onItemReady_t getOnItemReady_LeaveContainer(const BerReader *pBase)
          case GlowType_QualifiedFunction: return onItemReady_QualifiedFunction;
          case GlowType_Invocation: return onItemReady_Invocation;
          case GlowType_InvocationResult: return onItemReady_InvocationResult;
+         case GlowType_Template: return onItemReady_Template;
+         case GlowType_QualifiedTemplate: return onItemReady_QualifiedTemplate;
          default:
             if(pStack->length > 1)
             {
@@ -1068,7 +1182,8 @@ static void onItemReady(const BerReader *pBase)
       if(pBase->type == GlowType_Node
       || pBase->type == GlowType_Parameter
       || pBase->type == GlowType_Matrix
-      || pBase->type == GlowType_Function)
+      || pBase->type == GlowType_Function
+      || pBase->type == GlowType_Template)
          pThis->pathLength--;
 
       pThis->onItemReadyState = getOnItemReady_LeaveContainer(pBase);
@@ -1099,21 +1214,35 @@ void nonFramingGlowReader_init(NonFramingGlowReader *pThis,
                                onStreamEntry_t onStreamEntry,
                                voidptr state)
 {
-   ASSERT(pThis != NULL);
+    nonFramingGlowReader_initEx(pThis, onNode, onParameter, onCommand, onStreamEntry, NULL, NULL, state);
+}
 
-   bzero(*pThis);
+void nonFramingGlowReader_initEx(NonFramingGlowReader *pThis,
+    onNode_t onNode,
+    onParameter_t onParameter,
+    onCommand_t onCommand,
+    onStreamEntry_t onStreamEntry,
+    onFunction_t onFunction,
+    onTemplate_t onTemplate,
+    voidptr state)
+{
+    ASSERT(pThis != NULL);
 
-   emberAsyncReader_init(&pThis->base);
+    bzero(*pThis);
 
-   pThis->base.onNewContainer = onNewContainer;
-   pThis->base.onItemReady = onItemReady;
+    emberAsyncReader_init(&pThis->base);
 
-   pThis->onNode = onNode;
-   pThis->onParameter = onParameter;
-   pThis->onCommand = onCommand;
-   pThis->onStreamEntry = onStreamEntry;
+    pThis->base.onNewContainer = onNewContainer;
+    pThis->base.onItemReady = onItemReady;
 
-   pThis->state = state;
+    pThis->onNode = onNode;
+    pThis->onParameter = onParameter;
+    pThis->onCommand = onCommand;
+    pThis->onStreamEntry = onStreamEntry;
+    pThis->onTemplate = onTemplate;
+    pThis->onFunction = onFunction;
+
+    pThis->state = state;
 }
 
 void nonFramingGlowReader_free(NonFramingGlowReader *pThis)
@@ -1201,17 +1330,32 @@ void glowReader_init(GlowReader *pThis,
                      byte *pRxBuffer,
                      unsigned int rxBufferSize)
 {
-   ASSERT(pThis != NULL);
-   ASSERT(pRxBuffer != NULL);
-   ASSERT(rxBufferSize > 0);
-
-   pThis->onOtherPackageReceived = NULL;
-   pThis->onFirstPackageReceived = NULL;
-   pThis->onLastPackageReceived = NULL;
-   pThis->onPackageReceived = NULL;
-   nonFramingGlowReader_init(&pThis->base, onNode, onParameter, onCommand, onStreamEntry, state);
-   emberFramingReader_init(&pThis->framing, pRxBuffer, rxBufferSize, onPackageReceived, pThis);
+    glowReader_initEx(pThis, onNode, onParameter, onCommand, onStreamEntry, NULL, NULL, state, pRxBuffer, rxBufferSize);
 }
+
+void glowReader_initEx(GlowReader *pThis,
+    onNode_t onNode,
+    onParameter_t onParameter,
+    onCommand_t onCommand,
+    onStreamEntry_t onStreamEntry,
+    onFunction_t onFunction,
+    onTemplate_t onTemplate,
+    voidptr state,
+    byte *pRxBuffer,
+    unsigned int rxBufferSize)
+{
+    ASSERT(pThis != NULL);
+    ASSERT(pRxBuffer != NULL);
+    ASSERT(rxBufferSize > 0);
+
+    pThis->onOtherPackageReceived = NULL;
+    pThis->onFirstPackageReceived = NULL;
+    pThis->onLastPackageReceived = NULL;
+    pThis->onPackageReceived = NULL;
+    nonFramingGlowReader_initEx(&pThis->base, onNode, onParameter, onCommand, onStreamEntry, onFunction, onTemplate, state);
+    emberFramingReader_init(&pThis->framing, pRxBuffer, rxBufferSize, onPackageReceived, pThis);
+}
+
 
 void glowReader_readBytes(GlowReader *pThis, const byte *pBytes, int count)
 {

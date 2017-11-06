@@ -502,6 +502,12 @@ int ber_encodeRelativeOid(BerOutput *pOut, const berint *pValue, int count)
    return size;
 }
 
+int ber_encodeNull(BerOutput *pOut)
+{
+    pOut;
+    return 0;
+}
+
 
 // ====================================================================
 //
@@ -798,4 +804,9 @@ int ber_decodeRelativeOid(BerInput *pIn, berint *pDest, int destSize, int length
    }
 
    return subidCount;
+}
+
+void ber_decodeNull(BerInput *pIn)
+{
+    pIn;
 }

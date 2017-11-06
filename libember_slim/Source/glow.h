@@ -35,6 +35,20 @@ typedef struct
 {
    struct
    {
+       BerTag number;
+       BerTag description;
+       BerTag element;
+   } template;
+
+   struct
+   {
+       BerTag path;
+       BerTag description;
+       BerTag element;
+   } qualifiedTemplate;
+
+   struct
+   {
       BerTag number;
       BerTag contents;
       BerTag children;
@@ -67,6 +81,7 @@ typedef struct
       BerTag enumMap;
       BerTag streamDescriptor;
       BerTag schemaIdentifiers;
+      BerTag templateReference;
    } parameterContents;
 
    struct
@@ -90,6 +105,7 @@ typedef struct
       BerTag isRoot;
       BerTag isOnline;
       BerTag schemaIdentifiers;
+      BerTag templateReference;
    } nodeContents;
 
    struct
@@ -166,6 +182,7 @@ typedef struct
       BerTag gainParameterNumber;
       BerTag labels;
       BerTag schemaIdentifiers;
+      BerTag templateReference;
    } matrixContents;
 
    struct
@@ -212,6 +229,7 @@ typedef struct
       BerTag description;
       BerTag arguments;
       BerTag result;
+      BerTag templateReference;
    } functionContents;
 
    struct 
@@ -273,6 +291,8 @@ typedef enum EGlowType
    GlowType_TupleItemDescription  = BerType_ApplicationFlag | 21,
    GlowType_Invocation            = BerType_ApplicationFlag | 22,
    GlowType_InvocationResult      = BerType_ApplicationFlag | 23,
+   GlowType_Template              = BerType_ApplicationFlag | 24,
+   GlowType_QualifiedTemplate     = BerType_ApplicationFlag | 25,
 } GlowType;
 
 
@@ -281,6 +301,7 @@ typedef enum EGlowType
   */
 typedef enum EGlowParameterType
 {
+   GlowParameterType_None    = 0,
    GlowParameterType_Integer = 1,
    GlowParameterType_Real    = 2,
    GlowParameterType_String  = 3,
@@ -332,7 +353,7 @@ typedef enum EGlowFieldFlags
    GlowFieldFlag_Factor             = 0x00000080,
    GlowFieldFlag_IsOnline           = 0x00000100,
    GlowFieldFlag_Step               = 0x00000200,
- //GlowFieldFlag_DefaultValue       = 0x00000400,
+   GlowFieldFlag_DefaultValue       = 0x00000400,
    GlowFieldFlag_Type               = 0x00000800,
    GlowFieldFlag_StreamIdentifier   = 0x00001000,
    GlowFieldFlag_Formula            = 0x00002000,
@@ -341,9 +362,11 @@ typedef enum EGlowFieldFlags
    GlowFieldFlag_StreamDescriptor   = 0x00010000,
    GlowFieldFlag_IsRoot             = 0x00020000,
    GlowFieldFlag_SchemaIdentifier   = 0x00040000,
+   GlowFieldFlag_TemplateReference  = 0x00080000,
    GlowFieldFlag_Connections        = 0x00000005,
 
    GlowFieldFlag_All                = 0xFFFFFFFF,
+   GlowFieldFlag_Sparse             = -2
 } GlowFieldFlags;
 
 
@@ -442,7 +465,28 @@ typedef enum EGlowElementType
    GlowElementType_Parameter = 1,
    GlowElementType_Matrix    = 2,
    GlowElementType_Function  = 3,
+   GlowElementType_Template  = 4
 } GlowElementType;
+
+/**
+ * Holds information about a Glow Template or a Glow QualifiedTemplate.
+ * The children contain describe the template structure.
+ */
+typedef struct SGlowTemplate
+{
+    /**
+     * The "description" field.
+     */
+    pstr pDescription;
+} GlowTemplate;
+
+
+/**
+* Frees all memory allocated by a GlowTemplate instance.
+* @param pThis pointer to the object to process.
+*/
+LIBEMBER_API void glowTemplate_free(GlowTemplate *pThis);
+
 
 /**
   * Holds information about a Glow Node or Glow QualifiedNode.
@@ -474,6 +518,16 @@ typedef struct SGlowNode
      * the "schemaIdentifiers" field.
      */
    pstr pSchemaIdentifiers;
+
+   /**
+    * the "templateReference" field.
+    */
+   berint* pTemplateReference;
+
+   /**
+    * the "templateReference" count
+    */
+   int templateReferenceLength;
 } GlowNode;
 
 
@@ -598,6 +652,11 @@ typedef struct SGlowParameter
    GlowValue value;
 
    /**
+    * The "default" field.
+    */
+   GlowValue defaultValue;
+
+   /**
      * the "minimum" field.
      */
    GlowMinMax minimum;
@@ -666,6 +725,16 @@ typedef struct SGlowParameter
      * the "schemaIdentifiers" field.
      */
    pstr pSchemaIdentifiers;
+
+   /**
+    * the "templateReference" field.
+    */
+   berint* pTemplateReference;
+
+   /**
+   * the "templateReference" count
+   */
+   int templateReferenceLength;
 } GlowParameter;
 
 
@@ -894,6 +963,16 @@ typedef struct SGlowMatrix
      * the "schemaIdentifiers" field.
      */
    pstr pSchemaIdentifiers;
+
+   /**
+    * the "templateReference" field.
+    */
+   berint* pTemplateReference;
+
+   /**
+   * the "templateReference" count
+   */
+   int templateReferenceLength;
 } GlowMatrix;
 
 
@@ -1017,6 +1096,16 @@ typedef struct SGlowFunction
      * at pResult)
      */
    int resultLength;
+
+   /**
+    * the "templateReference" field.
+    */
+   berint* pTemplateReference;
+
+   /**
+   * the "templateReference" count
+   */
+   int templateReferenceLength;
 } GlowFunction;
 
 

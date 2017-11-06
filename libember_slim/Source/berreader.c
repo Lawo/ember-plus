@@ -153,3 +153,18 @@ int berReader_getRelativeOid(const BerReader *pThis, berint *pDest, int destSize
 
    return ber_decodeRelativeOid(&input.base, pDest, destSize, pThis->length);
 }
+
+void berReader_getNull(const BerReader *pThis)
+{
+    BerMemoryInput input;
+
+    ASSERT(pThis != NULL);
+
+    if (pThis->isContainer || pThis->length != 0)
+        throwError(201, "Invalid Null encoding");
+
+    ASSERT(pThis->type == BerType_Null || IsApplicationDefinedBerType(pThis->type));
+
+    berMemoryInput_init(&input, pThis->buffer.pMemory, pThis->length);
+    ber_decodeNull(&input.base);
+}

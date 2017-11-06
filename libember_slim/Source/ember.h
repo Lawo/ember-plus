@@ -183,4 +183,13 @@ LIBEMBER_API void ember_writeOctetString(BerOutput *pOut, const BerTag *pTag, co
   */
 LIBEMBER_API void ember_writeRelativeOid(BerOutput *pOut, const BerTag *pTag, const berint *pValue, int count);
 
+/**
+* Writes a TLTLV with a Null value, using the definite
+* length form for both Ls.
+* The inner T is 'UNIVERSAL BerType_Null'.
+* @param pOut pointer to the output to write to.
+* @param pTag pointer to the outer tag of the TLTLV.
+*/
+LIBEMBER_API void ember_writeNull(BerOutput *pOut, const BerTag *pTag);
+
 #endif

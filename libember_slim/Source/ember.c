@@ -208,3 +208,17 @@ void ember_writeRelativeOid(BerOutput *pOut, const BerTag *pTag, const berint *p
    ber_encodeLength(pOut, valueLength);
    ber_encodeRelativeOid(pOut, pValue, count);
 }
+
+void ember_writeNull(BerOutput *pOut, const BerTag *pTag)
+{
+    BerTag innerTag;
+
+    ASSERT(pOut != NULL);
+    ASSERT(pTag != NULL);
+
+    berTag_init(&innerTag, BerClass_Universal, BerType_Null);
+    writeOuterHeader(pOut, pTag, 0 + ber_getHeaderLength(&innerTag, 0));
+    ber_encodeTag(pOut, &innerTag);
+    ber_encodeLength(pOut, 0);
+    ber_encodeNull(pOut);
+}

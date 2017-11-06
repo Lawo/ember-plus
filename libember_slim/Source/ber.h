@@ -192,6 +192,12 @@ LIBEMBER_API int ber_encodeOctetString(BerOutput *pOut, const byte *pValue, int 
   */
 LIBEMBER_API int ber_encodeRelativeOid(BerOutput *pOut, const berint *pValue, int count);
 
+/**
+ * Encodes a null value to the passed output.
+ * @param pOut pointer to the output to encode to.
+ * @return the number of bytes written to @p pOut.
+ */
+LIBEMBER_API int ber_encodeNull(BerOutput *pOut);
 
 
 // ====================================================================
@@ -292,5 +298,11 @@ LIBEMBER_API void ber_decodeOctetString(BerInput *pIn, byte *pDest, int length);
   * @return the number of decoded subidentifiers.
   */
 LIBEMBER_API int ber_decodeRelativeOid(BerInput *pIn, berint *pDest, int destSize, int length);
+
+/**
+* Decodes a null value from the passed input.
+* @param pIn pointer to the input to decode from.
+*/
+LIBEMBER_API void ber_decodeNull(BerInput *pIn);
 
 #endif

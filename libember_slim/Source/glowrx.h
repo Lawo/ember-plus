@@ -19,6 +19,21 @@
 // ====================================================================
 
 /**
+* Function type used by NonFramingGlowReader to notify the application
+* of an incoming glow template.
+* @param pTemplate pointer to the read template.
+* @param fields flags indicating which fields of @p pParameter have been
+*     read.
+* @param pPath pointer to the first number in the node path, which is
+*     the number of the tree's root node. May be NULL only if
+*     pathLength is 0.
+*     See documentation of glow_writeQualifiedParameter for an example.
+* @param pathLength number of node numbers at @p pPath.
+* @param state application-defined state as stored in NonFramingGlowReader.
+*/
+typedef void(*onTemplate_t)(const GlowTemplate *pTemplate, GlowFieldFlags fields, const berint *pPath, int pathLength, voidptr state);
+
+/**
   * Function type used by NonFramingGlowReader to notify the application
   * of an incoming glow parameter.
   * @param pParameter pointer to the read parameter.
@@ -145,6 +160,7 @@ typedef enum EGlowReaderPosition
    GlowReaderPosition_Connection,
    GlowReaderPosition_FunctionContents,
    GlowReaderPosition_InvocationResult,
+   GlowReaderPosition_Template
 } GlowReaderPosition;
 
 /**
@@ -234,6 +250,11 @@ typedef struct SNonFramingGlowReader
         * Private field.
         */
       GlowInvocationResult invocationResult;
+
+      /**
+       * Private field.
+       */
+      GlowTemplate template;
    } glow;
 
    /**
@@ -245,6 +266,12 @@ typedef struct SNonFramingGlowReader
      * Private field.
      */
    void (*onItemReadyState)(struct SNonFramingGlowReader *pThis);
+
+   /**
+   * May be set to a callback function called when
+   * a glow template has been read.
+   */
+   onTemplate_t onTemplate;
 
    /**
      * May be set to a callback function called when
@@ -344,6 +371,35 @@ LIBEMBER_API void nonFramingGlowReader_init(NonFramingGlowReader *pThis,
                                voidptr state);
 
 /**
+* Initializes a NonFramingGlowReader instance.
+* Must be called before any other operations on the
+* NonFramingGlowReader instance are invoked.
+* @param pThis pointer to the object to process.
+* @param onNode callback function to called by the reader
+*     when a glow node has been read.
+* @param onParameter callback function to called by the reader
+*     when a glow parameter has been read.
+* @param onCommand callback function to called by the reader
+*     when a glow command has been read.
+* @param onFunction callback function called by the reader
+*     when a glow function has been read.
+* @param onTemplate callback function called by the reader
+*     when a glow template has been read.
+* @param state application-defined argument passed to
+*     callback functions.
+* @note you need to call nonFramingGlowReader_free to release
+*     all memory allocated by nonFramingGlowReader_init.
+*/
+LIBEMBER_API void nonFramingGlowReader_initEx(NonFramingGlowReader *pThis,
+    onNode_t onNode,
+    onParameter_t onParameter,
+    onCommand_t onCommand,
+    onStreamEntry_t onStreamEntry,
+    onFunction_t onFunction,
+    onTemplate_t onTemplate,
+    voidptr state);
+
+/**
   * Frees all dynamically allocated memory used by the
   * passed NonFramingGlowReader. The memory has been allocated
   * by a prior call to nonFramingGlowReader_init.
@@ -421,6 +477,8 @@ typedef struct SGlowReader
   *     when a glow parameter has been read.
   * @param onCommand callback function to called by the reader
   *     when a glow command has been read.
+  * @param onStreamEntry callback function called when a stream
+  *     entry has been read.
   * @param state application-defined argument passed to
   *     callback functions.
   * @param pRxBuffer pointer to the memory location to unframe
@@ -437,13 +495,56 @@ typedef struct SGlowReader
   *     all memory allocated by glowReader_init.
   */
 LIBEMBER_API void glowReader_init(GlowReader *pThis,
-                     onNode_t onNode,
-                     onParameter_t onParameter,
-                     onCommand_t onCommand,
-                     onStreamEntry_t onStreamEntry,
-                     voidptr state,
-                     byte *pRxBuffer,
-                     unsigned int rxBufferSize);
+   onNode_t onNode,
+   onParameter_t onParameter,
+   onCommand_t onCommand,
+   onStreamEntry_t onStreamEntry,
+   voidptr state,
+   byte *pRxBuffer,
+   unsigned int rxBufferSize);
+
+/**
+* Initializes a GlowReader instance.
+* Must be called before any other operations on the
+* GlowReader instance are invoked.
+* @param pThis pointer to the object to process.
+* @param onNode callback function to called by the reader
+*     when a glow node has been read.
+* @param onParameter callback function to called by the reader
+*     when a glow parameter has been read.
+* @param onCommand callback function to called by the reader
+*     when a glow command has been read.
+* @param onStreamEntry callback function called when a stream
+*     entry has been read.
+* @param onFunction callback function called when a function has
+*     been read.
+* @param onTemplate callback function called when a template
+*     has been read.
+* @param state application-defined argument passed to
+*     callback functions.
+* @param pRxBuffer pointer to the memory location to unframe
+*     packages to.
+* @param rxBufferSize number of available bytes at @p pRxBuffer.
+*     If this value is exceeded, the throwError callback
+*     is invoked.
+*     This value has to be greater than or equal to the size of
+*     the biggest package you expect to receive.
+*     This value is usually much bigger for applications which
+*     act as ember consumers than for applications which act as
+*     ember providers.
+* @note you need to call glowReader_free to release
+*     all memory allocated by glowReader_init.
+*/
+LIBEMBER_API void glowReader_initEx(GlowReader *pThis,
+   onNode_t onNode,
+   onParameter_t onParameter,
+   onCommand_t onCommand,
+   onStreamEntry_t onStreamEntry,
+   onFunction_t onFunction,
+   onTemplate_t onTemplate,
+   voidptr state,
+   byte *pRxBuffer,
+   unsigned int rxBufferSize);
 
 /**
   * Frees all dynamically allocated memory used by the

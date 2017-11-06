@@ -126,6 +126,25 @@ LIBEMBER_API void glow_writeQualifiedNode(GlowOutput *pOut,
                              int pathLength);
 
 /**
+* Writes a Template to the passed GlowOutput, encoding @p pTemplate
+* with type QualifiedTemplate.
+* The last integer at @p pPath is the number of the template.
+* @param pOut pointer to the output to be used for in-memory framing.
+* @param pTemlate pointer to the template to write.
+* @param fields flags indicating which fields of @p pTemplate should
+*     be written.
+* @param pPath pointer to the first number in the template path, which is
+*     the number of the tree's root node. The last number is the template's
+*     number. May be NULL only if pathLength is 0.
+* @param pathLength number of template numbers at @p pPath.
+*/
+LIBEMBER_API void glow_writeQualifiedTemplate(GlowOutput *pOut,
+    const GlowTemplate *pTemplate,
+    GlowFieldFlags fields,
+    const berint *pPath,
+    int pathLength);
+
+/**
   * Writes a Parameter to the passed GlowOutput, encoding @p pParameter
   * with type QualifiedParameter.
   * The last integer at @p pPath is the number of the parameter.

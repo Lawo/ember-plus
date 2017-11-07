@@ -102,12 +102,27 @@ namespace libs101
         /** Resets the current decoding buffer. */
         void reset();
 
+        /**
+         * Gets a value indicating whether the decoder currently parses a
+         * frame that uses the S101 variant without escaping. This
+         * method shall be called while the callback is being invoked
+         * to determine whether the current packet uses escaping or not.
+         */
+        bool isDecodingFrameWithoutEscaping() const;
+
+    private:
+        enum State
+        {
+            OutOfFrame,
+            WithinFrameWithEscaping,
+            WithinFrameWithoutEscaping
+        };
+
     private:
         /** Resets the current decoding buffer.
-         * @param frame Specifies whether a start byte has been received and
-         *      The decoder is currently receiving a valid packet.
+         * @param state Specifies the current decoder state.
          */
-        void reset(bool frame);
+        void reset(State state);
 
         /**
          * This static method is used to invoke a callback which doesn't have a state parameter.
@@ -120,8 +135,9 @@ namespace libs101
 
         ByteVector m_bytes;
         bool m_escape;
-        bool m_frame;
+        State m_state;
         util::Crc16::value_type m_crc;
+        size_type m_payloadLength;
     };
 
     /**************************************************************************
@@ -131,13 +147,20 @@ namespace libs101
     template<typename ValueType>
     inline StreamDecoder<ValueType>::StreamDecoder()
         : m_escape(false)
-        , m_frame(false)
+        , m_state(OutOfFrame)
         , m_crc(0xFFFF)
+        , m_payloadLength(0)
     {}
 
     template<typename ValueType>
     inline StreamDecoder<ValueType>::~StreamDecoder()
     {}
+
+    template<typename ValueType>
+    inline bool StreamDecoder<ValueType>::isDecodingFrameWithoutEscaping() const
+    {
+        return m_state == WithinFrameWithoutEscaping;
+    }
 
     template<typename ValueType>
     template<typename CallbackType>
@@ -149,16 +172,17 @@ namespace libs101
     template<typename ValueType>
     inline void StreamDecoder<ValueType>::reset()
     {
-        reset(false);
+        reset(OutOfFrame);
     }
 
     template<typename ValueType>
-    inline void StreamDecoder<ValueType>::reset(bool frame)
+    inline void StreamDecoder<ValueType>::reset(State state)
     {
         m_bytes.clear();
         m_escape = false;
-        m_frame = frame;
+        m_state = state;
         m_crc = 0xFFFF;
+        m_payloadLength = 0;
     }
 
     template<typename ValueType>
@@ -192,12 +216,25 @@ namespace libs101
     {
         value_type byte = static_cast<value_type>(input);
 
-        if (m_frame)
+        switch (m_state)
         {
-            switch(byte)
+        case OutOfFrame:
+            if (byte == Byte::BoF)
+            {
+                reset(WithinFrameWithEscaping);
+            }
+            else if (byte == Byte::Invalid)
+            {
+                reset(WithinFrameWithoutEscaping);
+            }
+
+            break;
+
+        case WithinFrameWithEscaping:
+            switch (byte)
             {
             case Byte::BoF:
-                reset(true);
+                reset(WithinFrameWithEscaping);
                 break;
 
             case Byte::EoF:
@@ -223,10 +260,30 @@ namespace libs101
                 m_crc = util::Crc16::add(m_crc, byte);
                 break;
             }
-        }
-        else if (byte == Byte::BoF)
-        {
-            reset(true);
+
+            break;
+
+        case WithinFrameWithoutEscaping:
+            m_bytes.push_back(byte);
+
+            size_type const length = m_bytes.size();
+
+            if (length == 4)
+            {
+                m_payloadLength = 0;
+                m_payloadLength |= (m_bytes[0] << 24);
+                m_payloadLength |= (m_bytes[1] << 16);
+                m_payloadLength |= (m_bytes[2] << 8);
+                m_payloadLength |= (m_bytes[3]);
+            }
+
+            if (length - 4 == m_payloadLength)
+            {
+                callback(m_bytes.begin() + 4, m_bytes.end(), state);
+                reset();
+            }
+
+            break;
         }
     }
 }

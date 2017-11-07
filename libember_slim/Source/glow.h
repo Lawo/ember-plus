@@ -25,7 +25,7 @@
   * The upper byte is the major version number, the
   * lower byte is the minor version number.
   */
-#define GLOW_SCHEMA_VERSION (0x021F)
+#define GLOW_SCHEMA_VERSION (0x0232)
 
 
 /**

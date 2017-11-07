@@ -26,7 +26,10 @@ using System.IO;
 namespace EmberLib.Framing.S101
 {
    /// <summary>
-   /// Used to receive and decode S101 messages.
+   /// Used to receive and decode S101 messages. This class supports the traditional
+   /// S101 framing which uses the escaping and the non-escaping variant.
+   /// For consumer that want to determine the framing being used, see <see cref="MessageReceivedArgs.IsNonEscapingMessage"/>
+   /// property can be used.
    /// </summary>
    public sealed class RxFrame : IDisposable
    {
@@ -35,11 +38,13 @@ namespace EmberLib.Framing.S101
       {
          public readonly int Length;
          public readonly byte[] Data;
+         public readonly bool IsNonEscapingMessage;
 
-         public MessageReceivedArgs(int length, byte[] data)
+         public MessageReceivedArgs(int length, byte[] data, bool isNonEscapingMessage)
          {
             Length = length;
             Data = data;
+            IsNonEscapingMessage = isNonEscapingMessage;
          }
       }
 
@@ -65,15 +70,27 @@ namespace EmberLib.Framing.S101
          {
             if(b == Constants.Bof)
             {
-               _stream.SetLength(0);
-               _isDataLinkEscaped = false;
-               _crc = Crc.InitialValue;
-               _isInFrame = true;
-
-               if(_outOfFrameByteCount > 0 && framingErrorCallback != null)
+               if (_outOfFrameByteCount > 0 && framingErrorCallback != null)
                   framingErrorCallback(string.Format("S101: {0} out of frame data bytes!", _outOfFrameByteCount));
 
+               _isInFrame = true;
+               _stream.SetLength(0);
+               _usesNonEscapingFraming = false;
                _outOfFrameByteCount = 0;
+               _payloadLength = 0;
+               _isDataLinkEscaped = false;
+               _crc = Crc.InitialValue;
+            }
+            else if(b == Constants.Invalid)
+            {
+               if (_outOfFrameByteCount > 0 && framingErrorCallback != null)
+                  framingErrorCallback(string.Format("S101: {0} out of frame data bytes!", _outOfFrameByteCount));
+
+               _isInFrame = true;
+               _stream.SetLength(0);
+               _usesNonEscapingFraming = true;
+               _outOfFrameByteCount = 0;
+               _payloadLength = 0;
             }
             else
             {
@@ -83,78 +100,22 @@ namespace EmberLib.Framing.S101
             return;
          }
 
-         if(b == Constants.Bof)
+         if (_usesNonEscapingFraming)
          {
-            if(framingErrorCallback != null)
-               framingErrorCallback("S101: BOF in frame!");
-
-            _stream.SetLength(0);
-            _isDataLinkEscaped = false;
-            _crc = Crc.InitialValue;
-
-            if(_outOfFrameByteCount > 0 && framingErrorCallback != null)
-               framingErrorCallback(String.Format("S101: {0} out of frame data bytes!", _outOfFrameByteCount));
-
-            _outOfFrameByteCount = 0;
-            return;
+            ReceiveByteWithoutEscaping(b, framingErrorCallback);
          }
-
-         if(b == Constants.Eof)
+         else
          {
-            var length = (int)_stream.Length;
-            _stream.Write(Constants.Eofs, 0, Constants.Eofs.Length);
-
-            if(length >= 3)
-            {
-               if(_crc == 0xF0B8)
-               {
-                  _stream.SetLength(length - 2);
-                  var memory = _stream.ToArray();
-                  OnMessageReceived(new MessageReceivedArgs(memory.Length, memory));
-               }
-               else
-               {
-                  if(framingErrorCallback != null)
-                     framingErrorCallback("S101: CRC error!");
-               }
-            }
-            else if(length == 0)
-            {
-               if(framingErrorCallback != null)
-                  framingErrorCallback("S101: EOF out of frame!");
-            }
-
-            _isInFrame = false;
-            _stream.SetLength(0);
-            return;
+            ReceiveByteWithEscaping(b, framingErrorCallback);
          }
-
-         if(b == Constants.Ce)
-         {
-            _isDataLinkEscaped = true;
-            return;
-         }
-
-         if(b >= Constants.Invalid)
-         {
-            if(framingErrorCallback != null)
-               framingErrorCallback("S101: Invalid character received!");
-
-            _isInFrame = false;
-            _stream.SetLength(0);
-            return;
-         }
-
-         if(_isDataLinkEscaped)
-         {
-            _isDataLinkEscaped = false;
-            b ^= 0x20;
-         }
-
-         _stream.WriteByte(b);
-         _crc = Crc.CrcCCITT16(_crc, b);
       }
 
+      /// <summary>
+      /// This should be called by the connection engine for every byte that has
+      /// been received. ReceiveByte raises the MessageReceived event when a complete message
+      /// has been received.
+      /// </summary>
+      /// <param name="b">received byte to process</param>
       public void ReceiveByte(byte b)
       {
          ReceiveByte(b, null);
@@ -165,7 +126,119 @@ namespace EmberLib.Framing.S101
       bool _isDataLinkEscaped = false;
       ushort _crc;
       int _outOfFrameByteCount;
+      int _payloadLength;
       bool _isInFrame;
+      bool _usesNonEscapingFraming;
+
+      void ReceiveByteWithoutEscaping(byte b, MessageCallback framingErrorCallback)
+      {
+         _stream.WriteByte(b);
+
+         switch (_stream.Length)
+         {
+            case 1:
+               _payloadLength = (b << 24);
+               break;
+
+            case 2:
+               _payloadLength |= (b << 16);
+               break;
+
+            case 3:
+               _payloadLength |= (b << 8);
+               break;
+
+            case 4:
+               _payloadLength |= b;
+               break;
+         }
+
+         if (_stream.Length >= 4 && _stream.Length - 4 == _payloadLength)
+         {
+            var memory = _stream.ToArray();
+
+            OnMessageReceived(new MessageReceivedArgs(memory.Length, memory, true));
+
+            _isInFrame = false;
+            _stream.SetLength(0);
+            _usesNonEscapingFraming = false;
+            _payloadLength = 0;
+         }
+      }
+
+      void ReceiveByteWithEscaping(byte b, MessageCallback framingErrorCallback)
+      {
+         if (b == Constants.Bof)
+         {
+            if (framingErrorCallback != null)
+               framingErrorCallback("S101: BOF in frame!");
+
+            _stream.SetLength(0);
+            _isDataLinkEscaped = false;
+            _crc = Crc.InitialValue;
+
+            if (_outOfFrameByteCount > 0 && framingErrorCallback != null)
+               framingErrorCallback(String.Format("S101: {0} out of frame data bytes!", _outOfFrameByteCount));
+
+            _outOfFrameByteCount = 0;
+            return;
+         }
+
+         if (b == Constants.Eof)
+         {
+            var length = (int)_stream.Length;
+            _stream.Write(Constants.Eofs, 0, Constants.Eofs.Length);
+
+            if (length >= 3)
+            {
+               if (_crc == 0xF0B8)
+               {
+                  _stream.SetLength(length - 2);
+                  var memory = _stream.ToArray();
+                  OnMessageReceived(new MessageReceivedArgs(memory.Length, memory, false));
+               }
+               else
+               {
+                  if (framingErrorCallback != null)
+                     framingErrorCallback("S101: CRC error!");
+               }
+            }
+            else if (length == 0)
+            {
+               if (framingErrorCallback != null)
+                  framingErrorCallback("S101: EOF out of frame!");
+            }
+
+            _isInFrame = false;
+            _stream.SetLength(0);
+            return;
+         }
+
+         if (b == Constants.Ce)
+         {
+            _isDataLinkEscaped = true;
+            return;
+         }
+
+         if (b >= Constants.Invalid)
+         {
+            if (framingErrorCallback != null)
+               framingErrorCallback("S101: Invalid character received!");
+
+            _isInFrame = false;
+            _stream.SetLength(0);
+            return;
+         }
+
+         if (_isDataLinkEscaped)
+         {
+            _isDataLinkEscaped = false;
+            b ^= 0x20;
+         }
+
+         _stream.WriteByte(b);
+         _crc = Crc.CrcCCITT16(_crc, b);
+      }
       #endregion
 
       #region IDisposable Members

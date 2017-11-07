@@ -66,6 +66,7 @@ namespace EmberLib.Glow
             case GlowType.Node:
             case GlowType.Matrix:
             case GlowType.Function:
+            case GlowType.Template:
                break;
 
             default:

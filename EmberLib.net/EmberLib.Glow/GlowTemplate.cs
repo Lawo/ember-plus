@@ -39,8 +39,9 @@ namespace EmberLib.Glow
       /// <summary>
       /// Initializes a new instance of the <see cref="GlowTemplate"/> class.
       /// </summary>
-      /// <param name="tag">The tag to assign. For example <see cref="GlowTags.NodeContents.TemplateReference"/>.</param>
       /// <param name="number">The number of the template.</param>
+      /// <param name="tag">The tag to assign. For example <see cref="GlowTags.NodeContents.TemplateReference"/>. If <c>nukk</c>,
+      /// the tag will be set to <see cref="GlowTags.CollectionItem"/></param>
       public GlowTemplate(int number, BerTag? tag = null)
          : base(tag ?? GlowTags.CollectionItem, GlowType.Template)
       {

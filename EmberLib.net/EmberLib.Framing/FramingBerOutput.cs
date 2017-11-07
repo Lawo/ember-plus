@@ -57,6 +57,34 @@ namespace EmberLib.Framing
          _isFirstPackage = true;
       }
 
+      /// <summary>
+      /// Constructs a new instance of FramingBerOutput where the S101 non-escaping variant can be activated.
+      /// </summary>
+      /// <param name="maximumPackageLength">The maximum length of a package.
+      /// Must be greater than ProtocolParameters.MinimumHeaderLength and less than or equal to
+      /// ProtocolParameters.MaximumPackageLength.</param>
+      /// <param name="useEscaping">Specifies whether the non-escaping variant of S101 shall be used.</param>
+      /// <param name="slotId">The S101 slot id</param>
+      /// <param name="dtd">The dtd of the ember data to frame</param>
+      /// <param name="packageReadyHandler">A callback that is attached to the PackageReady event. May be null.</param>
+      public FramingBerOutput(bool useEscaping, int maximumPackageLength, int slotId, Dtd dtd, EventHandler<PackageReadyArgs> packageReadyHandler)
+      {
+         if (maximumPackageLength <= ProtocolParameters.MinimumHeaderLength)
+            throw new ArgumentException("maximumPackageLength must be greater than ProtocolParameters.MinimumHeaderLength!");
+         if (maximumPackageLength > ProtocolParameters.MaximumPackageLength)
+            throw new ArgumentException("maximumPackageLength must not be greater than ProtocolParameters.MaxPackageLength!");
+
+         MaximumPackageLength = maximumPackageLength;
+         SlotId = slotId;
+         Dtd = dtd;
+
+         if (packageReadyHandler != null)
+            PackageReady += packageReadyHandler;
+
+         _isFirstPackage = true;
+         _useEscaping = useEscaping;
+      }
+
       // suppress "Implement IDisposable correctly"
       // because implementation is correct, warning is
       // raised because of additional method call to AssertFinished().
@@ -160,8 +188,10 @@ namespace EmberLib.Framing
       /// </summary>
       /// <param name="slotId">The S101 slot id to address.</param>
       /// <param name="length">Receives the length of the framed package.</param>
+      /// <param name="useEscaping">Specifies whether the escaping or the non-escaping variant of S101 shall be used.
+      /// The default is to use escaping.</param>
       /// <returns>A byte array containing the framed package.</returns>
-      public static byte[] WriteKeepAliveRequest(int slotId, out int length)
+      public static byte[] WriteKeepAliveRequest(int slotId, out int length, bool useEscaping = true)
       {
          var bytes = new byte[]
          {
@@ -171,7 +201,9 @@ namespace EmberLib.Framing
             1,
          };
 
-         return S101.TxFrame.WriteMessage(bytes, bytes.Length, out length);
+         return useEscaping
+            ? S101.TxFrame.WriteMessage(bytes, bytes.Length, out length)
+            : S101.TxFrameWithoutEscaping.WriteMessage(bytes, bytes.Length, out length);
       }
 
       /// <summary>
@@ -179,8 +211,10 @@ namespace EmberLib.Framing
       /// </summary>
       /// <param name="slotId">The S101 slot id to address.</param>
       /// <param name="length">Receives the length of the framed package.</param>
+      /// <param name="useEscaping">Specifies whether the escaping or the non-escaping variant of S101 shall be used.
+      /// The default is to use escaping.</param>
       /// <returns>A byte array containing the framed package.</returns>
-      public static byte[] WriteKeepAliveResponse(int slotId, out int length)
+      public static byte[] WriteKeepAliveResponse(int slotId, out int length, bool useEscaping = true)
       {
          var bytes = new byte[]
          {
@@ -190,7 +224,9 @@ namespace EmberLib.Framing
             1,
          };
 
-         return S101.TxFrame.WriteMessage(bytes, bytes.Length, out length);
+         return useEscaping
+            ? S101.TxFrame.WriteMessage(bytes, bytes.Length, out length)
+            : S101.TxFrameWithoutEscaping.WriteMessage(bytes, bytes.Length, out length);
       }
 
       /// <summary>
@@ -199,8 +235,10 @@ namespace EmberLib.Framing
       /// <param name="slotId">The S101 slot id to address.</param>
       /// <param name="providerState">One of the values defined in the ProtocolParameters.ProviderState type.</param>
       /// <param name="length">Receives the length of the framed package.</param>
+      /// <param name="useEscaping">Specifies whether the escaping or the non-escaping variant of S101 shall be used.
+      /// The default is to use escaping.</param>
       /// <returns>A byte array containing the framed package.</returns>
-      public static byte[] WriteProviderState(int slotId, byte providerState, out int length)
+      public static byte[] WriteProviderState(int slotId, byte providerState, out int length, bool useEscaping = true)
       {
          var bytes = new byte[]
          {
@@ -211,7 +249,9 @@ namespace EmberLib.Framing
             providerState,
          };
 
-         return S101.TxFrame.WriteMessage(bytes, bytes.Length, out length);
+         return useEscaping
+            ? S101.TxFrame.WriteMessage(bytes, bytes.Length, out length)
+            : S101.TxFrameWithoutEscaping.WriteMessage(bytes, bytes.Length, out length);
       }
 
       /// <summary>
@@ -279,6 +319,7 @@ namespace EmberLib.Framing
       #endregion
 
       #region Implementation
+      readonly bool _useEscaping;
       BerMemoryOutput _buffer;
       int _dataLength;
       bool _isFirstPackage;
@@ -336,7 +377,9 @@ namespace EmberLib.Framing
          memory[4] = packageFlags;
 
          int framedLength;
-         var package = S101.TxFrame.WriteMessage(memory, (int)_buffer.Length, out framedLength);
+         var package = _useEscaping
+            ? S101.TxFrame.WriteMessage(memory, (int)_buffer.Length, out framedLength)
+            : S101.TxFrameWithoutEscaping.WriteMessage(memory, (int)_buffer.Length, out framedLength);
 
          OnPackageReady(new PackageReadyArgs(package, framedLength, _dataLength));
 

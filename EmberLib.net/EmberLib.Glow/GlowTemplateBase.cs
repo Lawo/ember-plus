@@ -12,8 +12,8 @@ namespace EmberLib.Glow
       /// <summary>
       /// Initializes a new instance of the <see cref="GlowTemplateBase"/> class.
       /// </summary>
-      /// <param name="tag"></param>
-      /// <param name="type"></param>
+      /// <param name="tag">The application tag of this instance.</param>
+      /// <param name="type">The application defined type of the template.</param>
       protected GlowTemplateBase(BerTag tag, uint type)
          : base(tag, type)
       {
@@ -23,6 +23,8 @@ namespace EmberLib.Glow
       /// Gets or sets the element that is described by the template. This can be any of
       /// <see cref="GlowNode"/>, <see cref="GlowParameter"/>, <see cref="GlowFunction"/>
       /// or <see cref="GlowMatrix"/>.
+      /// To set a template element, its tag must be set to <see cref="GlowTags.Template.Element"/>. Otherwise,
+      /// an <see cref="ArgumentException"/> will be thrown.
       /// </summary>
       public GlowElement Element
       {

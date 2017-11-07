@@ -63,6 +63,18 @@ namespace EmberLib.Glow
       }
 
       /// <summary>
+      /// Gets a value indicating whether this instance contains a valid value or not. If
+      /// <c>false</c> is being returned, the <see cref="Type"/> is <see cref="GlowParameterType.None"/>.
+      /// </summary>
+      public bool IsNull
+      {
+         get
+         {
+            return Type == GlowParameterType.None;
+         }
+      }
+
+      /// <summary>
       /// Gets the parameter type of the contained value.
       /// Either GlowParameterType.Integer or GlowParameterType.Real.
       /// </summary>
@@ -172,6 +184,11 @@ namespace EmberLib.Glow
                }
 
                break;
+            }
+            case GlowParameterType.None:
+            {
+               value = new GlowMinMax(type);
+               return true;
             }
 
             default:

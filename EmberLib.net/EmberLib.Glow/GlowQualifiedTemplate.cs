@@ -38,8 +38,9 @@ namespace EmberLib.Glow
       /// <summary>
       /// Initializes a new instance of the <see cref="GlowQualifiedTemplate"/> class.
       /// </summary>
-      /// <param name="tag">The tag to assign. For example <see cref="GlowTags.NodeContents.TemplateReference"/>.</param>
       /// <param name="path">The path to assign.</param>
+      /// <param name="tag">The tag to assign. For example <see cref="GlowTags.NodeContents.TemplateReference"/>. If set
+      /// to <c>null</c>, the tag will be set to <see cref="GlowTags.CollectionItem"/>.</param>
       public GlowQualifiedTemplate(int[] path, BerTag? tag)
          : base(tag ?? tag ?? GlowTags.CollectionItem, GlowType.QualifiedTemplate)
       {
@@ -51,7 +52,10 @@ namespace EmberLib.Glow
       /// </summary>
       public int[] Path
       {
-         get { return GetChildValue<int[]>(GlowTags.QualifiedTemplate.Path); }
+         get
+         {
+            return GetChildValue<int[]>(GlowTags.QualifiedTemplate.Path);
+         }
          private set
          {
             var tag = GlowTags.QualifiedTemplate.Path;

@@ -58,6 +58,7 @@ namespace EmberLib.Glow
             case GlowType.Invocation:              return new GlowInvocation(tag);
             case GlowType.InvocationResult:        return new GlowInvocationResult(tag);
             case GlowType.Template:                return new GlowTemplate(tag);
+            case GlowType.QualifiedTemplate:       return new GlowQualifiedTemplate(tag);
          }
 
          return null;
@@ -91,6 +92,7 @@ namespace EmberLib.Glow
             case GlowType.Invocation:              return new GlowInvocation(tag);
             case GlowType.InvocationResult:        return new GlowInvocationResult(tag);
             case GlowType.Template:                return new GlowTemplate(tag);
+            case GlowType.QualifiedTemplate:       return new GlowQualifiedTemplate(tag);
          }
 
          return base.CreateNodeFromXml(type, tag, reader);

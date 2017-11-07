@@ -120,11 +120,64 @@ static void berFramingOutput_writeBytes(BerOutput *pBase, const byte *pBytes, in
 }
 
 
+// Non-Escaping Framing Output
+
+static void berFramingOutput_writeByteWithoutEscaping(BerOutput *pBase, byte b)
+{
+    berMemoryOutput_writeByte(pBase, b);
+}
+
+static void berFramingOutput_writeBytesWithoutEscaping(BerOutput *pBase, byte const *pBytes, int count)
+{
+    for ( ; count > 0; count--, pBytes++)
+        berMemoryOutput_writeByte(pBase, *pBytes);
+}
+
+
 // ======================================================
 //
 // BerFramingOutput globals
 //
 // ======================================================
+
+
+void berFramingOutput_initImpl(BerFramingOutput *pThis,
+    byte *pMemory,
+    unsigned int size,
+    byte slotId,
+    byte dtd,
+    const byte *pAppBytes,
+    byte appBytesCount,
+    bool useNonEscapingFrames)
+{
+    ASSERT(pThis != NULL);
+    ASSERT(size <= EMBER_MAXIMUM_PACKAGE_LENGTH);
+
+    if (size > EMBER_MAXIMUM_PACKAGE_LENGTH)
+        size = EMBER_MAXIMUM_PACKAGE_LENGTH;
+
+    bzero(*pThis);
+    berMemoryOutput_init(&pThis->base, pMemory, size);
+
+    if (useNonEscapingFrames)
+    {
+        pThis->base.base.writeByte = berFramingOutput_writeByte;
+        pThis->base.base.writeBytes = berFramingOutput_writeBytes;
+    }
+    else
+    {
+        pThis->base.base.writeByte = berFramingOutput_writeByteWithoutEscaping;
+        pThis->base.base.writeBytes = berFramingOutput_writeBytesWithoutEscaping;
+    }
+
+    pThis->crc = 0xFFFF;
+    pThis->slotId = slotId;
+    pThis->dtd = dtd;
+
+    pThis->pAppBytes = pAppBytes;
+    pThis->appBytesCount = appBytesCount;
+    pThis->useNonEscapingFrames = useNonEscapingFrames;
+}
 
 void berFramingOutput_init(BerFramingOutput *pThis,
                            byte *pMemory,
@@ -134,24 +187,18 @@ void berFramingOutput_init(BerFramingOutput *pThis,
                            const byte *pAppBytes,
                            byte appBytesCount)
 {
-   ASSERT(pThis != NULL);
-   ASSERT(size <= EMBER_MAXIMUM_PACKAGE_LENGTH);
+    berFramingOutput_initImpl(pThis, pMemory, size, slotId, dtd, pAppBytes, appBytesCount, false);
+}
 
-   if(size > EMBER_MAXIMUM_PACKAGE_LENGTH)
-      size = EMBER_MAXIMUM_PACKAGE_LENGTH;
-
-   bzero(*pThis);
-   berMemoryOutput_init(&pThis->base, pMemory, size);
-
-   pThis->base.base.writeByte = berFramingOutput_writeByte;
-   pThis->base.base.writeBytes = berFramingOutput_writeBytes;
-
-   pThis->crc = 0xFFFF;
-   pThis->slotId = slotId;
-   pThis->dtd = dtd;
-
-   pThis->pAppBytes = pAppBytes;
-   pThis->appBytesCount = appBytesCount;
+void berFramingOutput_initWithoutEscaping(BerFramingOutput *pThis,
+    byte *pMemory,
+    unsigned int size,
+    byte slotId,
+    byte dtd,
+    const byte *pAppBytes,
+    byte appBytesCount)
+{
+    berFramingOutput_initImpl(pThis, pMemory, size, slotId, dtd, pAppBytes, appBytesCount, true);
 }
 
 void berFramingOutput_writeHeader(BerFramingOutput *pThis, EmberFramingFlags flags)
@@ -162,26 +209,55 @@ void berFramingOutput_writeHeader(BerFramingOutput *pThis, EmberFramingFlags fla
    ASSERT(pThis != NULL);
    ASSERT(pThis->base.position == 0);
 
-   pThis->crc = 0xFFFF;
-
-   berMemoryOutput_writeByte(pBase, S101_BOF);
-   writeEscapedByteWithCrc(pThis, 0x00);                  // slotid
-   writeEscapedByteWithCrc(pThis, EMBER_MESSAGE_ID);      // message
-   writeEscapedByteWithCrc(pThis, EMBER_COMMAND_PAYLOAD); // command
-   writeEscapedByteWithCrc(pThis, 0x01);                  // framing version
-   writeEscapedByteWithCrc(pThis, (byte)(flags & 0xFF));  // flags: first_package | last_package
-   writeEscapedByteWithCrc(pThis, pThis->dtd);            // dtd
-
-   if(pThis->pAppBytes != NULL)
+   if (pThis->useNonEscapingFrames)
    {
-      writeEscapedByteWithCrc(pThis, pThis->appBytesCount);
+       berMemoryOutput_writeByte(pBase, S101_Invalid);
+       berMemoryOutput_writeByte(pBase, 0x00);                  // Payload Length 0
+       berMemoryOutput_writeByte(pBase, 0x00);                  // Payload Length 1
+       berMemoryOutput_writeByte(pBase, 0x00);                  // Payload Length 2
+       berMemoryOutput_writeByte(pBase, 0x00);                  // Payload Length 3
+       berMemoryOutput_writeByte(pBase, 0x00);                  // slotid
+       berMemoryOutput_writeByte(pBase, EMBER_MESSAGE_ID);      // message
+       berMemoryOutput_writeByte(pBase, EMBER_COMMAND_PAYLOAD); // command
+       berMemoryOutput_writeByte(pBase, 0x01);                  // framing version
+       berMemoryOutput_writeByte(pBase, (byte)(flags & 0xFF));  // flags: first_package | last_package;
+       berMemoryOutput_writeByte(pBase, pThis->dtd);
 
-      for(index = 0; index < pThis->appBytesCount; index++)
-         writeEscapedByteWithCrc(pThis, pThis->pAppBytes[index]);
+       if (pThis->pAppBytes != NULL)
+       {
+           berMemoryOutput_writeByte(pBase, pThis->appBytesCount);
+
+           for (index = 0; index < pThis->appBytesCount; index++)
+               berMemoryOutput_writeByte(pBase, pThis->pAppBytes[index]);
+       }
+       else
+       {
+           berMemoryOutput_writeByte(pBase, 0x00);
+       }
    }
    else
    {
-      writeEscapedByteWithCrc(pThis, 0x00);            // appbytes count
+       pThis->crc = 0xFFFF;
+
+       berMemoryOutput_writeByte(pBase, S101_BOF);
+       writeEscapedByteWithCrc(pThis, 0x00);                  // slotid
+       writeEscapedByteWithCrc(pThis, EMBER_MESSAGE_ID);      // message
+       writeEscapedByteWithCrc(pThis, EMBER_COMMAND_PAYLOAD); // command
+       writeEscapedByteWithCrc(pThis, 0x01);                  // framing version
+       writeEscapedByteWithCrc(pThis, (byte)(flags & 0xFF));  // flags: first_package | last_package
+       writeEscapedByteWithCrc(pThis, pThis->dtd);            // dtd
+
+       if (pThis->pAppBytes != NULL)
+       {
+           writeEscapedByteWithCrc(pThis, pThis->appBytesCount);
+
+           for (index = 0; index < pThis->appBytesCount; index++)
+               writeEscapedByteWithCrc(pThis, pThis->pAppBytes[index]);
+       }
+       else
+       {
+           writeEscapedByteWithCrc(pThis, 0x00);            // appbytes count
+       }
    }
 }
 
@@ -190,14 +266,26 @@ unsigned int berFramingOutput_finish(BerFramingOutput *pThis)
    BerOutput *pBase;
    unsigned short crc;
    unsigned int position;
+   unsigned int payloadLength = pThis->base.position - 5;
 
    ASSERT(pThis != NULL);
 
    pBase = &pThis->base.base;
-   crc = ~pThis->crc;
-   writeEscapedByte(pBase, (byte)((crc >> 0) & 0xFF));
-   writeEscapedByte(pBase, (byte)((crc >> 8) & 0xFF));
-   berMemoryOutput_writeByte(pBase, S101_EOF);
+
+   if (pThis->useNonEscapingFrames)
+   {
+       pThis->base.pMemory[1] = (payloadLength >> 24) & 0xFF;
+       pThis->base.pMemory[2] = (payloadLength >> 16) & 0xFF;
+       pThis->base.pMemory[3] = (payloadLength >> 8) & 0xFF;
+       pThis->base.pMemory[4] = (payloadLength >> 0) & 0xFF;
+   }
+   else
+   {
+       crc = ~pThis->crc;
+       writeEscapedByte(pBase, (byte)((crc >> 0) & 0xFF));
+       writeEscapedByte(pBase, (byte)((crc >> 8) & 0xFF));
+       berMemoryOutput_writeByte(pBase, S101_EOF);
+   }
 
    position = pThis->base.position;
    berMemoryOutput_reset(&pThis->base);
@@ -220,6 +308,17 @@ static unsigned int writeKeepAlivePackage(BerFramingOutput *pOut, byte command)
    writeEscapedByteWithCrc(pOut, 0x01);             // framing version
 
    return berFramingOutput_finish(pOut);
+}
+
+static unsigned int writeKeepAlivePackageWithoutEscaping(BerFramingOutput *pOut, byte command)
+{
+    berMemoryOutput_writeByte(&pOut->base.base, S101_Invalid);
+    berMemoryOutput_writeByte(&pOut->base.base, pOut->slotId);
+    berMemoryOutput_writeByte(&pOut->base.base, EMBER_MESSAGE_ID); // message
+    berMemoryOutput_writeByte(&pOut->base.base, command);          // command
+    berMemoryOutput_writeByte(&pOut->base.base, 0x01);             // framing version
+
+    return berFramingOutput_finish(pOut);
 }
 
 
@@ -246,6 +345,23 @@ unsigned int emberFraming_writeKeepAliveResponse(byte *pBuffer, unsigned int siz
 }
 
 
+unsigned int emberFraming_writeKeepAliveRequestWithoutEscaping(byte *pBuffer, unsigned int size, byte slotId)
+{
+    BerFramingOutput output;
+    berFramingOutput_initWithoutEscaping(&output, pBuffer, size, slotId, 0, NULL, 0);
+
+    return writeKeepAlivePackage(&output, EMBER_COMMAND_KEEPALIVE_REQUEST);
+}
+
+unsigned int emberFraming_writeKeepAliveResponseWithoutEscaping(byte *pBuffer, unsigned int size, byte slotId)
+{
+    BerFramingOutput output;
+    berFramingOutput_initWithoutEscaping(&output, pBuffer, size, slotId, 0, NULL, 0);
+
+    return writeKeepAlivePackage(&output, EMBER_COMMAND_KEEPALIVE_RESPONSE);
+}
+
+
 // ======================================================
 //
 // EmberFramingReader locals
@@ -262,54 +378,85 @@ static void readFramedByte(EmberFramingReader *pThis, byte b)
       {
          byteBuffer_reset(pBuffer);
          byteBuffer_add(pBuffer, S101_BOF);
+         pThis->isNonEscapingFrame = false;
          pThis->isEscaped = false;
          pThis->crc = 0xFFFF;
       }
-
-      return;
-   }
-
-   if(b == S101_BOF)
-   {
-      byteBuffer_reset(pBuffer);
-      byteBuffer_add(pBuffer, S101_BOF);
-      pThis->isEscaped = false;
-      pThis->crc = 0xFFFF;
-      return;
-   }
-
-   if(b == S101_EOF)
-   {
-      if(pBuffer->position >= 2)
+      else if (b == S101_Invalid)
       {
-         if(pThis->crc == 0xF0B8)
-            pThis->onPackageReceived(pBuffer->pMemory + 1, pBuffer->position - 3, pThis->state);
+          byteBuffer_reset(pBuffer);
+          byteBuffer_add(pBuffer, S101_BOF);
+          pThis->isNonEscapingFrame = true;
+          pThis->isEscaped = false;
+          pThis->crc = 0xFFFF;
       }
 
-      emberFramingReader_reset(pThis);
       return;
    }
 
-   if(b == S101_CE)
+   if (pThis->isNonEscapingFrame)
    {
-      pThis->isEscaped = true;
-      return;
-   }
+       byteBuffer_add(pBuffer, b);
 
-   if(b >= S101_Invalid)
+       if (pBuffer->position == 5)
+       {
+           pThis->payloadLength = 0;
+           pThis->payloadLength |= (pBuffer->pMemory[1] << 24);
+           pThis->payloadLength |= (pBuffer->pMemory[2] << 16);
+           pThis->payloadLength |= (pBuffer->pMemory[3] << 8);
+           pThis->payloadLength |= (pBuffer->pMemory[4] << 0);
+       }
+
+       if (pBuffer->position >= 5 && pBuffer->position - 5 == pThis->payloadLength)
+       {
+           pThis->onPackageReceived(pBuffer->pMemory + 5, pBuffer->position - 5, pThis->state);
+           emberFramingReader_reset(pThis);
+       }
+   }
+   else
    {
-      byteBuffer_reset(pBuffer);
-      return;
-   }
+       if (b == S101_BOF)
+       {
+           byteBuffer_reset(pBuffer);
+           byteBuffer_add(pBuffer, S101_BOF);
+           pThis->isEscaped = false;
+           pThis->crc = 0xFFFF;
+           return;
+       }
 
-   if(pThis->isEscaped)
-   {
-      pThis->isEscaped = false;
-      b ^= 0x20;
-   }
+       if (b == S101_EOF)
+       {
+           if (pBuffer->position >= 2)
+           {
+               if (pThis->crc == 0xF0B8)
+                   pThis->onPackageReceived(pBuffer->pMemory + 1, pBuffer->position - 3, pThis->state);
+           }
 
-   byteBuffer_add(pBuffer, b);
-   pThis->crc = crc_addByte(pThis->crc, b);
+           emberFramingReader_reset(pThis);
+           return;
+       }
+
+       if (b == S101_CE)
+       {
+           pThis->isEscaped = true;
+           return;
+       }
+
+       if (b >= S101_Invalid)
+       {
+           byteBuffer_reset(pBuffer);
+           return;
+       }
+
+       if (pThis->isEscaped)
+       {
+           pThis->isEscaped = false;
+           b ^= 0x20;
+       }
+
+       byteBuffer_add(pBuffer, b);
+       pThis->crc = crc_addByte(pThis->crc, b);
+   }
 }
 
 
@@ -336,6 +483,9 @@ void emberFramingReader_init(EmberFramingReader *pThis,
    pThis->crc = 0xFFFF;
    pThis->onPackageReceived = onPackageReceived;
    pThis->state = state;
+   pThis->isEscaped = false;
+   pThis->isNonEscapingFrame = false;
+   pThis->payloadLength = 0;
 }
 
 void emberFramingReader_reset(EmberFramingReader *pThis)
@@ -346,6 +496,8 @@ void emberFramingReader_reset(EmberFramingReader *pThis)
 
    pThis->crc = 0xFFFF;
    pThis->isEscaped = false;
+   pThis->isNonEscapingFrame = false;
+   pThis->payloadLength = 0;
 }
 
 void emberFramingReader_readBytes(EmberFramingReader *pThis, const byte *pBytes, int count)

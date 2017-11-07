@@ -88,6 +88,11 @@ typedef struct SBerFramingOutput
    unsigned short crc;
 
    /**
+    * Private field.
+    */
+   bool useNonEscapingFrames;
+
+   /**
      * The slot id as described in the framing protocol documentation.
      */
    byte slotId;
@@ -134,6 +139,31 @@ LIBEMBER_API void berFramingOutput_init(BerFramingOutput *pThis,
                            byte dtd,
                            const byte *pAppBytes,
                            byte appBytesCount);
+
+/**
+* Initializes a BerFramingOutput instance which uses the non-escaping variant of the S101 framing.
+* Must be called before any other operations on the
+* BerFramingOutput instance are invoked.
+* @param pThis pointer to the object to process.
+* @param pMemory pointer to the memory location to write
+*     the framed package to.
+* @param size number of bytes at @p pMemory.
+* @param slotId the slot id as described in the
+*     framing protocol documentation.
+* @param dtd the identifier of the dtd used by the ember data
+*     contained in the frame.
+* @param pAppBytes Pointer to application-defined bytes to store
+*     in the frame header.
+* @param appBytesCount number of application-defined bytes at
+*     @p pAppBytes.
+*/
+LIBEMBER_API void berFramingOutput_initWithoutEscaping(BerFramingOutput *pThis,
+    byte *pMemory,
+    unsigned int size,
+    byte slotId,
+    byte dtd,
+    const byte *pAppBytes,
+    byte appBytesCount);
 
 /**
   * Writes the framing header to a BerFramingOutput.
@@ -185,6 +215,28 @@ LIBEMBER_API unsigned int emberFraming_writeKeepAliveRequest(byte *pBuffer, unsi
   */
 LIBEMBER_API unsigned int emberFraming_writeKeepAliveResponse(byte *pBuffer, unsigned int size, byte slotId);
 
+/**
+* Frames a Keep-Alive Request message into the passed buffer by using the non-escaping variant of S101.
+* @param pBuffer pointer to the buffer where to store the
+*     framed package.
+* @param size the size of @pBuffer. Refer to the framing documentation
+*     to determine how many bytes are needed.
+* @param slotId the S101 slot id of the remote host.
+* @return the number of bytes written to @p pBuffer.
+*/
+LIBEMBER_API unsigned int emberFraming_writeKeepAliveRequestWithoutEscaping(byte *pBuffer, unsigned int size, byte slotId);
+
+/**
+* Frames a Keep-Alive Response message into the passed buffer by using the non-escaping variant of S101.
+* @param pBuffer pointer to the buffer where to store the
+*     framed package.
+* @param size the size of @pBuffer. Refer to the framing documentation
+*     to determine how many bytes are needed.
+* @param slotId the S101 slot id of the remote host.
+* @return the number of bytes written to @p pBuffer.
+*/
+LIBEMBER_API unsigned int emberFraming_writeKeepAliveResponseWithoutEscaping(byte *pBuffer, unsigned int size, byte slotId);
+
 
 // ======================================================
 //
@@ -218,6 +270,16 @@ typedef struct SEmberFramingReader
      * Private field.
      */
    bool isEscaped;
+
+   /**
+    * Private field.
+    */
+   bool isNonEscapingFrame;
+
+   /**
+    * Private field.
+    */
+   unsigned int payloadLength;
 
    /**
      * Private field.

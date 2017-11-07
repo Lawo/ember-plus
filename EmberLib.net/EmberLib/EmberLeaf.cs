@@ -189,8 +189,15 @@ namespace EmberLib
       #endregion
    }
 
+   /// <summary>
+   /// Leaf class representing the NULL value.
+   /// </summary>
    public sealed class NullEmberLeaf : EmberLeaf<object>
    {
+      /// <summary>
+      /// Creates a new instance representing null.
+      /// </summary>
+      /// <param name="tag">The tag of the newly created node.</param>
       public NullEmberLeaf(BerTag tag)
          : base(tag)
       {

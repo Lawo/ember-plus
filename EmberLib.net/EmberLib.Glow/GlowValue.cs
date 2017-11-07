@@ -254,6 +254,9 @@ namespace EmberLib.Glow
 
                break;
             }
+            case GlowParameterType.None:
+               value = GlowValue.Null;
+               return true;
 
             default:
                throw new ArgumentException("Unsupported type");

@@ -11,6 +11,10 @@
 
 #include "../../util/Inline.hpp"
 #include "../util/ValueConverter.hpp"
+#include "../GlowFunction.hpp"
+#include "../GlowNode.hpp"
+#include "../GlowMatrix.hpp"
+#include "../GlowParameter.hpp"
 
 namespace libember { namespace glow 
 {
@@ -76,6 +80,31 @@ namespace libember { namespace glow
             return 0;
         }
     }
+
+    LIBEMBER_INLINE
+    GlowNode * GlowTemplateBase::makeNode(int number) const
+    {
+        return new GlowNode(number, elementTag());
+    }
+
+    LIBEMBER_INLINE
+    GlowMatrix * GlowTemplateBase::makeMatrix(int number) const
+    {
+        return new GlowMatrix(number, elementTag());
+    }
+
+    LIBEMBER_INLINE
+    GlowFunction * GlowTemplateBase::makeFunction(int number) const
+    {
+        return new GlowFunction(number, elementTag());
+    }
+
+    LIBEMBER_INLINE
+    GlowParameter * GlowTemplateBase::makeParameter(int number) const
+    {
+        return new GlowParameter(number, elementTag());
+    }
+
 }
 }
 

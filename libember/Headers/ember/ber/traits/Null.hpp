@@ -17,7 +17,7 @@ Distributed under the Boost Software License, Version 1.0.
 namespace libember { namespace ber
 {
     /**
-    * UniversalTagTraits specialization for the Null type.
+    * UniversalTagTraits specialization for the null type.
     */
     template<>
     struct UniversalTagTraits<Null>

@@ -91,6 +91,11 @@ static void readMinMax(const BerReader *pBase, GlowMinMax *pMinMax)
          pMinMax->choice.real = berReader_getReal(pBase);
          break;
 
+      case BerType_Null:
+          pMinMax->flag = GlowParameterType_None;
+          pMinMax->choice.integer = 0;
+          break;
+
       default:
          throwError(508, "BerReader reports unsupported GlowMinMax type!");
          break;
@@ -108,11 +113,12 @@ static void onItemReady_Template(NonFramingGlowReader *pThis)
     if (pBase->isContainer)
     {
         if (pThis->onTemplate != NULL)
-            pThis->onTemplate(&pThis->glow.template, GlowFieldFlag_None, pThis->path, pThis->pathLength, pThis->state);
+            pThis->onTemplate(&pThis->glow.template, pThis->fields, pThis->path, pThis->pathLength, pThis->state);
 
         // reset read template
         glowTemplate_free(&pThis->glow.template);
         pThis->fields = GlowFieldFlag_None;
+
     }
     else
     {
@@ -139,7 +145,7 @@ static void onItemReady_QualifiedTemplate(NonFramingGlowReader *pThis)
     if (pBase->isContainer)
     {
         if (pThis->onTemplate != NULL)
-            pThis->onTemplate(&pThis->glow.template, GlowFieldFlag_None, pThis->path, pThis->pathLength, pThis->state);
+            pThis->onTemplate(&pThis->glow.template, pThis->fields, pThis->path, pThis->pathLength, pThis->state);
 
         // reset read template
         glowTemplate_free(&pThis->glow.template);
@@ -974,8 +980,8 @@ static onItemReady_t getOnItemReady_EnterContainer(const BerReader *pBase)
          bzero(pThis->glow.template);
          return onItemReady_Template;
       case GlowType_QualifiedTemplate:
-          bzero(pThis->glow.template);
-          return onItemReady_QualifiedTemplate;
+         bzero(pThis->glow.template);
+         return onItemReady_QualifiedTemplate;
       case GlowType_Node:
          bzero(pThis->glow.node);
          pThis->glow.node.isOnline = true;

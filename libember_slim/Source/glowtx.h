@@ -129,10 +129,25 @@ LIBEMBER_API void glow_writeQualifiedNode(GlowOutput *pOut,
 * Writes a Template to the passed GlowOutput, encoding @p pTemplate
 * with type QualifiedTemplate.
 * The last integer at @p pPath is the number of the template.
+* To write the structure the element defines, pass a valid function to
+* the writeElement callback. Within this callback, the functions
+*   @see glow_writeTemplateElementNodeBegin
+*   @see glow_writeTemplateElementNodeEnd
+*   @see glow_writeTemplateElementNodeChildrenBegin
+*   @see glow_writeTemplateElementNodeChildrenEnd
+*   @see glow_writeTemplateElementNode
+*   @see glow_writeTemplateElementParameter
+*   @see glow_writeTemplateElementFunction
+*
+* can be used to write the structure.
 * @param pOut pointer to the output to be used for in-memory framing.
 * @param pTemlate pointer to the template to write.
 * @param fields flags indicating which fields of @p pTemplate should
 *     be written.
+* @param writeElement A callback which will be invoked when the structure of
+*     the template can be written. The tag passed to this callback must be used
+*     for the root element of the tag. For all children, NULL can be passed
+*     when writing the structure.
 * @param pPath pointer to the first number in the template path, which is
 *     the number of the tree's root node. The last number is the template's
 *     number. May be NULL only if pathLength is 0.
@@ -141,8 +156,121 @@ LIBEMBER_API void glow_writeQualifiedNode(GlowOutput *pOut,
 LIBEMBER_API void glow_writeQualifiedTemplate(GlowOutput *pOut,
     const GlowTemplate *pTemplate,
     GlowFieldFlags fields,
+    void (*writeElement)(GlowOutput *pOut, const BerTag * elementTag),
     const berint *pPath,
     int pathLength);
+
+
+/**
+ * Writes an element of a template. This function must only be called within the context of
+ * the callback invoked by @see glow_writeQualifiedTemplate.
+ * When using this function children can be added by calling 
+ *      @see glow_writeTemplateElementNodeChildrenBegin.
+ * When done, @see glow_writeTemplateElementNodeChildrenEnd must be called to terminate
+ * the container.
+ * When the node does not contain any children, the @see glow_writeTemplateElementNode
+ * function can be used for convenience.
+ * @param pOut pointer to the output to be used for in-memory framing.
+ * @param tag The application tag of this element. For the root element of the template, the
+ *      tag passed to the callback must be used. For all subsequent elements, NULL or
+ *      glowTags.elementCollection.element can be used.
+ * @param pNode The node to encode.
+ * @param fields The fields of the node to encode.
+ * @param number The number of the node.
+ */
+LIBEMBER_API void glow_writeTemplateElementNodeBegin(
+    GlowOutput *pOut,
+    const BerTag *tag,
+    const GlowNode *pNode,
+    GlowFieldFlags fields,
+    berint number);
+
+/**
+ * Terminates a node structure within a template. Must be called once per call
+ * to @see glow_writeTemplateElementNodeBegin.
+ *
+ * This function must only be called within the context of
+ * the callback invoked by @see glow_writeQualifiedTemplate.
+ * @param pOut pointer to the output to be used for in-memory framing.
+ */
+LIBEMBER_API void glow_writeTemplateElementNodeEnd(GlowOutput *pOut);
+
+/**
+ * Starts a new container which may contain the subelements of a templated node.
+ * Once all elements have been written, @see glow_writeTemplateElementNodeChildrenEnd
+ * must be called.
+ *
+ * This function must only be called within the context of
+ * the callback invoked by @see glow_writeQualifiedTemplate.
+ *
+ * @param pOut pointer to the output to be used for in-memory framing.
+ */
+LIBEMBER_API void glow_writeTemplateElementNodeChildrenBegin(GlowOutput *pOut);
+
+/**
+ * Terminates the current child-element container.
+ *
+ * This function must only be called within the context of
+ * the callback invoked by @see glow_writeQualifiedTemplate.
+ * 
+ * @param pOut pointer to the output to be used for in-memory framing.
+ */
+LIBEMBER_API void glow_writeTemplateElementNodeChildrenEnd(GlowOutput *pOut);
+
+/**
+ * Writes a node of a template. This function must only be called within the context of
+ * the callback invoked by @see glow_writeQualifiedTemplate.
+ * @param pOut pointer to the output to be used for in-memory framing.
+ * @param tag The application tag of this element. For the root element of the template, the
+ *      tag passed to the callback must be used. For all subsequent elements, NULL or
+ *      glowTags.elementCollection.element can be used.
+ * @param pNode The node to encode.
+ * @param fields The fields to encode.
+ * @param number The number of the node.
+ */
+LIBEMBER_API void glow_writeTemplateElementNode(
+    GlowOutput *pOut,
+    const BerTag *tag,
+    const GlowNode *pNode,
+    GlowFieldFlags fields,
+    berint number);
+
+/**
+ * Writes a parameter of a template. This function must only be called within the context of
+ * the callback invoked by @see glow_writeQualifiedTemplate.
+ * @param pOut pointer to the output to be used for in-memory framing.
+ * @param tag The application tag of this element. For the root element of the template, the
+ *      tag passed to the callback must be used. For all subsequent elements, NULL or
+ *      glowTags.elementCollection.element can be used.
+ * @param pParameter The parameter to encode.
+ * @param fields The fields of to encode.
+ * @param number The number of the parameter.
+ */
+LIBEMBER_API void glow_writeTemplateElementParameter(
+    GlowOutput *pOut,
+    const BerTag *tag,
+    const GlowParameter *pParameter,
+    GlowFieldFlags fields,
+    berint number);
+
+
+/**
+ * Writes a function of a template. This function must only be called within the context of
+ * the callback invoked by @see glow_writeQualifiedTemplate.
+ * @param pOut pointer to the output to be used for in-memory framing.
+ * @param tag The application tag of this element. For the root element of the template, the
+ *      tag passed to the callback must be used. For all subsequent elements, NULL or
+ *      glowTags.elementCollection.element can be used.
+ * @param pFunction The function to encode.
+ * @param fields The fields to encode.
+ * @param number The number of the function.
+ */
+LIBEMBER_API void glow_writeTemplateElementFunction(
+    GlowOutput *pOut,
+    const BerTag *tag,
+    const GlowFunction *pFunction,
+    GlowFieldFlags fields,
+    berint number);
 
 /**
   * Writes a Parameter to the passed GlowOutput, encoding @p pParameter

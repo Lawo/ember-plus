@@ -12,6 +12,7 @@
 #include <string>
 #include "../../ber/ObjectIdentifier.hpp"
 #include "../../ber/Octets.hpp"
+#include "../../ber/Null.hpp"
 #include "../../ber/Type.hpp"
 
 namespace libember { namespace glow { namespace traits 
@@ -116,6 +117,18 @@ namespace libember { namespace glow { namespace traits
         static ber::Type berType()
         {
             return ber::Type::RelativeObject;
+        }
+    };
+
+    /**
+    * Specialization for the ber::Null type
+    */
+    template<>
+    struct ValueTypeToBerType<ber::Null>
+    {
+        static ber::Type berType()
+        {
+            return ber::Type::Null;
         }
     };
 }

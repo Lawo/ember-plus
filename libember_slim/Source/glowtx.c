@@ -275,34 +275,6 @@ void glow_writeQualifiedNodeImpl(BerOutput *pOut,
    ember_writeContainerEnd(pOut); // end node
 }
 
-
-void glow_writeQualifiedTemplateImpl(BerOutput *pOut,
-    const GlowTemplate *pTemplate,
-    GlowFieldFlags fields,
-    const berint *pPath,
-    int pathLength)
-{
-    ASSERT(pOut != NULL);
-    ASSERT(pTemplate != NULL);
-
-    ember_writeContainerBegin(pOut, &glowTags.elementCollection.element, GlowType_QualifiedTemplate);
-    ember_writeRelativeOid(pOut, &glowTags.qualifiedTemplate.path, pPath, pathLength);
-
-    if (fields != 0)
-    {
-        ember_writeSetBegin(pOut, &glowTags.qualifiedNode.contents);
-
-        if ((fields & GlowFieldFlag_Description) == GlowFieldFlag_Description
-            && pTemplate->pDescription != NULL)
-            ember_writeString(pOut, &glowTags.qualifiedTemplate.description, pTemplate->pDescription);
-
-
-        ember_writeContainerEnd(pOut); // end node.contents
-    }
-
-    ember_writeContainerEnd(pOut); // end node
-}
-
 void glow_writeQualifiedParameterImpl(BerOutput *pOut,
                                       const GlowParameter *pParameter,
                                       GlowFieldFlags fields,
@@ -699,19 +671,271 @@ void glow_writeQualifiedNode(GlowOutput *pOut,
    glow_writeQualifiedNodeImpl(&pOut->base.base.base, pNode, fields, pPath, pathLength);
 }
 
+
 void glow_writeQualifiedTemplate(GlowOutput *pOut,
     const GlowTemplate *pTemplate,
     GlowFieldFlags fields,
+    void (*writeElement)(GlowOutput *pOut, const BerTag * elementTag),
     const berint *pPath,
     int pathLength)
 {
+    BerOutput *pBerOutput;
+
     ASSERT(pOut != NULL);
     ASSERT(pTemplate != NULL);
     ASSERT(pPath != NULL || pathLength == 0);
     ASSERT(pOut->positionHint == 0);
 
-    glow_writeQualifiedTemplateImpl(&pOut->base.base.base, pTemplate, fields, pPath, pathLength);
+    ASSERT(pOut != NULL);
+    ASSERT(pTemplate != NULL);
+
+    pBerOutput = &pOut->base.base.base;
+
+    ember_writeContainerBegin(pBerOutput, &glowTags.elementCollection.element, GlowType_QualifiedTemplate);
+    ember_writeRelativeOid(pBerOutput, &glowTags.qualifiedTemplate.path, pPath, pathLength);
+
+    if (fields != 0)
+    {
+        if ((fields & GlowFieldFlag_Description) == GlowFieldFlag_Description
+            && pTemplate->pDescription != NULL)
+            ember_writeString(pBerOutput, &glowTags.qualifiedTemplate.description, pTemplate->pDescription);
+    }
+
+    if (writeElement != NULL)
+        writeElement(pOut, &glowTags.qualifiedTemplate.element);
+
+    ember_writeContainerEnd(pBerOutput); // end node
 }
+
+
+LIBEMBER_API void glow_writeTemplateElementNodeBegin(
+    GlowOutput *pOut,
+    const BerTag *tag,
+    const GlowNode *pNode,
+    GlowFieldFlags fields,
+    berint number)
+{
+    BerOutput *pBerOutput = &pOut->base.base.base;
+
+    if (tag == NULL)
+        tag = &glowTags.elementCollection.element;
+
+    ember_writeContainerBegin(pBerOutput, tag, GlowType_Node);
+    {
+        ember_writeInteger(pBerOutput, &glowTags.node.number, number);
+
+        if (fields != 0)
+        {
+            ember_writeSetBegin(pBerOutput, &glowTags.node.contents);
+            {
+                if ((fields & GlowFieldFlag_Identifier) == GlowFieldFlag_Identifier
+                    && pNode->pIdentifier != NULL)
+                {
+                    if (glow_assertIdentifierValid(pNode->pIdentifier, false))
+                        ember_writeString(pBerOutput, &glowTags.nodeContents.identifier, pNode->pIdentifier);
+                }
+
+                if ((fields & GlowFieldFlag_Description) == GlowFieldFlag_Description
+                    && pNode->pDescription != NULL)
+                    ember_writeString(pBerOutput, &glowTags.nodeContents.description, pNode->pDescription);
+
+                if (fields & GlowFieldFlag_IsRoot)
+                    ember_writeBoolean(pBerOutput, &glowTags.nodeContents.isRoot, pNode->isRoot);
+
+                if (fields & GlowFieldFlag_IsOnline)
+                    ember_writeBoolean(pBerOutput, &glowTags.nodeContents.isOnline, pNode->isOnline);
+
+                if ((fields & GlowFieldFlag_SchemaIdentifier)
+                    && pNode->pSchemaIdentifiers != NULL)
+                    ember_writeString(pBerOutput, &glowTags.nodeContents.schemaIdentifiers, pNode->pSchemaIdentifiers);
+
+                if ((fields & GlowFieldFlag_TemplateReference)
+                    && pNode->pTemplateReference != NULL)
+                    ember_writeRelativeOid(pBerOutput, &glowTags.nodeContents.templateReference, pNode->pTemplateReference, pNode->templateReferenceLength);
+            }
+            ember_writeContainerEnd(pBerOutput);
+        }
+    }
+}
+
+void glow_writeTemplateElementNodeEnd(GlowOutput *pOut)
+{
+    ember_writeContainerEnd(&pOut->base.base.base);
+}
+
+void glow_writeTemplateElementNodeChildrenBegin(GlowOutput *pOut)
+{
+    ember_writeContainerBegin(&pOut->base.base.base, &glowTags.node.children, BerType_Sequence);
+}
+
+void glow_writeTemplateElementNodeChildrenEnd(GlowOutput *pOut)
+{
+    ember_writeContainerEnd(&pOut->base.base.base);
+}
+
+void glow_writeTemplateElementNode(
+    GlowOutput *pOut,
+    const BerTag *tag,
+    const GlowNode *pNode,
+    GlowFieldFlags fields,
+    berint number)
+{
+    glow_writeTemplateElementNodeBegin(pOut, tag, pNode, fields, number);
+    glow_writeTemplateElementNodeEnd(pOut);
+}
+
+void glow_writeTemplateElementParameter(
+    GlowOutput *pOut,
+    const BerTag *tag,
+    const GlowParameter *pParameter,
+    GlowFieldFlags fields,
+    berint number)
+{
+    BerOutput *pBerOutput;
+
+    ASSERT(pOut != NULL);
+    ASSERT(pParameter != NULL);
+
+    pBerOutput = &pOut->base.base.base;
+
+    if (tag == NULL)
+        tag = &glowTags.elementCollection.element;
+
+    ember_writeContainerBegin(pBerOutput, tag, GlowType_Parameter);
+    ember_writeInteger(pBerOutput, &glowTags.parameter.number, number);
+
+    ember_writeSetBegin(pBerOutput, &glowTags.parameter.contents);
+
+    if ((fields & GlowFieldFlag_Identifier) == GlowFieldFlag_Identifier && pParameter->pIdentifier != NULL)
+    {
+        if (glow_assertIdentifierValid(pParameter->pIdentifier, false))
+            ember_writeString(pBerOutput, &glowTags.parameterContents.identifier, pParameter->pIdentifier);
+    }
+
+    if ((fields & GlowFieldFlag_Description) == GlowFieldFlag_Description
+        && pParameter->pDescription != NULL)
+        ember_writeString(pBerOutput, &glowTags.parameterContents.description, pParameter->pDescription);
+
+    if (fields & GlowFieldFlag_Value)
+        writeValue(pBerOutput, &glowTags.parameterContents.value, &pParameter->value);
+
+    if (fields & GlowFieldFlag_DefaultValue)
+        writeValue(pBerOutput, &glowTags.parameterContents.value, &pParameter->defaultValue);
+
+    if (fields & GlowFieldFlag_Minimum)
+        writeMinMax(pBerOutput, &glowTags.parameterContents.minimum, &pParameter->minimum);
+
+    if (fields & GlowFieldFlag_Maximum)
+        writeMinMax(pBerOutput, &glowTags.parameterContents.maximum, &pParameter->maximum);
+
+    if (fields & GlowFieldFlag_Access)
+        ember_writeInteger(pBerOutput, &glowTags.parameterContents.access, (berint)pParameter->access);
+
+    if ((fields & GlowFieldFlag_Format) && pParameter->pFormat != NULL)
+        ember_writeString(pBerOutput, &glowTags.parameterContents.format, pParameter->pFormat);
+
+    if (fields & GlowFieldFlag_Factor)
+        ember_writeInteger(pBerOutput, &glowTags.parameterContents.factor, pParameter->factor);
+
+    if (fields & GlowFieldFlag_IsOnline)
+        ember_writeBoolean(pBerOutput, &glowTags.parameterContents.isOnline, pParameter->isOnline);
+
+    if (fields & GlowFieldFlag_Step)
+        ember_writeInteger(pBerOutput, &glowTags.parameterContents.step, pParameter->step);
+
+    if (fields & GlowFieldFlag_Type)
+        ember_writeInteger(pBerOutput, &glowTags.parameterContents.type, (berint)pParameter->type);
+
+    if (fields & GlowFieldFlag_StreamIdentifier)
+        ember_writeInteger(pBerOutput, &glowTags.parameterContents.streamIdentifier, pParameter->streamIdentifier);
+
+    if ((fields & GlowFieldFlag_Formula) && pParameter->pFormula != NULL)
+        ember_writeString(pBerOutput, &glowTags.parameterContents.formula, pParameter->pFormula);
+
+    if ((fields & GlowFieldFlag_Enumeration) && pParameter->pEnumeration != NULL)
+        ember_writeString(pBerOutput, &glowTags.parameterContents.enumeration, pParameter->pEnumeration);
+
+    if ((fields & GlowFieldFlag_TemplateReference) && pParameter->pTemplateReference != NULL)
+        ember_writeRelativeOid(pBerOutput, &glowTags.parameterContents.templateReference, pParameter->pTemplateReference, pParameter->templateReferenceLength);
+
+    if (fields & GlowFieldFlag_StreamDescriptor)
+    {
+        ember_writeContainerBegin(pBerOutput, &glowTags.parameterContents.streamDescriptor, GlowType_StreamDescription);
+        ember_writeInteger(pBerOutput, &glowTags.streamDescription.format, pParameter->streamDescriptor.format);
+        ember_writeInteger(pBerOutput, &glowTags.streamDescription.offset, pParameter->streamDescriptor.offset);
+        ember_writeContainerEnd(pBerOutput);
+    }
+
+    if ((fields & GlowFieldFlag_SchemaIdentifier) && pParameter->pSchemaIdentifiers != NULL)
+        ember_writeString(pBerOutput, &glowTags.parameterContents.schemaIdentifiers, pParameter->pSchemaIdentifiers);
+
+    ember_writeContainerEnd(pBerOutput); // end parameter.contents
+
+    ember_writeContainerEnd(pBerOutput); // end parameter
+}
+
+void glow_writeTemplateElementFunction(
+    GlowOutput *pOut,
+    const BerTag *tag,
+    const GlowFunction *pFunction,
+    GlowFieldFlags fields,
+    berint number)
+{
+    int index;
+    BerOutput *pBerOutput;
+
+    ASSERT(pOut != NULL);
+    ASSERT(pFunction != NULL);
+
+    pBerOutput = &pOut->base.base.base;
+
+    if (tag == NULL)
+        tag = &glowTags.elementCollection.element;
+
+    ember_writeContainerBegin(pBerOutput, tag, GlowType_Function);
+    ember_writeInteger(pBerOutput, &glowTags.function.number, number);
+    ember_writeSetBegin(pBerOutput, &glowTags.function.contents);
+
+    if ((fields & GlowFieldFlag_Identifier) == GlowFieldFlag_Identifier && pFunction->pIdentifier != NULL)
+    {
+        if (glow_assertIdentifierValid(pFunction->pIdentifier, false))
+            ember_writeString(pBerOutput, &glowTags.functionContents.identifier, pFunction->pIdentifier);
+    }
+
+    if ((fields & GlowFieldFlag_Description) == GlowFieldFlag_Description && pFunction->pDescription != NULL)
+        ember_writeString(pBerOutput, &glowTags.functionContents.description, pFunction->pDescription);
+
+
+    if ((fields & GlowFieldFlag_TemplateReference) && pFunction->pTemplateReference != NULL)
+        ember_writeRelativeOid(pBerOutput, &glowTags.functionContents.templateReference, pFunction->pTemplateReference, pFunction->templateReferenceLength);
+
+    if (fields == GlowFieldFlag_All)
+    {
+        if (pFunction->pArguments != NULL)
+        {
+            ember_writeSequenceBegin(pBerOutput, &glowTags.functionContents.arguments);
+
+            for (index = 0; index < pFunction->argumentsLength; index++)
+                writeTupleItemDescription(pBerOutput, &glowTags.collection.item, &pFunction->pArguments[index]);
+
+            ember_writeContainerEnd(pBerOutput);
+        }
+
+        if (pFunction->pResult != NULL)
+        {
+            ember_writeSequenceBegin(pBerOutput, &glowTags.functionContents.result);
+
+            for (index = 0; index < pFunction->resultLength; index++)
+                writeTupleItemDescription(pBerOutput, &glowTags.collection.item, &pFunction->pResult[index]);
+
+            ember_writeContainerEnd(pBerOutput);
+        }
+    }
+
+    ember_writeContainerEnd(pBerOutput); // end function.contents
+    ember_writeContainerEnd(pBerOutput); // end function
+}
+
 
 
 void glow_writeQualifiedParameter(GlowOutput *pOut,

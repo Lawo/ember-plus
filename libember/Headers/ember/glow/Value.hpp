@@ -95,6 +95,13 @@ namespace libember { namespace glow
             ParameterType type() const;
 
             /**
+             * Convenience method returning true if the underlying value is of type ber::Null.
+             * In that case, type() returns ParameterType::None.
+             * @return true, if the underlying type is ber::Null and. Otherwise, false.
+             */
+            bool isNull() const;
+
+            /**
              * Returns the current value as integer. 
              * @note If the data type is not an integer, the implementation will try to convert it.
              * @return The current value as integer
@@ -198,6 +205,11 @@ namespace libember { namespace glow
             m_value = Variant::create(0L);
 
         //EndSimianIgnore
+    }
+
+    inline bool Value::isNull() const
+    {
+        return type().value() == ParameterType::None;
     }
 
     inline ber::Value Value::toBerValue() const

@@ -469,8 +469,8 @@ typedef enum EGlowElementType
 } GlowElementType;
 
 /**
- * Holds information about a Glow Template or a Glow QualifiedTemplate.
- * The children contain describe the template structure.
+ * Holds information about a Glow Template or a Glow Qualified Template.
+ * The children describe the template structure.
  */
 typedef struct SGlowTemplate
 {
@@ -548,6 +548,7 @@ typedef struct SGlowMinMax
      * The type of the stored value.
      * If flag is GlowParameterType_Integer, GlowMinMax.integer is valid.
      * If flag is GlowParameterType_Real, GlowMinMax.real is valid.
+     * If flag is GlowParameterType_None, the value is not present.
      */
    GlowParameterType flag;
    union
@@ -582,6 +583,7 @@ typedef struct SGlowValue
      * If flag is GlowParameterType_String, GlowValue.pString is valid.
      * If flag is GlowParameterType_Boolean, GlowValue.boolean is valid.
      * If flag is GlowParameterType_Octets, GlowValue.octets is valid.
+     * If flag is GlowParameterType_None, the value is not present.
      */
    GlowParameterType flag;
    union

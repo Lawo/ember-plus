@@ -106,6 +106,7 @@ namespace libember { namespace glow
         //SimianIgnore
 
         ber::Tag const type = value.universalTag();
+
         if (type.getClass() == ber::Class::Universal)
         {
             switch(type.number())
@@ -115,6 +116,9 @@ namespace libember { namespace glow
                     return;
                 case ber::Type::Real:
                     m_value = Variant::create(util::ValueConverter::valueOf(value, double(0.0)));
+                    return;
+                case ber::Type::Null:
+                    m_value = Variant::create<void*>(0);
                     return;
             }
         }

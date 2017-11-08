@@ -161,13 +161,13 @@ void berFramingOutput_initImpl(BerFramingOutput *pThis,
 
     if (useNonEscapingFrames)
     {
-        pThis->base.base.writeByte = berFramingOutput_writeByte;
-        pThis->base.base.writeBytes = berFramingOutput_writeBytes;
+        pThis->base.base.writeByte = berFramingOutput_writeByteWithoutEscaping;
+        pThis->base.base.writeBytes = berFramingOutput_writeBytesWithoutEscaping;
     }
     else
     {
-        pThis->base.base.writeByte = berFramingOutput_writeByteWithoutEscaping;
-        pThis->base.base.writeBytes = berFramingOutput_writeBytesWithoutEscaping;
+        pThis->base.base.writeByte = berFramingOutput_writeByte;
+        pThis->base.base.writeBytes = berFramingOutput_writeBytes;
     }
 
     pThis->crc = 0xFFFF;

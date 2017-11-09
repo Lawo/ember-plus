@@ -36,15 +36,15 @@ typedef struct
    struct
    {
        BerTag number;
-       BerTag description;
        BerTag element;
-   } template;
+       BerTag description;
+   } template_;
 
    struct
    {
        BerTag path;
-       BerTag description;
        BerTag element;
+       BerTag description;
    } qualifiedTemplate;
 
    struct
@@ -301,7 +301,6 @@ typedef enum EGlowType
   */
 typedef enum EGlowParameterType
 {
-   GlowParameterType_None    = 0,
    GlowParameterType_Integer = 1,
    GlowParameterType_Real    = 2,
    GlowParameterType_String  = 3,
@@ -309,6 +308,7 @@ typedef enum EGlowParameterType
    GlowParameterType_Trigger = 5,
    GlowParameterType_Enum    = 6,
    GlowParameterType_Octets  = 7,
+   GlowParameterType_None    = 8
 } GlowParameterType;
 
 
@@ -478,6 +478,11 @@ typedef struct SGlowTemplate
      * The "description" field.
      */
     pstr pDescription;
+
+    /**
+     * Private field
+     */
+    bool state;
 } GlowTemplate;
 
 

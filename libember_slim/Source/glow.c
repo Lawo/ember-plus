@@ -15,15 +15,15 @@ const __GlowTags glowTags =
    // template
    {
       { BerClass_ContextSpecific, 0 }, // number
-      { BerClass_ContextSpecific, 1 }, // description
-      { BerClass_ContextSpecific, 2 }, // element
+      { BerClass_ContextSpecific, 1 }, // element
+      { BerClass_ContextSpecific, 2 }, // description
    },
 
    // qualifiedTemplate
    {
       { BerClass_ContextSpecific, 0 }, // path
-      { BerClass_ContextSpecific, 1 }, // description
-      { BerClass_ContextSpecific, 2 }, // element
+      { BerClass_ContextSpecific, 1 }, // element
+      { BerClass_ContextSpecific, 2 }, // description
    },
 
    // parameter
@@ -295,6 +295,8 @@ void glowTemplate_free(GlowTemplate *pThis)
 
     if (pThis->pDescription != NULL)
         freeMemory(pThis->pDescription);
+
+    pThis->state = false;
 }
 
 void glowNode_free(GlowNode *pThis)

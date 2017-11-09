@@ -78,6 +78,7 @@ namespace EmberLib.Framing.S101
                _usesNonEscapingFraming = false;
                _outOfFrameByteCount = 0;
                _payloadLength = 0;
+               _payloadBytesRead = 0;
                _isDataLinkEscaped = false;
                _crc = Crc.InitialValue;
             }
@@ -91,6 +92,7 @@ namespace EmberLib.Framing.S101
                _usesNonEscapingFraming = true;
                _outOfFrameByteCount = 0;
                _payloadLength = 0;
+               _payloadBytesRead = 0;
             }
             else
             {
@@ -127,33 +129,40 @@ namespace EmberLib.Framing.S101
       ushort _crc;
       int _outOfFrameByteCount;
       int _payloadLength;
+      int _payloadBytesRead;
       bool _isInFrame;
       bool _usesNonEscapingFraming;
 
       void ReceiveByteWithoutEscaping(byte b, MessageCallback framingErrorCallback)
       {
-         _stream.WriteByte(b);
-
-         switch (_stream.Length)
+         switch (_payloadBytesRead)
          {
-            case 1:
+            case 0:
                _payloadLength = (b << 24);
+               _payloadBytesRead++;
+               break;
+
+            case 1:
+               _payloadLength |= (b << 16);
+               _payloadBytesRead++;
                break;
 
             case 2:
-               _payloadLength |= (b << 16);
+               _payloadLength |= (b << 8);
+               _payloadBytesRead++;
                break;
 
             case 3:
-               _payloadLength |= (b << 8);
+               _payloadLength |= b;
+               _payloadBytesRead++;
                break;
 
-            case 4:
-               _payloadLength |= b;
+            default:
+               _stream.WriteByte(b);
                break;
          }
 
-         if (_stream.Length >= 4 && _stream.Length - 4 == _payloadLength)
+         if (_payloadBytesRead == 4 && _stream.Length == _payloadLength)
          {
             var memory = _stream.ToArray();
 
@@ -163,6 +172,7 @@ namespace EmberLib.Framing.S101
             _stream.SetLength(0);
             _usesNonEscapingFraming = false;
             _payloadLength = 0;
+            _payloadBytesRead = 0;
          }
       }
 

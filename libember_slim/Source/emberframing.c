@@ -179,18 +179,20 @@ void berFramingOutput_initImpl(BerFramingOutput *pThis,
     pThis->useNonEscapingFrames = useNonEscapingFrames;
 }
 
-void berFramingOutput_init(BerFramingOutput *pThis,
-                           byte *pMemory,
-                           unsigned int size,
-                           byte slotId,
-                           byte dtd,
-                           const byte *pAppBytes,
-                           byte appBytesCount)
+void berFramingOutput_init(
+    BerFramingOutput *pThis,
+    byte *pMemory,
+    unsigned int size,
+    byte slotId,
+    byte dtd,
+    const byte *pAppBytes,
+    byte appBytesCount)
 {
     berFramingOutput_initImpl(pThis, pMemory, size, slotId, dtd, pAppBytes, appBytesCount, false);
 }
 
-void berFramingOutput_initWithoutEscaping(BerFramingOutput *pThis,
+void berFramingOutput_initWithoutEscaping(
+    BerFramingOutput *pThis,
     byte *pMemory,
     unsigned int size,
     byte slotId,
@@ -385,7 +387,7 @@ static void readFramedByte(EmberFramingReader *pThis, byte b)
       else if (b == S101_Invalid)
       {
           byteBuffer_reset(pBuffer);
-          byteBuffer_add(pBuffer, S101_BOF);
+          byteBuffer_add(pBuffer, S101_Invalid);
           pThis->isNonEscapingFrame = true;
           pThis->isEscaped = false;
           pThis->crc = 0xFFFF;

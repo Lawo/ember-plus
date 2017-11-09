@@ -68,6 +68,22 @@ LIBEMBER_API void glowOutput_init(GlowOutput *pThis,
                      byte slotId);
 
 /**
+* Initializes a GlowOutput instance which uses the non-escaping variant of the S101 framing.
+* Must be called before any other operations on the
+* GlowOutput instance are invoked.
+* @param pThis pointer to the object to process.
+* @param pMemory pointer to the memory location to write
+*     the framed package to.
+* @param size number of bytes at @p pMemory.
+* @param slotId the slot id as described in the
+*     framing protocol documentation.
+*/
+LIBEMBER_API void glowOutput_initWithoutEscaping(GlowOutput *pThis,
+    byte *pMemory,
+    unsigned int size,
+    byte slotId);
+
+/**
   * Begins a new package by writing the framing header and the start tag
   * of the root container.
   * Must be called before any Glow payload is written to @p pThis.
@@ -156,7 +172,7 @@ LIBEMBER_API void glow_writeQualifiedNode(GlowOutput *pOut,
 LIBEMBER_API void glow_writeQualifiedTemplate(GlowOutput *pOut,
     const GlowTemplate *pTemplate,
     GlowFieldFlags fields,
-    void (*writeElement)(GlowOutput *pOut, const BerTag * elementTag),
+    void (*writeElement)(GlowOutput *pOut, const GlowTemplate *pTemplate, const BerTag * elementTag),
     const berint *pPath,
     int pathLength);
 

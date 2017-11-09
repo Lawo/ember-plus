@@ -113,27 +113,29 @@ static void onItemReady_Template(NonFramingGlowReader *pThis)
     if (pBase->isContainer)
     {
         if (pThis->onTemplate != NULL)
-            pThis->onTemplate(&pThis->glow.template, pThis->fields, pThis->path, pThis->pathLength, pThis->state);
+            pThis->onTemplate(&pThis->glow.template_, pThis->fields, pThis->glow.template_.state, pThis->path, pThis->pathLength, pThis->state);
 
         // reset read template
-        glowTemplate_free(&pThis->glow.template);
+        glowTemplate_free(&pThis->glow.template_);
         pThis->fields = GlowFieldFlag_None;
 
     }
     else
     {
-        if (berTag_equals(&pBase->tag, &glowTags.template.number))
+        pThis->glow.template_.state = true;
+
+        if (berTag_equals(&pBase->tag, &glowTags.template_.number))
         {
             number = berReader_getInteger(pBase);
 
             pThis->path[pThis->pathLength] = number;
             pThis->pathLength++;
         }
-        else if (berTag_equals(&pBase->tag, &glowTags.template.description))
+        else if (berTag_equals(&pBase->tag, &glowTags.template_.description))
         {
             pThis->glow.parameter.pDescription = newarr(char, pBase->length + 1);
             pThis->fields |= GlowFieldFlag_Description;
-            berReader_getString(pBase, pThis->glow.template.pDescription, pBase->length + 1);
+            berReader_getString(pBase, pThis->glow.template_.pDescription, pBase->length + 1);
         }
     }
 }
@@ -145,15 +147,16 @@ static void onItemReady_QualifiedTemplate(NonFramingGlowReader *pThis)
     if (pBase->isContainer)
     {
         if (pThis->onTemplate != NULL)
-            pThis->onTemplate(&pThis->glow.template, pThis->fields, pThis->path, pThis->pathLength, pThis->state);
+            pThis->onTemplate(&pThis->glow.template_, pThis->fields, pThis->glow.template_.state, pThis->path, pThis->pathLength, pThis->state);
 
         // reset read template
-        glowTemplate_free(&pThis->glow.template);
+        glowTemplate_free(&pThis->glow.template_);
         pThis->fields = GlowFieldFlag_None;
-        pThis->pathLength = 0;
     }
     else
     {
+        pThis->glow.template_.state = true;
+
         if (berTag_equals(&pBase->tag, &glowTags.qualifiedTemplate.path))
         {
             if (pThis->pathLength != 0)
@@ -166,9 +169,9 @@ static void onItemReady_QualifiedTemplate(NonFramingGlowReader *pThis)
         }
         else if (berTag_equals(&pBase->tag, &glowTags.qualifiedTemplate.description))
         {
-            pThis->glow.parameter.pDescription = newarr(char, pBase->length + 1);
+            pThis->glow.template_.pDescription = newarr(char, pBase->length + 1);
             pThis->fields |= GlowFieldFlag_Description;
-            berReader_getString(pBase, pThis->glow.template.pDescription, pBase->length + 1);
+            berReader_getString(pBase, pThis->glow.template_.pDescription, pBase->length + 1);
         }
     }
 }
@@ -977,10 +980,10 @@ static onItemReady_t getOnItemReady_EnterContainer(const BerReader *pBase)
    switch(pBase->type)
    {
       case GlowType_Template:
-         bzero(pThis->glow.template);
+         bzero(pThis->glow.template_);
          return onItemReady_Template;
       case GlowType_QualifiedTemplate:
-         bzero(pThis->glow.template);
+         bzero(pThis->glow.template_);
          return onItemReady_QualifiedTemplate;
       case GlowType_Node:
          bzero(pThis->glow.node);
@@ -1199,9 +1202,15 @@ static void onItemReady(const BerReader *pBase)
 static void onNewContainer(const BerReader *pBase)
 {
    NonFramingGlowReader *pThis = (NonFramingGlowReader *)pBase;
+   bool predecessorIsTemplate =
+       pThis->onItemReadyState == onItemReady_QualifiedTemplate ||
+       pThis->onItemReadyState == onItemReady_Template;
 
    if(berTag_equals(&pBase->tag, &glowTags.root))
       pThis->pathLength = 0;
+
+   if (predecessorIsTemplate)
+       pThis->onItemReadyState(pThis);
 
    pThis->onItemReadyState = getOnItemReady_EnterContainer(pBase);
 }

@@ -65,6 +65,22 @@ void glowOutput_init(GlowOutput *pThis,
 #endif
 }
 
+void glowOutput_initWithoutEscaping(GlowOutput *pThis, byte *pMemory, unsigned int size, byte slotId)
+{
+    static const byte s_appBytes[2] =
+    {
+        (byte)((GLOW_SCHEMA_VERSION >> 0) & 0xFF),
+        (byte)((GLOW_SCHEMA_VERSION >> 8) & 0xFF),
+    };
+
+    berFramingOutput_initWithoutEscaping(&pThis->base, pMemory, size, slotId, EMBER_DTD_GLOW, s_appBytes, sizeof(s_appBytes));
+    pThis->hasLastPackage = false;
+    pThis->packageCount = 0;
+#ifdef _DEBUG
+    pThis->positionHint = 0;
+#endif
+}
+
 void glowOutput_beginPackage(GlowOutput *pThis, bool isLastPackage)
 {
    bool isFirstPackage = pThis->packageCount == 0;
@@ -303,7 +319,7 @@ void glow_writeQualifiedParameterImpl(BerOutput *pOut,
       writeValue(pOut, &glowTags.parameterContents.value, &pParameter->value);
 
    if (fields & GlowFieldFlag_DefaultValue)
-       writeValue(pOut, &glowTags.parameterContents.value, &pParameter->defaultValue);
+       writeValue(pOut, &glowTags.parameterContents.defaultValue, &pParameter->defaultValue);
 
    if(fields & GlowFieldFlag_Minimum)
       writeMinMax(pOut, &glowTags.parameterContents.minimum, &pParameter->minimum);
@@ -675,7 +691,7 @@ void glow_writeQualifiedNode(GlowOutput *pOut,
 void glow_writeQualifiedTemplate(GlowOutput *pOut,
     const GlowTemplate *pTemplate,
     GlowFieldFlags fields,
-    void (*writeElement)(GlowOutput *pOut, const BerTag * elementTag),
+    void (*writeElement)(GlowOutput *pOut, const GlowTemplate *pTemplate, const BerTag * elementTag),
     const berint *pPath,
     int pathLength)
 {
@@ -702,7 +718,7 @@ void glow_writeQualifiedTemplate(GlowOutput *pOut,
     }
 
     if (writeElement != NULL)
-        writeElement(pOut, &glowTags.qualifiedTemplate.element);
+        writeElement(pOut, pTemplate, &glowTags.qualifiedTemplate.element);
 
     ember_writeContainerEnd(pBerOutput); // end node
 }
@@ -765,7 +781,7 @@ void glow_writeTemplateElementNodeEnd(GlowOutput *pOut)
 
 void glow_writeTemplateElementNodeChildrenBegin(GlowOutput *pOut)
 {
-    ember_writeContainerBegin(&pOut->base.base.base, &glowTags.node.children, BerType_Sequence);
+    ember_writeContainerBegin(&pOut->base.base.base, &glowTags.node.children, GlowType_ElementCollection);
 }
 
 void glow_writeTemplateElementNodeChildrenEnd(GlowOutput *pOut)
@@ -820,7 +836,7 @@ void glow_writeTemplateElementParameter(
         writeValue(pBerOutput, &glowTags.parameterContents.value, &pParameter->value);
 
     if (fields & GlowFieldFlag_DefaultValue)
-        writeValue(pBerOutput, &glowTags.parameterContents.value, &pParameter->defaultValue);
+        writeValue(pBerOutput, &glowTags.parameterContents.defaultValue, &pParameter->defaultValue);
 
     if (fields & GlowFieldFlag_Minimum)
         writeMinMax(pBerOutput, &glowTags.parameterContents.minimum, &pParameter->minimum);

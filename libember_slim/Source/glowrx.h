@@ -24,6 +24,14 @@
 * @param pTemplate pointer to the read template.
 * @param fields flags indicating which fields of @p pParameter have been
 *     read.
+* @param entering
+*       true, if the template is now being entered. All subsequent calls to other on... calls are now
+*       within the context of this template until this callback is invoked again with entering
+*       set to false.
+*
+*       Please note that all elements reported within the template context contain the full path, not the
+*       path relative to the template. Typically, only the number of the template element is of importance.
+*       However, if the relative path to the template is needed, it must be computed separately.
 * @param pPath pointer to the first number in the node path, which is
 *     the number of the tree's root node. May be NULL only if
 *     pathLength is 0.
@@ -31,7 +39,7 @@
 * @param pathLength number of node numbers at @p pPath.
 * @param state application-defined state as stored in NonFramingGlowReader.
 */
-typedef void(*onTemplate_t)(const GlowTemplate *pTemplate, GlowFieldFlags fields, const berint *pPath, int pathLength, voidptr state);
+typedef void(*onTemplate_t)(const GlowTemplate *pTemplate, GlowFieldFlags fields, bool entering, const berint *pPath, int pathLength, voidptr state);
 
 /**
   * Function type used by NonFramingGlowReader to notify the application
@@ -254,7 +262,7 @@ typedef struct SNonFramingGlowReader
       /**
        * Private field.
        */
-      GlowTemplate template;
+      GlowTemplate template_;
    } glow;
 
    /**

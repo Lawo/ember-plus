@@ -216,7 +216,7 @@ namespace EmberLib
 
          BerEncoding.EncodeTag(output, Tag.ToContainer());
          BerEncoding.EncodeLength(output, 2);
-         BerEncoding.EncodeTag(output, new BerTag(BerType.Boolean));
+         BerEncoding.EncodeTag(output, new BerTag(BerTypeNumber));
          BerEncoding.EncodeLength(output, 0);
 
          Encoded = output.ToArray();

@@ -701,16 +701,17 @@ namespace libember { namespace glow
     }
 
     LIBEMBER_INLINE
-        ber::Tag GlowTags::Template::Description()
+        ber::Tag GlowTags::Template::Element()
     {
         return ber::make_tag(ber::Class::ContextSpecific, 1);
     }
 
     LIBEMBER_INLINE
-    ber::Tag GlowTags::Template::Element()
+        ber::Tag GlowTags::Template::Description()
     {
         return ber::make_tag(ber::Class::ContextSpecific, 2);
     }
+
 
     LIBEMBER_INLINE
     ber::Tag GlowTags::QualifiedTemplate::Path()
@@ -719,13 +720,13 @@ namespace libember { namespace glow
     }
 
     LIBEMBER_INLINE
-        ber::Tag GlowTags::QualifiedTemplate::Description()
+        ber::Tag GlowTags::QualifiedTemplate::Element()
     {
         return ber::make_tag(ber::Class::ContextSpecific, 1);
     }
 
     LIBEMBER_INLINE
-        ber::Tag GlowTags::QualifiedTemplate::Element()
+        ber::Tag GlowTags::QualifiedTemplate::Description()
     {
         return ber::make_tag(ber::Class::ContextSpecific, 2);
     }

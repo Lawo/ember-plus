@@ -13,7 +13,7 @@
 #include "util/Inline.hpp"
 
 #define LIBEMBER_VERSION_MAJOR      1
-#define LIBEMBER_VERSION_MINOR      7
+#define LIBEMBER_VERSION_MINOR      8
 #define LIBEMBER_VERSION_REVISION   0
 
 namespace libember

@@ -301,14 +301,14 @@ typedef enum EGlowType
   */
 typedef enum EGlowParameterType
 {
+   GlowParameterType_None = 0,
    GlowParameterType_Integer = 1,
    GlowParameterType_Real    = 2,
    GlowParameterType_String  = 3,
    GlowParameterType_Boolean = 4,
    GlowParameterType_Trigger = 5,
    GlowParameterType_Enum    = 6,
-   GlowParameterType_Octets  = 7,
-   GlowParameterType_None    = 8
+   GlowParameterType_Octets  = 7
 } GlowParameterType;
 
 

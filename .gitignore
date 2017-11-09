@@ -1,4 +1,7 @@
 build/*
+bin/*
+obj/*
+.vs
 *.tmp
 documentation/~$ber+ Documentation.docx
 /libember/.idea/.name

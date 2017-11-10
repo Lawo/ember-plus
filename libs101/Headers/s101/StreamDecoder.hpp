@@ -138,6 +138,7 @@ namespace libs101
         State m_state;
         util::Crc16::value_type m_crc;
         size_type m_payloadLength;
+        size_type m_payloadLengthLength;
     };
 
     /**************************************************************************
@@ -150,6 +151,7 @@ namespace libs101
         , m_state(OutOfFrame)
         , m_crc(0xFFFF)
         , m_payloadLength(0)
+        , m_payloadLengthLength(0)
     {}
 
     template<typename ValueType>
@@ -183,6 +185,7 @@ namespace libs101
         m_state = state;
         m_crc = 0xFFFF;
         m_payloadLength = 0;
+        m_payloadLengthLength = 0;
     }
 
     template<typename ValueType>
@@ -268,18 +271,25 @@ namespace libs101
 
             size_type const length = m_bytes.size();
 
-            if (length == 4)
+            if (length == 1)
+            {
+                m_payloadLengthLength = byte & 0x07;
+            }
+            else if (length == 1 + m_payloadLengthLength)
             {
                 m_payloadLength = 0;
-                m_payloadLength |= (m_bytes[0] << 24);
-                m_payloadLength |= (m_bytes[1] << 16);
-                m_payloadLength |= (m_bytes[2] << 8);
-                m_payloadLength |= (m_bytes[3]);
+
+                for (size_type index = 0; index < m_payloadLengthLength; ++index)
+                {
+                    int const shift = (m_payloadLength - index - 1) * 8;
+
+                    m_payloadLength |= (m_bytes[1 + index] << shift);
+                }
             }
 
-            if (length - 4 == m_payloadLength)
+            if (length >= 1 && length - (1 + m_payloadLengthLength) == m_payloadLength)
             {
-                callback(m_bytes.begin() + 4, m_bytes.end(), state);
+                callback(m_bytes.begin() + (1 + m_payloadLengthLength), m_bytes.end(), state);
                 reset();
             }
 

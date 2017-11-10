@@ -214,6 +214,7 @@ void berFramingOutput_writeHeader(BerFramingOutput *pThis, EmberFramingFlags fla
    if (pThis->useNonEscapingFrames)
    {
        berMemoryOutput_writeByte(pBase, S101_Invalid);
+       berMemoryOutput_writeByte(pBase, 0x04);                  // Length Length
        berMemoryOutput_writeByte(pBase, 0x00);                  // Payload Length 0
        berMemoryOutput_writeByte(pBase, 0x00);                  // Payload Length 1
        berMemoryOutput_writeByte(pBase, 0x00);                  // Payload Length 2
@@ -268,7 +269,7 @@ unsigned int berFramingOutput_finish(BerFramingOutput *pThis)
    BerOutput *pBase;
    unsigned short crc;
    unsigned int position;
-   unsigned int payloadLength = pThis->base.position - 5;
+   unsigned int payloadLength = pThis->base.position - 6;
 
    ASSERT(pThis != NULL);
 
@@ -276,10 +277,10 @@ unsigned int berFramingOutput_finish(BerFramingOutput *pThis)
 
    if (pThis->useNonEscapingFrames)
    {
-       pThis->base.pMemory[1] = (payloadLength >> 24) & 0xFF;
-       pThis->base.pMemory[2] = (payloadLength >> 16) & 0xFF;
-       pThis->base.pMemory[3] = (payloadLength >> 8) & 0xFF;
-       pThis->base.pMemory[4] = (payloadLength >> 0) & 0xFF;
+       pThis->base.pMemory[2] = (payloadLength >> 24) & 0xFF;
+       pThis->base.pMemory[3] = (payloadLength >> 16) & 0xFF;
+       pThis->base.pMemory[4] = (payloadLength >> 8) & 0xFF;
+       pThis->base.pMemory[5] = (payloadLength >> 0) & 0xFF;
    }
    else
    {
@@ -372,6 +373,8 @@ unsigned int emberFraming_writeKeepAliveResponseWithoutEscaping(byte *pBuffer, u
 
 static void readFramedByte(EmberFramingReader *pThis, byte b)
 {
+   unsigned int loop = 0;
+   unsigned int shift = 0;
    ByteBuffer *pBuffer = &pThis->buffer;
 
    if(byteBuffer_isEmpty(pBuffer))
@@ -380,6 +383,8 @@ static void readFramedByte(EmberFramingReader *pThis, byte b)
       {
          byteBuffer_reset(pBuffer);
          byteBuffer_add(pBuffer, S101_BOF);
+         pThis->payloadLength = 0;
+         pThis->payloadLengthLength = 0;
          pThis->isNonEscapingFrame = false;
          pThis->isEscaped = false;
          pThis->crc = 0xFFFF;
@@ -388,6 +393,8 @@ static void readFramedByte(EmberFramingReader *pThis, byte b)
       {
           byteBuffer_reset(pBuffer);
           byteBuffer_add(pBuffer, S101_Invalid);
+          pThis->payloadLength = 0;
+          pThis->payloadLengthLength = 0;
           pThis->isNonEscapingFrame = true;
           pThis->isEscaped = false;
           pThis->crc = 0xFFFF;
@@ -400,18 +407,28 @@ static void readFramedByte(EmberFramingReader *pThis, byte b)
    {
        byteBuffer_add(pBuffer, b);
 
-       if (pBuffer->position == 5)
+       if (pBuffer->position == 2)
+       {
+           pThis->payloadLengthLength = b & 0x07;
+       }
+       else if (pBuffer->position > 1 && pBuffer->position - 2 == pThis->payloadLengthLength)
        {
            pThis->payloadLength = 0;
-           pThis->payloadLength |= (pBuffer->pMemory[1] << 24);
-           pThis->payloadLength |= (pBuffer->pMemory[2] << 16);
-           pThis->payloadLength |= (pBuffer->pMemory[3] << 8);
-           pThis->payloadLength |= (pBuffer->pMemory[4] << 0);
+
+           for (loop = 0; loop < pThis->payloadLengthLength; loop++)
+           {
+               shift = (pThis->payloadLengthLength - loop - 1) * 8;
+               pThis->payloadLength |= (pBuffer->pMemory[2 + loop] << shift);
+           }
        }
 
-       if (pBuffer->position >= 5 && pBuffer->position - 5 == pThis->payloadLength)
+       if (pBuffer->position >= 2 &&
+           pBuffer->position - (2 + pThis->payloadLengthLength) == pThis->payloadLength)
        {
-           pThis->onPackageReceived(pBuffer->pMemory + 5, pBuffer->position - 5, pThis->state);
+           pThis->onPackageReceived(
+               pBuffer->pMemory + (2 + pThis->payloadLengthLength),
+               pBuffer->position - (2 + pThis->payloadLengthLength), 
+               pThis->state);
            emberFramingReader_reset(pThis);
        }
    }
@@ -488,6 +505,7 @@ void emberFramingReader_init(EmberFramingReader *pThis,
    pThis->isEscaped = false;
    pThis->isNonEscapingFrame = false;
    pThis->payloadLength = 0;
+   pThis->payloadLengthLength = 0;
 }
 
 void emberFramingReader_reset(EmberFramingReader *pThis)
@@ -500,6 +518,7 @@ void emberFramingReader_reset(EmberFramingReader *pThis)
    pThis->isEscaped = false;
    pThis->isNonEscapingFrame = false;
    pThis->payloadLength = 0;
+   pThis->payloadLengthLength = 0;
 }
 
 void emberFramingReader_readBytes(EmberFramingReader *pThis, const byte *pBytes, int count)

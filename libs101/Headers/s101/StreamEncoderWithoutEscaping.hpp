@@ -123,17 +123,17 @@ namespace libs101
     {
         std::size_t const totalLength = m_bytes.size();
 
-        if (totalLength < 5)
+        if (totalLength < 6)
         {
             return;
         }
 
-        std::size_t payloadLength = totalLength - 5;
+        std::size_t payloadLength = totalLength - 6;
 
-        m_bytes[1] = static_cast<value_type>((payloadLength >> 24) & 0xFF);
-        m_bytes[2] = static_cast<value_type>((payloadLength >> 16) & 0xFF);
-        m_bytes[3] = static_cast<value_type>((payloadLength >> 8) & 0xFF);
-        m_bytes[4] = static_cast<value_type>((payloadLength >> 0) & 0xFF);
+        m_bytes[2] = static_cast<value_type>((payloadLength >> 24) & 0xFF);
+        m_bytes[3] = static_cast<value_type>((payloadLength >> 16) & 0xFF);
+        m_bytes[4] = static_cast<value_type>((payloadLength >> 8) & 0xFF);
+        m_bytes[5] = static_cast<value_type>((payloadLength >> 0) & 0xFF);
         m_isFinished = true;
     }
 
@@ -168,6 +168,7 @@ namespace libs101
         if (m_bytes.empty())
         {
             m_bytes.push_back(Byte::Invalid);
+            m_bytes.push_back(0x04);
             m_bytes.push_back(0x00);
             m_bytes.push_back(0x00);
             m_bytes.push_back(0x00);
@@ -184,6 +185,7 @@ namespace libs101
         if (m_bytes.empty())
         {
             m_bytes.push_back(Byte::Invalid);
+            m_bytes.push_back(0x04);
             m_bytes.push_back(0x00);
             m_bytes.push_back(0x00);
             m_bytes.push_back(0x00);

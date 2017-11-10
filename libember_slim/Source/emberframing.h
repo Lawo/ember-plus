@@ -282,6 +282,11 @@ typedef struct SEmberFramingReader
    unsigned int payloadLength;
 
    /**
+   * Private field.
+   */
+   unsigned int payloadLengthLength;
+
+   /**
      * Private field.
      */
    unsigned short crc;

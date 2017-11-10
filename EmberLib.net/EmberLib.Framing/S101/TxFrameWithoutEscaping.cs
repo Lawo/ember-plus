@@ -35,16 +35,17 @@ namespace EmberLib.Framing.S101
       /// <returns>the encoded s101 package</returns>
       public static byte[] WriteMessage(IList<byte> package, int length, out int newLength)
       {
-         newLength = 5 + length;
+         newLength = 6 + length;
 
          var txBuffer = new byte[newLength];
 
          txBuffer[0] = Constants.Invalid;
-         txBuffer[1] = (byte)((length >> 24) & 0xFF);
-         txBuffer[2] = (byte)((length >> 16) & 0xFF);
-         txBuffer[3] = (byte)((length >> 8) & 0xFF);
-         txBuffer[4] = (byte)((length >> 0) & 0xFF);
-         package.CopyTo(txBuffer, 5);
+         txBuffer[1] = 0x04;
+         txBuffer[2] = (byte)((length >> 24) & 0xFF);
+         txBuffer[3] = (byte)((length >> 16) & 0xFF);
+         txBuffer[4] = (byte)((length >> 8) & 0xFF);
+         txBuffer[5] = (byte)((length >> 0) & 0xFF);
+         package.CopyTo(txBuffer, 6);
 
          return txBuffer;
       }

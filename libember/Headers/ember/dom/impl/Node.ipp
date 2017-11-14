@@ -63,8 +63,8 @@ namespace libember { namespace dom
     {
         if (m_dirty)
         {
-            updateImpl();
             m_dirty = false;
+            updateImpl();
         }
     }
 

@@ -112,6 +112,10 @@ namespace libember { namespace dom { namespace detail
         typedef util::DerefIterator<NodeList::iterator> DerefIteratorType;
         NodeList::iterator const f = first.as<DerefIteratorType>().wrappedIterator();
         NodeList::iterator const l = last.as<DerefIteratorType>().wrappedIterator();
+        for (NodeList::const_iterator i = f; i != l; ++i)
+        {
+            delete (*i);
+        }
         m_children.erase(f, l);
     }
 

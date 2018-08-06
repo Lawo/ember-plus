@@ -7,7 +7,7 @@
 #ifndef TINYEMBERPLUS_H
 #define TINYEMBERPLUS_H
 
-#include <QtGui/QMainWindow>
+#include <QtGui>
 #include <qdatetime.h>
 #include <qtimer.h>
 #include "glow/ProviderInterface.h"
@@ -42,7 +42,7 @@ class TinyEmberPlus : public QMainWindow, public glow::ProviderInterface
          * @param parent The parent widget of this main window, usually null.
          * @param flags Optional window flags.
          */
-        TinyEmberPlus(::glow::ConsumerProxy* proxy, QWidget *parent = 0, Qt::WFlags flags = 0);
+        TinyEmberPlus(::glow::ConsumerProxy* proxy, QWidget *parent = 0, Qt::WindowFlags flags = 0);
 
         /** Destructor */
         ~TinyEmberPlus();

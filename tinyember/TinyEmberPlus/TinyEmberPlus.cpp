@@ -39,7 +39,7 @@ const QString TinyEmberPlus::StreamTimerInterval = "StreamTimerInterval";
 const QString TinyEmberPlus::SendKeepAliveRequest = "SendKeepAliveRequest";
 const QString TinyEmberPlus::UseEnumMap = "UseEnumMap";
 
-TinyEmberPlus::TinyEmberPlus(::glow::ConsumerProxy* proxy, QWidget *parent, Qt::WFlags flags)
+TinyEmberPlus::TinyEmberPlus(::glow::ConsumerProxy* proxy, QWidget *parent, Qt::WindowFlags flags)
     : QMainWindow(parent, flags)
     , m_proxy(proxy)
     , m_settingsSerializer("Settings.xml")

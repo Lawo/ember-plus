@@ -12,8 +12,17 @@ SET(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTORCC ON)
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
-find_package( Qt4 REQUIRED QtCore QtGui QtNetwork)
-include( ${QT_USE_FILE} )
+find_package( Qt5Core )
+find_package( Qt5Gui )
+find_package( Qt5Widgets )
+find_package( Qt5Network )
+find_package( Qt5Xml )
+
+include_directories ( ${Qt5Core_INCLUDE_DIRS} )
+include_directories ( ${Qt5Gui_INCLUDE_DIRS} )
+include_directories ( ${Qt5Widgets_INCLUDE_DIRS} )
+include_directories ( ${Qt5Network_INCLUDE_DIRS} )
+include_directories ( ${Qt5Xml_INCLUDE_DIRS} )
 
 include_directories( ${CMAKE_BINARY_DIR}
         ${CMAKE_CURRENT_BINARY_DIR} # generated ui_.h files
@@ -74,9 +83,13 @@ set ( GLOB RESOURCES
         main.qrc
         )
 
-QT4_ADD_RESOURCES( RES_SOURCES ${RESOURCES} )
-QT4_WRAP_UI( UI_HEADERS ${UIS} )
-QT4_WRAP_CPP( MOC_SRCS ${MOC_HEADERS})
+qt5_add_resources( RES_SOURCES ${RESOURCES} )
+qt5_wrap_ui( UI_HEADERS ${UIS} )
+qt5_wrap_cpp( MOC_SRCS ${MOC_HEADERS})
 
 add_executable(${PROJECT_NAME} ${HEADER_FILES} ${SOURCE_FILES} ${MOC_HEADERS} ${RES_SOURCES} ${UI_HEADERS})
-target_link_libraries(${PROJECT_NAME} ember_static ${QT_LIBRARIES})
+target_link_libraries(${PROJECT_NAME} ember_static ${Qt5Core_LIBRARIES})
+target_link_libraries(${PROJECT_NAME} ember_static ${Qt5Gui_LIBRARIES})
+target_link_libraries(${PROJECT_NAME} ember_static ${Qt5Widgets_LIBRARIES})
+target_link_libraries(${PROJECT_NAME} ember_static ${Qt5Network_LIBRARIES})
+target_link_libraries(${PROJECT_NAME} ember_static ${Qt5Xml_LIBRARIES})

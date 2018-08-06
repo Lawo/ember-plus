@@ -6,7 +6,7 @@
 
 #include "TinyEmberPlus.h"
 #include <memory>
-#include <QtGui/QApplication>
+#include <QtGui>
 
 #include "gadget/Subscriber.h"
 #include "glow/ConsumerProxy.h"

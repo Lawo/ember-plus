@@ -11,8 +11,11 @@ SET(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTORCC ON)
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
-find_package( Qt4 REQUIRED QtCore QtNetwork)
-include( ${QT_USE_FILE} )
+find_package( Qt5Core )
+find_package( Qt5Network )
+
+include_directories ( ${Qt5Core_INCLUDE_DIRS} )
+include_directories ( ${Qt5Network_INCLUDE_DIRS} )
 
 include_directories( ${CMAKE_BINARY_DIR}
         ../../../libember/Headers
@@ -47,7 +50,7 @@ set ( GLOB MOC_HEADERS
         *.h
         )
 
-QT4_WRAP_CPP( MOC_SRCS ${MOC_HEADERS})
+qt5_wrap_cpp( MOC_SRCS ${MOC_HEADERS})
 add_executable(${PROJECT_NAME} ${HEADER_FILES} ${SOURCE_FILES} ${MOC_HEADERS})
-target_link_libraries(${PROJECT_NAME} ember_static ${QT_LIBRARIES})
-
+target_link_libraries(${PROJECT_NAME} ember_static ${Qt5Core_LIBRARIES})
+target_link_libraries(${PROJECT_NAME} ember_static ${Qt5Network_LIBRARIES})

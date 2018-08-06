@@ -13,7 +13,7 @@
 /** Forward declarations */
 namespace libember { namespace glow
 {
-    struct DirFieldMask;
+    class DirFieldMask;
 
     class GlowContainer;
     class GlowCommand;

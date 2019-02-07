@@ -9,7 +9,7 @@ compiler:
 addons:
   apt:
     packages:
-    - qt4-dev-tools
+    - qt5-default
 
 before_script:
   - mkdir build

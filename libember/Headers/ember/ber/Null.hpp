@@ -45,3 +45,4 @@ namespace libember { namespace ber
 #endif
 
 #endif//__LIBEMBER_BER_NULL_HPP
+

@@ -1,10 +1,10 @@
-cmake_minimum_required(VERSION 3.0.2)
-project(libember_all)
+cmake_minimum_required(VERSION 3.9 FATAL_ERROR)
+project(ember-plus VERSION 1.7.0)
 
-set(CMAKE_VERBOSE_MAKEFILE ON)
-set(CMAKE_COLOR_MAKEFILE   ON)
+add_subdirectory(libs101)
+add_subdirectory(libformula)
 
 add_subdirectory(libember)
-add_subdirectory(libformula)
-add_subdirectory(libs101)
+add_subdirectory(libember_slim)
+
 add_subdirectory(tinyember)

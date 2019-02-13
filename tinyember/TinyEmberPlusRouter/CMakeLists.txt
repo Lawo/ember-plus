@@ -12,7 +12,7 @@ cmake_policy(SET CMP0063 NEW)
 # Allow interprocedural optimization
 cmake_policy(SET CMP0069 NEW)
 
-project(TinyEmberPlus VERSION 2.5.0 LANGUAGES CXX)
+project(TinyEmberPlusRouter VERSION 1.5.1 LANGUAGES CXX)
 
 # Use GNUInstallDirs to make sure libraries are installed into correct locations
 # on all platforms.
@@ -56,21 +56,17 @@ if(NOT TARGET ${LIBEMBER_TARGET})
 endif()
 
 
-find_package(Qt5 COMPONENTS Core Gui Widgets Network Xml REQUIRED)
+find_package(Qt5 COMPONENTS Core Network REQUIRED)
 
 
 file(GLOB_RECURSE SOURCE_FILES
-        *.cpp
-        *.ui
-        *.qrc
+        TinyEmberPlusRouter/*.cpp
     )
 
 add_executable(${PROJECT_NAME} ${SOURCE_FILES})
 set_target_properties(${PROJECT_NAME}
         PROPERTIES
             AUTOMOC                      ON
-            AUTOUIC                      ON
-            AUTORCC                      ON
             POSITION_INDEPENDENT_CODE    ON
             C_EXTENSIONS                 OFF
             CXX_EXTENSIONS               OFF
@@ -78,10 +74,7 @@ set_target_properties(${PROJECT_NAME}
 target_link_libraries(${PROJECT_NAME}
         PRIVATE
             Qt5::Core
-            Qt5::Gui
-            Qt5::Widgets
             Qt5::Network
-            Qt5::Xml
             libs101::s101
             libformula::formula
             ${LIBEMBER_TARGET}

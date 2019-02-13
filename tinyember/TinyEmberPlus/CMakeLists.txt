@@ -66,6 +66,10 @@ file(GLOB_RECURSE SOURCE_FILES
     )
 
 add_executable(${PROJECT_NAME} ${SOURCE_FILES})
+target_compile_features(${PROJECT_NAME}
+        INTERFACE
+            cxx_std_11
+    )
 set_target_properties(${PROJECT_NAME}
         PROPERTIES
             AUTOMOC                      ON

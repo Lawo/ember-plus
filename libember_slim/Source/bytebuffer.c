@@ -117,6 +117,6 @@ void byteBuffer_free(ByteBuffer *pThis)
       if(pThis->pMemory != NULL)
          freeMemory(pThis->pMemory);
 
-      bzero(*pThis);
+      bzero_item(*pThis);
    }
 }

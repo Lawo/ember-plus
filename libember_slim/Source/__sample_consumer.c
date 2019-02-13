@@ -89,7 +89,7 @@ typedef struct SPtrList
 
 void ptrList_init(PtrList *pThis)
 {
-   bzero(*pThis);
+   bzero_item(*pThis);
 }
 
 void ptrList_addLast(PtrList *pThis, voidptr value)
@@ -125,7 +125,7 @@ void ptrList_free(PtrList *pThis)
       freeMemory(pPrev);
    }
 
-   bzero(*pThis);
+   bzero_item(*pThis);
 }
 
 
@@ -174,7 +174,7 @@ typedef struct SElement
 
 static void element_init(Element *pThis, Element *pParent, GlowElementType type, berint number)
 {
-   bzero(*pThis);
+   bzero_item(*pThis);
 
    pThis->pParent = pParent;
    pThis->type = type;
@@ -245,7 +245,7 @@ static void element_free(Element *pThis)
       glowNode_free(&pThis->glow.node);
    }
 
-   bzero(*pThis);
+   bzero_item(*pThis);
 }
 
 static pcstr element_getIdentifier(const Element *pThis)
@@ -405,7 +405,7 @@ static Target *element_findOrCreateTarget(Element *pThis, berint number)
       }
 
       pTarget = newobj(Target);
-      bzero(*pTarget);
+      bzero_item(*pTarget);
       pTarget->number = number;
 
       ptrList_addLast(&pThis->glow.matrix.targets, pTarget);
@@ -840,7 +840,7 @@ static void onSource(const GlowSignal *pSignal, const berint *pPath, int pathLen
    && pElement->type == GlowElementType_Matrix)
    {
       pSource = newobj(Source);
-      bzero(*pSource);
+      bzero_item(*pSource);
       pSource->number = pSignal->number;
 
       ptrList_addLast(&pElement->glow.matrix.sources, pSource);
@@ -1051,7 +1051,7 @@ static bool setParameterValue(const Session *pSession, pcstr pValueString)
    GlowParameterType type = element_getParameterType(pElement);
    GlowParameter parameter;
 
-   bzero(parameter);
+   bzero_item(parameter);
 
    switch(type)
    {
@@ -1117,7 +1117,7 @@ static bool issueConnect(const Session *pSession, pcstr pArguments, GlowConnecti
    GlowConnection connection;
    bool result = false;
 
-   bzero(connection);
+   bzero_item(connection);
 
    if(pElement->type == GlowElementType_Matrix)
    {
@@ -1168,7 +1168,7 @@ static bool invoke(const Session *pSession, pcstr pArguments)
    //value[1].flag = GlowParameterType_Integer;
    //value[1].integer = 202;
 
-   //bzero(command);
+   //bzero_item(command);
 
    //if(pElement->type == GlowElementType_Function)
    //{
@@ -1203,7 +1203,7 @@ static bool handleInput(Session *pSession, pcstr pInput)
    {
       pBuffer = newarr(byte, bufferSize);
 
-      bzero(command);
+      bzero_item(command);
       command.number = GlowCommandType_GetDirectory;
 
       glowOutput_init(&output, pBuffer, bufferSize, 0);
@@ -1251,7 +1251,7 @@ static bool handleInput(Session *pSession, pcstr pInput)
          pSession->pCursorPath = element_getPath(pElement, pSession->cursorPathBuffer, &pSession->cursorPathLength);
          pSession->pCursor = pElement;
       }
-   
+
       writePrompt(pSession);
    }
    else if(strncmp(pInput, "print ", 6) == 0)
@@ -1501,7 +1501,7 @@ void runConsumer(int argc, char **argv)
 
          if(result != SOCKET_ERROR)
          {
-            bzero(session);
+            bzero_item(session);
             session.sock = sock;
             session.pCursor = &session.root;
             session.remoteAddress = argv[1];

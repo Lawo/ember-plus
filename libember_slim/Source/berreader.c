@@ -22,7 +22,7 @@ void berReader_init(BerReader *pThis)
 {
    ASSERT(pThis != NULL);
 
-   bzero(*pThis);
+   bzero_item(*pThis);
 
    byteBuffer_initDynamic(&pThis->buffer, 0);
 }
@@ -33,14 +33,14 @@ void berReader_free(BerReader *pThis)
 
    byteBuffer_free(&pThis->buffer);
 
-   bzero(*pThis);
+   bzero_item(*pThis);
 }
 
 void berReader_reset(BerReader *pThis)
 {
    ASSERT(pThis != NULL);
 
-   bzero(pThis->tag);
+   bzero_item(pThis->tag);
    pThis->length = 0;
    pThis->type = BerType_Invalid;
    pThis->isContainer = false;

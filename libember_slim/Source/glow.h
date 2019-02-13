@@ -157,7 +157,7 @@ typedef struct
       BerTag sources;
       BerTag connections;
    } matrix;
-   
+
    struct
    {
       BerTag path;
@@ -167,7 +167,7 @@ typedef struct
       BerTag sources;
       BerTag connections;
    } qualifiedMatrix;
-   
+
    struct
    {
       BerTag identifier;
@@ -190,13 +190,13 @@ typedef struct
       BerTag basePath;
       BerTag description;
    } label;
-   
-   struct 
+
+   struct
    {
       BerTag number;
    } signal;
 
-   struct 
+   struct
    {
       BerTag target;
       BerTag sources;
@@ -204,26 +204,26 @@ typedef struct
       BerTag disposition;
    } connection;
 
-   struct 
+   struct
    {
       BerTag item;
    } collection;
 
-   struct 
+   struct
    {
       BerTag number;
       BerTag contents;
       BerTag children;
    } function;
 
-   struct 
+   struct
    {
       BerTag path;
       BerTag contents;
       BerTag children;
    } qualifiedFunction;
 
-   struct 
+   struct
    {
       BerTag identifier;
       BerTag description;
@@ -232,19 +232,19 @@ typedef struct
       BerTag templateReference;
    } functionContents;
 
-   struct 
+   struct
    {
       BerTag type;
       BerTag name;
    } tupleItemDescription;
 
-   struct 
+   struct
    {
       BerTag invocationId;
       BerTag arguments;
    } invocation;
 
-   struct 
+   struct
    {
       BerTag invocationId;
       BerTag success;
@@ -772,7 +772,7 @@ typedef struct SGlowInvocation
      * number of GlowValues in the array at pArguments.
      */
    int argumentsLength;
-   
+
 } GlowInvocation;
 
 
@@ -1037,7 +1037,7 @@ LIBEMBER_API void glowConnection_free(GlowConnection *pThis);
 typedef struct SGlowSignal
 {
    /**
-     * the "number" field. 
+     * the "number" field.
      */
    berint number;
 } GlowSignal;
@@ -1050,12 +1050,12 @@ typedef struct SGlowSignal
 typedef struct SGlowTupleItemDescription
 {
    /**
-     * the "type" field. 
+     * the "type" field.
      */
    GlowParameterType type;
 
    /**
-     * the "name" field. 
+     * the "name" field.
      */
    pstr pName;
 } GlowTupleItemDescription;

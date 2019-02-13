@@ -662,7 +662,7 @@ static void onItemReady_Signal(NonFramingGlowReader *pThis, const BerReader *pBa
       }
 
       // reset read signal
-      bzero(pThis->glow.signal);
+      bzero_item(pThis->glow.signal);
    }
    else
    {
@@ -980,60 +980,60 @@ static onItemReady_t getOnItemReady_EnterContainer(const BerReader *pBase)
    switch(pBase->type)
    {
       case GlowType_Template:
-         bzero(pThis->glow.template_);
+         bzero_item(pThis->glow.template_);
          return onItemReady_Template;
       case GlowType_QualifiedTemplate:
-         bzero(pThis->glow.template_);
+         bzero_item(pThis->glow.template_);
          return onItemReady_QualifiedTemplate;
       case GlowType_Node:
-         bzero(pThis->glow.node);
+         bzero_item(pThis->glow.node);
          pThis->glow.node.isOnline = true;
          return onItemReady_Node;
       case GlowType_QualifiedNode:
-         bzero(pThis->glow.node);
+         bzero_item(pThis->glow.node);
          pThis->glow.node.isOnline = true;
          return onItemReady_QualifiedNode;
       case GlowType_Parameter:
-         bzero(pThis->glow.parameter);
+         bzero_item(pThis->glow.parameter);
          return onItemReady_Parameter;
       case GlowType_QualifiedParameter:
-         bzero(pThis->glow.parameter);
+         bzero_item(pThis->glow.parameter);
          return onItemReady_QualifiedParameter;
       case GlowType_Command:
-         bzero(pThis->glow.command);
+         bzero_item(pThis->glow.command);
          return onItemReady_Command;
       case GlowType_StreamEntry:
-         bzero(pThis->glow.streamEntry);
+         bzero_item(pThis->glow.streamEntry);
          return onItemReady_StreamEntry;
       case GlowType_StreamDescription:
-         bzero(pThis->glow.parameter.streamDescriptor);
+         bzero_item(pThis->glow.parameter.streamDescriptor);
          return onItemReady_StreamDescription;
       case GlowType_Matrix:
-         bzero(pThis->glow.matrix);
+         bzero_item(pThis->glow.matrix);
          return onItemReady_Matrix;
       case GlowType_QualifiedMatrix:
-         bzero(pThis->glow.matrix);
+         bzero_item(pThis->glow.matrix);
          return onItemReady_QualifiedMatrix;
       case GlowType_Target:
-         bzero(pThis->glow.signal);
+         bzero_item(pThis->glow.signal);
          return onItemReady_Target;
       case GlowType_Source:
-         bzero(pThis->glow.signal);
+         bzero_item(pThis->glow.signal);
          return onItemReady_Source;
       case GlowType_Connection:
-         bzero(pThis->glow.connection);
+         bzero_item(pThis->glow.connection);
          return onItemReady_Connection;
       case GlowType_Function:
-         bzero(pThis->glow.function);
+         bzero_item(pThis->glow.function);
          return onItemReady_Function;
       case GlowType_QualifiedFunction:
-         bzero(pThis->glow.function);
+         bzero_item(pThis->glow.function);
          return onItemReady_QualifiedFunction;
       case GlowType_Invocation:
-         bzero(pThis->glow.command.options.invocation);
+         bzero_item(pThis->glow.command.options.invocation);
          return onItemReady_Invocation;
       case GlowType_InvocationResult:
-         bzero(pThis->glow.invocationResult);
+         bzero_item(pThis->glow.invocationResult);
          return onItemReady_InvocationResult;
       default:
          pStack = pAsync->pContainerStack;
@@ -1243,7 +1243,7 @@ void nonFramingGlowReader_initEx(NonFramingGlowReader *pThis,
 {
     ASSERT(pThis != NULL);
 
-    bzero(*pThis);
+    bzero_item(*pThis);
 
     emberAsyncReader_init(&pThis->base);
 
@@ -1266,7 +1266,7 @@ void nonFramingGlowReader_free(NonFramingGlowReader *pThis)
 
    emberAsyncReader_free(&pThis->base);
 
-   bzero(*pThis);
+   bzero_item(*pThis);
 }
 
 void nonFramingGlowReader_reset(NonFramingGlowReader *pThis)
@@ -1385,7 +1385,7 @@ void glowReader_free(GlowReader *pThis)
 
    nonFramingGlowReader_free(&pThis->base);
 
-   bzero(*pThis);
+   bzero_item(*pThis);
 }
 
 void glowReader_reset(GlowReader *pThis)

@@ -125,8 +125,8 @@ typedef unsigned int bertype;
 //
 // ======================================================
 
-#ifndef bzero
-#define bzero(item) (memset(&(item), 0, sizeof(item)))
+#ifndef bezero_item
+#define bzero_item(item) (memset(&(item), 0, sizeof(item)))
 #endif
 
 #ifndef NULL

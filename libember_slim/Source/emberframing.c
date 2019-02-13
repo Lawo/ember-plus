@@ -156,7 +156,7 @@ void berFramingOutput_initImpl(BerFramingOutput *pThis,
     if (size > EMBER_MAXIMUM_PACKAGE_LENGTH)
         size = EMBER_MAXIMUM_PACKAGE_LENGTH;
 
-    bzero(*pThis);
+    bzero_item(*pThis);
     berMemoryOutput_init(&pThis->base, pMemory, size);
 
     if (useNonEscapingFrames)
@@ -427,7 +427,7 @@ static void readFramedByte(EmberFramingReader *pThis, byte b)
        {
            pThis->onPackageReceived(
                pBuffer->pMemory + (2 + pThis->payloadLengthLength),
-               pBuffer->position - (2 + pThis->payloadLengthLength), 
+               pBuffer->position - (2 + pThis->payloadLengthLength),
                pThis->state);
            emberFramingReader_reset(pThis);
        }
@@ -495,7 +495,7 @@ void emberFramingReader_init(EmberFramingReader *pThis,
    ASSERT(pMemory != NULL);
    ASSERT(size > 0);
 
-   bzero(*pThis);
+   bzero_item(*pThis);
 
    byteBuffer_init(&pThis->buffer, pMemory, size);
 

@@ -315,7 +315,7 @@ void glowNode_free(GlowNode *pThis)
    if(pThis->pTemplateReference != NULL)
        freeMemory(pThis->pTemplateReference);
 
-   bzero(*pThis);
+   bzero_item(*pThis);
 }
 
 void glowValue_copyFrom(GlowValue *pThis, const GlowValue *pSource)
@@ -377,7 +377,7 @@ void glowValue_free(GlowValue *pThis)
          freeMemory(pThis->choice.octets.pOctets);
    }
 
-   bzero(*pThis);
+   bzero_item(*pThis);
 }
 
 void glowParameter_free(GlowParameter *pThis)
@@ -402,7 +402,7 @@ void glowParameter_free(GlowParameter *pThis)
    if(pThis->pTemplateReference != NULL)
       freeMemory(pThis->pTemplateReference);
 
-   bzero(*pThis);
+   bzero_item(*pThis);
 }
 
 void glowMatrix_free(GlowMatrix *pThis)
@@ -421,7 +421,7 @@ void glowMatrix_free(GlowMatrix *pThis)
    if(pThis->pTemplateReference != NULL)
       freeMemory(pThis->pTemplateReference);
 
-   bzero(*pThis);
+   bzero_item(*pThis);
 }
 
 void glowConnection_free(GlowConnection *pThis)
@@ -431,7 +431,7 @@ void glowConnection_free(GlowConnection *pThis)
    if(pThis->pSources != NULL)
       freeMemory(pThis->pSources);
 
-   bzero(*pThis);
+   bzero_item(*pThis);
 }
 
 void glowFunction_free(GlowFunction *pThis)
@@ -465,7 +465,7 @@ void glowFunction_free(GlowFunction *pThis)
       freeMemory(pThis->pResult);
    }
 
-   bzero(*pThis);
+   bzero_item(*pThis);
 }
 
 void glowInvocation_free(GlowInvocation *pThis)
@@ -482,7 +482,7 @@ void glowInvocation_free(GlowInvocation *pThis)
       freeMemory(pThis->pArguments);
    }
 
-   bzero(*pThis);
+   bzero_item(*pThis);
 }
 
 void glowCommand_free(GlowCommand *pThis)
@@ -492,7 +492,7 @@ void glowCommand_free(GlowCommand *pThis)
    if(pThis->number == GlowCommandType_Invoke)
       glowInvocation_free(&pThis->options.invocation);
 
-   bzero(*pThis);
+   bzero_item(*pThis);
 }
 
 void glowInvocationResult_free(GlowInvocationResult *pThis)
@@ -509,7 +509,7 @@ void glowInvocationResult_free(GlowInvocationResult *pThis)
       freeMemory(pThis->pResult);
    }
 
-   bzero(*pThis);
+   bzero_item(*pThis);
 }
 
 void glowTupleItemDescription_free(GlowTupleItemDescription *pThis)
@@ -519,5 +519,5 @@ void glowTupleItemDescription_free(GlowTupleItemDescription *pThis)
    if(pThis->pName != NULL)
       freeMemory(pThis->pName);
 
-   bzero(*pThis);
+   bzero_item(*pThis);
 }

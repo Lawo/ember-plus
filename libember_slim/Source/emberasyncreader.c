@@ -388,7 +388,7 @@ void emberAsyncReader_init(EmberAsyncReader *pThis)
 {
    ASSERT(pThis != NULL);
 
-   bzero(*pThis);
+   bzero_item(*pThis);
 
    berReader_init(&pThis->base);
 
@@ -417,7 +417,7 @@ void emberAsyncReader_free(EmberAsyncReader *pThis)
 
    berReader_free(&pThis->base);
 
-   bzero(*pThis);
+   bzero_item(*pThis);
 }
 
 void emberAsyncReader_readByte(EmberAsyncReader *pThis, byte b)

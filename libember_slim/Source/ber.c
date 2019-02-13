@@ -504,7 +504,7 @@ int ber_encodeRelativeOid(BerOutput *pOut, const berint *pValue, int count)
 
 int ber_encodeNull(BerOutput *pOut)
 {
-    pOut;
+    (void)pOut;
     return 0;
 }
 
@@ -808,5 +808,6 @@ int ber_decodeRelativeOid(BerInput *pIn, berint *pDest, int destSize, int length
 
 void ber_decodeNull(BerInput *pIn)
 {
-    pIn;
+    (void)pIn;
 }
+

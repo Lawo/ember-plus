@@ -49,10 +49,6 @@ Apart from these structural changes the current mid-term roadmap foresees transi
 ### Changed
 - TinyEmberPlus: TinyEmberPlus is now built against Qt5.
 
-### Deprecated
-
-### Removed
-
 ### Fixed
 - All: Fixed issues #51, #52 and #54.
 - libember: Fixed issues #26, #45 and #48.

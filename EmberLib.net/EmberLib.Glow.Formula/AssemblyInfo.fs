@@ -8,7 +8,7 @@ module internal EmberLib.Glow.Formula.AssemblyInfo
 
 open System.Reflection
 
-[<AssemblyVersion("1.7.0.0")>]
+[<AssemblyVersion("1.8.0.0")>]
 [<AssemblyTitle("EmberLib.Glow.Formula")>]
 [<AssemblyCompany("Lawo GmbH")>]
 [<AssemblyCopyright("(c) Lawo GmbH")>]

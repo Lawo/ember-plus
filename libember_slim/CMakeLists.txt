@@ -14,7 +14,7 @@ cmake_policy(SET CMP0063 NEW)
 # Allow interprocedural optimization
 cmake_policy(SET CMP0069 NEW)
 
-project(libember_slim VERSION 1.7.0 LANGUAGES C)
+project(libember_slim VERSION 1.8.0 LANGUAGES C)
 
 # Use GNUInstallDirs to make sure libraries are installed into correct locations
 # on all platforms.

@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.9 FATAL_ERROR)
-project(ember-plus VERSION 1.7.0)
+project(ember-plus VERSION 1.8.0)
 
 add_subdirectory(libs101)
 add_subdirectory(libformula)

@@ -37,7 +37,3 @@ This SDK also contains a premake4 project file that may be used to generate
 native project files for various platforms and development environments for the
 'libember' and 'libember_slim' projects.
 
-The 'tools' directory contains prebuilt versions of 'TinyEmberPlus' and
-'TinyEmberPlusRouter' as well as the 'EmberPlusView' utility, a generic Ember+
-consumer.
-

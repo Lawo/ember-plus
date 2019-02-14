@@ -166,7 +166,7 @@ void createIdentity(model::Node* router, int nodeNumber)
 
    auto author = new model::StringParameter(2, productInfo, "company", nullptr);
    author->setReadOnly(true);
-   author->setValue("L-S-B Broadcast Technologies GmbH");
+   author->setValue("Lawo GmbH");
 
    auto version = new model::StringParameter(3, productInfo, "version", nullptr);
    version->setReadOnly(true);

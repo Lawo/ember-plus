@@ -1,20 +1,9 @@
 /*
    EmberLib.net -- .NET implementation of the Ember+ Protocol
-   Copyright (C) 2012-2014  L-S-B Broadcast Technologies GmbH
 
-   This library is free software; you can redistribute it and/or
-   modify it under the terms of the GNU Lesser General Public
-   License as published by the Free Software Foundation; either
-   version 2.1 of the License, or (at your option) any later version.
-
-   This library is distributed in the hope that it will be useful,
-   but WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-   Lesser General Public License for more details.
-
-   You should have received a copy of the GNU Lesser General Public
-   License along with this library; if not, write to the Free Software
-   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+   Copyright (C) 2012-2019 Lawo GmbH (http://www.lawo.com).
+   Distributed under the Boost Software License, Version 1.0.
+   (See accompanying file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 */
 
 using System;
@@ -77,7 +66,7 @@ namespace BerLib
       /// ASN.1 type INTEGER
       /// </summary>
       public const uint Integer = 2;
-      
+
       /// <summary>
       /// ASN.1 type BIT STRING
       /// </summary>
@@ -97,7 +86,7 @@ namespace BerLib
       /// ASN.1 type OBJECT IDENTIFIER
       /// </summary>
       public const uint ObjectIdentifier = 6;
-      
+
       /// <summary>
       /// ASN.1 type ObjectDescriptor
       /// </summary>
@@ -107,7 +96,7 @@ namespace BerLib
       /// ASN.1 type EXTERNAL
       /// </summary>
       public const uint External = 8;
-      
+
       /// <summary>
       /// ASN.1 type REAL
       /// </summary>
@@ -122,7 +111,7 @@ namespace BerLib
       /// ASN.1 type EMBEDDED PDV
       /// </summary>
       public const uint EmbeddedPdv = 11;
-      
+
       /// <summary>
       /// ASN.1 type UTF8String
       /// </summary>
@@ -231,7 +220,7 @@ namespace BerLib
       }
    }
 
-   
+
    /// <summary>
    /// Defines constants used by decoding/encoding entities and
    /// some helper methods.
@@ -245,7 +234,7 @@ namespace BerLib
       /// </summary>
       public const int IndefiniteLength = -1;
 
-      
+
       /// <summary>
       /// Gets the name of the type passed in <paramref name="type"/> in PascalCase
       /// (e.g. 'ObjectIdentifier' if type equals 6).

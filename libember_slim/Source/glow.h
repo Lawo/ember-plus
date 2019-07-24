@@ -365,8 +365,8 @@ typedef enum EGlowFieldFlags
    GlowFieldFlag_TemplateReference  = 0x00080000,
    GlowFieldFlag_Connections        = 0x00000005,
 
-   GlowFieldFlag_All                = 0xFFFFFFFF,
-   GlowFieldFlag_Sparse             = -2
+   GlowFieldFlag_All                = (int)0xffffffff,
+   GlowFieldFlag_Sparse             = (int)0xfffffffe
 } GlowFieldFlags;
 
 

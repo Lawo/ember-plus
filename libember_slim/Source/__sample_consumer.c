@@ -962,7 +962,7 @@ static void onInvocationResult(const GlowInvocationResult *pInvocationResult, vo
    }
 }
 
-static void onPackageReceived(const byte *pPackage, int length, voidptr state)
+static void onOtherPackageReceived(const byte *pPackage, int length, voidptr state)
 {
    Session *pSession = (Session *)state;
    SOCKET sock = pSession->sock;
@@ -1361,7 +1361,7 @@ static void run(Session *pSession)
    pReader->base.onConnection = onConnection;
    pReader->base.onFunction = onFunction;
    pReader->base.onInvocationResult = onInvocationResult;
-   pReader->onPackageReceived = onPackageReceived;
+   pReader->onOtherPackageReceived = onOtherPackageReceived;
    pReader->base.onUnsupportedTltlv = onUnsupportedTltlv;
 
    printf_s("Enter '?' for help\n");

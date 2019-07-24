@@ -563,7 +563,7 @@ static void onParameter(const GlowParameter *pParameter, GlowFieldFlags fields, 
    }
 }
 
-static void onPackageReceived(const byte *pPackage, int length, voidptr state)
+static void onOtherPackageReceived(const byte *pPackage, int length, voidptr state)
 {
    ClientInfo *pClientInfo = (ClientInfo *)state;
    byte buffer[16];
@@ -630,7 +630,7 @@ static void handleClient(SOCKET sock)
 
    // only handle parameters and commands
    glowReader_init(pReader, NULL, onParameter, onCommand, NULL, (voidptr)&client, pRxBuffer, rxBufferSize);
-   pReader->onPackageReceived = onPackageReceived;
+   pReader->onOtherPackageReceived = onOtherPackageReceived;
 
    while(true)
    {

@@ -72,7 +72,7 @@ namespace libember { namespace ber
             Tag::Number number = byte & 0x1F;
             if (number == 0x1F)
             {
-                number = static_cast<Tag::Number>(detail::decodeMultibyte(input));
+                number = static_cast<Tag::Number>(detail::decodeMultibyte(input).first);
             }
 
             return make_tag(preamble, number);

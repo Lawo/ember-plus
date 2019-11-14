@@ -92,19 +92,23 @@ namespace libember { namespace dom
             resetImpl();
         }
 
-        if (m_root == 0)
+        if (container != 0)
         {
-            m_root = container;
-        }
-        else
-        {
-            dom::Container* current = dynamic_cast<dom::Container*>(m_current);
-            if (current)
-                current->insert(current->end(), container);
+            if (m_root == 0)
+            {
+                m_root = container;
+            }
+            else
+            {
+                dom::Container* current = dynamic_cast<dom::Container*>(m_current);
+                if (current)
+                    current->insert(current->end(), container);
+            }
+
+            m_current = container;
+            containerReady(container);
         }
 
-        m_current = container;
-        containerReady(container);
     }
 
     LIBEMBER_INLINE

@@ -11,7 +11,7 @@ cmake_policy(SET CMP0063 NEW)
 # Allow interprocedural optimization
 cmake_policy(SET CMP0069 NEW)
 
-project(libformula VERSION 1.8.0 LANGUAGES CXX)
+project(libformula VERSION 1.8.2 LANGUAGES CXX)
 
 # Use GNUInstallDirs to make sure libraries are installed into correct locations
 # on all platforms.

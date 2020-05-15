@@ -28,7 +28,7 @@ namespace libember { namespace glow
                 Tree = 3,
                 Value = 4,
                 Connections = 5,
-                All = 0xFFFFFFFF,
+                All = -1,
                 Sparse = -2
             };
 

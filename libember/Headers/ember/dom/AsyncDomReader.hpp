@@ -50,7 +50,7 @@ namespace libember { namespace dom
             bool isRootReady() const;
 
             /**
-             * When a root has been decoded, this method returns the 
+             * When a root has been decoded, this method returns the
              * root node and resets its internal state. In that case, the returned node
              * muste be deleted manually when it is no longer being used.
              * @return The root node if already decoded, otherwise null.

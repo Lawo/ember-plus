@@ -13,7 +13,7 @@
 #include "../../util/Inline.hpp"
 #include "../Container.hpp"
 
-namespace libember { namespace dom 
+namespace libember { namespace dom
 {
     LIBEMBER_INLINE
     AsyncDomReader::AsyncDomReader(dom::NodeFactory const& factory)
@@ -61,7 +61,7 @@ namespace libember { namespace dom
     }
 
     LIBEMBER_INLINE
-    void AsyncDomReader::containerReady(dom::Node*) 
+    void AsyncDomReader::containerReady(dom::Node*)
     {
     }
 
@@ -78,11 +78,15 @@ namespace libember { namespace dom
     LIBEMBER_INLINE
     void AsyncDomReader::resetImpl()
     {
-        if (m_current != 0 && m_current->parent() == 0 && m_current != m_root)
+        if ((m_current != 0) && (m_current->parent() == 0) && (m_current != m_root))
+        {
             delete m_current;
+        }
 
         if (m_root)
+        {
             delete m_root;
+        }
 
         m_root = 0;
         m_current = 0;
@@ -108,13 +112,14 @@ namespace libember { namespace dom
             {
                 dom::Container* current = dynamic_cast<dom::Container*>(m_current);
                 if (current)
+                {
                     current->insert(current->end(), container);
+                }
             }
 
             m_current = container;
             containerReady(container);
         }
-
     }
 
     LIBEMBER_INLINE
@@ -144,7 +149,9 @@ namespace libember { namespace dom
             {
                 dom::Container* container = dynamic_cast<dom::Container*>(m_current);
                 if (container)
+                {
                     container->insert(container->end(), node);
+                }
 
                 itemReady(node);
             }

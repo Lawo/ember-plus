@@ -39,6 +39,12 @@ namespace libember { namespace dom
             virtual ~AsyncDomReader();
 
             /**
+             * Returns true when the decoder is currently decoding
+             * a tree and has nt yet finished doing so..
+             */
+            bool isDecodingInProgress() const;
+
+            /**
              * Returns true when the root node has been decoded.
              */
             bool isRootReady() const;

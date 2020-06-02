@@ -31,6 +31,12 @@ namespace libember { namespace dom
     }
 
     LIBEMBER_INLINE
+    bool AsyncDomReader::isDecodingInProgress() const
+    {
+        return (m_current != 0) || ((m_root != 0) && !m_isRootReady);
+    }
+
+    LIBEMBER_INLINE
     bool AsyncDomReader::isRootReady() const
     {
         return m_isRootReady;

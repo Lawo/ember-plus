@@ -154,7 +154,7 @@ namespace libs101
     inline StreamDecoder<ValueType>::StreamDecoder()
         : m_escape(false)
         , m_state(OutOfFrame)
-        , m_crc(0xFFFF)
+        , m_crc(0xFFFFU)
         , m_payloadLength(0)
         , m_payloadLengthLength(0)
     {}
@@ -194,9 +194,9 @@ namespace libs101
         m_bytes.clear();
         m_escape = false;
         m_state = state;
-        m_crc = 0xFFFF;
-        m_payloadLength = 0;
-        m_payloadLengthLength = 0;
+        m_crc = 0xFFFFU;
+        m_payloadLength = 0U;
+        m_payloadLengthLength = 0U;
     }
 
     template<typename ValueType>

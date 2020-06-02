@@ -89,7 +89,7 @@ namespace glow
         * @param last Points the the first element beyond the rx buffer.
         * @param state A pointer to the consumer that received the bytes passed.
         */
-      static bool onS101Message(Decoder::const_iterator first, Decoder::const_iterator last, Consumer* state);
+      static void onS101Message(Decoder::const_iterator first, Decoder::const_iterator last, Consumer* state);
 
    private:
       Dispatcher* m_dispatcher;

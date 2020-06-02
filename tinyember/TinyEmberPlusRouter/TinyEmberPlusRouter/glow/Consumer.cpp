@@ -121,10 +121,9 @@ namespace glow
       }
    }
 
-   //static
-   bool Consumer::onS101Message(Decoder::const_iterator first, Decoder::const_iterator last, Consumer* state)
+   //static 
+   void Consumer::onS101Message(Decoder::const_iterator first, Decoder::const_iterator last, Consumer* state)
    {
-       state->handleS101Message(first, last);
-       return true;
+      state->handleS101Message(first, last);
    }
 }

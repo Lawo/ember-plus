@@ -35,6 +35,14 @@ namespace libs101
         typedef typename ByteVector::const_reference const_reference;
         typedef typename ByteVector::size_type size_type;
 
+        enum State
+        {
+            OutOfFrame,
+            WithinFrameWithEscaping,
+            WithinFrameWithoutEscaping
+        };
+
+    public:
         /** Constructor */
         StreamDecoder();
 
@@ -99,8 +107,8 @@ namespace libs101
         template<typename InputType, typename CallbackType>
         void readByte(InputType input, CallbackType callback);
 
-        /** Resets the current decoding buffer. */
-        void reset();
+        /** Return the current decoder state. */
+        State getState() const;
 
         /**
          * Gets a value indicating whether the decoder currently parses a
@@ -110,13 +118,8 @@ namespace libs101
          */
         bool isDecodingFrameWithoutEscaping() const;
 
-    private:
-        enum State
-        {
-            OutOfFrame,
-            WithinFrameWithEscaping,
-            WithinFrameWithoutEscaping
-        };
+        /** Resets the current decoding buffer. */
+        void reset();
 
     private:
         /** Resets the current decoding buffer.
@@ -157,6 +160,12 @@ namespace libs101
     template<typename ValueType>
     inline StreamDecoder<ValueType>::~StreamDecoder()
     {}
+
+    template<typename ValueType>
+    inline typename StreamDecoder<ValueType>::State StreamDecoder<ValueType>::getState() const
+    {
+        return m_state;
+    }
 
     template<typename ValueType>
     inline bool StreamDecoder<ValueType>::isDecodingFrameWithoutEscaping() const

@@ -64,7 +64,7 @@ namespace libs101
          * @note Each time a message has been decoded this method calls reset.
          */
         template<typename InputIterator, typename CallbackType, typename StateType>
-        void read(InputIterator first, InputIterator last, CallbackType callback, StateType state);
+        bool read(InputIterator first, InputIterator last, CallbackType callback, StateType state);
 
         /**
          * Reads n bytes from the provided input buffer. Each time a 
@@ -79,7 +79,7 @@ namespace libs101
          * @note Each time a message has been decoded this method calls reset.
          */
         template<typename InputIterator, typename CallbackType>
-        void read(InputIterator first, InputIterator last, CallbackType callback);
+        bool read(InputIterator first, InputIterator last, CallbackType callback);
 
         /**
          * Decodes a single byte. If this is the last byte of a S101 message
@@ -93,7 +93,7 @@ namespace libs101
          * @note Each time a message has been decoded this method calls reset.
          */
         template<typename InputType, typename CallbackType, typename StateType>
-        void readByte(InputType input, CallbackType callback, StateType state);
+        bool readByte(InputType input, CallbackType callback, StateType state);
 
         /**
          * Decodes a single byte. If this is the last byte of a S101 message
@@ -105,7 +105,7 @@ namespace libs101
          * @note Each time a message has been decoded this method calls reset.
          */
         template<typename InputType, typename CallbackType>
-        void readByte(InputType input, CallbackType callback);
+        bool readByte(InputType input, CallbackType callback);
 
         /** Return the current decoder state. */
         State getState() const;
@@ -132,9 +132,10 @@ namespace libs101
          * @param first Start of the buffer containing a decoded S101 message.
          * @param last End of the buffer.
          * @param callback The stateless callback, which only expects the data buffer.
+         * @return The value returned by the callback.
          */
         template<typename CallbackType>
-        static void invokeStatelessCallback(const_iterator first, const_iterator last, CallbackType callback);
+        static bool invokeStatelessCallback(const_iterator first, const_iterator last, CallbackType callback);
 
         ByteVector m_bytes;
         bool m_escape;
@@ -162,6 +163,13 @@ namespace libs101
     {}
 
     template<typename ValueType>
+    template<typename CallbackType>
+    inline bool StreamDecoder<ValueType>::invokeStatelessCallback(const_iterator first, const_iterator last, CallbackType callback)
+    {
+        return callback(first, last);
+    }
+
+    template<typename ValueType>
     inline typename StreamDecoder<ValueType>::State StreamDecoder<ValueType>::getState() const
     {
         return m_state;
@@ -171,13 +179,6 @@ namespace libs101
     inline bool StreamDecoder<ValueType>::isDecodingFrameWithoutEscaping() const
     {
         return m_state == WithinFrameWithoutEscaping;
-    }
-
-    template<typename ValueType>
-    template<typename CallbackType>
-    inline void StreamDecoder<ValueType>::invokeStatelessCallback(const_iterator first, const_iterator last, CallbackType callback)
-    {
-        callback(first, last);
     }
 
     template<typename ValueType>
@@ -199,111 +200,117 @@ namespace libs101
 
     template<typename ValueType>
     template<typename InputIterator, typename CallbackType, typename StateType>
-    inline void StreamDecoder<ValueType>::read(InputIterator first, InputIterator last, CallbackType callback, StateType state)
+    inline bool StreamDecoder<ValueType>::read(InputIterator first, InputIterator last, CallbackType callback, StateType state)
     {
-        for(; first != last; ++first)
-            readByte(*first, callback, state);
+        while (first != last)
+        {
+            if (!readByte(*first++, callback, state))
+            {
+                return false;
+            }
+        }
+        return true;
     }
 
     template<typename ValueType>
     template<typename InputIterator, typename CallbackType>
-    inline void StreamDecoder<ValueType>::read(InputIterator first, InputIterator last, CallbackType callback)
+    inline bool StreamDecoder<ValueType>::read(InputIterator first, InputIterator last, CallbackType callback)
     {
-        for(; first != last; ++first)
-            readByte(*first, callback);
+        while (first != last)
+        {
+            if (!readByte(*first++, callback))
+            {
+                return false;
+            }
+        }
+        return true;
     }
 
     template<typename ValueType>
     template<typename InputType, typename CallbackType>
-    inline void StreamDecoder<ValueType>::readByte(InputType input, CallbackType callback)
+    inline bool StreamDecoder<ValueType>::readByte(InputType input, CallbackType callback)
     {
         typedef void (*CallbackBindType)(const_iterator, const_iterator, CallbackType);
 
-        readByte<InputType, CallbackBindType, CallbackType>(input, invokeStatelessCallback, callback);
+        return readByte<InputType, CallbackBindType, CallbackType>(input, invokeStatelessCallback, callback);
     }
 
     template<typename ValueType>
     template<typename InputType, typename CallbackType, typename StateType>
-    inline void StreamDecoder<ValueType>::readByte(InputType input, CallbackType callback, StateType state)
+    inline bool StreamDecoder<ValueType>::readByte(InputType input, CallbackType callback, StateType state)
     {
         value_type byte = static_cast<value_type>(input);
 
+        bool result = true;
         switch (m_state)
         {
-        case OutOfFrame:
-            if (byte == Byte::BoF)
-            {
-                reset(WithinFrameWithEscaping);
-            }
-            else if (byte == Byte::Invalid)
-            {
-                reset(WithinFrameWithoutEscaping);
-            }
-
-            break;
-
-        case WithinFrameWithEscaping:
-            switch (byte)
-            {
-            case Byte::BoF:
-                reset(WithinFrameWithEscaping);
+            case OutOfFrame:
+                reset((byte == Byte::BoF) ? WithinFrameWithEscaping : WithinFrameWithoutEscaping);
                 break;
 
-            case Byte::EoF:
-                if (m_crc == 0xF0B8 && m_bytes.size() > 1)
-                    callback(m_bytes.begin(), m_bytes.end() - 2, state);
-
-                reset();
-                break;
-
-            case Byte::CE:
-                m_escape = true;
-                break;
-
-            default:
-                if (m_escape)
+            case WithinFrameWithEscaping:
+                switch (byte)
                 {
-                    m_escape = false;
+                    case Byte::BoF:
+                        reset(WithinFrameWithEscaping);
+                        break;
 
-                    byte = byte ^ Byte::XOR;
-                }
+                    case Byte::EoF:
+                        if ((m_crc == 0xF0B8U) && (m_bytes.size() > 1))
+                        {
+                            result = callback(m_bytes.begin(), m_bytes.end() - 2, state);
+                        }
 
-                m_bytes.push_back(byte);
-                m_crc = util::Crc16::add(m_crc, byte);
-                break;
-            }
+                        reset();
+                        break;
 
-            break;
+                    case Byte::CE:
+                        m_escape = true;
+                        break;
 
-        case WithinFrameWithoutEscaping:
-            m_bytes.push_back(byte);
+                    default:
+                        if (m_escape)
+                        {
+                            m_escape = false;
 
-            size_type const length = m_bytes.size();
+                            byte = byte ^ Byte::XOR;
+                        }
 
-            if (length == 1)
-            {
-                m_payloadLengthLength = byte & 0x07;
-            }
-            else if (length == 1 + m_payloadLengthLength)
-            {
-                m_payloadLength = 0;
+                        m_bytes.push_back(byte);
+                        m_crc = util::Crc16::add(m_crc, byte);
+                        break;
+                } break;
 
-                for (size_type index = 0; index < m_payloadLengthLength; ++index)
+            case WithinFrameWithoutEscaping:
                 {
-                    int const shift = (m_payloadLength - index - 1) * 8;
+                    m_bytes.push_back(byte);
 
-                    m_payloadLength |= (m_bytes[1 + index] << shift);
-                }
-            }
+                    size_type const length = m_bytes.size();
 
-            if (length >= 1 && length - (1 + m_payloadLengthLength) == m_payloadLength)
-            {
-                callback(m_bytes.begin() + (1 + m_payloadLengthLength), m_bytes.end(), state);
-                reset();
-            }
+                    if (length == 1)
+                    {
+                        m_payloadLengthLength = byte & 0x07;
+                    }
+                    else if (length == 1 + m_payloadLengthLength)
+                    {
+                        m_payloadLength = 0;
 
-            break;
+                        for (size_type index = 0; index < m_payloadLengthLength; ++index)
+                        {
+                            int const shift = (m_payloadLength - index - 1) * 8;
+
+                            m_payloadLength |= (m_bytes[1 + index] << shift);
+                        }
+                    }
+
+                    if ((length >= 1) && (length - (1 + m_payloadLengthLength) == m_payloadLength))
+                    {
+                        result = callback(m_bytes.begin() + (1 + m_payloadLengthLength), m_bytes.end(), state);
+                        reset();
+                    }
+                } break;
         }
+        return result;
     }
 }
 

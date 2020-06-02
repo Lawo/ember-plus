@@ -134,9 +134,10 @@ namespace glow
             provider->notifyAsync(root, m_subscriber);
     }
 
-    //static 
-    void Consumer::dispatch(Decoder::const_iterator first, Decoder::const_iterator last, Consumer* state)
+    //static
+    bool Consumer::dispatch(Decoder::const_iterator first, Decoder::const_iterator last, Consumer* state)
     {
         state->handleMessage(first, last);
+        return true;
     }
 }

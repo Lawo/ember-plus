@@ -50,16 +50,16 @@ namespace libs101
         ~StreamDecoder();
 
         /**
-         * Reads n bytes from the provided input buffer. Each time a 
+         * Reads n bytes from the provided input buffer. Each time a
          * valid message has been decoded, the provided callback function will
          * be invoked with the decoded result. The result contains the decoded
          * data buffer.
          * @param first First item of the buffer to decode the data from.
          * @param last Last item of the buffer to decode the data from.
          * @param callback Callback function that will be called when a valid
-         *      message has been decoded. The function must have the following 
-         *      signature: (const_iterator, const_iterator, StateType)
-         * @param state A user state that can be used to transfer any 
+         *      message has been decoded. The function must have the following
+         *      signature: bool (const_iterator, const_iterator, StateType)
+         * @param state A user state that can be used to transfer any
          *      kind of data to the callback function.
          * @note Each time a message has been decoded this method calls reset.
          */
@@ -67,15 +67,15 @@ namespace libs101
         bool read(InputIterator first, InputIterator last, CallbackType callback, StateType state);
 
         /**
-         * Reads n bytes from the provided input buffer. Each time a 
+         * Reads n bytes from the provided input buffer. Each time a
          * valid message has been decoded, the provided callback function will
          * be invoked with the decoded result. The result contains the decoded
          * data buffer.
          * @param first First item of the buffer to decode the data from.
          * @param last Last item of the buffer to decode the data from.
          * @param callback Callback function that will be called when a valid
-         *      message has been decoded. The function must have the following 
-         *      signature: (const_iterator, const_iterator)
+         *      message has been decoded. The function must have the following
+         *      signature: bool (const_iterator, const_iterator)
          * @note Each time a message has been decoded this method calls reset.
          */
         template<typename InputIterator, typename CallbackType>
@@ -86,9 +86,9 @@ namespace libs101
          * the provided callback function will be invoked.
          * @param input The byte to decode.
          * @param callback Callback function that will be called when a valid
-         *      message has been decoded. The function must have the following 
-         *      signature: (const_iterator, const_iterator, StateType)
-         * @param state A user state that can be used to transfer any 
+         *      message has been decoded. The function must have the following
+         *      signature: bool (const_iterator, const_iterator, StateType)
+         * @param state A user state that can be used to transfer any
          *      kind of data to the callback function.
          * @note Each time a message has been decoded this method calls reset.
          */
@@ -100,8 +100,8 @@ namespace libs101
          * the provided callback function will be invoked.
          * @param input The byte to decode.
          * @param callback Callback function that will be called when a valid
-         *      message has been decoded. The function must have the following 
-         *      signature: (const_iterator, const_iterator)
+         *      message has been decoded. The function must have the following
+         *      signature: bool (const_iterator, const_iterator)
          * @note Each time a message has been decoded this method calls reset.
          */
         template<typename InputType, typename CallbackType>
@@ -122,7 +122,8 @@ namespace libs101
         void reset();
 
     private:
-        /** Resets the current decoding buffer.
+        /**
+         * Resets the current decoding buffer.
          * @param state Specifies the current decoder state.
          */
         void reset(State state);

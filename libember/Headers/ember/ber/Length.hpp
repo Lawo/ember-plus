@@ -9,6 +9,9 @@
 #ifndef __LIBEMBER_BER_LENGTH_HPP
 #define __LIBEMBER_BER_LENGTH_HPP
 
+#include "../meta/EnableIf.hpp"
+#include "../meta/Signedness.hpp"
+
 namespace libember { namespace ber
 {
     /**
@@ -21,7 +24,7 @@ namespace libember { namespace ber
     template<typename IntegralType>
     struct Length
     {
-        typedef IntegralType value_type;
+        typedef typename meta::EnableIf<meta::IsUnsigned<IntegralType>, IntegralType>::type value_type;
 
         /** 
          * Indicates indefinite length

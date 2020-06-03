@@ -26,7 +26,7 @@ namespace libember { namespace ber
     {
         typedef typename meta::EnableIf<meta::IsUnsigned<IntegralType>, IntegralType>::type value_type;
 
-        /** 
+        /**
          * Indicates indefinite length
          */
         static value_type const INDEFINITE = static_cast<value_type>(-1);
@@ -41,7 +41,7 @@ namespace libember { namespace ber
         Length(value_type value);
 
         /**
-         * Checks if this length is indefinite 
+         * Checks if this length is indefinite
          * @return True if the length value is indefinite, otherwise false
          */
         bool isIndefinite() const;
@@ -57,7 +57,6 @@ namespace libember { namespace ber
      */
     template<typename IntegralType>
     Length<IntegralType> make_length(IntegralType value);
-
 
 
     /**************************************************************************/

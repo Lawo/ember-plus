@@ -12,6 +12,7 @@
 #include "CodecTraits.hpp"
 #include "../Length.hpp"
 #include "../../meta/FunctionTraits.hpp"
+#include "Integral.hpp"
 
 namespace libember { namespace ber
 {
@@ -25,46 +26,27 @@ namespace libember { namespace ber
     struct EncodingTraits<Length<LengthType> >
     {
         typedef Length<LengthType> value_type;
+        typedef typename value_type::value_type underlying_type;
 
         static std::size_t encodedLength(value_type length)
         {
-            if ((length.value < 0x80 || length.isIndefinite()))
-            {
-                return 1;
-            }
-            else
-            {
-                // Create a bit-mask that has the nine most significant bits set
-                LengthType const value = length.value;
-                LengthType mask = static_cast<LengthType>(~((static_cast<LengthType>(1U) << (((sizeof(LengthType) - 1) * 8) - 1)) - 1));
-                std::size_t encodedLength = sizeof(LengthType);
-                while ((encodedLength > 1) && ((value & mask) == 0))
-                {
-                    encodedLength -= 1;
-                    mask >>= 8;
-                }
-                if ((value >> (encodedLength * 8 - 1)) != 0)
-                {
-                    encodedLength += 1;
-                }
-                return 1 + encodedLength;
-            }
+            return length.isIndefinite() ? 1U : EncodingTraits<value_type>::encodedLength(length.value);
         }
 
         static void encode(util::OctetStream& output, value_type length)
         {
             if (length.isIndefinite())
             {
-                output.append(0x80);
+                output.append(0x80U);
             }
-            else if (length.value <= 0x7F)
+            else if (length.value <= 0x7FU)
             {
                 output.append(static_cast<util::OctetStream::value_type>(length.value));
             }
             else
             {
-                output.append(static_cast<util::OctetStream::value_type>(0x80 | ber::encodedLength(static_cast<int>(length.value))));
-                ber::encode(output, static_cast<int>(length.value));
+                output.append(static_cast<util::OctetStream::value_type>(0x80U | EncodingTraits<underlying_type>::encodedLength(length.value)));
+                EncodingTraits<underlying_type>::encode(output, length.value);
             }
         }
     };
@@ -74,6 +56,8 @@ namespace libember { namespace ber
     struct DecodingTraits<Length<LengthType> >
     {
         typedef Length<LengthType> value_type;
+        typedef typename value_type::value_type underlying_type;
+
         /**
          * Traits type providing various infos on the decode functions signature.
          * Unfortunately C++03 does not yet support a library independent
@@ -86,22 +70,22 @@ namespace libember { namespace ber
 
         static Length<LengthType> decode(util::OctetStream& input)
         {
-            LengthType length = input.front();
+            underlying_type length = input.front();
             input.consume();
 
-            if ((length & 0x80) != 0)
+            if ((length & 0x80U) != 0U)
             {
-                std::size_t bytes = length & 0x7F;
-                if (bytes == 0)
+                std::size_t bytes = length & 0x7FU;
+                if (bytes == 0U)
                 {
                     return value_type::INDEFINITE;
                 }
                 else
                 {
-                    length = 0;
-                    for (/* Nothing */; bytes > 0; bytes -= 1)
+                    length = 0U;
+                    for (/* Nothing */; bytes > 0U; bytes -= 1U)
                     {
-                        length = ((length << 8) | input.front());
+                        length = ((length << 8U) | input.front());
                         input.consume();
                     }
                 }

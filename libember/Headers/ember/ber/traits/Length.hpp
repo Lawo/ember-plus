@@ -12,7 +12,6 @@
 #include "CodecTraits.hpp"
 #include "../Length.hpp"
 #include "../../meta/FunctionTraits.hpp"
-#include "Integral.hpp"
 
 namespace libember { namespace ber
 {

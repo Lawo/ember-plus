@@ -137,6 +137,11 @@ namespace libember { namespace dom
             }
             else
             {
+                if (m_current == 0)
+                {
+                    throw std::runtime_error("Item Ready before Container Ready happened");
+                }
+
                 m_current = m_current->parent();
             }
 

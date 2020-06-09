@@ -29,7 +29,12 @@ namespace libember { namespace ber
 
         static std::size_t encodedLength(value_type length)
         {
-            return length.isIndefinite() ? 1U : EncodingTraits<underlying_type>::encodedLength(length.value);
+            if (length.isIndefinite() || (length.value < 0x80U))
+            {
+                return 1U;
+            }
+
+            return EncodingTraits<underlying_type>::encodedLength(length.value) + 1;
         }
 
         static void encode(util::OctetStream& output, value_type length)

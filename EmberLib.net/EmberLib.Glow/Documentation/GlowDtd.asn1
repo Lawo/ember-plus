@@ -225,8 +225,8 @@ Command ::=
         SEQUENCE {
             number    [0] CommandType,
             options       CHOICE {
-                dirFieldMask [1] FieldFlags -- only valid if number is getDirectory(32)
-                invocation   [2] Invocation -- only valid if number is invoke(33)
+                dirFieldMask [1] FieldFlags, -- only valid if number is getDirectory(32)
+                invocation   [2] Invocation  -- only valid if number is invoke(33)
             } OPTIONAL
         }
 
@@ -524,7 +524,7 @@ Element ::=
         node               Node,
         command            Command,
         matrix             Matrix,
-        function           Function,
+        function           Function
     }
 
 

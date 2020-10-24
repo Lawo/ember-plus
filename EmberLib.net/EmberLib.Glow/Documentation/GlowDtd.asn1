@@ -573,7 +573,7 @@ RootElement ::=
         qualifiedParameter QualifiedParameter,
         qualifiedNode      QualifiedNode,
         qualifiedMatrix    QualifiedMatrix,
-        qualifiedFunction  QualififedFunction
+        qualifiedFunction  QualifiedFunction
     }
 
 

@@ -38,7 +38,11 @@ namespace libember { namespace dom
         m_input = &input;
         m_bytesAvailable = input.size();
 
+#if __cplusplus >= 201103L
+        std::unique_ptr<Node> root;
+#else
         std::auto_ptr<Node> root;
+#endif
         if (read())
         {
             root.reset(decodeNode(factory));
@@ -60,7 +64,11 @@ namespace libember { namespace dom
     {
         while (reader.read())
         {
+#if __cplusplus >= 201103L
+            std::unique_ptr<Node> node(reader.decodeNode(factory));
+#else
             std::auto_ptr<Node> node(reader.decodeNode(factory));
+#endif
             if (node.get() != 0)
             {
                 if (reader.isContainer())

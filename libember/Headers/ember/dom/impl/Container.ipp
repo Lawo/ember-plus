@@ -20,6 +20,11 @@ namespace libember { namespace dom
     {}
 
     LIBEMBER_INLINE
+    Container::Container(Container const& other)
+        : Node(other)
+    {}
+
+    LIBEMBER_INLINE
     Container::iterator Container::insert(iterator const& where, Node* child)
     {
         if (child->parent() != 0)

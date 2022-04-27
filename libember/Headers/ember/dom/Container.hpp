@@ -145,6 +145,13 @@ namespace libember { namespace dom
             explicit Container(ber::Tag tag);
 
             /**
+             * Default copy constructor specified to disable compiler warning.
+             * As of C++11, implicit generation of copy constructor is declared
+             * as deprecated.
+             */
+            explicit Container(Container const& other);
+
+            /**
              * Helper that ensures that the parent setting of the (presumed) child
              * node is set to this container.
              * This method allows derived classes, to add child nodes to

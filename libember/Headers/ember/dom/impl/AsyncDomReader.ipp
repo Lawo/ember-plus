@@ -13,7 +13,7 @@
 #include "../../util/Inline.hpp"
 #include "../Container.hpp"
 
-namespace libember { namespace dom 
+namespace libember { namespace dom
 {
     LIBEMBER_INLINE
     AsyncDomReader::AsyncDomReader(dom::NodeFactory const& factory)
@@ -28,6 +28,12 @@ namespace libember { namespace dom
     AsyncDomReader::~AsyncDomReader()
     {
         resetImpl();
+    }
+
+    LIBEMBER_INLINE
+    bool AsyncDomReader::isDecodingInProgress() const
+    {
+        return (m_current != 0) || ((m_root != 0) && !m_isRootReady);
     }
 
     LIBEMBER_INLINE
@@ -55,7 +61,7 @@ namespace libember { namespace dom
     }
 
     LIBEMBER_INLINE
-    void AsyncDomReader::containerReady(dom::Node*) 
+    void AsyncDomReader::containerReady(dom::Node*)
     {
     }
 
@@ -72,11 +78,15 @@ namespace libember { namespace dom
     LIBEMBER_INLINE
     void AsyncDomReader::resetImpl()
     {
-        if (m_current != 0 && m_current->parent() == 0 && m_current != m_root)
+        if ((m_current != 0) && (m_current->parent() == 0) && (m_current != m_root))
+        {
             delete m_current;
+        }
 
         if (m_root)
+        {
             delete m_root;
+        }
 
         m_root = 0;
         m_current = 0;
@@ -92,19 +102,24 @@ namespace libember { namespace dom
             resetImpl();
         }
 
-        if (m_root == 0)
+        if (container != 0)
         {
-            m_root = container;
-        }
-        else
-        {
-            dom::Container* current = dynamic_cast<dom::Container*>(m_current);
-            if (current)
-                current->insert(current->end(), container);
-        }
+            if (m_root == 0)
+            {
+                m_root = container;
+            }
+            else
+            {
+                dom::Container* current = dynamic_cast<dom::Container*>(m_current);
+                if (current)
+                {
+                    current->insert(current->end(), container);
+                }
+            }
 
-        m_current = container;
-        containerReady(container);
+            m_current = container;
+            containerReady(container);
+        }
     }
 
     LIBEMBER_INLINE
@@ -122,6 +137,11 @@ namespace libember { namespace dom
             }
             else
             {
+                if (m_current == 0)
+                {
+                    throw std::runtime_error("Item Ready before Container Ready happened");
+                }
+
                 m_current = m_current->parent();
             }
 
@@ -134,7 +154,9 @@ namespace libember { namespace dom
             {
                 dom::Container* container = dynamic_cast<dom::Container*>(m_current);
                 if (container)
+                {
                     container->insert(container->end(), node);
+                }
 
                 itemReady(node);
             }

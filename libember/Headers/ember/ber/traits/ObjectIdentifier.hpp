@@ -86,11 +86,9 @@ namespace libember { namespace ber
             std::vector<item_type> items;
             while(size > 0)
             {
-                item_type const item = static_cast<item_type>(detail::decodeMultibyte(input));
-                std::size_t const encodedItemLength = detail::getMultiByteEncodedLength(item);
-
-                items.push_back(item);
-                size -= encodedItemLength;
+                std::pair<unsigned long long, std::size_t> encodeResult = detail::decodeMultibyte(input);
+                items.push_back(static_cast<item_type>(encodeResult.first));
+                size -= encodeResult.second;
             }
 
             return ObjectIdentifier(items.begin(), items.end());

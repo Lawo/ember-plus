@@ -39,12 +39,18 @@ namespace libember { namespace dom
             virtual ~AsyncDomReader();
 
             /**
+             * Returns true when the decoder is currently decoding
+             * a tree and has nt yet finished doing so..
+             */
+            bool isDecodingInProgress() const;
+
+            /**
              * Returns true when the root node has been decoded.
              */
             bool isRootReady() const;
 
             /**
-             * When a root has been decoded, this method returns the 
+             * When a root has been decoded, this method returns the
              * root node and resets its internal state. In that case, the returned node
              * muste be deleted manually when it is no longer being used.
              * @return The root node if already decoded, otherwise null.

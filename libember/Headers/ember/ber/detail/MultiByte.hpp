@@ -45,7 +45,7 @@ namespace libember { namespace ber { namespace detail
      *      should be decoded..
      * @return The decoded value.
      */
-    unsigned long long decodeMultibyte(util::OctetStream& input);
+    std::pair<unsigned long long, std::size_t> decodeMultibyte(util::OctetStream& input);
 
 
     /**************************************************************************/
@@ -90,17 +90,19 @@ namespace libember { namespace ber { namespace detail
         output.append(static_cast<util::OctetStream::value_type>(value & 0x7F));
     }
 
-    inline unsigned long long decodeMultibyte(util::OctetStream& input)
+    inline std::pair<unsigned long long, std::size_t> decodeMultibyte(util::OctetStream& input)
     {
         unsigned long long result = 0;
+        std::size_t byteCount = 0;
         util::OctetStream::value_type byte = 0;
         do
         {
             byte = input.front();   
             input.consume();
+            ++byteCount;
             result = (result << 7) | (byte & ~0x80);
         } while ((byte & 0x80) != 0);
-        return result;
+        return std::pair<unsigned long long, std::size_t>(result, byteCount);
     }
 
 }

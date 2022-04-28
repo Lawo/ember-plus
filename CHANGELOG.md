@@ -19,6 +19,16 @@ Starting with version 2.0.0 this project adheres to [Semantic Versioning](https:
 ### Fixed
 
 
+## [1.8.2] - 2019-11-14
+
+### Overview
+Version 1.8.2 of the Ember+ SDK is a maintenance release that fixes two issues recently discovered in the libember C++ library.
+
+### Fixed
+- libember: Fixed an incorrect assumption about the length of multibyte encoded values. (#102).
+- libember: Fixed a missing `null` pointer check, before use (#103).
+
+
 ## [1.8.0] - 2019-02-14
 
 ### Overview
@@ -159,7 +169,8 @@ Unfortunately no detailed changelog is available for this version.
 Unfortunately no detailed changelog is available for this version.
 
 
-[Unreleased]: https://github.com/lawo/ember-plus/compare/v1.8.0...HEAD
+[Unreleased]: https://github.com/lawo/ember-plus/compare/v1.8.2...HEAD
+[1.8.2]: https://github.com/lawo/ember-plus/compare/v1.8.0...v1.8.2
 [1.8.0]: https://github.com/lawo/ember-plus/compare/v1.6.2...v1.8.0
 [1.6.2]: https://github.com/lawo/ember-plus/compare/v1.6.0...v1.6.2
 [1.6.0]: https://github.com/lawo/ember-plus/compare/v1.4.0...v1.6.0

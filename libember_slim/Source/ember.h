@@ -25,7 +25,7 @@
   * The upper byte is the major version number.
   * The lower byte is the minor version number.
   */
-#define EMBER_ENCODING_VERSION (0x0152)
+#define EMBER_ENCODING_VERSION (0x0153)
 
 
 // ====================================================================

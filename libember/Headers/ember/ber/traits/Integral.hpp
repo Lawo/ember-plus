@@ -37,7 +37,7 @@ namespace libember { namespace ber
 
             static std::size_t encodedLength(value_type)
             {
-                return 1;
+                return 1U;
             }
         };
 
@@ -48,15 +48,14 @@ namespace libember { namespace ber
 
             static std::size_t encodedLength(value_type value)
             {
-                // Create a bit-mask that has the eight most significant bits set
-                value_type mask = static_cast<value_type>(value_type(0xFF) << (sizeof(value_type) * 8 - 8));
-                std::size_t length = sizeof(IntegralType);
-
-                for (; (value & mask) == 0 && length > 1; mask >>= 8)
+                std::size_t result = 1U;
+                for (std::size_t i = 0U; i < sizeof value; ++i)
                 {
-                    length -= 1;
+                    result += (value > 0x7FU);
+                    value >>= 8U;
                 }
-                return length;
+
+                return result;
             }
         };
 
@@ -67,25 +66,16 @@ namespace libember { namespace ber
 
             static std::size_t encodedLength(value_type value)
             {
-                typedef typename meta::MakeUnsigned<value_type>::type unsigned_type;
+                value ^= (value >= 0) ? 0 : -1;
 
-                bool const isPositive = (value >= 0); 
-
-                // Create a bit-mask that has the nine most significant bits set
-                unsigned_type mask = static_cast<unsigned_type>(~((static_cast<unsigned_type>(1U) << (((sizeof(IntegralType) - 1) * 8) - 1)) - 1));
-                unsigned_type const unsignedValue = static_cast<unsigned_type>(value);
-
-                std::size_t length = sizeof(value_type);
-                while ((length > 1) && ((unsignedValue & mask) == (isPositive ? 0 : mask)))
+                std::size_t result = 1U;
+                for (std::size_t i = 0U; i < sizeof value; ++i)
                 {
-                    length -= 1;
-                    mask >>= 8;
+                    result += (value > 0x7F);
+                    value >>= 8;
                 }
-                if (isPositive && ((unsignedValue >> (length * 8 - 1)) != 0))
-                {
-                    length += 1;
-                }
-                return length;
+
+                return result;
             }
         };
 
@@ -99,10 +89,10 @@ namespace libember { namespace ber
                 std::size_t const length = encodedLength(value);
                 std::size_t bits = length * 8;
 
-                while (bits > 0)
+                while (bits > 0U)
                 {
-                    bits -= 8;
-                    output.append(static_cast<util::OctetStream::value_type>((value >> bits) & 0xFF));
+                    bits -= 8U;
+                    output.append(static_cast<util::OctetStream::value_type>((value >> bits) & 0xFFU));
                 }
             }
         };
@@ -166,7 +156,7 @@ namespace libember { namespace ber
     struct DecodingTraits<char>
         : detail::IntegerDecodingTraits<char>
     {};
-    
+
 
     /** UniversalTagTraits specialization for the signed char type. */
     template<>
@@ -185,7 +175,7 @@ namespace libember { namespace ber
     struct DecodingTraits<unsigned char>
         : detail::IntegerDecodingTraits<unsigned char>
     {};
-    
+
 
     /** UniversalTagTraits specialization for the signed char type. */
     template<>
@@ -204,7 +194,7 @@ namespace libember { namespace ber
     struct DecodingTraits<short>
         : detail::IntegerDecodingTraits<short>
     {};
-    
+
 
     /** UniversalTagTraits specialization for the signed char type. */
     template<>
@@ -223,7 +213,7 @@ namespace libember { namespace ber
     struct DecodingTraits<unsigned short>
         : detail::IntegerDecodingTraits<unsigned short>
     {};
-    
+
 
     /** UniversalTagTraits specialization for the signed char type. */
     template<>
@@ -242,7 +232,7 @@ namespace libember { namespace ber
     struct DecodingTraits<int>
         : detail::IntegerDecodingTraits<int>
     {};
-    
+
 
     /** UniversalTagTraits specialization for the signed char type. */
     template<>
@@ -261,7 +251,7 @@ namespace libember { namespace ber
     struct DecodingTraits<unsigned int>
         : detail::IntegerDecodingTraits<unsigned int>
     {};
-    
+
 
     /** UniversalTagTraits specialization for the signed char type. */
     template<>
@@ -280,7 +270,7 @@ namespace libember { namespace ber
     struct DecodingTraits<long>
         : detail::IntegerDecodingTraits<long>
     {};
-    
+
 
     /** UniversalTagTraits specialization for the signed char type. */
     template<>
@@ -299,7 +289,7 @@ namespace libember { namespace ber
     struct DecodingTraits<unsigned long>
         : detail::IntegerDecodingTraits<unsigned long>
     {};
-    
+
 
     /** UniversalTagTraits specialization for the signed char type. */
     template<>
@@ -318,7 +308,7 @@ namespace libember { namespace ber
     struct DecodingTraits<long long>
         : detail::IntegerDecodingTraits<long long>
     {};
-    
+
 
     /** UniversalTagTraits specialization for the signed char type. */
     template<>
@@ -337,7 +327,7 @@ namespace libember { namespace ber
     struct DecodingTraits<unsigned long long>
         : detail::IntegerDecodingTraits<unsigned long long>
     {};
-    
+
 
     /**
      * Helper template instances that makes the decode function

@@ -2,7 +2,7 @@
 # Ember+ control protocol - Slick and free for all! #
 
 ## Status
-[![Build Status](https://travis-ci.org/Lawo/ember-plus.svg?branch=master)](https://travis-ci.org/Lawo/ember-plus)
+[![Build Status](https://github.com/lawo/ember-plus/actions/workflows/build_linux.yml/badge.svg?branch=master)](https://github.com/Lawo/ember-plus/actions/workflows/build_linux.yml)
 
 ## Introduction
 

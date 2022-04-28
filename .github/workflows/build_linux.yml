@@ -23,17 +23,7 @@ jobs:
         build_type:
         - Debug
         - Release
-        compiler:
-        - g++
-        - clang++
         
-    env:
-      # Customize the CMake build type here (Release, Debug, RelWithDebInfo, etc.)
-      CC: ${{matrix.compiler}}
-      CFLAGS: -xc
-      CXX: ${{matrix.compiler}}
-      LD: ${{matrix.compiler}}
-      
     steps:
     - uses: actions/checkout@v3
 

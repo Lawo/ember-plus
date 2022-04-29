@@ -1,0 +1,61 @@
+name: CI
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  build:
+    name: "${{matrix.config.name}} - ${{matrix.build_type}}"
+    runs-on: ${{matrix.config.os}}
+    strategy:
+      fail-fast: false
+      matrix:
+        config:
+        - name: "Ubuntu 18.04 (Ninja)"
+          os: ubuntu-18.04
+          generator: "Ninja"
+        - name: "Ubuntu Latest (Ninja)"
+          os: ubuntu-latest
+          generator: "Ninja"
+        - name: "macOS Latest (Ninja)"
+          os: macos-latest
+          generator: "Ninja"
+        #- name: "Windows Latest (Visual Studio)"
+        #  os: windows-latest
+        #  generator: "Visual Studio 17 2022"
+        build_type:
+        - Release
+        - Debug
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Install Dependencies (Ubuntu)
+        if: startsWith(matrix.config.os, 'ubuntu')
+        shell: bash
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y cmake ninja-build qt5-default
+
+      - name: Install Dependencies (macOS)
+        if: startsWith(matrix.config.os, 'macos')
+        run: |
+          brew install cmake ninja qt@5
+          brew link --force qt@5
+          sudo ln -s "$(brew --prefix qt@5)/mkspecs" /usr/local
+          sudo ln -s "$(brew --prefix qt@5)/plugins" /usr/local
+
+      - name: Install Dependencies (Windows)
+        if: startsWith(matrix.config.os, 'windows')
+        run: |
+          choco install cmake ninja qt5-default
+
+      - name: Configure
+        run: cmake -G "${{matrix.config.generator}}" -B "${{github.workspace}}/build" -DCMAKE_BUILD_TYPE=${{matrix.build_type}}
+
+      - name: Build
+        run: cmake --build "${{github.workspace}}/build" --config "${{matrix.build_type}}"
+

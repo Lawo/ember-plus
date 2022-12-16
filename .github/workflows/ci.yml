@@ -38,7 +38,7 @@ jobs:
         shell: bash
         run: |
           sudo apt-get update
-          sudo apt-get install -y cmake ninja-build qt5-default
+          sudo apt-get install -y cmake ninja-build qtbase5-dev
 
       - name: Install Dependencies (macOS)
         if: startsWith(matrix.config.os, 'macos')

@@ -14,8 +14,8 @@ jobs:
       fail-fast: false
       matrix:
         config:
-        - name: "Ubuntu 18.04 (Ninja)"
-          os: ubuntu-18.04
+        - name: "Ubuntu 20.04 (Ninja)"
+          os: ubuntu-20.04
           generator: "Ninja"
         - name: "Ubuntu Latest (Ninja)"
           os: ubuntu-latest

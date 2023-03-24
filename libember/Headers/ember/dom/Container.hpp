@@ -211,14 +211,6 @@ namespace libember { namespace dom
              */
             virtual void eraseImpl(iterator const& first, iterator const& last) = 0;
 
-#if __cplusplus >= 201103L
-            /**
-             * Default copy constructor specified to disable compiler warning.
-             * As of C++11, implicit generation of copy constructor is declared
-             * as deprecated.
-             */
-            explicit Container(Container const&) = default;
-#endif
          private:
             /**
              * Private and unimplemented assignment operator to disallow assignment

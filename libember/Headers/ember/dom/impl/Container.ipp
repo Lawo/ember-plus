@@ -19,10 +19,16 @@ namespace libember { namespace dom
         : Node(tag)
     {}
 
+#if __cplusplus >= 201103L
+    LIBEMBER_INLINE
+    Container::Container(Container const&) = default;
+
+#else
     LIBEMBER_INLINE
     Container::Container(Container const& other)
         : Node(other)
     {}
+#endif
 
     LIBEMBER_INLINE
     Container::iterator Container::insert(iterator const& where, Node* child)

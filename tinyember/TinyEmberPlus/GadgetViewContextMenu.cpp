@@ -26,9 +26,9 @@ using namespace gadget;
 
 GadgetViewContextMenu::GadgetViewContextMenu(::glow::ConsumerProxy* proxy, QTreeWidget* view, QPoint const& cursor)
     : m_view(view)
-    , m_proxy(proxy)
     , m_item(view->currentItem())
     , m_position(view->mapToGlobal(cursor))
+    , m_proxy(proxy)
     , m_removeItem(false)
 {
 }

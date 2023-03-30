@@ -106,8 +106,8 @@ class EditEnumerationDialog : public QDialog
 template<typename InputIterator>
 inline EditEnumerationDialog::EditEnumerationDialog(QWidget* parent, InputIterator first, InputIterator last)
     : QDialog(parent)
-    , m_dialog(new Ui::EditEnumerationDialog())
     , m_items(first, last)
+    , m_dialog(new Ui::EditEnumerationDialog())
 {
     m_dialog->setupUi(this);
 

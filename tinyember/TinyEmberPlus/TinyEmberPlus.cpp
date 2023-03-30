@@ -43,9 +43,9 @@ TinyEmberPlus::TinyEmberPlus(::glow::ConsumerProxy* proxy, QWidget *parent, Qt::
     : QMainWindow(parent, flags)
     , m_proxy(proxy)
     , m_settingsSerializer("Settings.xml")
+    , m_lastKeepAliveTransmitTime(QDateTime::currentDateTimeUtc())
     , m_generateRandomValues(false)
     , m_sendKeepAlive(false)
-    , m_lastKeepAliveTransmitTime(QDateTime::currentDateTimeUtc())
 {
     m_dialog.setupUi(this);
     m_dialog.gadgetTreeView->setContextMenuPolicy( Qt::CustomContextMenu );
@@ -59,7 +59,7 @@ TinyEmberPlus::TinyEmberPlus(::glow::ConsumerProxy* proxy, QWidget *parent, Qt::
     setWindowIcon(QIcon(":/image/resources/document-globe.png"));
     setWindowTitle(title());
     connect(m_timer, SIGNAL(timeout()), this, SLOT(timer()));
-    
+
     auto const notificationBehavior = m_settingsSerializer.getOption(NotificationBehavior);
     auto const notificationBehaviorIndex = m_dialog.boxNotificationBehavior->findText(notificationBehavior);
     if (notificationBehaviorIndex > -1)

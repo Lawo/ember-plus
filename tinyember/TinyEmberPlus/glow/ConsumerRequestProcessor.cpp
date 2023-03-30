@@ -133,7 +133,6 @@ namespace glow
                             auto const& nodes = node->nodes();
                             auto const first = std::begin(nodes);
                             auto const last = std::end(nodes);
-                            auto const number = glow.number();
                             auto result = std::find_if(first, last, [&glow](Node const* child) -> bool
                             {
                                 return glow.number() == child->number();

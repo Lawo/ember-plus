@@ -94,7 +94,7 @@ namespace glow
         }
     }
 
-    void ConsumerProxy::notifyStateChanged(gadget::NodeFieldState const& state, gadget::Node const* object)
+    void ConsumerProxy::notifyStateChanged(gadget::NodeFieldState const& /* state */, gadget::Node const* object)
     {
         using namespace libember;
         using namespace libember::glow;

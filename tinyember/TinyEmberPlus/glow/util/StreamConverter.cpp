@@ -24,7 +24,7 @@
  **************************************************************************/
 
 template<typename OutputIterator>
-inline void glow::util::StreamConverter::encode(long long value, gadget::StreamFormat const& format, OutputIterator first, OutputIterator last)
+inline void glow::util::StreamConverter::encode(long long value, gadget::StreamFormat const& format, OutputIterator first, OutputIterator /* last */)
 {
     auto const type = format.value();
     switch(type)
@@ -205,7 +205,7 @@ glow::util::StreamConverter::OctetStreamEntryEncoder<OutputIterator>::OctetStrea
 }
 
 template<typename OutputIterator>
-void glow::util::StreamConverter::OctetStreamEntryEncoder<OutputIterator>::visit(gadget::BooleanParameter* parameter)
+void glow::util::StreamConverter::OctetStreamEntryEncoder<OutputIterator>::visit(gadget::BooleanParameter* /* parameter */)
 {
     /* Booleans are not supported */
 }
@@ -223,7 +223,7 @@ void glow::util::StreamConverter::OctetStreamEntryEncoder<OutputIterator>::visit
 }
 
 template<typename OutputIterator>
-void glow::util::StreamConverter::OctetStreamEntryEncoder<OutputIterator>::visit(gadget::StringParameter* parameter)
+void glow::util::StreamConverter::OctetStreamEntryEncoder<OutputIterator>::visit(gadget::StringParameter* /* parameter */)
 {
     /* Strings are not supported for octet streams */
 }

@@ -137,7 +137,7 @@ void StringView::updateStreamIdentifier()
     }
 }
 
-void StringView::notifyStateChanged(gadget::ParameterFieldState const& state, gadget::Parameter const*)
+void StringView::notifyStateChanged(gadget::ParameterFieldState const& /* state */, gadget::Parameter const*)
 {
     updateUi();
 }

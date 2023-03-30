@@ -12,8 +12,8 @@
 
 IntegerView::IntegerView(QWidget* parent, gadget::IntegerParameter* parameter)
     : QFrame(parent)
-    , m_view(new Ui::IntegerView())
     , m_parameter(parameter)
+    , m_view(new Ui::IntegerView())
 {
     m_view->setupUi(this);
     m_parameter->registerListener(this);
@@ -254,7 +254,7 @@ void IntegerView::updateStreamIdentifier()
     }
 }
 
-void IntegerView::updateStreamFormat(int index)
+void IntegerView::updateStreamFormat(int /* index */)
 {
     auto const isChecked = m_view->checkUseStreamDescriptor->isChecked();
     if (isChecked)
@@ -294,7 +294,7 @@ void IntegerView::updateStreamOffset()
     }
 }
 
-void IntegerView::notifyStateChanged(gadget::ParameterFieldState const& state, gadget::Parameter const*)
+void IntegerView::notifyStateChanged(gadget::ParameterFieldState const& /* state */, gadget::Parameter const*)
 {
     updateUi();
 }

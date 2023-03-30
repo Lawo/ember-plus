@@ -13,12 +13,10 @@ namespace gadget
         : Parameter(ParameterType::String, parent, identifier, number)
         , m_value(value)
         , m_maxLength(maxLength)
-    {
-    }
-    
-    void StringParameter::setValueImpl(value_type value, bool forceNotification)
-    {
-    }
+    {}
+
+    void StringParameter::setValueImpl(value_type /* value */, bool /* forceNotification */)
+    {}
 
     void StringParameter::accept(ParameterTypeVisitorConst const& visitor) const
     {

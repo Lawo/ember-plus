@@ -201,9 +201,9 @@ namespace glow
     }
 
     inline Settings::Settings()
-        : m_responseBehavior(ResponseBehavior::Default)
+        : m_useEnumMap(false)
+        , m_responseBehavior(ResponseBehavior::Default)
         , m_notificationBehavior(NotificationBehavior::UseExpandedContainer)
-        , m_useEnumMap(false)
     {}
 }
 

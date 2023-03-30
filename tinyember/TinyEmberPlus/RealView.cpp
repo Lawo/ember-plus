@@ -12,8 +12,8 @@
 
 RealView::RealView(QWidget* parent, gadget::RealParameter* parameter)
     : QFrame(parent)
-    , m_view(new Ui::RealView())
     , m_parameter(parameter)
+    , m_view(new Ui::RealView())
 {
     m_view->setupUi(this);
     m_parameter->registerListener(this);
@@ -254,7 +254,7 @@ void RealView::updateStreamIdentifier()
     }
 }
 
-void RealView::updateStreamFormat(int index)
+void RealView::updateStreamFormat(int /* index */)
 {
     auto const isChecked = m_view->checkUseStreamDescriptor->isChecked();
     if (isChecked)
@@ -293,7 +293,7 @@ void RealView::updateStreamOffset()
         }
     }}
 
-void RealView::notifyStateChanged(gadget::ParameterFieldState const& state, gadget::Parameter const*)
+void RealView::notifyStateChanged(gadget::ParameterFieldState const& /* state */, gadget::Parameter const*)
 {
     updateUi();
 }

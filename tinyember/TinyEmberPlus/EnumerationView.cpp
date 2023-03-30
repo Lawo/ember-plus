@@ -252,7 +252,7 @@ void EnumerationView::updateStreamIdentifier()
     }
 }
 
-void EnumerationView::updateStreamFormat(int index)
+void EnumerationView::updateStreamFormat(int /* index */)
 {
     auto const isChecked = m_view->checkUseStreamDescriptor->isChecked();
     if (isChecked)
@@ -292,7 +292,7 @@ void EnumerationView::updateStreamOffset()
     }
 }
 
-void EnumerationView::notifyStateChanged(gadget::ParameterFieldState const& state, gadget::Parameter const*)
+void EnumerationView::notifyStateChanged(gadget::ParameterFieldState const& /* state */, gadget::Parameter const*)
 {
     updateUi();
 }

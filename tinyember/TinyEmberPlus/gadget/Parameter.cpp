@@ -12,15 +12,14 @@
 namespace gadget
 {
     Parameter::Parameter(ParameterType const& type, Node* parent, String const& identifier, int number)
-        : m_identifier(identifier)
+        : m_type(type)
         , m_number(number)
-        , m_parent(parent)
-        , m_type(type)
         , m_streamIdentifier(-1)
-        , m_access(gadget::Access::ReadWrite)
+        , m_identifier(identifier)
+        , m_parent(parent)
         , m_state(ParameterField::All)
-    {
-    }
+        , m_access(gadget::Access::ReadWrite)
+    {}
 
     Parameter::~Parameter()
     {
@@ -228,7 +227,7 @@ namespace gadget
             StreamManager::instance().unregisterParameter(this);
     }
 
-    void Parameter::subscriptionCountChanged(size_type newCount)
+    void Parameter::subscriptionCountChanged(size_type /* newCount */)
     {
         markDirty(ParameterField::SubscriptionCount, true);
     }

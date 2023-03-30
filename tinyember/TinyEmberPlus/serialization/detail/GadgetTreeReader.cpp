@@ -128,7 +128,7 @@ namespace serialization { namespace detail
                                 break;
 
                             default:
-                                volatile int x = paramtype.value();
+                                (void)paramtype.value();
                                 break;
                         }
                     }

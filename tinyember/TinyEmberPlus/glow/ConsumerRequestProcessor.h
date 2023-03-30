@@ -54,9 +54,9 @@ namespace glow
              * @param subscriber A pointer to a subscriber who represents the consumer that sent the request.
              */
             explicit Context(bool isQualifiedRequest, bool transmitResponse, gadget::Subscriber* subscriber)
-                : m_isQualifiedRequest(isQualifiedRequest)
+                : m_subscriber(subscriber)
+                , m_isQualifiedRequest(isQualifiedRequest)
                 , m_transmitResponse(transmitResponse)
-                , m_subscriber(subscriber)
             {}
 
             /**

@@ -11,12 +11,12 @@
 namespace gadget
 {
     Node::Node(Node* parent, String const& identifier, int number)
-        : m_identifier(identifier)
-        , m_number(number)
+        : m_number(number)
+        , m_identifier(identifier)
         , m_parent(parent)
-        , m_state(NodeField::All)
         , m_isOnline(true)
         , m_isMounted(true)
+        , m_state(NodeField::All)
     {
     }
 

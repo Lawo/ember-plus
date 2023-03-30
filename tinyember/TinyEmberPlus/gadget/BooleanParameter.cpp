@@ -12,12 +12,10 @@ namespace gadget
     BooleanParameter::BooleanParameter(Node* parent, String const& identifier, int number, value_type value)
         : Parameter(ParameterType::Boolean, parent, identifier, number)
         , m_value(value)
-    {
-    }
+    {}
 
-    void BooleanParameter::setValueImpl(value_type value, bool forceNotification)
-    {
-    }
+    void BooleanParameter::setValueImpl(value_type /* value */, bool /* forceNotification */)
+    {}
 
     BooleanParameter::value_type BooleanParameter::value() const
     {

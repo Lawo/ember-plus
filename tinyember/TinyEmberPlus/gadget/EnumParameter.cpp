@@ -12,13 +12,11 @@ namespace gadget
     EnumParameter::EnumParameter(Node* parent, String const& identifier, int number)
         : Parameter(ParameterType::Enum, parent, identifier, number)
         , m_index(0)
-    {
-    }
+    {}
 
-    void EnumParameter::setIndexImpl(size_type value, bool forceNotification)
-    {
-    }
-    
+    void EnumParameter::setIndexImpl(size_type /* value */, bool /* forceNotification */)
+    {}
+
     void EnumParameter::accept(ParameterTypeVisitorConst const& visitor) const
     {
         visitor.visit(this);

@@ -14,16 +14,14 @@ namespace gadget
 {
     RealParameter::RealParameter(Node* parent, String const& identifier, int number, value_type min, value_type max, value_type value)
         : Parameter(ParameterType::Real, parent, identifier, number)
+        , m_value(value)
         , m_min(min)
         , m_max(max)
-        , m_value(value)
-    {
-    }
+    {}
 
-    void RealParameter::setValueImpl(value_type value, bool forceNotification)
-    {
-    }
-    
+    void RealParameter::setValueImpl(value_type /* value */, bool /* forceNotification */)
+    {}
+
     void RealParameter::accept(ParameterTypeVisitorConst const& visitor) const
     {
         visitor.visit(this);

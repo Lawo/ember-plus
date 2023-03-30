@@ -24,7 +24,7 @@ namespace net
      */
     class TcpServer : public QTcpServer
     {
-        Q_OBJECT;
+        Q_OBJECT
         public:
             /**
              * Initializes a new TcpServer.

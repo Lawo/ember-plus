@@ -75,7 +75,7 @@ namespace glow
         m_subscriber->releaseRef();
     }
 
-    void Consumer::read(const_iterator first, const_iterator last, size_type size)
+    void Consumer::read(const_iterator first, const_iterator last, size_type /* size */)
     {
         m_decoder.read(first, last, Consumer::dispatch, this);
     }

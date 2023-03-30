@@ -134,7 +134,7 @@ namespace gadget
     {
         auto const newSize = std::distance(first, last);
         auto const oldSize = size();
-        auto const isEqualSequence = newSize == oldSize && std::equal(first, last, begin());
+        auto const isEqualSequence = (newSize == oldSize) && std::equal(first, last, begin());
         if (isEqualSequence == false)
         {
             m_enumeration.assign(first, last);

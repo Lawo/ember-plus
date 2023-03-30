@@ -126,14 +126,15 @@ namespace gadget
                 subscriptionCountChanged(subscribers());
             }
 
-            if (isSubscribed == true && this->isSubscribed() == false)
+            if ((isSubscribed == true) && (this->isSubscribed() == false))
+            {
                 unsubscribed();
+            }
         }
     }
 
     void Subscribable::unsubscribe()
     {
-        auto const isSubscribed = this->isSubscribed();
         auto subscribers = m_subscribers;
         for(auto subscriber : subscribers)
         {
@@ -144,20 +145,17 @@ namespace gadget
 
     bool Subscribable::isSubscribed() const
     {
-        return m_subscribers.empty() == false;
+        return !m_subscribers.empty();
     }
 
     void Subscribable::subscribed()
-    {
-    }
+    {}
 
     void Subscribable::unsubscribed()
-    {
-    }
+    {}
 
-    void Subscribable::subscriptionCountChanged(size_type newCount)
-    {
-    }
+    void Subscribable::subscriptionCountChanged(size_type /* newCount */)
+    {}
 
     Subscribable::size_type Subscribable::subscribers() const
     {

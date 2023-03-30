@@ -82,7 +82,7 @@ void BooleanView::updateAccess(int access)
     }
 }
 
-void BooleanView::notifyStateChanged(gadget::ParameterFieldState const& state, gadget::Parameter const*)
+void BooleanView::notifyStateChanged(gadget::ParameterFieldState const& /* state */, gadget::Parameter const*)
 {
     updateUi();
 }

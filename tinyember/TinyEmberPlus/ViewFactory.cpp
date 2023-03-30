@@ -25,8 +25,8 @@ QFrame* ViewFactory::createView(QWidget* parent, gadget::Parameter* parameter)
 
 
 ViewFactory::ViewFactoryImpl::ViewFactoryImpl(QWidget* parent, gadget::Parameter* parameter)
-    : m_view(nullptr)
-    , m_parent(parent)
+    : m_parent(parent)
+    , m_view(nullptr)
 {
     parameter->accept(*this);
 }

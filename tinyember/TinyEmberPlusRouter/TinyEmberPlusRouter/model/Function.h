@@ -29,6 +29,7 @@ namespace model
       public:
          virtual void invoke(util::VariantValueVector const& arguments,
                              util::VariantValueVector& result) = 0;
+         virtual ~Delegate();
       };
 
    public:

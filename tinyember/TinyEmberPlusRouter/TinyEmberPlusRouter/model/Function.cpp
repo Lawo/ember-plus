@@ -9,15 +9,17 @@
 
 namespace model
 {
-   Function::~Function()
-   {
-      if(m_delegate != nullptr)
-         delete m_delegate;
-   }
+    Function::Delegate::~Delegate()
+    {}
 
-   // override
-   void Function::accept(ElementVisitor* visitor)
-   {
-      visitor->visit(this);
-   }
+    Function::~Function()
+    {
+        delete m_delegate;
+    }
+
+    // override
+    void Function::accept(ElementVisitor* visitor)
+    {
+        visitor->visit(this);
+    }
 }

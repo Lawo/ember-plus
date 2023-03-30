@@ -11,8 +11,8 @@ namespace model
 {
    Element::Element(int number, Element* parent, std::string const& identifier)
       : m_number(number)
-      , m_parent(parent)
       , m_identifier(identifier)
+      , m_parent(parent)
       , m_path(nullptr)
    {
       if(parent != nullptr)

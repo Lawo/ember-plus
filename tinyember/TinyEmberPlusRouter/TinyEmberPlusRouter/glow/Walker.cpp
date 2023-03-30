@@ -64,16 +64,16 @@ namespace glow
       }
    }
 
-   void Walker::handleNode(libember::glow::GlowNodeBase const* glow, libember::ber::ObjectIdentifier const& path)
+   void Walker::handleNode(libember::glow::GlowNodeBase const* /* glow */, libember::ber::ObjectIdentifier const& /* path */)
    {}
 
-   void Walker::handleFunction(libember::glow::GlowFunctionBase const* glow, libember::ber::ObjectIdentifier const& path)
+   void Walker::handleFunction(libember::glow::GlowFunctionBase const* /* glow */, libember::ber::ObjectIdentifier const& /* path */)
    {}
 
-   void Walker::handleStreamEntry(libember::glow::GlowStreamEntry const* glow)
+   void Walker::handleStreamEntry(libember::glow::GlowStreamEntry const* /* glow */)
    {}
 
-   void Walker::handleInvocationResult(libember::glow::GlowInvocationResult const* glow)
+   void Walker::handleInvocationResult(libember::glow::GlowInvocationResult const* /* glow */)
    {}
 
    void Walker::walkNode(libember::glow::GlowNode const* glow)

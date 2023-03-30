@@ -18,7 +18,7 @@ namespace glow
 
    class Consumer : public net::TcpClient
    {
-      Q_OBJECT;
+      Q_OBJECT
 
       /**
       * Implementation of an async DomReader which forwards decoded ember trees

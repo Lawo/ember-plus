@@ -191,11 +191,11 @@ public:
 class DoNothingDelegate : public model::Function::Delegate
 {
 public:
-   virtual void invoke(util::VariantValueVector const& arguments,
-                       util::VariantValueVector& result)
+   virtual void invoke(util::VariantValueVector const& /* arguments */,
+                       util::VariantValueVector& /* result */)
    {
       std::cout << "Doing Nothing" << std::endl;
-   };
+   }
 };
 
 // bool enterLicenseKey(string key)

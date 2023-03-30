@@ -397,7 +397,7 @@ namespace glow
       : m_server(parent, this, port)
    {}
 
-   void Dispatcher::notifyMatrixConnection(model::matrix::Matrix* matrix, model::matrix::Signal* target, void* state)
+   void Dispatcher::notifyMatrixConnection(model::matrix::Matrix* matrix, model::matrix::Signal* target, void* /* state */)
    {
       auto glow = libember::glow::GlowRootElementCollection::create();
       auto glowMatrix = new libember::glow::GlowQualifiedMatrix(matrix->path());

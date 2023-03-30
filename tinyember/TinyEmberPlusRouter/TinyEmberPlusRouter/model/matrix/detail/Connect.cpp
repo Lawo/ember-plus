@@ -8,7 +8,7 @@
 
 namespace model { namespace matrix { namespace detail
 {
-   bool connectOneToN(Signal* target, Signal::Vector const& sources, void* state, util::ConnectOperation const& operation)
+   bool connectOneToN(Signal* target, Signal::Vector const& sources, void* /* state */, util::ConnectOperation const& /* operation */)
    {
       // only connect first source
       // do not disconnect
@@ -24,7 +24,7 @@ namespace model { namespace matrix { namespace detail
       return false;
    }
 
-   bool connectNToN(Signal* target, Signal::Vector const& sources, void* state, util::ConnectOperation const& operation)
+   bool connectNToN(Signal* target, Signal::Vector const& sources, void* /* state */, util::ConnectOperation const& operation)
    {
       // connect/disconnect all passed sources
 

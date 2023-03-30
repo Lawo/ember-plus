@@ -103,7 +103,7 @@ namespace libformula { namespace traits
          */
         typedef ValueType value_type;
         template<typename InputIterator>
-        static value_type parse(InputIterator first, InputIterator last)
+        static value_type parse(InputIterator /* first */, InputIterator /* last */)
         {
             return value_type(0);
         }

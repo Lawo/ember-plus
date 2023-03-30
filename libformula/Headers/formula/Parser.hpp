@@ -112,8 +112,8 @@ namespace libformula
     inline Parser<InputIterator>::Parser(scanner_type const& scanner, CodeEmitter* code, ErrorStack* error)
         : m_last(scanner.end())
         , m_first(scanner.begin())
-        , m_current(scanner.end())
         , m_scanner(scanner)
+        , m_current(scanner.end())
     {
         term(code, error);
 

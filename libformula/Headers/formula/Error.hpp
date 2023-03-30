@@ -28,8 +28,8 @@ namespace libformula
             template<typename InputIterator>
             Error(ErrorType const& type, Symbol<InputIterator> const& symbol, std::string const& message)
                 : m_type(type)
-                , m_message(message)
                 , m_token(symbol.token())
+                , m_message(message)
                 , m_symbol(util::symbol_tostring(symbol))
             {}
 
@@ -40,8 +40,8 @@ namespace libformula
              */
             Error(ErrorType const& type, std::string const& message)
                 : m_type(type)
-                , m_message(message)
                 , m_token(0)
+                , m_message(message)
             {}
 
             /**

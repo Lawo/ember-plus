@@ -157,14 +157,14 @@ namespace libformula
     }
 
     template<typename InputIterator>
-    inline InputIterator Scanner<InputIterator>::scanSingleCharSymbol(InputIterator first, InputIterator last, ErrorStack *error)
+    inline InputIterator Scanner<InputIterator>::scanSingleCharSymbol(InputIterator first, InputIterator /* last */, ErrorStack* /*error */)
     {
         push(value_type(static_cast<SymbolType::_Domain>(*first), size(), first, first + 1));
         return ++first;
     }
 
     template<typename InputIterator>
-    inline InputIterator Scanner<InputIterator>::scanMultiCharSymbol(InputIterator first, InputIterator last, ErrorStack *error)
+    inline InputIterator Scanner<InputIterator>::scanMultiCharSymbol(InputIterator first, InputIterator last, ErrorStack* error)
     {
         if (::isalpha(*first))
         {

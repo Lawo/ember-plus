@@ -150,7 +150,7 @@ namespace libformula
         m_errors.clear();
     }
 
-    inline void ErrorStack::pushOverride(Error const& error)
+    inline void ErrorStack::pushOverride(Error const& /* error */)
     {}
 }
 

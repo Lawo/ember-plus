@@ -11,15 +11,21 @@
 
 #include "../../util/Inline.hpp"
 
-namespace libember { namespace glow 
+namespace libember { namespace glow
 {
     LIBEMBER_INLINE
     GlowContainer::GlowContainer(GlowType const& type, ber::Tag const& tag)
-        : dom::Sequence(tag)    
+        : dom::Sequence(tag)
         , m_universalTag(type.toTypeTag())
-    {
-    }
-    
+    {}
+
+    LIBEMBER_INLINE
+    GlowContainer::GlowContainer(GlowContainer const& other)
+        : dom::Sequence(other)
+        , m_universalTag(other.m_universalTag)
+    {}
+
+
     LIBEMBER_INLINE
     GlowContainer::GlowContainer(GlowType const& type)
         : dom::Sequence(GlowTags::ElementDefault())

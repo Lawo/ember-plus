@@ -31,6 +31,11 @@ namespace libember { namespace glow
             GlowContainer(GlowType const& type, ber::Tag const& tag);
 
             /**
+             * Copy constructor.
+             */
+            GlowContainer(GlowContainer const& other);
+
+            /**
              * Initializes a new container only with a type.
              * @param type The glow type to set. This type will be converted into a universal tag.
              * @note The application tag will be set to ContextSpecific-0.

@@ -34,22 +34,21 @@ jobs:
       - uses: actions/checkout@v3
 
       - name: Install Dependencies (Ubuntu)
-        if: startsWith(matrix.config.os, 'ubuntu')
-        shell: bash
+        if: ${{ startsWith(matrix.config.os, 'ubuntu') }}
         run: |
           sudo apt-get update
           sudo apt-get install -y cmake ninja-build qtbase5-dev
 
       - name: Install Dependencies (macOS)
-        if: startsWith(matrix.config.os, 'macos')
+        if: ${{ startsWith(matrix.config.os, 'macos') }}
         run: |
           brew install cmake ninja qt@5
           brew link --force qt@5
-          sudo ln -s "$(brew --prefix qt@5)/mkspecs" /usr/local
-          sudo ln -s "$(brew --prefix qt@5)/plugins" /usr/local
+          sudo ln -s "$(brew --prefix qt@5)/mkspecs" /opt/homebrew
+          sudo ln -s "$(brew --prefix qt@5)/plugins" /opt/homebrew
 
       - name: Install Dependencies (Windows)
-        if: startsWith(matrix.config.os, 'windows')
+        if: ${{ startsWith(matrix.config.os, 'windows') }}
         run: |
           choco install cmake ninja qt5-default
 

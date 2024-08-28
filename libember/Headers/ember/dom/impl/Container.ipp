@@ -12,7 +12,7 @@
 #include <stdexcept>
 #include "../../util/Inline.hpp"
 
-namespace libember { namespace dom 
+namespace libember { namespace dom
 {
     LIBEMBER_INLINE
     Container::Container(ber::Tag tag)
@@ -33,14 +33,24 @@ namespace libember { namespace dom
     LIBEMBER_INLINE
     Container::iterator Container::insert(iterator const& where, Node* child)
     {
-        if (child->parent() != 0)
+        if (child != 0)
         {
-            throw std::runtime_error("Attempt to add a node already owned by a container node.");
+            if (child->parent() == 0)
+            {
+                iterator const result = insertImpl(where, child);
+                result->setParent(this);
+                markDirty();
+                return result;
+            }
+            else
+            {
+                throw std::runtime_error("Attempt to add a node already owned by a container node.");
+            }
         }
-        iterator const result = insertImpl(where, child);
-        result->setParent(this);
-        markDirty();
-        return result;
+        else
+        {
+            throw std::runtime_error("Attempt to add an invalid child node.");
+        }
     }
 
     LIBEMBER_INLINE

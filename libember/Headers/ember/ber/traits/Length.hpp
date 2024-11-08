@@ -74,6 +74,11 @@ namespace libember { namespace ber
 
         static Length<LengthType> decode(util::OctetStream& input)
         {
+            if (input.empty())
+            {
+                throw std::runtime_error("Not enough data");
+            }
+
             underlying_type length = input.front();
             input.consume();
 
@@ -86,6 +91,10 @@ namespace libember { namespace ber
                 }
                 else
                 {
+                    if (input.size() < bytes)
+                    {
+                        throw std::runtime_error("Not enough data");
+                    }
                     length = 0U;
                     for (/* Nothing */; bytes > 0U; bytes -= 1U)
                     {
@@ -101,4 +110,3 @@ namespace libember { namespace ber
 }
 
 #endif // __LIBEMBER_BER_TRAITS_LENGTH_HPP
-

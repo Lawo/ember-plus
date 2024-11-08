@@ -65,6 +65,11 @@ namespace libember { namespace ber
 
         static value_type decode(util::OctetStream& input)
         {
+            if (input.empty())
+            {
+                throw std::runtime_error("Not enough data");
+            }
+
             util::OctetStream::value_type byte = input.front();
             input.consume();
 
@@ -82,4 +87,3 @@ namespace libember { namespace ber
 }
 
 #endif // __LIBEMBER_BER_TRAITS_TAG_HPP
-

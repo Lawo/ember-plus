@@ -152,22 +152,33 @@ namespace libember { namespace ber
             static value_type decode(util::OctetStream& input, std::size_t encodedLength)
             {
                 if (encodedLength == 0)
+                {
                     return static_cast<value_type>(0.0);
+                }
+
+                if (encodedLength > input.size())
+                {
+                    throw std::runtime_error("Not enough data");
+                }
 
                 unsigned char const preamble = input.front();
                 input.consume();
 
-                if (encodedLength == 1 && preamble == 0x40)
+                if ((encodedLength == 1) && (preamble == 0x40))
                 {
                     return +std::numeric_limits<value_type>::infinity();
                 }
-                else if (encodedLength == 1 && preamble == 0x41)
+                else if ((encodedLength == 1) && (preamble == 0x41))
                 {
                     return -std::numeric_limits<value_type>::infinity();
                 }
-                else if (encodedLength == 1 && preamble == 0x42)
+                else if ((encodedLength == 1) && (preamble == 0x42))
                 {
                     return std::numeric_limits<value_type>::quiet_NaN();
+                }
+                else if ((encodedLength == 1) && (preamble == 0x43))
+                {
+                    return static_cast<value_type>(-0.0);
                 }
                 else
                 {
@@ -176,14 +187,19 @@ namespace libember { namespace ber
                     unsigned int const exponentLength = 1 + (preamble & 3);
                     unsigned int const mantissaShift = ((preamble >> 2) & 3);
 
+                    // Note: If (exponentLength > encodedLength - 1), the following call to decode will throw,
+                    // so there is no need to check this separately.
                     long long exponent = ber::decode<long long>(input, exponentLength);
                     unsigned long long mantissa = ber::decode<unsigned long long>(input, encodedLength - exponentLength - 1) << mantissaShift;
 
-                    while((mantissa & 0x7FFFF00000000000ULL) == 0x00)
-                        mantissa <<= 8;
+                    if (mantissa != 0)
+                    {
+                        while((mantissa & 0x7FFFF00000000000ULL) == 0x00)
+                            mantissa <<= 8;
 
-                    while((mantissa & 0x7FF0000000000000ULL) == 0x00)
-                        mantissa <<= 1;
+                        while((mantissa & 0x7FF0000000000000ULL) == 0x00)
+                            mantissa <<= 1;
+                    }
 
                     mantissa &= 0x0FFFFFFFFFFFFFULL;
                     bits = (static_cast<unsigned long long>(exponent + 1023) << 52) | mantissa;

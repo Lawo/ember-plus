@@ -97,7 +97,11 @@ namespace libember { namespace ber { namespace detail
         util::OctetStream::value_type byte = 0;
         do
         {
-            byte = input.front();   
+            if (input.empty())
+            {
+                throw std::runtime_error("Not enough data");
+            }
+            byte = input.front();
             input.consume();
             ++byteCount;
             result = (result << 7) | (byte & ~0x80);

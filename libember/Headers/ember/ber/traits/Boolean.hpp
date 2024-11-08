@@ -68,6 +68,10 @@ namespace libember { namespace ber
 
         static value_type decode(util::OctetStream& input, std::size_t)
         {
+            if (input.empty())
+            {
+                throw std::runtime_error("Not enough data");
+            }
             util::OctetStream::value_type const byte = input.front();
             input.consume();
             return (byte != 0);

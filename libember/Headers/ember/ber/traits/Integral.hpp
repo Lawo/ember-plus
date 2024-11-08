@@ -118,6 +118,10 @@ namespace libember { namespace ber
 
             static value_type decode(util::OctetStream& input, std::size_t encodedLength)
             {
+                if (input.size() < encodedLength)
+                {
+                    throw std::runtime_error("Not enough data");
+                }
                 typedef typename meta::MakeUnsigned<value_type>::type unsigned_type;
                 value_type value = 0;
                 for (std::size_t index = 0; index < encodedLength; ++index)

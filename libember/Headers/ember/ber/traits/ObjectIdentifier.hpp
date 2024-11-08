@@ -82,6 +82,7 @@ namespace libember { namespace ber
 
         static value_type decode(util::OctetStream& input, std::size_t size)
         {
+            // Note: Multibyte decoding already verifies validity of the given size.
             typedef ObjectIdentifier::value_type item_type;
             std::vector<item_type> items;
             while(size > 0)

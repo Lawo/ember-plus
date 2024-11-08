@@ -15,6 +15,7 @@
 #include "Integral.hpp"
 #include "../../meta/FunctionTraits.hpp"
 #include "../../util/TypePun.hpp"
+#include "../../util/SignBit.hpp"
 
 //SimianIgnore
 
@@ -61,6 +62,13 @@ namespace libember { namespace ber
                 {
                     // 0x42 Indicates NaN
                     output.append(0x42);
+                }
+                else if (
+                    (value == static_cast<value_type>(0.0)) &&
+                    util::signbit(value))
+                {
+                    // 0x43 Indicates -0.0
+                    output.append(0x43);
                 }
                 else
                 {

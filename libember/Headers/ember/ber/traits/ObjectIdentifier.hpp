@@ -44,7 +44,7 @@ namespace libember { namespace ber
             std::size_t length = 0;
             value_type::const_iterator first = value.begin();
             value_type::const_iterator const last = value.end();
-            
+
             for (/* Nothing */; first != last; ++first)
             {
                 length += detail::getMultiByteEncodedLength(*first);
@@ -99,4 +99,3 @@ namespace libember { namespace ber
 }
 
 #endif // __LIBEMBER_BER_TRAITS_OBJECTIDENTIFIER_HPP
-

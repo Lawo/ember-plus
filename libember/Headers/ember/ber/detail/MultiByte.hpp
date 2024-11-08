@@ -114,4 +114,3 @@ namespace libember { namespace ber { namespace detail
 }
 
 #endif  // __LIBEMBER_BER_DETAIL_MULTIBYTE_HPP
-

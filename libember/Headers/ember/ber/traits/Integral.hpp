@@ -351,4 +351,3 @@ namespace libember { namespace ber
 }
 
 #endif // __LIBEMBER_BER_TRAITS_INTEGRAL_HPP
-

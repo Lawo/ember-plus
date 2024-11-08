@@ -270,4 +270,3 @@ namespace libember { namespace ber
 //EndSimianIgnore
 
 #endif  // __LIBEMBER_BER_TRAITS_REAL_HPP
-

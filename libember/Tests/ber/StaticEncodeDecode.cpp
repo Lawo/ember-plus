@@ -29,7 +29,7 @@ namespace
         TYPE_FLOAT,
         TYPE_BOOLEAN,
         TYPE_STRING,
-        
+
         TYPE_COUNT
     };
 
@@ -193,10 +193,11 @@ int main(int, char const* const*)
                     break;
             }
         }
-        // Make the previously encoded byte stream was consumed in its entirety.
+
+        // Make sure the previously encoded byte stream was consumed in its entirety.
         if (!testStream.empty())
         {
-            throw std::runtime_error("Stream not empty after all values have been encoded.");
+            throw std::runtime_error("Stream not empty after all values have been decoded.");
         }
     }
     catch (std::exception const& e)
@@ -213,4 +214,3 @@ int main(int, char const* const*)
 }
 
 //EndSimianIgnore
-

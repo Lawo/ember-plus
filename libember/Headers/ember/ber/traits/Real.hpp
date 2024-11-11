@@ -102,10 +102,11 @@ namespace libember { namespace ber
 
             static std::size_t encodedLength(value_type value)
             {
-                if (value == +std::numeric_limits<value_type>::infinity()
-                ||  value == -std::numeric_limits<value_type>::infinity()
-                ||  value == std::numeric_limits<value_type>::quiet_NaN()
-                ||  value == std::numeric_limits<value_type>::signaling_NaN())
+                if ((value == +std::numeric_limits<value_type>::infinity())
+                ||  (value == -std::numeric_limits<value_type>::infinity())
+                ||  (value == std::numeric_limits<value_type>::quiet_NaN())
+                ||  (value == std::numeric_limits<value_type>::signaling_NaN())
+                ||  ((value == static_cast<value_type>(0.0)) && util::signbit(value)))
                 {
                     return 1;
                 }

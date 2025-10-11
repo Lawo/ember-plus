@@ -12,7 +12,7 @@
 #include "../../meta/EnableIf.hpp"
 #include "../../meta/Signedness.hpp"
 #include "../../util/OctetStream.hpp"
-
+#include <stdexcept>
 namespace libember { namespace ber { namespace detail
 {
     /**

@@ -12,7 +12,7 @@
 #include "CodecTraits.hpp"
 #include "../detail/MultiByte.hpp"
 #include "../../meta/FunctionTraits.hpp"
-
+#include <stdexcept>
 namespace libember { namespace ber
 {
     /*

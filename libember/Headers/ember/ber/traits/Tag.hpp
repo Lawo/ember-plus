@@ -9,10 +9,11 @@
 #ifndef __LIBEMBER_BER_TRAITS_TAG_HPP
 #define __LIBEMBER_BER_TRAITS_TAG_HPP
 
+#include <stdexcept>
 #include "CodecTraits.hpp"
 #include "../detail/MultiByte.hpp"
 #include "../../meta/FunctionTraits.hpp"
-#include <stdexcept>
+
 namespace libember { namespace ber
 {
     /*

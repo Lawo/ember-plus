@@ -9,10 +9,11 @@
 #ifndef __LIBEMBER_BER_DETAIL_MULTIBYTE_HPP
 #define __LIBEMBER_BER_DETAIL_MULTIBYTE_HPP
 
+#include <stdexcept>
 #include "../../meta/EnableIf.hpp"
 #include "../../meta/Signedness.hpp"
 #include "../../util/OctetStream.hpp"
-#include <stdexcept>
+
 namespace libember { namespace ber { namespace detail
 {
     /**

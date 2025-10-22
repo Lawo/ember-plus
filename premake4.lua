@@ -144,6 +144,9 @@ solution "EmberPlus SDK"
         configuration { "not windows" }
             targetname  "ember_slim"
             
+        configuration { "gmake or not windows" }
+            buildoptions { "-std=c17" }
+            
         -- Common settings for all static library configurations of this project
         configuration { "*Static" }
             kind      "StaticLib"

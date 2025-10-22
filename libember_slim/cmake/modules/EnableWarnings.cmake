@@ -3,7 +3,7 @@ if (NOT ENABLE_WARNINGS_INCLUDED)
 
     function(enable_warnings_on_target target)
         if (CMAKE_CXX_COMPILER_ID MATCHES "Clang|AppleClang|GNU")
-            target_compile_options(${target} PRIVATE -Wall -Wextra -Wunreachable-code -Wpedantic -Wno-long-long)
+            target_compile_options(${target} PRIVATE -Wall -Wextra -Wunreachable-code -Wpedantic -Wno-long-long -std=c17)
         endif()
 
         if ( CMAKE_CXX_COMPILER_ID MATCHES "MSVC" )

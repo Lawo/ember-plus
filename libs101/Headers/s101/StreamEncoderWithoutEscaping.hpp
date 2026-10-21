@@ -107,9 +107,10 @@ namespace libs101
 
     template<typename ValueType>
     inline StreamEncoderWithoutEscaping<ValueType>::StreamEncoderWithoutEscaping(size_type capacity)
-        : m_bytes(capacity)
+        : m_bytes()
         , m_isFinished(false)
     {
+        m_bytes.reserve(capacity);
     }
 
     template<typename ValueType>

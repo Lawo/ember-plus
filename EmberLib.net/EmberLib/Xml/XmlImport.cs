@@ -143,8 +143,34 @@ namespace EmberLib.Xml
 
                   case BerType.OctetString:
                   {
-                     var octets = System.Convert.FromBase64String(_reader.ReadContentAsString());
+                     var text = _reader.ReadContentAsString();
+                     var hex = new StringBuilder();
+                     foreach(var character in text)
+                     {
+                        if(Char.IsWhiteSpace(character) == false)
+                           hex.Append(character);
+                     }
+
+                     if((hex.Length & 1) != 0)
+                        throw new FormatException("Invalid hexadecimal octet string");
+
+                     var octets = new byte[hex.Length / 2];
+                     for(int index = 0; index < octets.Length; index++)
+                        octets[index] = Byte.Parse(hex.ToString(index * 2, 2), NumberStyles.HexNumber, XmlExport.FormatProvider);
+
                      node = new OctetStringEmberLeaf(tag, octets);
+                     break;
+                  }
+
+                  case BerType.ObjectIdentifier:
+                  {
+                     node = new ObjectIdentifierEmberLeaf(tag, ConvertIdentifier(_reader.ReadContentAsString()));
+                     break;
+                  }
+
+                  case BerType.RelativeOid:
+                  {
+                     node = new RelativeOidEmberLeaf(tag, ConvertIdentifier(_reader.ReadContentAsString()));
                      break;
                   }
 
@@ -185,6 +211,17 @@ namespace EmberLib.Xml
          }
 
          return node;
+      }
+
+      static int[] ConvertIdentifier(string value)
+      {
+         var tokens = value.Split('.');
+         var identifier = new int[tokens.Length];
+
+         for(int index = 0; index < tokens.Length; index++)
+            identifier[index] = Int32.Parse(tokens[index], NumberStyles.Integer, XmlExport.FormatProvider);
+
+         return identifier;
       }
       #endregion
    }

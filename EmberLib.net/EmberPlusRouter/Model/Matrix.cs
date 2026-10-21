@@ -72,15 +72,15 @@ namespace EmberPlusRouter.Model
          if(_targets.Contains(target) == false)
             throw new ArgumentException("target");
 
-         var firstSource = sources.FirstOrDefault();
+         var sourceList = sources.ToList();
 
-         if(firstSource != null)
+         foreach(var source in sourceList)
          {
-            if(_sources.Contains(firstSource) == false)
+            if(_sources.Contains(source) == false)
                throw new ArgumentException("sources");
          }
 
-         var result = ConnectOverride(target, sources, operation);
+         var result = ConnectOverride(target, sourceList, operation);
 
          if(result)
             Dispatcher.NotifyMatrixConnection(this, target, state);

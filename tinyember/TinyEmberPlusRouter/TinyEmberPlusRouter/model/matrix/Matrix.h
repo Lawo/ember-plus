@@ -165,13 +165,13 @@ namespace model { namespace matrix
       if(util::contains(m_targets.begin(), m_targets.end(), target) == false)
          throw std::runtime_error("target");
 
-      if(firstSource != lastSource)
+      auto sources = Signal::Vector(firstSource, lastSource);
+
+      for(Signal::Vector::const_iterator source = sources.begin(); source != sources.end(); ++source)
       {
-         if(util::contains(m_sources.begin(), m_sources.end(), *firstSource) == false)
+         if(util::contains(m_sources.begin(), m_sources.end(), *source) == false)
             throw std::runtime_error("sources");
       }
-
-      auto sources = Signal::Vector(firstSource, lastSource);
 
       if(connectOverride(target, sources, state, operation))
          m_notificationSink->notifyMatrixConnection(this, target, state);

@@ -711,8 +711,9 @@ namespace BerLib
                }
                else
                {
-                  values.Add(subidentifier / 40);
-                  values.Add(subidentifier % 40);
+                  var first = subidentifier < 40 ? 0 : subidentifier < 80 ? 1 : 2;
+                  values.Add(first);
+                  values.Add(subidentifier - first * 40);
                }
 
                subidentifier = 0;

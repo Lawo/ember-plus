@@ -78,6 +78,7 @@ void EnumerationView::updateUi()
     if (sequenceChanged)
     {
         auto box = m_view->valueComboBox;
+        auto const signalsBlocked = box->blockSignals(true);
         auto const first = m_parameter->begin();
         auto const last = m_parameter->end();
         while(box->count() > 0)
@@ -88,6 +89,7 @@ void EnumerationView::updateUi()
             auto const text = util::StringConverter::toUtf8QString(item);
             box->addItem(text);
         });
+        box->blockSignals(signalsBlocked);
     }
 
     auto const index = m_parameter->index();

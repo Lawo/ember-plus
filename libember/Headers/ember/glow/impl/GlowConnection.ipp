@@ -37,18 +37,36 @@ namespace libember { namespace glow
     LIBEMBER_INLINE
     void GlowConnection::setSources(ber::ObjectIdentifier const& sources)
     {
+        iterator result = util::find_tag(begin(), end(), GlowTags::Connection::Sources());
+        while (result != end())
+        {
+            erase(result);
+            result = util::find_tag(begin(), end(), GlowTags::Connection::Sources());
+        }
         insert(begin(), new dom::VariantLeaf(GlowTags::Connection::Sources(), sources));
     }
 
     LIBEMBER_INLINE
     void GlowConnection::setOperation(ConnectionOperation const& operation)
     {
+        iterator result = util::find_tag(begin(), end(), GlowTags::Connection::Operation());
+        while (result != end())
+        {
+            erase(result);
+            result = util::find_tag(begin(), end(), GlowTags::Connection::Operation());
+        }
         insert(begin(), new dom::VariantLeaf(GlowTags::Connection::Operation(), operation.value()));
     }
 
     LIBEMBER_INLINE
     void GlowConnection::setDisposition(ConnectionDisposition const& disposition)
     {
+        iterator result = util::find_tag(begin(), end(), GlowTags::Connection::Disposition());
+        while (result != end())
+        {
+            erase(result);
+            result = util::find_tag(begin(), end(), GlowTags::Connection::Disposition());
+        }
         insert(begin(), new dom::VariantLeaf(GlowTags::Connection::Disposition(), disposition.value()));
     }
 

@@ -134,6 +134,12 @@ namespace libember { namespace glow
     LIBEMBER_INLINE
     void GlowCommand::setDirFieldMask(DirFieldMask const& value)
     {
+        iterator result = util::find_tag(begin(), end(), GlowTags::Command::DirFieldMask());
+        while (result != end())
+        {
+            erase(result);
+            result = util::find_tag(begin(), end(), GlowTags::Command::DirFieldMask());
+        }
         insert(end(), new dom::VariantLeaf(GlowTags::Command::DirFieldMask(), value.value()));
     }
 

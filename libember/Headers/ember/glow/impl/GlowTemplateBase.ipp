@@ -30,6 +30,12 @@ namespace libember { namespace glow
     {
         ber::Tag tag = descriptionTag();
 
+        iterator result = util::find_tag(begin(), end(), tag);
+        while (result != end())
+        {
+            erase(result);
+            result = util::find_tag(begin(), end(), tag);
+        }
         insert(end(), new dom::VariantLeaf(tag, description));
     }
 
@@ -41,6 +47,14 @@ namespace libember { namespace glow
             return;
         }
 
+        iterator result = util::find_tag(begin(), end(), elementTag());
+        if (result != end() && &*result == element)
+            return;
+        while (result != end())
+        {
+            erase(result);
+            result = util::find_tag(begin(), end(), elementTag());
+        }
         insert(end(), element);
     }
 

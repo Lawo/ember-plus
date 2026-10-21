@@ -141,7 +141,7 @@ namespace EmberLib.Glow.PowerPack.Xml
             glow.Step.Do(value => writer.WriteElementString("step", XmlConvert.ToString(value)));
             glow.Access.Do(value => writer.WriteElementString("access", XmlConvert.ToString(value)));
             glow.Type.Do(value => writer.WriteElementString("type", XmlConvert.ToString(value)));
-            glow.IsOnline.Do(value => writer.WriteElementString("isOnlin", XmlConvert.ToString(value)));
+            glow.IsOnline.Do(value => writer.WriteElementString("isOnline", XmlConvert.ToString(value)));
             glow.StreamIdentifier.Do(value => writer.WriteElementString("streamIdentifier", XmlConvert.ToString(value)));
 
             var enumMap = glow.EnumMap;

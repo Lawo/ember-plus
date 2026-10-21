@@ -75,6 +75,12 @@ namespace EmberLib.Glow.PowerPack.Xml
 
             case "QualifiedFunction":
                return ConvertQualifiedFunction(xml);
+
+            case "Template":
+               return ConvertTemplate(xml);
+
+            case "QualifiedTemplate":
+               return ConvertQualifiedTemplate(xml);
          }
 
          return null;
@@ -245,23 +251,69 @@ namespace EmberLib.Glow.PowerPack.Xml
          return glow;
       }
 
-      GlowNode ConvertNode(XElement xml)
+      GlowTemplateBase ConvertTemplateBase(GlowTemplateBase glow, XElement xml)
       {
-         var glow = new GlowNode(XmlConvert.ToInt32(xml.Attribute("number").Value));
+         var description = xml.Attribute("description");
+         if(description != null)
+            glow.Description = description.Value;
+
+         var elementXml = xml.Element("element");
+         if(elementXml != null)
+         {
+            var element = elementXml.Elements().SingleOrDefault();
+            if(element != null)
+               glow.Element = ConvertTemplateElement(element);
+         }
+
+         return glow;
+      }
+
+      GlowElement ConvertTemplateElement(XElement xml)
+      {
+         switch(xml.Name.LocalName)
+         {
+            case "Node":
+               return ConvertNode(xml, GlowTags.Template.Element);
+            case "Parameter":
+               return ConvertParameter(xml, GlowTags.Template.Element);
+            case "Matrix":
+               return ConvertMatrix(xml, GlowTags.Template.Element);
+            case "Function":
+               return ConvertFunction(xml, GlowTags.Template.Element);
+         }
+
+         return null;
+      }
+
+      GlowTemplate ConvertTemplate(XElement xml)
+      {
+         var glow = new GlowTemplate(XmlConvert.ToInt32(xml.Attribute("number").Value));
+         return (GlowTemplate)ConvertTemplateBase(glow, xml);
+      }
+
+      GlowQualifiedTemplate ConvertQualifiedTemplate(XElement xml)
+      {
+         var glow = new GlowQualifiedTemplate(ConvertPath(xml.Attribute("path").Value), null);
+         return (GlowQualifiedTemplate)ConvertTemplateBase(glow, xml);
+      }
+
+      GlowNode ConvertNode(XElement xml, BerTag? tag = null)
+      {
+         var glow = new GlowNode(XmlConvert.ToInt32(xml.Attribute("number").Value), tag);
          FillNode(glow, xml);
          return glow;
       }
 
-      GlowParameter ConvertParameter(XElement xml)
+      GlowParameter ConvertParameter(XElement xml, BerTag? tag = null)
       {
-         var glow = new GlowParameter(XmlConvert.ToInt32(xml.Attribute("number").Value));
+         var glow = new GlowParameter(XmlConvert.ToInt32(xml.Attribute("number").Value), tag);
          FillParameter(glow, xml);
          return glow;
       }
 
-      GlowMatrix ConvertMatrix(XElement xml)
+      GlowMatrix ConvertMatrix(XElement xml, BerTag? tag = null)
       {
-         var glow = new GlowMatrix(XmlConvert.ToInt32(xml.Attribute("number").Value));
+         var glow = new GlowMatrix(XmlConvert.ToInt32(xml.Attribute("number").Value), tag);
          FillMatrix(glow, xml);
          return glow;
       }
@@ -294,9 +346,9 @@ namespace EmberLib.Glow.PowerPack.Xml
          return glow;
       }
 
-      GlowContainer ConvertFunction(XElement xml)
+      GlowFunction ConvertFunction(XElement xml, BerTag? tag = null)
       {
-         var glow = new GlowFunction(XmlConvert.ToInt32(xml.Attribute("number").Value));
+         var glow = new GlowFunction(XmlConvert.ToInt32(xml.Attribute("number").Value), tag);
          FillFunction(glow, xml);
          return glow;
       }
@@ -361,6 +413,10 @@ namespace EmberLib.Glow.PowerPack.Xml
             var valueXml = contentsXml.Element("value");
             if(valueXml != null)
                glow.Value = ConvertValue(valueXml);
+
+            var defaultXml = contentsXml.Element("default");
+            if(defaultXml != null)
+               glow.Default = ConvertValue(defaultXml);
 
             var minimumXml = contentsXml.Element("minimum");
             if(minimumXml != null)
